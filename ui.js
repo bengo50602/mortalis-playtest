@@ -106,10 +106,21 @@ const UI = {
     P.lanes.forEach((L, li) => {
       const lane = document.createElement("div");
       lane.className = "lane";
+      const unlocked = laneUnlocked(pi, li);
+      if (!unlocked) lane.style.opacity = "0.45";
       const tag = document.createElement("div");
       tag.className = "realm-tag";
-      tag.textContent = `Lane ${li + 1} · ${L.realm}`;
+      const sched = C().laneUnlockTurns || [];
+      tag.textContent = unlocked ? `Lane ${li + 1} · ${L.realm}` : `Lane ${li + 1} · ${L.realm} 🔒`;
       lane.appendChild(tag);
+      if (!unlocked) {
+        const slot = document.createElement("div");
+        slot.className = "heroslot";
+        slot.textContent = `Locked — unlocks on turn ${sched[li] || "?"}`;
+        lane.appendChild(slot);
+        el.appendChild(lane);
+        return;
+      }
 
       const auxRow = document.createElement("div");
       auxRow.className = "slotrow";
@@ -628,6 +639,10 @@ const RulesTab = {
       const label = k.replace(/([A-Z])/g, " $1").toLowerCase();
       if (typeof v === "boolean") {
         d.innerHTML = `<label>${label}</label><input type="checkbox" id="const-${k}" ${v ? "checked" : ""} style="width:auto">`;
+      } else if (Array.isArray(v)) {
+        d.innerHTML = `<label>${label} (comma-separated)</label><input id="const-${k}" value="${v.join(", ")}">`;
+      } else if (v == null) {
+        d.innerHTML = `<label>${label} (blank = none)</label><input id="const-${k}" value="">`;
       } else {
         d.innerHTML = `<label>${label}</label><input type="number" id="const-${k}" value="${v}">`;
       }
@@ -639,7 +654,10 @@ const RulesTab = {
     for (const k of Object.keys(C())) {
       const el = $("const-" + k);
       if (!el) continue;
-      C()[k] = el.type === "checkbox" ? el.checked : +el.value;
+      if (el.type === "checkbox") C()[k] = el.checked;
+      else if (Array.isArray(C()[k])) C()[k] = el.value.split(",").map(s => +s.trim()).filter(n => !isNaN(n));
+      else if (el.value.trim() === "") C()[k] = null;
+      else C()[k] = +el.value;
     }
     saveDB();
     UI.toast("Constants saved — they apply from the next game.");
@@ -678,9 +696,9 @@ window.addEventListener("DOMContentLoaded", () => {
     e.target.value = "";
   };
   $("btn-reset").onclick = () => {
-    if (confirm("Discard ALL your edits (cards, constants, rule text) and restore rulebook v1.7 data?")) {
+    if (confirm("Discard ALL your edits (cards, constants, rule text) and restore the published rulebook data?")) {
       resetDB();
-      UI.toast("Reset to v1.7 defaults.");
+      UI.toast("Reset to rulebook defaults.");
       UI.renderSetup();
       if (UI.screen === "cards") Editor.render();
       if (UI.screen === "rules") RulesTab.render();

@@ -1,6 +1,6 @@
 # Mortalis: Realms — Playtest Program
 
-A self-contained playtest app for the Mortalis: Realms card game (Core Rules v1.7, all 15 realms, 480 cards).
+A self-contained playtest app for the Mortalis: Realms card game (current Core Rules document, all realms and cards).
 
 ## How to run it
 
@@ -32,15 +32,15 @@ The published data lands in `custom.js`: visitors get your cards/rules as their 
 1. **Setup screen** (every new game): pick AI difficulty (Easy / Medium / Hard), assign a realm to each of your 4 lanes (repeats allowed), choose the AI's realms (random or hand-picked), and who goes first. Both 50-card decks auto-build from the chosen realms.
 2. **Board**: AI on top, you on the bottom. Each lane shows its realm, 1 Hero slot, 2 Auxiliary slots, and the Hero's 2 Relic slots. Each side has 4 shared slots for Hexes / Rites / Pacts (Incantations resolve through an open slot).
 3. **Click any card to zoom it** — hand, board, or slots. The zoomed card shows the exact rulebook text plus action buttons (Play as Hero, Play as Aux, Equip, Set face-down, Begin Rite, Cast, resolve-Rite-early, etc.).
-4. **Attacking**: click your Hero to select it (click more Heroes to build an Onslaught), then click the red-highlighted target — or the AI's Mortality when a direct attack is legal. Redirects, Onslaughts, Overkill, fatigue, and the first-player restrictions all follow v1.7.
+4. **Attacking**: click your Hero to select it (click more Heroes to build an Onslaught), then click the red-highlighted target — or the AI's Mortality when a direct attack is legal. Redirects, Onslaughts, Overkill, fatigue, and the first-player restrictions all follow the current rulebook.
 5. **Hexes** trigger automatically when their condition fires; you'll be asked to pay the Pulse cost at that moment (Cancel = fizzle), exactly per the rules.
 6. **Undo** rolls back any number of steps (including a whole AI turn). **Sandbox tools** let you adjudicate anything by hand: adjust Mortality/Pulse, draw, add any card to your hand, and (via zooming a Hero) damage / heal / buff / destroy.
 
 ## Editing (the whole point)
 
 - **Edit cards** tab: every card's name, realm, type, cost, Attack/Health, rarity, slots, and ability text. Duplicate, delete, or create new cards. Changes save instantly to your browser and stat/cost changes apply even mid-game.
-- **Edit rules** tab: the 16 game constants that drive the engine (starting Mortality, Pulse per turn, hand size, deck size, copy limit, aux discount, fatigue, first-player rules…) plus your full working copy of the v1.7 rule text.
-- **Export / Import**: download all your edits as a JSON file; import it later or on another machine. **Reset to v1.7** restores rulebook defaults.
+- **Edit rules** tab: the 16 game constants that drive the engine (starting Mortality, Pulse per turn, hand size, deck size, copy limit, aux discount, fatigue, first-player rules…) plus your full working copy of the rule text.
+- **Export / Import**: download all your edits as a JSON file; import it later or on another machine. **Reset to rulebook** restores the published defaults.
 
 ### How scripted card behavior works
 
@@ -58,11 +58,11 @@ Because compilation is wording-based, if you write ability text using the rulebo
 | `index.html` | The app shell + styling |
 | `engine.js` | All game rules, the text-to-effect compiler, combat, and the 3 AI levels — plain readable JS, edit freely |
 | `ui.js` | Rendering and interaction |
-| `cards.js` / `rules.js` | Default card database + rule text, **generated** from `rules_v1_7.md` |
-| `rules_v1_7.md` | Your rulebook (copied from Downloads) |
+| `cards.js` / `rules.js` | Default card database + rule text, **generated** from `rules_current.md` |
+| `rules_current.md` | Your rulebook (copied from Downloads) |
 | `build_data.py` | Regenerates `cards.js`/`rules.js` from the rulebook: `python3 build_data.py` |
 
-Two editing layers: quick tweaks in the app (saved in the browser, exportable), or permanent changes by editing `rules_v1_7.md` and re-running `build_data.py` (then "Reset to v1.7" in the app to pick them up).
+Two editing layers: quick tweaks in the app (saved in the browser, exportable), or permanent changes by editing `rules_current.md` and re-running `build_data.py` (then "Reset to rulebook" in the app to pick them up).
 
 ## AI levels
 

@@ -27,6 +27,11 @@ function loadDB() {
     try { DB = JSON.parse(saved); } catch (e) { DB = null; }
   }
   if (!DB || !DB.cards) DB = baseData();
+  else {
+    // older saved data may predate newly added game constants — fill the gaps
+    const base = baseData();
+    for (const k of Object.keys(base.constants)) if (!(k in DB.constants)) DB.constants[k] = base.constants[k];
+  }
   if (!DB.rulesText) DB.rulesText = window.DEFAULT_RULES_TEXT;
   recompileAll();
 }
@@ -421,7 +426,7 @@ function uid() { return UID++; }
 function newGame(opts) {
   UNDO = [];
   const mkPlayer = (name, isAI, realms) => ({
-    name, isAI, mortality: C().startingMortality, pulse: 0, fatigue: 0,
+    name, isAI, mortality: C().startingMortality, pulse: 0, fatigue: 0, turnCount: 0,
     realms: realms.slice(0, C().lanes),
     lanes: realms.slice(0, C().lanes).map(r => ({ realm: r, hero: null, aux: [null, null] })),
     slots: new Array(C().sharedSlots).fill(null),
@@ -552,9 +557,19 @@ function maxAttacksOf(pi, li) { return collectAuras(pi, li).maxAttacks; }
 
 /* ------------------------------ turn flow ------------------------------ */
 
+// Staggered lane unlocks: lane li is usable once its owner's own turn count
+// reaches laneUnlockTurns[li] (e.g. [1,1,3,5] = lanes 1-2 open, 3 on turn 3, 4 on turn 5).
+function laneUnlocked(pi, li) {
+  const sched = C().laneUnlockTurns || [1, 1, 1, 1];
+  return Math.max(1, G.players[pi].turnCount || 0) >= (sched[li] || 1);
+}
+
 function startTurn() {
   G.turn++; G.gt++;
   const pi = G.active, P = G.players[pi];
+  P.turnCount = (P.turnCount || 0) + 1;
+  const sched = C().laneUnlockTurns || [];
+  sched.forEach((t, li) => { if (t === P.turnCount && t > 1 && li < P.lanes.length) log(`${P.name}'s Lane ${li + 1} (${P.lanes[li].realm}) unlocks!`, P.isAI ? "ai" : ""); });
   P.pulse += C().pulsePerTurn;
   const skipDraw = C().firstPlayerSkipsDraw && G.gt === 1 && pi === G.firstPlayer;
   log(`— ${P.name}'s turn (turn ${Math.ceil(G.gt / 2)}) —`, P.isAI ? "ai turnhdr" : "turnhdr");
@@ -982,8 +997,10 @@ function destroyHero(pi, li, killer, opts) {
   P.lanes[li].hero = null;
   log(`${c.name} dies.${h.relics.length ? " Its Relics are destroyed." : ""}`);
   if (opts.overkill > 0) {
-    P.mortality -= opts.overkill;
-    log(`Overkill: ${P.name} loses ${opts.overkill} Mortality.`);
+    const cap = C().overkillCap;
+    const ov = (cap != null && cap >= 0) ? Math.min(opts.overkill, cap) : opts.overkill;
+    P.mortality -= ov;
+    log(`Overkill: ${P.name} loses ${ov} Mortality${ov < opts.overkill ? ` (capped at ${cap})` : ""}.`);
   }
   // death triggers: lane hexes + global "on death" listeners
   fireHexes(pi, "laneHeroDied", { laneIdx: li, killer, deadOwner: pi, lastCost: c.cost });
@@ -1156,6 +1173,7 @@ function playOptions(pi, handIdx) {
     opts.auxCost = Math.max(1, card.auxCost != null ? card.auxCost : card.cost - C().auxDiscount);
     if (canPlayNameCheck(pi, card)) {
       P.lanes.forEach((L, li) => {
+        if (!laneUnlocked(pi, li)) return;
         if (L.realm === card.realm && !L.hero && P.pulse >= card.cost) opts.heroLanes.push(li);
         const freeAux = L.aux.filter(a => !a).length;
         if (L.realm === card.realm && freeAux >= (card.auxSlots || 1) && P.pulse >= opts.auxCost) opts.auxLanes.push(li);
@@ -1163,15 +1181,15 @@ function playOptions(pi, handIdx) {
     }
   } else if (card.type === "relic") {
     P.lanes.forEach((L, li) => {
-      if (!L.hero) return;
+      if (!L.hero || !laneUnlocked(pi, li)) return;
       if (C().relicRealmLocked && cardById(L.hero.cardId).realm !== card.realm) return;
       const used = L.hero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0);
       if (C().relicSlotsPerHero - used >= (card.slots || 1) && P.pulse >= card.cost) opts.relicLanes.push(li);
     });
   } else if (card.type === "hex") {
-    if (openSlotIdx(pi) >= 0) P.lanes.forEach((L, li) => opts.hexLanes.push(li));
+    if (openSlotIdx(pi) >= 0) P.lanes.forEach((L, li) => { if (laneUnlocked(pi, li)) opts.hexLanes.push(li); });
   } else if (card.type === "rite") {
-    if (openSlotIdx(pi) >= 0 && P.pulse >= card.cost) P.lanes.forEach((L, li) => opts.riteLanes.push(li));
+    if (openSlotIdx(pi) >= 0 && P.pulse >= card.cost) P.lanes.forEach((L, li) => { if (laneUnlocked(pi, li)) opts.riteLanes.push(li); });
   } else {
     opts.spell = openSlotIdx(pi) >= 0 && P.pulse >= card.cost;
   }
