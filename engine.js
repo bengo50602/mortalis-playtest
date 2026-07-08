@@ -21,6 +21,7 @@ function baseData() {
   return d;
 }
 function loadDB() {
+  DB = null;
   const saved = localStorage.getItem(LS_KEY);
   if (saved) {
     try { DB = JSON.parse(saved); } catch (e) { DB = null; }
