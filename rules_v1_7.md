@@ -1,5 +1,5 @@
 # MORTALIS: REALMS
-## Core Rules — Draft v1.7 (Combined Edition: Core Rules + All 15 Realm Card Sets)
+## Core Rules — Draft v1.8 (Combined Edition: Core Rules + All 15 Realm Card Sets)
 
 ## 1. Overview & Win Condition
 
@@ -67,9 +67,19 @@ Each turn follows a simple sequence:
 
 - Each Realm = 1 Lane, up to 4 Lanes total
 - Each Lane holds a **maximum of 1 Hero**
-- Total Heroes in play at once = number of Lanes filled (max 4)
 - Each Lane also has **2 Auxiliary slots** (see Section 8 — Heroes, Auxiliary Mode)
 - **Lane adjacency:** Lanes are arranged in a fixed left-to-right order, set when you choose your Realms before the match. A "neighboring" Lane (referenced by some card effects) means a Lane physically adjacent to it — a middle Lane has 2 neighbors, an end Lane has 1 (or 0 if you're only running a single Lane).
+
+### Staggered Lane Unlocks
+Lanes do **not** all open at once. They unlock on a fixed schedule tied to each player's own turn count, so the early game is a build-up phase rather than a race to flood the board:
+
+- **Lanes 1 and 2:** open from the start of the game (each player's turn 1)
+- **Lane 3:** unlocks at the start of each player's **3rd turn**
+- **Lane 4:** unlocks at the start of each player's **5th turn**
+
+A Hero, Relic, or Auxiliary card may only be played into, and only occupies, an **unlocked** Lane. A locked Lane cannot be attacked into or targeted, and it cannot hold cards. The schedule is per-player and symmetric — the player going second reaches each unlock on their own corresponding turn. If you run fewer than 4 Realms, you simply have fewer Lanes; the unlock timings for the Lanes you do have are unchanged (i.e., your 3rd Lane, if you have one, still opens on turn 3).
+
+- Total Heroes in play at once = number of **unlocked** Lanes filled (max 4, and fewer in the early turns)
 
 ---
 
@@ -89,15 +99,15 @@ If a Hero attacks but the opponent's matching lane is empty:
 - If the opponent's entire board is empty, the attack goes directly to their **Mortality**
 
 ### Onslaught (Gang-Ups)
-Multiple Heroes can redirect onto the same single defending Hero — this is called an **Onslaught**.
+Multiple Heroes can redirect onto the same single defending Hero — this is called an **Onslaught**. An Onslaught resolves like basic combat, except the attackers' Attack values are summed and treated as one collective Attack value, which is then compared against the **defending Hero's Attack**:
 
-- Sum the Attack of all attacking Heroes and treat it as **one collective Attack value**
-- If the combined Attack is **higher** than the defender's Attack, the defender loses Health equal to the **difference** between the combined Attack and the defender's Attack
-- If the defender's Attack is **higher** than the combined total, **every individual attacking Hero** loses Health equal to the difference (not divided among them) — a failed Onslaught can wipe out several attackers at once
-- If the two values are **equal**, no damage is dealt to either side
+- Sum the Attack of all attacking Heroes into one collective Attack value
+- If the attackers' combined Attack is **higher** than the defender's Attack, the **defender** loses Health equal to the difference (combined attacker Attack − defender Attack), and all attackers take no damage
+- If the **defender's** Attack is **higher** than the attackers' combined Attack, the defender takes no damage and **each individual attacking Hero** loses Health equal to the full difference (defender Attack − combined attacker Attack) — every attacker takes the same full amount, not a divided share, so a failed Onslaught can wipe out several attackers at once
+- If the two values are equal, no damage is dealt to either side
 
 ### Overkill Damage
-Whenever a Hero dies from combat damage — whether from basic combat, a successful Onslaught, or the shortfall damage from a failed Onslaught — any damage dealt in excess of that Hero's Health is dealt directly to its controller's Mortality instead of being wasted. This applies symmetrically: it can happen to a defender killed by an attack, or to an attacking Hero killed by a failed Onslaught's shortfall.
+Whenever a Hero dies from combat damage — whether from basic combat, a successful Onslaught, or the difference damage from a failed Onslaught — any damage dealt in excess of that Hero's Health spills over to its controller's Mortality, **capped at a maximum of 30 Mortality per Hero killed** (excess beyond 30 is wasted). This applies symmetrically: it can happen to a defender killed by an attack, or to an attacking Hero killed by a failed Onslaught. (For a failed Onslaught, each attacking Hero is evaluated separately: any that die may each contribute up to 30 Overkill Damage to their controller's Mortality.) The cap keeps a single oversized swing from erasing a huge share of Mortality at once, while preserving the pressure that finishing a Hero cleanly should apply.
 
 ---
 
@@ -1559,7 +1569,7 @@ When this Incantation resolves, choose a Hero you control: it gains +30 Attack u
 
 **Knighting / your Champion:** Some cards "Knight" a Hero you control, making it your **Champion**. You may only have one Champion at a time — Knighting a new Hero removes the title from the previous one. A Hero keeps the title until it leaves play or is replaced. The title itself does nothing; cards that reference "your Champion" grant the benefits.
 
-**Joint Strike:** Two Heroes you control in neighboring lanes attack a single enemy lane together as **one combat**: their Attacks are added together against the defender, and the combat damage dealt back is split as evenly as possible between the two attackers (rounded to multiples of 10, your choice on uneven splits). A Joint Strike counts as both Heroes attacking that turn.
+**Joint Strike:** Two Heroes you control in neighboring lanes attack a single enemy lane together as **one combat**: their Attacks are added together and compared against the defending Hero's Attack, exactly like an Onslaught. If the combined Attack is higher, the defender loses Health equal to the difference. **Unlike an Onslaught, however, a failed Joint Strike does not deal the full difference to each attacker:** if the defender's Attack is higher, the return damage (defender's Attack − combined attacker Attack) is **split as evenly as possible between the two attacking Heroes** (rounded to multiples of 10; you choose how to assign an uneven split). This damage-sharing is Oathenhall's signature — coordinating a strike so neither Hero absorbs the whole counter-blow, in contrast to a raw Onslaught where every attacker takes the full difference. A Joint Strike counts as both Heroes attacking that turn, and ties deal no damage to either side.
 
 ### Heroes
 *(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
@@ -2482,4 +2492,3 @@ When this Incantation resolves, remove all enemy-imposed stat reductions and neg
 
 **Aegis of Dawn** — Cost: 5 Pulse
 When this Incantation resolves, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack), and you gain 1 Pulse for each Hero warded this way (maximum 3).
-
