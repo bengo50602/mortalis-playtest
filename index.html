@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mortalis: Realms — Playtest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#ece9e2; --panel:#f7f5f0; --card:#ffffff; --ink:#22211f; --muted:#6b6a64;
+  --line:#c9c6bc; --line2:#a5a29a; --accent:#1d5fa5; --accent-bg:#e2edf8;
+  --good:#2c6e2f; --bad:#a32d2d; --warn:#a05a00; --warn-bg:#f7ead2;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+button{font-family:inherit;font-size:13px;padding:5px 12px;border:1px solid var(--line2);border-radius:6px;background:#fff;color:var(--ink);cursor:pointer}
+button:hover{background:#f0eee8}
+button.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+button.primary:hover{background:#3a3936}
+button.active-tab{border:2px solid var(--accent);color:var(--accent);font-weight:600}
+button:disabled{opacity:.45;cursor:default}
+select,input,textarea{font-family:inherit;font-size:13px;padding:5px 8px;border:1px solid var(--line2);border-radius:6px;background:#fff;color:var(--ink)}
+textarea{width:100%;line-height:1.5}
+h1{font-size:20px;margin:0}
+h2{font-size:16px;margin:0 0 10px}
+.topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);flex-wrap:wrap;position:sticky;top:0;z-index:50}
+.topbar .spacer{flex:1}
+.screen{display:none;padding:16px;max-width:1280px;margin:0 auto}
+.screen.visible{display:block}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+
+/* ---- setup ---- */
+.lane-picks{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:6px 0 14px}
+.lane-picks select{width:100%}
+.setup-label{font-size:13px;color:var(--muted);margin:12px 0 4px}
+
+/* ---- board ---- */
+.board{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:12px}
+.statline{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:4px 6px}
+.statline .who{font-weight:600}
+.statline .nums span{margin-left:14px}
+.mortality{font-weight:600}
+.clickable-face{cursor:pointer;border:1px dashed transparent;border-radius:6px;padding:2px 6px}
+.clickable-face.targetable{border-color:var(--bad);background:#f7dede}
+.lanes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:4px 0}
+.lane{text-align:center;min-width:0}
+.lane .realm-tag{font-size:11px;font-weight:600;letter-spacing:.02em;padding:2px 0;border-radius:4px;background:#e5e2d9;margin-bottom:4px}
+.slotrow{display:flex;gap:4px;margin:4px 0}
+.minislot{flex:1;min-height:24px;border:1px dashed var(--line2);border-radius:5px;font-size:10px;color:var(--muted);display:flex;align-items:center;justify-content:center;padding:2px 3px;background:transparent;cursor:default;min-width:0;overflow:hidden}
+.minislot.filled{border-style:solid;background:var(--card);cursor:pointer;color:var(--ink)}
+.minislot.eligible{border-color:var(--accent);background:var(--accent-bg);cursor:pointer;color:var(--accent);font-weight:600}
+.heroslot{min-height:96px;border:1px dashed var(--line2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);background:transparent}
+.heroslot.eligible{border-color:var(--accent);background:var(--accent-bg);cursor:pointer;color:var(--accent);font-weight:600}
+.herocard{width:100%;min-height:96px;background:var(--card);border:1px solid var(--line2);border-radius:8px;padding:6px;text-align:left;cursor:pointer;font-size:11px;position:relative}
+.herocard .nm{font-weight:600;line-height:1.25}
+.herocard .stats{margin:3px 0;font-size:12px}
+.herocard .txt{color:var(--muted);line-height:1.3;max-height:42px;overflow:hidden}
+.herocard.selected{outline:3px solid var(--accent)}
+.herocard.targetable{outline:3px solid var(--bad)}
+.herocard.exhausted{opacity:.62}
+.buffed{color:var(--good);font-weight:600}
+.nerfed{color:var(--bad);font-weight:600}
+.badge-manual{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--warn)}
+.sharedrow{display:flex;gap:6px;align-items:center;padding:3px 6px;font-size:11px;color:var(--muted)}
+.sharedslot{width:76px;min-height:30px;border:1px dashed var(--line2);border-radius:5px;font-size:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:2px;background:transparent;color:var(--muted)}
+.sharedslot.filled{border-style:solid;background:var(--card);cursor:pointer;color:var(--ink)}
+.midbar{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:6px 0;padding:6px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;min-height:34px}
+#prompt{font-weight:600;color:var(--accent)}
+.hand{display:flex;gap:6px;padding:6px;flex-wrap:wrap}
+.handcard{width:118px;background:var(--card);border:1px solid var(--line2);border-radius:7px;padding:6px;font-size:11px;cursor:pointer;position:relative}
+.handcard:hover{border-color:var(--ink)}
+.handcard .nm{font-weight:600;line-height:1.25}
+.handcard .meta{color:var(--muted);margin-top:2px}
+.handcard.unaffordable{opacity:.55}
+.logpanel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:12px;display:flex;flex-direction:column;min-height:400px}
+.logpanel h3{margin:0 0 6px;font-size:13px}
+#log{flex:1;overflow-y:auto;max-height:560px;line-height:1.45}
+#log .turnhdr{font-weight:600;margin-top:6px;border-top:1px solid var(--line);padding-top:4px}
+#log .ai{color:#7a3aa0}
+.sidebtns{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.sandbox{background:var(--warn-bg);border:1px solid #dcc08a;border-radius:8px;padding:8px;margin-top:10px;font-size:12px}
+.sandbox h4{margin:0 0 6px;font-size:12px}
+.sandbox .row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
+.sandbox button{font-size:11px;padding:3px 7px}
+
+/* ---- zoom overlay ---- */
+#overlay{position:fixed;inset:0;background:rgba(20,20,18,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+#overlay.visible{display:flex}
+.bigcard{width:400px;max-width:94vw;max-height:88vh;overflow-y:auto;background:#ffffff;color:#22211f;border:1px solid #8d8a82;border-radius:12px;padding:20px}
+.bigcard .hdr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.bigcard .nm{font-size:17px;font-weight:600}
+.bigcard .realm{font-size:12px;color:var(--muted);white-space:nowrap}
+.bigcard .sub{font-size:12px;color:var(--muted);margin:2px 0 12px}
+.bigcard .mode{font-size:13px;font-weight:600;margin:10px 0 2px}
+.bigcard .body{font-size:13px;line-height:1.55;margin:0}
+.bigcard .live{background:#f2f0ea;border-radius:6px;padding:8px;margin-top:10px;font-size:12px}
+.bigcard .actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.manual-note{font-size:11px;color:var(--warn);margin-top:8px}
+
+/* ---- editor ---- */
+.editgrid{display:grid;grid-template-columns:250px minmax(0,1fr);gap:12px}
+.cardlist{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px;max-height:640px;overflow-y:auto;font-size:12px}
+.cardlist .item{padding:3px 6px;border-radius:4px;cursor:pointer;display:flex;justify-content:space-between;gap:6px}
+.cardlist .item:hover{background:#f0eee8}
+.cardlist .item.sel{background:var(--accent-bg);color:var(--accent);font-weight:600}
+.cardlist .ct{color:var(--muted);font-size:10px;white-space:nowrap}
+.editform{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px}
+.frow{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-bottom:10px}
+.frow label{display:block;font-size:11px;color:var(--muted);margin-bottom:3px}
+.frow input,.frow select{width:100%}
+.constgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:14px}
+.constgrid label{display:block;font-size:11px;color:var(--muted);margin-bottom:3px}
+.constgrid input{width:100%}
+.pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;background:#e5e2d9;color:var(--muted)}
+.pill.auto{background:#ddebdd;color:var(--good)}
+.pill.manual{background:var(--warn-bg);color:var(--warn)}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;display:none;z-index:200}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>Mortalis: Realms — playtest</h1>
+  <span id="verinfo" style="font-size:11px;color:var(--muted)">v1.7</span>
+  <div class="spacer"></div>
+  <button id="tab-play" class="active-tab">Play</button>
+  <button id="tab-cards">Edit cards</button>
+  <button id="tab-rules">Edit rules</button>
+  <button id="btn-newgame">New game</button>
+  <button id="btn-export" title="Download all your edits as a JSON file">Export</button>
+  <button id="btn-import">Import</button>
+  <input type="file" id="import-file" accept=".json" style="display:none">
+  <button id="btn-reset" title="Discard all edits and restore rulebook v1.7 data">Reset to v1.7</button>
+</div>
+
+<div id="screen-setup" class="screen visible">
+  <div class="panel" style="max-width:760px;margin:0 auto">
+    <h2>New game</h2>
+    <p class="setup-label">AI difficulty</p>
+    <div style="display:flex;gap:8px" id="diff-btns">
+      <button data-d="easy">Easy</button>
+      <button data-d="medium" class="active-tab">Medium</button>
+      <button data-d="hard">Hard</button>
+    </div>
+    <p class="setup-label">Your realms — every lane must have a realm (repeats are fine)</p>
+    <div class="lane-picks" id="player-realms"></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button id="btn-rand-mine">Randomize mine</button>
+    </div>
+    <p class="setup-label">AI realms</p>
+    <div style="display:flex;gap:8px;margin-bottom:6px" id="ai-mode-btns">
+      <button data-m="random" class="active-tab">Random</button>
+      <button data-m="pick">Pick for the AI</button>
+    </div>
+    <div class="lane-picks" id="ai-realms" style="display:none"></div>
+    <p class="setup-label">Decks auto-build to 50 cards from each side's chosen realms. Who goes first?</p>
+    <div style="display:flex;gap:8px;margin-bottom:16px" id="first-btns">
+      <button data-f="random" class="active-tab">Random</button>
+      <button data-f="you">You</button>
+      <button data-f="ai">AI</button>
+    </div>
+    <button class="primary" id="btn-start" style="font-size:15px;padding:8px 22px">Start game</button>
+  </div>
+</div>
+
+<div id="screen-game" class="screen">
+  <div class="board">
+    <div>
+      <div class="statline">
+        <span class="who" id="ai-name">AI</span>
+        <span class="nums">
+          <span class="clickable-face" id="ai-face">Mortality <span class="mortality" id="ai-mort">250</span></span>
+          <span>Pulse <b id="ai-pulse">0</b></span>
+          <span>Hand <b id="ai-hand">0</b></span>
+          <span>Deck <b id="ai-deck">0</b></span>
+        </span>
+      </div>
+      <div class="sharedrow"><span>AI slots</span><span id="ai-slots" style="display:flex;gap:6px"></span></div>
+      <div class="lanes" id="ai-lanes"></div>
+      <div class="midbar">
+        <span id="turn-ind"></span>
+        <span id="prompt"></span>
+        <span><button id="btn-cancel" style="display:none">Cancel</button></span>
+      </div>
+      <div class="lanes" id="my-lanes"></div>
+      <div class="sharedrow"><span>Your slots</span><span id="my-slots" style="display:flex;gap:6px"></span></div>
+      <div class="statline">
+        <span class="who">You</span>
+        <span class="nums">
+          <span class="clickable-face" id="my-face">Mortality <span class="mortality" id="my-mort">250</span></span>
+          <span>Pulse <b id="my-pulse">0</b></span>
+          <span>Deck <b id="my-deck">0</b></span>
+        </span>
+      </div>
+      <div class="hand" id="hand"></div>
+      <p style="font-size:11px;color:var(--muted);margin:2px 6px">Click a hand card to zoom and play it. Single-click your Hero to select it for an attack (click more Heroes for an Onslaught), then click the target — or the AI's Mortality when its board is empty. <b>Double-click any Hero to zoom it and use its abilities</b> or adjust it manually.</p>
+    </div>
+    <div>
+      <div class="logpanel">
+        <h3>Game log</h3>
+        <div id="log"></div>
+        <div class="sidebtns">
+          <button id="btn-undo">Undo</button>
+          <button class="primary" id="btn-endturn">End turn</button>
+          <button id="btn-sandbox-toggle">Sandbox tools</button>
+        </div>
+        <div class="sandbox" id="sandbox" style="display:none">
+          <h4>Sandbox — adjudicate anything by hand</h4>
+          <div class="row">You: <button data-sb="my-mort:-10">−10 Mort</button><button data-sb="my-mort:10">+10</button>
+          <button data-sb="my-pulse:-1">−1 Pulse</button><button data-sb="my-pulse:1">+1</button>
+          <button data-sb="my-draw">Draw</button></div>
+          <div class="row">AI: <button data-sb="ai-mort:-10">−10 Mort</button><button data-sb="ai-mort:10">+10</button>
+          <button data-sb="ai-pulse:-1">−1 Pulse</button><button data-sb="ai-pulse:1">+1</button>
+          <button data-sb="ai-draw">Draw</button></div>
+          <div class="row"><button data-sb="add-card">Add any card to your hand…</button>
+          <label style="display:flex;align-items:center;gap:4px"><input type="checkbox" id="free-target" style="width:auto"> Free targeting</label></div>
+          <div style="color:var(--warn)">Zoom any Hero in play for damage / heal / buff / destroy controls.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-cards" class="screen">
+  <div class="editgrid">
+    <div>
+      <div style="display:flex;gap:6px;margin-bottom:8px">
+        <select id="ed-realm" style="flex:1"></select>
+        <select id="ed-type">
+          <option value="">All types</option><option value="hero">Heroes</option><option value="relic">Relics</option>
+          <option value="hex">Hexes</option><option value="rite">Rites</option><option value="pact">Pacts</option>
+          <option value="incantation">Incantations</option>
+        </select>
+      </div>
+      <input id="ed-search" placeholder="Search cards" style="width:100%;margin-bottom:8px">
+      <div class="cardlist" id="ed-list"></div>
+      <button id="ed-new" style="width:100%;margin-top:8px">＋ New card</button>
+    </div>
+    <div class="editform" id="ed-form"><p style="color:var(--muted)">Select a card to edit.</p></div>
+  </div>
+</div>
+
+<div id="screen-rules" class="screen">
+  <div class="panel">
+    <h2>Game constants <span style="font-weight:400;font-size:12px;color:var(--muted)">— these drive the engine directly; changes apply to the next game</span></h2>
+    <div class="constgrid" id="const-grid"></div>
+    <button class="primary" id="btn-save-consts">Save constants</button>
+  </div>
+  <div class="panel" style="margin-top:14px">
+    <h2>Rule text <span style="font-weight:400;font-size:12px;color:var(--muted)">— your working copy of the v1.7 rulebook; edit freely, it saves with your data</span></h2>
+    <textarea id="rules-text" style="height:480px;font-family:ui-monospace,Menlo,monospace;font-size:12px"></textarea>
+    <div style="margin-top:8px"><button class="primary" id="btn-save-rules">Save rule text</button></div>
+  </div>
+</div>
+
+<div id="overlay"><div class="bigcard" id="bigcard"></div></div>
+<div id="toast"></div>
+
+<script src="cards.js"></script>
+<script src="rules.js"></script>
+<script src="custom.js"></script>
+<script src="engine.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>
