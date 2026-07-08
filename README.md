@@ -9,11 +9,21 @@ Double-click **index.html** — it opens in your browser. No install, no interne
 
 ## Sharing & publishing updates
 
-The game is hosted on GitHub Pages — one link for all your playtesters. To push your latest edits to everyone:
+The game is hosted on GitHub Pages — one link for all your playtesters:
+**https://bengo50602.github.io/mortalis-playtest/**
 
-1. In the app, click **Export** (saves `mortalis_playtest_data....json` to Downloads)
-2. Double-click **Publish update.command** in this folder
-3. The shared link updates in about a minute — playtesters just refresh
+Two ways to make changes; both end the same way:
+
+**A) Rules-document workflow (the Claude "Mortalis: Realms" project):**
+1. Update the rules document in the Claude project as usual
+2. Download the document (it lands in Downloads — any `.md` name containing "mortalis" and "rules" works)
+3. Double-click **Publish update.command** — the entire card database and rule text are rebuilt from the document, then published
+
+**B) In-app workflow:**
+1. Edit cards/constants/rules inside the playtest app, click **Export** (saves a `.json` to Downloads)
+2. Double-click **Publish update.command**
+
+If both exist, whichever is newer wins — a newly downloaded rules document becomes the single source of truth and clears older in-app publishes. If the document's card format ever drifts so far the parser can't read it, publishing safely aborts with a message instead of pushing a broken game.
 
 The published data lands in `custom.js`: visitors get your cards/rules as their defaults (their own experiments stay local to their browsers; the Reset button returns them to your published version). `mortalis_playtest.html` is the offline single-file copy for people you'd rather send a file than a link.
 
