@@ -2482,3 +2482,4 @@ When this Incantation resolves, remove all enemy-imposed stat reductions and neg
 
 **Aegis of Dawn** — Cost: 5 Pulse
 When this Incantation resolves, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack), and you gain 1 Pulse for each Hero warded this way (maximum 3).
+
