@@ -131,7 +131,13 @@ function parseOp(cl) {
   // cleanse
   if ((m = cl.match(/^remove all enemy-imposed stat reductions and negative effects(?: \([^)]*\))? from (?:up to (\d+) Heroes you control|a Hero you control)[^]*$/i))) return { op: "removeReductions", target: m[1] ? "upToOwn" : "ownChoice", count: m[1] ? +m[1] : 1 };
   // search deck for a relic
-  if ((m = cl.match(/^search your deck for(?: up to (\d+))?(?: any)? Relic cards?(?: costing (\d+) or less)?, reveal (?:it|them), and put (?:it|them) into your hand, then shuffle your deck$/i))) return { op: "searchRelic", count: m[1] ? +m[1] : 1, maxCost: m[2] ? +m[2] : 99 };
+  if ((m = cl.match(/^(?:you may )?search your deck for(?: up to (\d+))?(?: a| any)? Relic cards?(?: costing (\d+) or less)?, reveal (?:it|them), and put (?:it|them) into your hand, then shuffle your deck$/i))) return { op: "searchRelic", count: m[1] ? +m[1] : 1, maxCost: m[2] ? +m[2] : 99 };
+  if ((m = cl.match(/^(?:you may )?move a Relic from one Hero you control to another Hero you control$/i))) return { op: "moveRelic" };
+  if ((m = cl.match(/^(?:you may )?attach a Relic card from your hand to a Hero you control without paying its cost$/i))) return { op: "attachRelic", discount: 99 };
+  if ((m = cl.match(/^(?:you may )?attach a Relic card from your hand to it, paying (\d+) less Pulse$/i))) return { op: "attachRelic", discount: +m[1], target: "laneHero" };
+  if ((m = cl.match(/^place (\d+) forge counters? on it$/i))) { const ops = []; for (let i = 0; i < +m[1]; i++) ops.push({ op: "forgeCounter" }); return ops; }
+  if ((m = cl.match(/^return a Relic card from your discard pile to your hand$/i))) return { op: "returnRelicDiscard" };
+  if ((m = cl.match(new RegExp(`^destroy up to (\\d+) Relics attached to enemy Heroes$`, "i")))) return { op: "shatterRelics", n: +m[1], dmg: 0 };
   // may attack twice / any lane (targeted at a chosen own hero)
   if ((m = cl.match(/^(?:choose a Hero you control: )?it may attack twice this turn$/i))) return { op: "attackTwice", target: "self" };
   // forge counters (N) on a chosen relic
@@ -265,6 +271,9 @@ function parseOps(text) {
   // multi-sentence "choose up to N ... deal N to each" pre-pass
   let m = norm(text).match(new RegExp(`^choose up to ${NUM} Heroes[^.]*\\.\\s*Deal ${NUM} damage to each chosen Hero\\.?$`, "i"));
   if (m) return [{ op: "damage", n: +m[2], target: "upToAny", count: +m[1] }];
+  // Shatterquake: destroy relics + damage per relic destroyed
+  m = norm(text).match(/^destroy up to (\d+) Relics attached to enemy Heroes\.\s*For each Relic destroyed this way, deal (\d+) damage to the Hero that held it\.?$/i);
+  if (m) return [{ op: "shatterRelics", n: +m[1], dmg: +m[2] }];
   const ops = [];
   for (const s of sentences(text)) {
     // try the whole sentence first (some single ops contain commas)
@@ -301,6 +310,9 @@ function compileContinuous(text, sourceKind, out) {
     }
     const stat = parseStatClause(s);
     if (!stat) continue;
+    // conditional self auras (Deepforge)
+    if (sourceKind === "hero" && /has a Relic equipped/i.test(s)) { out.cont.push({ atk: stat.atk, hp: stat.hp, scope: "selfIfHasRelic" }); out.autoBits.push("conditional aura"); continue; }
+    if (sourceKind === "hero" && /both of \w+'s Relic slots are filled/i.test(s)) { out.cont.push({ atk: stat.atk, hp: stat.hp, scope: "selfIfTwoRelics" }); out.autoBits.push("conditional aura"); continue; }
     const sc = parseScope(s, sourceKind);
     if (sc) { out.cont.push(Object.assign({ atk: stat.atk, hp: stat.hp }, sc)); out.autoBits.push("aura"); }
   }
@@ -321,6 +333,8 @@ function compileRecurring(text, out) {
     else if ((m = norm(s).match(new RegExp(`^At the start of each of your turns, this Hero heals ${NUM} Health`, "i")))) { out.sot.push({ op: "heal", n: +m[1], target: "laneHero" }); out.autoBits.push("start-of-turn heal"); }
     else if ((m = norm(s).match(new RegExp(`^At the end of each of your turns, (?:the Hero in this lane|this Hero) takes ${NUM} damage`, "i")))) { out.eot.push({ op: "damage", n: +m[1], target: "laneHero" }); out.autoBits.push("end-of-turn damage"); }
     else if ((m = norm(s).match(new RegExp(`^At the end of each of your turns, gain ${NUM} Pulse`, "i")))) { out.eot.push({ op: "pulse", n: +m[1] }); out.autoBits.push("end-of-turn pulse"); }
+    else if (/^At the start of each of your turns, place a forge counter on a Relic equipped to the Hero in this lane/i.test(norm(s))) { out.sot.push({ op: "forgeCounterLane" }); out.autoBits.push("start-of-turn forge counter"); }
+    else if ((m = norm(s).match(/^At the start of each of your turns, place a forge counter on each of up to (\d+) different Relics you control/i))) { for (let i = 0; i < +m[1]; i++) out.sot.push({ op: "forgeCounterChoice" }); out.autoBits.push("start-of-turn forge counters"); }
   }
 }
 
@@ -352,7 +366,7 @@ function compileListen(text, out, bits) {
 }
 
 // Static combat flags on a Hero. out.flags = {attackAnyLane, taunt, ignoreEnemyEquip, protect:{cond}}
-function compileFlags(text, out, bits) {
+function compileFlags(text, bits) {
   const t = norm(text || "");
   const f = {};
   if (/may attack any enemy lane/i.test(t)) { f.attackAnyLane = true; bits.push("attacks any lane"); }
@@ -366,8 +380,12 @@ function compileFlags(text, out, bits) {
     if (f.protect) bits.push("conditional protection");
   }
   let am;
-  if ((am = t.match(/Enemy Heroes attacking \w+ have [-−–](\d+) Attack for that combat/i))) { f.attackerPenalty = +am[1]; bits.push("attacker penalty"); }
-  if (Object.keys(f).length) out.flags = f;
+  if ((am = t.match(/While \w+ has a Relic equipped, enemy Heroes attacking (?:her|him|it) have [-−–](\d+) Attack for that combat/i))) { f.attackerPenaltyIfRelic = +am[1]; bits.push("attacker penalty"); }
+  else if ((am = t.match(/Enemy Heroes attacking \w+ have [-−–](\d+) Attack for that combat/i))) { f.attackerPenalty = +am[1]; bits.push("attacker penalty"); }
+  if (/Relics equipped to Heroes you control in neighboring lanes cannot be destroyed by enemy card effects/i.test(t)) { f.relicProtect = "neighbor"; bits.push("relic protection"); }
+  else if (/Relics equipped to (?:this Hero|\w+) cannot be destroyed by enemy card effects/i.test(t) || /his Relics cannot be destroyed by enemy card effects/i.test(t)) { f.relicProtect = /both of \w+'s Relic slots are filled/i.test(t) ? "selfIfTwoRelics" : "self"; bits.push("relic protection"); }
+  if (Object.keys(f).length) return f;
+  return null;
 }
 
 // Defender-side redirect: "when an enemy attacks a Hero you control [in a
@@ -600,7 +618,8 @@ function compileCard(card) {
       compileCombatTriggers(card.text, out.combatTrig, out.autoBits);
       compileListen(card.text, out.listen, out.autoBits);
       compileOnDeath(card.text, out, out.autoBits);
-      compileFlags(card.text, out, out.autoBits);
+      out.flags = compileFlags(card.text, out.autoBits);
+      out.auxFlags = compileFlags(card.auxText, out.auxAutoBits);
       const hRed = parseRedirect(card.text); if (hRed) { out.redirect = Object.assign({ protector: "self" }, hRed); out.autoBits.push("attack redirect"); }
       const hBg = parseBodyguard(card.text); if (hBg) { out.bodyguard = Object.assign({ protector: "self" }, hBg); out.autoBits.push("bodyguard"); }
       const aRed = parseRedirect(card.auxText); if (aRed) { out.auxRedirect = Object.assign({ protector: "laneHero" }, aRed); out.auxAutoBits.push("attack redirect"); }
@@ -627,6 +646,8 @@ function compileCard(card) {
     } else if (card.type === "hex") {
       compileHex(card, out);
       const xRed = parseRedirect(card.text); if (xRed && (!out.hexTrig || out.hexTrig === "manual")) { out.hexRedirect = Object.assign({ protector: "laneHero" }, xRed); out.autoBits.push("attack redirect"); }
+      if (/When an enemy card effect would destroy a Relic you control, prevent that destruction/i.test(norm(card.text))) { out.relicWard = true; out.autoBits.push("relic ward"); }
+      if (/When an enemy Hero destroys a Hero you control in this lane in combat, that enemy Hero takes (\d+) damage/i.test(norm(card.text))) { const dm = norm(card.text).match(/takes (\d+) damage/); out.hexTrig = { event: "laneHeroDied", ops: [{ op: "damage", n: +dm[1], target: "killer" }], persistent: false }; }
     } else if (card.type === "rite") {
       compileRite(card, out);
     } else {
@@ -640,7 +661,7 @@ function compileCard(card) {
 function autoLevel(card) {
   const f = fx(card.id);
   const bits = f.autoBits.concat(f.auxAutoBits || []);
-  if (card.type === "hex") return (f.hexTrig && f.hexTrig !== "manual") || f.hexRedirect ? "auto" : "manual";
+  if (card.type === "hex") return (f.hexTrig && f.hexTrig !== "manual") || f.hexRedirect || f.relicWard ? "auto" : "manual";
   if (card.type === "rite") return f.rite && f.rite.payoff !== "manual" ? "auto" : "manual";
   if (card.type === "pact" || card.type === "incantation") return f.spellOps !== "manual" ? "auto" : "manual";
   return bits.length ? "partial" : "manual";
@@ -657,7 +678,7 @@ function uid() { return UID++; }
 function newGame(opts) {
   UNDO = [];
   const mkPlayer = (name, isAI, realms) => ({
-    name, isAI, mortality: C().startingMortality, pulse: 0, fatigue: 0, turnCount: 0, championUid: null,
+    name, isAI, mortality: C().startingMortality, pulse: 0, fatigue: 0, turnCount: 0, championUid: null, discard: [],
     realms: realms.slice(0, C().lanes),
     lanes: realms.slice(0, C().lanes).map(r => ({ realm: r, hero: null, aux: [null, null] })),
     slots: new Array(C().sharedSlots).fill(null),
@@ -746,7 +767,34 @@ function collectAuras(tpi, tli, bare) {
       }
     }
   }
+  // Deepforge relic-boost effects modify the target Hero's Relic bonuses
+  const tH = G.players[tpi].lanes[tli].hero;
+  if (tH && tH.relics.length && !(bare)) {
+    const boost = relicBoost(tpi, tli, tH);
+    atk += boost.atk; hp += boost.hp;
+  }
   return { atk, hp, maxAttacks };
+}
+
+// Extra Attack/Health granted to a Hero's Relics by Deepforge boosters:
+// Durgan (double printed stats), Mardis-aux (+10/+10 per Relic, board-wide),
+// Hegga-aux (+N Health per Relic on that lane's Hero).
+function relicBoost(tpi, tli, tHero) {
+  const relicCount = tHero.relics.length;
+  let printedAtk = 0, printedHp = 0;
+  for (const r of tHero.relics) for (const e of (fx(r.cardId).cont || [])) if (e.scope === "equipped") { printedAtk += e.atk; printedHp += e.hp; }
+  let atk = 0, hp = 0;
+  for (const pos of heroesOf(tpi)) if (/all Relics equipped to Heroes you control grant double their printed Attack and Health/i.test(cardById(heroAt(pos).cardId).text || "")) { atk += printedAtk; hp += printedHp; }
+  G.players[tpi].lanes.forEach((L, li) => {
+    const seen = new Set();
+    for (const a of L.aux) if (a && !seen.has(a.uid)) {
+      seen.add(a.uid);
+      const at = cardById(a.cardId).auxText || "";
+      if (/all Relics equipped to Heroes you control grant an additional \+(\d+) Attack and \+(\d+) Health/i.test(at)) { const mm = at.match(/\+(\d+) Attack and \+(\d+) Health/); atk += relicCount * +mm[1]; hp += relicCount * +mm[2]; }
+      if (li === tli) { const hm = at.match(/each Relic equipped to the Hero in this lane grants an additional \+(\d+) Health/i); if (hm) hp += relicCount * +hm[1]; }
+    }
+  });
+  return { atk, hp };
 }
 
 function auraHits(e, spi, sli, tpi, tli, src) {
@@ -756,6 +804,8 @@ function auraHits(e, spi, sli, tpi, tli, src) {
     case "equipped": return src.equippedHere && spi === tpi && sli === tli;
     case "equippedIfChampion": return src.equippedHere && spi === tpi && sli === tli && isChampion({ pi: tpi, li: tli });
     case "champion": return spi === tpi && isChampion({ pi: tpi, li: tli });
+    case "selfIfHasRelic": return spi === tpi && sli === tli && tHero.relics.length > 0;
+    case "selfIfTwoRelics": return spi === tpi && sli === tli && tHero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0) >= 2;
     case "laneHero": return spi === tpi && sli === tli;
     case "allFriendly":
       if (spi !== tpi) return false;
@@ -899,13 +949,14 @@ async function runOp(op, pi, ctx) {
     case "mortality": if (op.n < 0) loseMortality(pi, -op.n, ctx.sourceName); else { P.mortality += op.n; log(`${P.name} gains ${op.n} Mortality.`); } break;
     case "draw": for (let i = 0; i < op.n; i++) drawCard(pi); break;
     case "discard":
+      if (!P.discard) P.discard = [];
       for (let i = 0; i < op.n && P.hand.length; i++) {
-        if (P.isAI) { P.hand.splice(Math.floor(Math.random() * P.hand.length), 1); log(`AI discards a card.`, "ai"); }
+        if (P.isAI) { P.discard.push(P.hand.splice(Math.floor(Math.random() * P.hand.length), 1)[0]); log(`AI discards a card.`, "ai"); }
         else {
           const idx = await UI.pickHandCard("Choose a card to discard");
           if (idx == null) return;
           log(`You discard ${cardById(P.hand[idx]).name}.`);
-          P.hand.splice(idx, 1);
+          P.discard.push(P.hand.splice(idx, 1)[0]);
         }
       }
       break;
@@ -1020,6 +1071,7 @@ async function runOp(op, pi, ctx) {
           L.aux.forEach(a => { if (a && !seen.has(a.uid)) { seen.add(a.uid); supports.push({ li, kind: "aux", obj: a, label: `Aux ${cardById(a.cardId).name} (lane ${li + 1})` }); } });
         });
         if (op.only) supports = supports.filter(s => s.kind === op.only);
+        supports = supports.filter(s => s.kind !== "relic" || canDestroyRelic(1 - pi, s.li));   // honor relic protection
         if (!supports.length) { if (!i) log(`No valid enemy ${op.only || "Relic/Auxiliary"} to destroy.`); break; }
         let pick = supports.sort((a, b) => cardById(b.obj.cardId).cost - cardById(a.obj.cardId).cost)[0];
         if (!P.isAI) {
@@ -1057,8 +1109,78 @@ async function runOp(op, pi, ctx) {
       break;
     }
     case "forgeCounter":
-      if (ctx.relic) { ctx.relic.counters = (ctx.relic.counters || 0) + 1; log(`${ctx.sourceName} gains a forge counter (${ctx.relic.counters}).`); }
+      if (ctx.relic) { ctx.relic.counters = (ctx.relic.counters || 0) + 1; log(`${cardById(ctx.relic.cardId).name} gains a forge counter (${ctx.relic.counters}).`); }
       break;
+    case "forgeCounterLane": {
+      const lh = ctx.laneIdx != null ? heroAt({ pi, li: ctx.laneIdx }) : null;
+      if (lh && lh.relics.length) { const r = lh.relics.sort((a, b) => (b.counters || 0) - (a.counters || 0))[0]; r.counters = (r.counters || 0) + 1; log(`${cardById(r.cardId).name} gains a forge counter (${r.counters}).`); }
+      break;
+    }
+    case "moveRelic": {
+      const owned = [];
+      G.players[pi].lanes.forEach((L, li) => { if (L.hero) L.hero.relics.forEach(r => owned.push({ li, r })); });
+      const heroes = heroesOf(pi);
+      if (!owned.length || heroes.length < 2) { log(`No Relic to move.`); break; }
+      let pick = owned[0];
+      if (!P.isAI) { const idx = promptPick("Move which Relic?", owned.map(o => `${cardById(o.r.cardId).name} (lane ${o.li + 1})`)); if (idx == null) break; pick = owned[idx]; }
+      const relCard = cardById(pick.r.cardId);
+      const dests = heroes.filter(t => t.li !== pick.li && (!C().relicRealmLocked || cardById(heroAt(t).cardId).realm === relCard.realm) && (C().relicSlotsPerHero - heroAt(t).relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0)) >= (relCard.slots || 1));
+      if (!dests.length) { log(`No legal Hero to move ${relCard.name} to.`); break; }
+      let dest = P.isAI ? dests.sort((a, b) => effAtk(pi, b.li) - effAtk(pi, a.li))[0] : (await UI.pickHero(`Move ${relCard.name} to which Hero?`, dests)) || dests[0];
+      const from = G.players[pi].lanes[pick.li].hero;
+      from.relics = from.relics.filter(r => r !== pick.r);
+      heroAt(dest).relics.push(pick.r);
+      log(`${P.name} re-forges ${relCard.name} onto ${cardById(heroAt(dest).cardId).name}.`, P.isAI ? "ai" : "");
+      break;
+    }
+    case "attachRelic": {
+      const relIdxs = P.hand.map((id, ix) => ({ id, ix })).filter(x => cardById(x.id).type === "relic");
+      if (!relIdxs.length) { log(`No Relic in hand to attach.`); break; }
+      let pickR = P.isAI ? relIdxs.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0] : relIdxs[(() => { const i = promptPick("Attach which Relic from your hand?", relIdxs.map(x => cardById(x.id).name)); return i == null ? -1 : i; })()];
+      if (!pickR) break;
+      const relCard = cardById(pickR.id);
+      let heroesE = op.target === "laneHero" && ctx.laneIdx != null ? (heroAt({ pi, li: ctx.laneIdx }) ? [{ pi, li: ctx.laneIdx }] : []) : heroesOf(pi);
+      heroesE = heroesE.filter(t => (!C().relicRealmLocked || cardById(heroAt(t).cardId).realm === relCard.realm) && (C().relicSlotsPerHero - heroAt(t).relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0)) >= (relCard.slots || 1));
+      if (!heroesE.length) { log(`No legal Hero to attach ${relCard.name} to.`); break; }
+      const cost = op.discount >= 99 ? 0 : Math.max(1, relCard.cost - op.discount);
+      if (P.pulse < cost) { log(`Can't afford ${relCard.name}.`); break; }
+      let dest = P.isAI ? heroesE.sort((a, b) => effAtk(pi, b.li) - effAtk(pi, a.li))[0] : (await UI.pickHero(`Attach ${relCard.name} to which Hero?`, heroesE)) || heroesE[0];
+      P.pulse -= cost; P.hand.splice(pickR.ix, 1);
+      const inst = { uid: uid(), cardId: relCard.id, counters: 0 };
+      heroAt(dest).relics.push(inst);
+      ctx.relic = inst;   // so a following "place N forge counters on it" targets this Relic
+      log(`${P.name} attaches ${relCard.name} to ${cardById(heroAt(dest).cardId).name}${cost ? ` (${cost} Pulse)` : " for free"}.`, P.isAI ? "ai" : "");
+      emit("playRelic", pi, {});
+      break;
+    }
+    case "returnRelicDiscard": {
+      if (!P.discard) P.discard = [];
+      const relIdxs = P.discard.map((id, ix) => ({ id, ix })).filter(x => cardById(x.id).type === "relic");
+      if (!relIdxs.length) { log(`No Relic in your discard pile.`); break; }
+      let pickR = P.isAI ? relIdxs.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0] : relIdxs[(() => { const i = promptPick("Return which Relic from your discard pile?", relIdxs.map(x => cardById(x.id).name)); return i == null ? -1 : i; })()];
+      if (!pickR) break;
+      P.hand.push(pickR.id); P.discard.splice(pickR.ix, 1);
+      log(`${P.name} returns ${cardById(pickR.id).name} from the discard pile to hand.`, P.isAI ? "ai" : "");
+      break;
+    }
+    case "shatterRelics": {
+      let destroyed = 0;
+      for (let k = 0; k < op.n; k++) {
+        const rels = [];
+        heroesOf(1 - pi).forEach(t => heroAt(t).relics.forEach(r => rels.push({ t, r })));
+        const avail = rels.filter(x => canDestroyRelic(1 - pi, x.t.li));
+        if (!avail.length) break;
+        let pick = avail.sort((a, b) => cardById(b.r.cardId).cost - cardById(a.r.cardId).cost)[0];
+        if (!P.isAI) { const idx = promptPick(`Destroy which enemy Relic? (${k + 1} of ${op.n})`, avail.map(x => `${cardById(x.r.cardId).name} on ${cardById(heroAt(x.t).cardId).name}`)); if (idx == null) break; pick = avail[idx]; }
+        const hero = heroAt(pick.t);
+        hero.relics = hero.relics.filter(r => r !== pick.r);
+        destroyed++;
+        log(`${P.name} destroys ${cardById(pick.r.cardId).name}.`);
+        if (op.dmg) dealDamage(pick.t, op.dmg, { sourceName: ctx.sourceName });
+      }
+      if (!destroyed) log(`No enemy Relic could be destroyed.`);
+      break;
+    }
     case "forgeCounterChoice": {
       const owned = [];
       G.players[pi].lanes.forEach((L, li) => { if (L.hero) L.hero.relics.forEach(r => owned.push({ li, r })); });
@@ -1074,13 +1196,14 @@ async function runOp(op, pi, ctx) {
       break;
     }
     case "destroyAnyEnemy": {
-      const opts2 = [];
+      let opts2 = [];
       G.players[1 - pi].lanes.forEach((L, li) => {
         if (L.hero) L.hero.relics.forEach(r => opts2.push({ kind: "relic", li, obj: r, label: `Relic ${cardById(r.cardId).name} (lane ${li + 1})` }));
         const seen = new Set();
         L.aux.forEach(a => { if (a && !seen.has(a.uid)) { seen.add(a.uid); opts2.push({ kind: "aux", li, obj: a, label: `Aux ${cardById(a.cardId).name} (lane ${li + 1})` }); } });
       });
       G.players[1 - pi].slots.forEach((s, si) => { if (s) opts2.push({ kind: "slot", si, label: `${s.kind}${s.faceDown ? " (face-down)" : ": " + cardById(s.cardId).name}` }); });
+      opts2 = opts2.filter(o => o.kind !== "relic" || canDestroyRelic(1 - pi, o.li));   // honor relic protection
       if (!opts2.length) { log(`Nothing to destroy — fizzles.`); break; }
       let pick = opts2[0];
       if (!P.isAI) {
@@ -1215,6 +1338,37 @@ function heroesOf(pi) {
   const out = [];
   G.players[pi].lanes.forEach((L, li) => { if (L.hero) out.push({ pi, li }); });
   return out;
+}
+
+/* --------------------------- Relic protection --------------------------- */
+function relicStaticProtected(ownerPi, li) {
+  const hero = G.players[ownerPi].lanes[li].hero;
+  if (!hero) return false;
+  const f = fx(hero.cardId).flags || {};
+  if (f.relicProtect === "self") return true;
+  if (f.relicProtect === "selfIfTwoRelics" && hero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0) >= 2) return true;
+  const lanes = G.players[ownerPi].lanes;
+  for (let l2 = 0; l2 < lanes.length; l2++) {
+    if (!lanes[l2].hero) continue;
+    const seen = new Set();
+    for (const a of lanes[l2].aux) if (a && !seen.has(a.uid)) {
+      seen.add(a.uid);
+      const af = fx(a.cardId).auxFlags || {};
+      if (af.relicProtect === "neighbor" && Math.abs(l2 - li) === 1) return true;
+      if (af.relicProtect === "self" && l2 === li) return true;
+    }
+  }
+  return false;
+}
+// May an enemy effect destroy the Relic on ownerPi's Hero at li? Consumes an Anvil Ward hex if present.
+function canDestroyRelic(ownerPi, li) {
+  if (relicStaticProtected(ownerPi, li)) { log(`That Relic can't be destroyed (protected).`); return false; }
+  const P = G.players[ownerPi];
+  for (let si = 0; si < P.slots.length; si++) {
+    const s = P.slots[si];
+    if (s && s.kind === "hex" && fx(s.cardId).relicWard) { P.slots[si] = null; log(`${P.name}'s ${cardById(s.cardId).name} prevents the Relic's destruction!`, P.isAI ? "ai" : ""); return false; }
+  }
+  return true;
 }
 
 /* ------------------------------ Champion ------------------------------ */
@@ -1576,10 +1730,19 @@ function removeAux(pi, laneIdx, auxUid) {
   for (let i = 0; i < L.aux.length; i++) if (L.aux[i] && L.aux[i].uid === auxUid) L.aux[i] = null;
 }
 
+// Total Relic-cost reduction the player currently has in play (Boldur aux, Mardis).
+function relicCostReduction(pi) {
+  let r = 0;
+  for (const pos of heroesOf(pi)) { const m = (cardById(heroAt(pos).cardId).text || "").match(/your Relics cost (\d+) less Pulse/i); if (m) r += +m[1]; }
+  G.players[pi].lanes.forEach(L => { const seen = new Set(); for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); const m = (cardById(a.cardId).auxText || "").match(/Relics you play cost (\d+) less Pulse/i); if (m) r += +m[1]; } });
+  return r;
+}
+function relicCostOf(pi, card) { return Math.max(1, card.cost - relicCostReduction(pi)); }
+
 function playRelic(pi, handIdx, laneIdx) {
   const P = G.players[pi];
   const card = cardById(P.hand[handIdx]);
-  P.pulse -= card.cost;
+  P.pulse -= relicCostOf(pi, card);
   P.hand.splice(handIdx, 1);
   P.lanes[laneIdx].hero.relics.push({ uid: uid(), cardId: card.id, counters: 0 });
   log(`${P.name} equips ${card.name} to ${cardById(P.lanes[laneIdx].hero.cardId).name}.`, P.isAI ? "ai" : "");
@@ -1669,7 +1832,7 @@ function playOptions(pi, handIdx) {
       if (!L.hero || !laneUnlocked(pi, li)) return;
       if (C().relicRealmLocked && cardById(L.hero.cardId).realm !== card.realm) return;
       const used = L.hero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0);
-      if (C().relicSlotsPerHero - used >= (card.slots || 1) && P.pulse >= card.cost) opts.relicLanes.push(li);
+      if (C().relicSlotsPerHero - used >= (card.slots || 1) && P.pulse >= relicCostOf(pi, card)) opts.relicLanes.push(li);
     });
   } else if (card.type === "hex") {
     if (openSlotIdx(pi) >= 0) P.lanes.forEach((L, li) => { if (laneUnlocked(pi, li)) opts.hexLanes.push(li); });
@@ -1873,7 +2036,8 @@ async function resolveAttack(pi, attackerLis, target) {
   const defBare = alive.some(li => heroFlag({ pi, li }, "ignoreEnemyEquip"));
   const atkBare = heroFlag(ctx.defender, "ignoreEnemyEquip");
   const defHero = heroAt(ctx.defender);
-  const atkPenalty = (fx(defHero.cardId).flags || {}).attackerPenalty || 0;   // Kaeso etc.
+  const defFlags = fx(defHero.cardId).flags || {};
+  const atkPenalty = (defFlags.attackerPenalty || 0) + (defHero.relics.length ? (defFlags.attackerPenaltyIfRelic || 0) : 0);   // Kaeso, Hegga
   const atkOf = (li) => {
     let a = effAtk(pi, li, atkBare);
     if (combat.atkSet != null) a = combat.atkSet;
