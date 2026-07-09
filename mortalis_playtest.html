@@ -5397,8 +5397,36 @@ function parseStatClause(s) {
 
 // Parse a simple imperative clause into ops. Returns null if unrecognized.
 function parseOp(cl) {
-  cl = norm(cl.trim().replace(/\.$/, ""));
+  cl = norm(cl.trim().replace(/\.$/, "").replace(/\s*\((?:stat reduction[^)]*|wards?[^)]*|rounded[^)]*|minimum \d+|maximum \d+|no stat bonus)\)/gi, ""));
   let m;
+  // ---- scoped buffs / heals / reductions (added for full coverage) ----
+  if ((m = cl.match(new RegExp(`^(?:all|each|every) Hero(?:es)? you control (?:of any [Rr]ealm )?gains? \\+${NUM} Attack(?: and \\+${NUM} Health)?(?: until end of turn| permanently)?$`, "i")))) {
+    const perm = /permanently/i.test(cl), tot = /until end of turn/i.test(cl);
+    return { op: "buff", atk: +m[1], hp: +(m[2] || 0), target: "allOwn", perm, dur: tot ? 0 : 0 };
+  }
+  if ((m = cl.match(new RegExp(`^all other Heroes you control gain \\+${NUM} Attack and \\+${NUM} Health permanently$`, "i")))) return { op: "buff", atk: +m[1], hp: +m[2], target: "allOwnOther", perm: true };
+  if ((m = cl.match(new RegExp(`^(?:all|each|every) Hero(?:es)? you control heals? ${NUM} Health(?: and gains? \\+${NUM} Health permanently)?$`, "i")))) return { op: "heal", n: +m[1], permHp: +(m[2] || 0), target: "allOwn" };
+  if ((m = cl.match(new RegExp(`^a Hero you control heals ${NUM} Health(?: and gains? \\+${NUM} Health permanently)?$`, "i")))) return { op: "heal", n: +m[1], permHp: +(m[2] || 0), target: "ownChoice" };
+  if ((m = cl.match(new RegExp(`^it heals ${NUM} Health$`, "i")))) return { op: "heal", n: +m[1], target: "self" };
+  if ((m = cl.match(/^it heals to its maximum Health(?:, gains? \+(\d+) Health permanently)?$/i))) { const ops = [{ op: "healToMax", target: "self" }]; if (m[1]) ops.push({ op: "buff", atk: 0, hp: +m[1], target: "self", perm: true }); return ops; }
+  if ((m = cl.match(/^(?:a Hero you control|it) heals to (?:its )?maximum Health$/i))) return { op: "healToMax", target: "ownChoice" };
+  // wards
+  if ((m = cl.match(new RegExp(`^(?:each|all) Hero(?:es)? you control gains? a ward that prevents the next ${NUM} damage(?: it would take)?(?:,? and you gain ${NUM} Pulse for each Hero warded[^,]*)?$`, "i")))) return { op: "ward", n: +m[1], target: "allOwn", pulsePerWard: m[2] ? 1 : 0, pulseMax: m[2] ? 3 : 0 };
+  if ((m = cl.match(new RegExp(`^(?:a Hero you control|it) gains a ward that prevents the next ${NUM} damage(?: it would take)?$`, "i")))) return { op: "ward", n: +m[1], target: cl.startsWith("it ") ? "self" : "ownChoice" };
+  // stat reductions to enemies
+  if ((m = cl.match(new RegExp(`^(?:every|all) enemy Hero(?:es)? (?:permanently )?(?:gets?|lose[s]?) [-−–]?${NUM} (Attack|Health)(?: permanently)?$`, "i")))) return { op: "statReduce", atk: /Attack/i.test(m[2]) ? +m[1] : 0, hp: /Health/i.test(m[2]) ? +m[1] : 0, target: "allEnemy" };
+  if ((m = cl.match(new RegExp(`^all enemy Hero(?:es)? permanently lose ${NUM} Health$`, "i")))) return { op: "statReduce", atk: 0, hp: +m[1], target: "allEnemy" };
+  if ((m = cl.match(new RegExp(`^an enemy Hero of your choice loses ${NUM} Health$`, "i")))) return { op: "statReduce", atk: 0, hp: +m[1], target: "enemyChoice" };
+  // damage to multiple
+  if ((m = cl.match(new RegExp(`^deal ${NUM} damage to each of up to ${NUM} (?:different )?enemy Heroes of your choice$`, "i")))) return { op: "damage", n: +m[1], target: "upToAny", count: +m[2], enemyOnly: true };
+  // cleanse
+  if ((m = cl.match(/^remove all enemy-imposed stat reductions and negative effects(?: \([^)]*\))? from (?:up to (\d+) Heroes you control|a Hero you control)[^]*$/i))) return { op: "removeReductions", target: m[1] ? "upToOwn" : "ownChoice", count: m[1] ? +m[1] : 1 };
+  // search deck for a relic
+  if ((m = cl.match(/^search your deck for(?: up to (\d+))?(?: any)? Relic cards?(?: costing (\d+) or less)?, reveal (?:it|them), and put (?:it|them) into your hand, then shuffle your deck$/i))) return { op: "searchRelic", count: m[1] ? +m[1] : 1, maxCost: m[2] ? +m[2] : 99 };
+  // may attack twice / any lane (targeted at a chosen own hero)
+  if ((m = cl.match(/^(?:choose a Hero you control: )?it may attack twice this turn$/i))) return { op: "attackTwice", target: "self" };
+  // forge counters (N) on a chosen relic
+  if ((m = cl.match(/^[Pp]lace (\d+) forge counters? on a Relic you control$/i))) { const ops = []; for (let i = 0; i < +m[1]; i++) ops.push({ op: "forgeCounterChoice" }); return ops; }
   if ((m = cl.match(/^destroy a Hero you control(?: in any lane)?$/i))) return { op: "sacrifice" };
   if ((m = cl.match(/^Gain Pulse equal to that Hero's cost(?:, immediately and only once)?$/i))) return { op: "pulseLastCost", mult: 1 };
   if ((m = cl.match(/^destroy a Relic you control$/i))) return { op: "sacrificeRelic" };
@@ -5515,16 +5543,20 @@ function parseOps(text) {
   if (m) return [{ op: "damage", n: +m[2], target: "upToAny", count: +m[1] }];
   const ops = [];
   for (const s of sentences(text)) {
-    const parts = s.replace(/\.$/, "").split(/, then |; | and (?=gain |draw |deal |destroy |discard |lose |you gain |a Hero you control )/i);
-    // try whole-sentence first (some ops contain commas)
+    // try the whole sentence first (some single ops contain commas)
     const whole = parseOp(s);
     if (whole) { ops.push(...[].concat(whole)); continue; }
-    let ok = true;
-    const got = [];
-    for (const p of parts) {
-      const o = parseOp(p);
-      if (!o) { ok = false; break; }
-      got.push(...[].concat(o));
+    // otherwise split on connectors and greedily parse, rejoining segments
+    // when an op legitimately spans a comma (longest-chunk-first)
+    const segs = s.replace(/\.$/, "").split(/, then | and then |, and | and (?=[a-z])|, |; /i).map(x => x.trim()).filter(Boolean);
+    let ok = true; const got = []; let i = 0;
+    while (i < segs.length) {
+      let matched = false;
+      for (let j = Math.min(segs.length, i + 3); j > i; j--) {
+        const o = parseOp(segs.slice(i, j).join(", "));
+        if (o) { got.push(...[].concat(o)); i = j; matched = true; break; }
+      }
+      if (!matched) { ok = false; break; }
     }
     if (!ok) return null;
     ops.push(...got);
@@ -5569,6 +5601,48 @@ function compileTriggers(text, card, out) {
   if ((m = t.match(new RegExp(`whenever an enemy Hero dies, gain ${NUM} Pulse`, "i")))) { out.onEnemyDeath = { pulse: +m[1] }; out.autoBits.push("pulse on enemy death"); }
   if ((m = t.match(new RegExp(`whenever a Hero you control dies, gain ${NUM} Pulse`, "i")))) { out.onFriendlyDeath = { pulse: +m[1] }; out.autoBits.push("pulse on friendly death"); }
   if ((m = t.match(new RegExp(`Whenever you play a Hero from a Realm other than (\\w+), gain ${NUM} Pulse`, "i")))) { out.onPlayOtherRealm = { realm: m[1], pulse: +m[2] }; out.autoBits.push("pulse on other-realm hero"); }
+}
+
+// Passive "While X is in play, whenever <event>, <effect>" listeners.
+// out.listen = [{event, do:{k,...}, maxPerTurn}]
+function compileListen(text, out, bits) {
+  let m; const t = norm(text || "");
+  const push = (event, dd, label, maxPerTurn) => { out.push({ event, do: dd, maxPerTurn }); bits.push(label); };
+  if ((m = t.match(new RegExp(`[Ww]henever you gain Pulse from a card effect, \\w+ gains \\+${NUM} Attack until the end of your next turn`, "i")))) push("gainPulse", { k: "buffSelf", atk: +m[1], dur: 2 }, "grows on Pulse gain");
+  if ((m = t.match(new RegExp(`[Ww]henever you lose Mortality, gain ${NUM} Pulse(?: \\(maximum (\\d+) Pulse per turn[^)]*\\))?`, "i")))) push("loseMortality", { k: "pulse", n: +m[1] }, "Pulse on Mortality loss", m[2] ? +m[2] : 0);
+  if ((m = t.match(new RegExp(`[Ww]henever you play a Relic, \\w+ gains \\+${NUM} Attack and \\+${NUM} Health permanently`, "i")))) push("playRelic", { k: "buffSelf", atk: +m[1], hp: +m[2], perm: true }, "grows on Relic play");
+  if ((m = t.match(new RegExp(`whenever an enemy Hero dies from combat damage dealt by one of your Heroes, \\w+ permanently gains \\+${NUM} Attack`, "i")))) push("enemyKilledByYourHero", { k: "buffSelf", atk: +m[1], perm: true }, "grows when your Hero kills");
+  if ((m = t.match(new RegExp(`whenever you heal a Hero with a card effect, gain ${NUM} Pulse(?: \\(maximum (\\d+) per turn\\))?`, "i")))) push("heal", { k: "pulse", n: +m[1] }, "Pulse on heal", m[2] ? +m[2] : 0);
+  if ((m = t.match(new RegExp(`whenever a Hero you control's ward is fully consumed[^,]*, that Hero heals ${NUM} Health`, "i")))) push("wardConsumed", { k: "healEvent", n: +m[1] }, "heal on ward break");
+  if ((m = t.match(new RegExp(`whenever a Hero you control dies, all remaining Heroes you control gain \\+${NUM} Attack and \\+${NUM} Health permanently`, "i")))) push("friendlyDied", { k: "buffAll", atk: +m[1], hp: +m[2], perm: true }, "team grows on death");
+  if ((m = t.match(new RegExp(`whenever an enemy Hero dies, all remaining enemy Heroes get [-−–]${NUM} Attack permanently`, "i")))) push("enemyDied", { k: "reduceAll", atk: +m[1] }, "enemies wither on death");
+}
+
+// Static combat flags on a Hero. out.flags = {attackAnyLane, taunt, ignoreEnemyEquip, protect:{cond}}
+function compileFlags(text, out, bits) {
+  const t = norm(text || "");
+  const f = {};
+  if (/may attack any enemy lane/i.test(t)) { f.attackAnyLane = true; bits.push("attacks any lane"); }
+  if (/(?:all enemy Hero attacks must target|enemy Heroes must attack) \w+(?:'s)? lane/i.test(t)) { f.taunt = true; bits.push("taunt"); }
+  if (/When \w+ fights, the (?:opposing Hero's equipped Relics|enemy Hero's Relics)[^.]*grant it no Attack or Health for that combat/i.test(t)) { f.ignoreEnemyEquip = true; bits.push("ignores enemy equipment"); }
+  if (/cannot be attacked and cannot be targeted by enemy card effects/i.test(t)) {
+    if (/While another Hero you control occupies a neighboring lane/i.test(t)) f.protect = "neighbor";
+    else if (/While any other Hero you control is in play/i.test(t)) f.protect = "otherHero";
+    else if (/Until (?:the first time she attacks|the first time he attacks|it attacks)/i.test(t)) f.protect = "untilAttack";
+    else if (/did not attack during your previous turn/i.test(t)) f.protect = "didntAttackLast";
+    if (f.protect) bits.push("conditional protection");
+  }
+  if (Object.keys(f).length) out.flags = f;
+}
+
+// "When <Name> dies, <effect>." → out.onDeath (ops run from destroyHero)
+function compileOnDeath(text, out, bits) {
+  const t = norm(text || "");
+  const m = t.match(/^When .+? (?:dies|is destroyed)(?: \([^)]*\))?, (.*)$/i);
+  if (!m) return;
+  let body = m[1].replace(/\s*and you draw (\d+) cards?/i, ". draw $1 cards");
+  const ops = parseOps(body);
+  if (ops) { out.onDeath = ops; bits.push("on-death effect"); }
 }
 
 // Combat-event triggers on Heroes/Relics. `self` fires for the carrying Hero's
@@ -5720,16 +5794,19 @@ function compileActivated(text, list, bits) {
 }
 
 function compileCard(card) {
-  const out = { cont: [], props: [], sot: [], eot: [], onEnter: null, spellOps: null, rite: null, hexTrig: null, autoBits: [], auxCont: [], auxSot: [], auxEot: [], auxOnEnter: null, auxProps: [], auxAutoBits: [], activated: [], auxActivated: [], combatTrig: [] };
+  const out = { cont: [], props: [], sot: [], eot: [], onEnter: null, onDeath: null, listen: [], spellOps: null, rite: null, hexTrig: null, autoBits: [], auxCont: [], auxSot: [], auxEot: [], auxOnEnter: null, auxProps: [], auxAutoBits: [], activated: [], auxActivated: [], combatTrig: [] };
   try {
     if (card.type === "hero") {
       compileContinuous(card.text, "hero", out);
       compileRecurring(card.text, out);
       compileTriggers(card.text, card, out);
       compileCombatTriggers(card.text, out.combatTrig, out.autoBits);
+      compileListen(card.text, out.listen, out.autoBits);
+      compileOnDeath(card.text, out, out.autoBits);
+      compileFlags(card.text, out, out.autoBits);
       compileActivated(card.text, out.activated, out.autoBits);
       compileActivated(card.auxText, out.auxActivated, out.auxAutoBits);
-      const em = norm(card.text).match(/^When \S+ enters play, (.*?\.)/i);
+      const em = norm(card.text).match(/^When .+? enters play, (.*?)(?:\. While |\.$|$)/i);
       if (em) { out.onEnter = parseOps(em[1]); if (out.onEnter) out.autoBits.push("on-enter"); }
       // aux side
       const aout = { cont: out.auxCont, props: out.auxProps, sot: out.auxSot, eot: out.auxEot, autoBits: out.auxAutoBits };
@@ -5833,21 +5910,24 @@ function undo() { if (!UNDO.length) return false; G = JSON.parse(UNDO.pop()); re
 
 function heroInst(cardId) {
   const c = cardById(cardId);
-  return { uid: uid(), cardId, permAtk: 0, permHp: 0, redAtk: 0, redHp: 0, dmg: 0, temp: [], relics: [], attacksUsed: 0, playedTurn: G ? G.gt : 0, survivedOnce: false };
+  return { uid: uid(), cardId, permAtk: 0, permHp: 0, redAtk: 0, redHp: 0, dmg: 0, ward: 0, temp: [], relics: [], attacksUsed: 0, playedTurn: G ? G.gt : 0, survivedOnce: false };
 }
 
-function collectAuras(tpi, tli) {
-  // sum continuous effects from everything in play that hits hero at (tpi, tli)
+function collectAuras(tpi, tli, bare) {
+  // sum continuous effects from everything in play that hits hero at (tpi, tli).
+  // bare=true skips the target's OWN Relics and its lane's Aux (for "enemy's
+  // Relics and Auxiliary cards grant it no Attack or Health" combat effects).
   let atk = 0, hp = 0, maxAttacks = 1;
   for (let pi = 0; pi < 2; pi++) {
     const P = G.players[pi];
     for (let li = 0; li < P.lanes.length; li++) {
       const L = P.lanes[li];
+      const isTargetLane = pi === tpi && li === tli;
       const sources = [];
       if (L.hero) sources.push({ f: fx(L.hero.cardId), cont: "cont", props: "props", self: pi === tpi && li === tli });
       const seen = new Set();
-      for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); sources.push({ f: fx(a.cardId), cont: "auxCont", props: "auxProps" }); }
-      if (L.hero) for (const r of L.hero.relics) sources.push({ f: fx(r.cardId), cont: "cont", props: "props", equippedHere: true, forge: r.counters || 0 });
+      if (!(bare && isTargetLane)) for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); sources.push({ f: fx(a.cardId), cont: "auxCont", props: "auxProps" }); }
+      if (L.hero && !(bare && isTargetLane)) for (const r of L.hero.relics) sources.push({ f: fx(r.cardId), cont: "cont", props: "props", equippedHere: true, forge: r.counters || 0 });
       for (const src of sources) {
         for (const e of (src.f[src.cont] || [])) {
           const hit = auraHits(e, pi, li, tpi, tli, src);
@@ -5881,22 +5961,22 @@ function auraHits(e, spi, sli, tpi, tli, src) {
   }
 }
 
-function effAtk(pi, li) {
+function effAtk(pi, li, bare) {
   const h = G.players[pi].lanes[li].hero;
   if (!h) return 0;
   const c = cardById(h.cardId);
-  const auras = collectAuras(pi, li);
+  const auras = collectAuras(pi, li, bare);
   let temp = h.temp.filter(t => t.until >= G.gt).reduce((s, t) => s + (t.atk || 0), 0);
   let v = c.atk + h.permAtk - h.redAtk + auras.atk + temp;
   // Vorka-style: +1 Attack per point of missing Health
   if (/Attack is continuously increased by 1 for each point of Health she is currently missing|for each point of Health .* missing/i.test(c.text)) v += h.dmg;
   return Math.max(0, v);
 }
-function effMaxHp(pi, li) {
+function effMaxHp(pi, li, bare) {
   const h = G.players[pi].lanes[li].hero;
   if (!h) return 0;
   const c = cardById(h.cardId);
-  const auras = collectAuras(pi, li);
+  const auras = collectAuras(pi, li, bare);
   const temp = h.temp.filter(t => t.until >= G.gt).reduce((s, t) => s + (t.hp || 0), 0);
   return Math.max(0, c.hp + h.permHp - h.redHp + auras.hp + temp);
 }
@@ -5925,7 +6005,8 @@ function startTurn() {
   // reset attacks + once-per-turn abilities, expire temps
   for (let p = 0; p < 2; p++) for (const L of G.players[p].lanes) {
     if (L.hero) {
-      if (p === pi) { L.hero.attacksUsed = 0; L.hero.extraAttacks = 0; L.hero.usedAb = {}; L.hero.relics.forEach(r => { r.usedAb = {}; }); }
+      if (p === pi) { L.hero.attacksUsed = 0; L.hero.extraAttacks = 0; L.hero.usedAb = {}; L.hero.atkTrig = {}; L.hero.relics.forEach(r => { r.usedAb = {}; }); }
+      L.hero.listenCount = {};
       L.hero.temp = L.hero.temp.filter(t => t.until >= G.gt);
     }
     if (p === pi) L.aux.forEach(a => { if (a) a.usedAb = {}; });
@@ -6004,8 +6085,8 @@ async function runOp(op, pi, ctx) {
   const P = G.players[pi], O = G.players[1 - pi];
   const nameOf = (t) => cardById(G.players[t.pi].lanes[t.li].hero.cardId).name;
   switch (op.op) {
-    case "pulse": P.pulse += op.n; log(`${P.name} gains ${op.n} Pulse (${ctx.sourceName || "effect"}).`); break;
-    case "mortality": P.mortality += op.n; log(`${P.name} ${op.n < 0 ? "loses" : "gains"} ${Math.abs(op.n)} Mortality.`); checkWin(); break;
+    case "pulse": gainPulse(pi, op.n, ctx.sourceName || "effect"); break;
+    case "mortality": if (op.n < 0) loseMortality(pi, -op.n, ctx.sourceName); else { P.mortality += op.n; log(`${P.name} gains ${op.n} Mortality.`); } break;
     case "draw": for (let i = 0; i < op.n; i++) drawCard(pi); break;
     case "discard":
       for (let i = 0; i < op.n && P.hand.length; i++) {
@@ -6025,12 +6106,16 @@ async function runOp(op, pi, ctx) {
     }
     case "heal": {
       let targets = await resolveTargets(op, pi, ctx);
+      let any = false;
       for (const t of targets) if (heroAt(t)) {
         const h = heroAt(t);
         const healed = Math.min(h.dmg, op.n);
         h.dmg -= healed;
-        log(`${nameOf(t)} heals ${healed}.`);
+        if (op.permHp) h.permHp += op.permHp;
+        log(`${nameOf(t)} heals ${healed}${op.permHp ? ` and gains +${op.permHp} Health` : ""}.`);
+        any = true;
       }
+      if (any) emit("heal", pi, {});
       break;
     }
     case "buff": {
@@ -6074,8 +6159,10 @@ async function runOp(op, pi, ctx) {
       else t = await UI.pickHero("Choose a Hero you control to destroy" + (op.other ? " (not the source Hero)" : ""), own);
       if (!t) { ctx.abort = true; break; }
       ctx.lastCost = cardById(heroAt(t).cardId).cost;
+      ctx.sacAtk = cardById(heroAt(t).cardId).atk;
       log(`${P.name} sacrifices ${nameOf(t)}.`);
-      destroyHero(t.pi, t.li, null, {});
+      destroyHero(t.pi, t.li, null, { sacrifice: true });
+      emit("sacrifice", pi, {});
       break;
     }
     case "sacrificeRelic": {
@@ -6211,6 +6298,58 @@ async function runOp(op, pi, ctx) {
       }
       break;
     }
+    case "ward": {
+      let targets = await resolveTargets(op, pi, ctx);
+      let warded = 0;
+      for (const t of targets) if (heroAt(t)) { heroAt(t).ward += op.n; warded++; log(`${nameOf(t)} gains a ${op.n}-damage ward.`); }
+      if (op.pulsePerWard && warded) { const g = Math.min(warded * op.pulsePerWard, op.pulseMax || 99); P.pulse += g; log(`${P.name} gains ${g} Pulse.`); }
+      break;
+    }
+    case "healToMax": {
+      let targets = await resolveTargets(op, pi, ctx);
+      for (const t of targets) if (heroAt(t)) { const h = heroAt(t); if (h.dmg) log(`${nameOf(t)} heals to full (${h.dmg}).`); h.dmg = 0; }
+      break;
+    }
+    case "removeReductions": {
+      let targets = await resolveTargets(op, pi, ctx);
+      for (const t of targets) if (heroAt(t)) {
+        const h = heroAt(t);
+        h.redAtk = 0; h.redHp = 0; h.temp = h.temp.filter(x => (x.atk || 0) >= 0 && (x.hp || 0) >= 0);
+        h.noAttackOnTurn = 0; h.noAttackUntil = 0; h.silenced = 0;
+        log(`${nameOf(t)} is cleansed of enemy stat reductions and negative effects.`);
+      }
+      break;
+    }
+    case "setFlag": {
+      let targets = await resolveTargets(op, pi, ctx);
+      for (const t of targets) if (heroAt(t)) { heroAt(t)[op.flag] = op.until ? G.gt + op.until : true; log(`${nameOf(t)}: ${op.label || op.flag}.`); }
+      break;
+    }
+    case "searchRelic": {
+      for (let k = 0; k < (op.count || 1); k++) {
+        const idxs = P.deck.map((id, ix) => ({ id, ix })).filter(x => { const c = cardById(x.id); return c.type === "relic" && c.cost <= (op.maxCost || 99); });
+        if (!idxs.length) { if (!k) log(`No matching Relic in deck.`); break; }
+        let pick;
+        if (P.isAI) pick = idxs.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0];
+        else { const ci = promptPick("Search your deck — put which Relic into your hand?", idxs.map(x => `${cardById(x.id).name} (${cardById(x.id).realm}, ${cardById(x.id).cost})`)); if (ci == null) break; pick = idxs[ci]; }
+        P.hand.push(pick.id); P.deck.splice(pick.ix, 1);
+        log(`${P.name} searches up a Relic: ${cardById(pick.id).name}.`);
+      }
+      break;
+    }
+    case "healthTransfer": {
+      // move up to N max+current Health from the source lane Hero to a chosen ally
+      const src = ctx.laneIdx != null ? heroAt({ pi, li: ctx.laneIdx }) : null;
+      if (!src) break;
+      const others = heroesOf(pi).filter(t => t.li !== ctx.laneIdx);
+      if (!others.length) { log(`No other Hero to receive Health.`); break; }
+      let t = P.isAI ? others[0] : await UI.pickHero(`Move up to ${op.n} Health to which Hero?`, others);
+      if (!t) break;
+      src.permHp -= op.n; heroAt(t).permHp += op.n;
+      log(`${op.n} Health moved to ${nameOf(t)}.`);
+      if (effMaxHp(pi, ctx.laneIdx) <= src.dmg) destroyHero(pi, ctx.laneIdx, null, { noOverkill: true });
+      break;
+    }
   }
 }
 
@@ -6248,7 +6387,8 @@ function heroesOf(pi) {
 }
 
 async function resolveTargets(op, pi, ctx) {
-  const enemies = heroesOf(1 - pi), own = heroesOf(pi);
+  // enemy Heroes protected by "cannot be targeted by enemy card effects" are skipped
+  const enemies = heroesOf(1 - pi).filter(t => !isProtected(t)), own = heroesOf(pi);
   const P = G.players[pi];
   const strongest = (list) => list.sort((a, b) => effAtk(b.pi, b.li) - effAtk(a.pi, a.li))[0];
   switch (op.target) {
@@ -6258,12 +6398,19 @@ async function resolveTargets(op, pi, ctx) {
     case "killer": return ctx.killer && heroAt(ctx.killer) ? [ctx.killer] : [];
     case "played": return ctx.played ? [ctx.played] : [];
     case "allEnemy": return enemies;
+    case "self": return ctx.laneIdx != null && heroAt({ pi, li: ctx.laneIdx }) ? [{ pi, li: ctx.laneIdx }] : [];
     case "allOwn": return own.filter(t => {
       const r = cardById(heroAt(t).cardId).realm;
+      if (op.neighborCond && !own.some(o => Math.abs(o.li - t.li) === 1)) return false;
       if (op.realmFilter) return r.toLowerCase() === op.realmFilter.toLowerCase();
       if (op.otherThan) return r.toLowerCase() !== op.otherThan.toLowerCase();
       return true;
     });
+    case "allOwnOther": return own.filter(t => t.li !== ctx.laneIdx);
+    case "opposingEnemy": {
+      const o = { pi: 1 - pi, li: ctx.laneIdx };
+      return ctx.laneIdx != null && heroAt(o) ? [o] : [];
+    }
     case "enemyChoice":
       if (!enemies.length) return [];
       if (P.isAI) return [strongest(enemies)];
@@ -6279,7 +6426,7 @@ async function resolveTargets(op, pi, ctx) {
       return [await UI.pickHero("Choose any Hero", all)].filter(Boolean);
     }
     case "upToAny": case "upToOwn": {
-      const cands = op.target === "upToOwn" ? own : enemies.concat(own);
+      const cands = op.target === "upToOwn" ? own : (op.enemyOnly ? enemies : enemies.concat(own));
       const picked = [];
       for (let i = 0; i < (op.count || 1); i++) {
         const rem = cands.filter(c => !picked.some(p => p.pi === c.pi && p.li === c.li));
@@ -6297,15 +6444,81 @@ async function resolveTargets(op, pi, ctx) {
   }
 }
 
+/* ------------------------- passive event listeners ------------------------- */
+// Heroes/Auxes with "While X is in play, whenever <event>, <effect>" register a
+// listen entry; emit() fires all matching ones for the observing player.
+
+function emit(event, pi, data) {
+  if (!G) return;
+  data = data || {};
+  for (const pos of heroesOf(pi)) {
+    const h = heroAt(pos);
+    const lis = fx(h.cardId).listen || [];
+    for (let i = 0; i < lis.length; i++) {
+      const L = lis[i];
+      if (L.event !== event) continue;
+      if (L.maxPerTurn) {
+        h.listenCount = h.listenCount || {};
+        const key = event + i;
+        if ((h.listenCount[key] || 0) >= L.maxPerTurn) continue;
+        h.listenCount[key] = (h.listenCount[key] || 0) + 1;
+      }
+      applyListen(L.do, pi, pos, h, data);
+    }
+  }
+}
+
+function applyListen(dd, pi, pos, h, data) {
+  const nm = cardById(h.cardId).name;
+  if (dd.k === "pulse") { G.players[pi].pulse += dd.n; log(`${G.players[pi].name} gains ${dd.n} Pulse (${nm}).`, G.players[pi].isAI ? "ai" : ""); }
+  else if (dd.k === "buffSelf") {
+    if (dd.perm) { h.permAtk += dd.atk || 0; h.permHp += dd.hp || 0; }
+    else h.temp.push({ atk: dd.atk || 0, hp: dd.hp || 0, until: G.gt + (dd.dur || 0) });
+    log(`${nm} gains +${dd.atk || 0}/+${dd.hp || 0}${dd.perm ? " permanently" : ""}.`);
+  } else if (dd.k === "healEvent") { const tg = heroAt(data.at); if (tg) { const hd = Math.min(tg.dmg, dd.n); tg.dmg -= hd; if (hd) log(`${cardById(tg.cardId).name} heals ${hd} (${nm}).`); } }
+  else if (dd.k === "buffAll") {
+    for (const t of heroesOf(pi)) {
+      if (dd.other && t.li === pos.li) continue;
+      const hh = heroAt(t);
+      if (dd.realmFilter && cardById(hh.cardId).realm.toLowerCase() !== dd.realmFilter.toLowerCase()) continue;
+      hh.permAtk += dd.atk || 0; hh.permHp += dd.hp || 0;
+    }
+    log(`${nm}: your${dd.realmFilter ? " " + dd.realmFilter : ""} Heroes gain +${dd.atk || 0}/+${dd.hp || 0}.`);
+  } else if (dd.k === "healAll") { for (const t of heroesOf(pi)) { if (dd.other && t.li === pos.li) continue; const hh = heroAt(t); const hd = Math.min(hh.dmg, dd.n); hh.dmg -= hd; } log(`${nm}: your Heroes heal ${dd.n}.`); }
+  else if (dd.k === "reduceAll") { for (const t of heroesOf(1 - pi)) { const hh = heroAt(t); hh.redAtk += dd.atk || 0; hh.redHp += dd.hp || 0; if (effMaxHp(t.pi, t.li) <= 0) destroyHero(t.pi, t.li, null, { noOverkill: true }); } log(`${nm}: enemy Heroes lose ${dd.atk || 0} Attack / ${dd.hp || 0} Health.`); }
+}
+
+// Route Pulse gains through here so onGainPulse listeners fire.
+function gainPulse(pi, n, src) {
+  if (n <= 0) { G.players[pi].pulse += n; return; }
+  G.players[pi].pulse += n;
+  log(`${G.players[pi].name} gains ${n} Pulse${src ? " (" + src + ")" : ""}.`, G.players[pi].isAI ? "ai" : "");
+  emit("gainPulse", pi, {});
+}
+function loseMortality(pi, n, src) {
+  G.players[pi].mortality -= n;
+  if (n > 0) { log(`${G.players[pi].name} loses ${n} Mortality${src ? " (" + src + ")" : ""}.`); emit("loseMortality", pi, {}); }
+  checkWin();
+}
+
 /* ------------------------------ damage/death ------------------------------ */
 
 function dealDamage(t, amount, opts) {
   opts = opts || {};
   const h = heroAt(t);
   if (!h || amount <= 0) return 0;
+  const c = cardById(h.cardId);
+  // wards absorb damage before it reaches Health
+  if (h.ward > 0) {
+    const absorbed = Math.min(h.ward, amount);
+    h.ward -= absorbed;
+    amount -= absorbed;
+    log(`${c.name}'s ward absorbs ${absorbed}.`);
+    if (h.ward === 0) emit("wardConsumed", t.pi, { at: t });
+    if (amount <= 0) return 0;
+  }
   const before = curHp(t.pi, t.li);
   h.dmg += amount;
-  const c = cardById(h.cardId);
   log(`${c.name} takes ${amount} damage${opts.sourceName ? " (" + opts.sourceName + ")" : ""}.`);
   // "whenever this hero takes damage" growth triggers
   const od = fx(h.cardId).onDamaged;
@@ -6355,7 +6568,11 @@ function destroyHero(pi, li, killer, opts) {
     const ov = (cap != null && cap >= 0) ? Math.min(opts.overkill, cap) : opts.overkill;
     P.mortality -= ov;
     log(`Overkill: ${P.name} loses ${ov} Mortality${ov < opts.overkill ? ` (capped at ${cap})` : ""}.`);
+    emit("loseMortality", pi, {});
   }
+  // the dying Hero's own "when this Hero dies" effect
+  const selfDeath = fx(c.id).onDeath;
+  if (selfDeath) for (const op of selfDeath) runOp(op, pi, { laneIdx: li, sourceName: c.name });
   // death triggers: lane hexes + global "on death" listeners
   fireHexes(pi, "laneHeroDied", { laneIdx: li, killer, deadOwner: pi, lastCost: c.cost });
   for (let p = 0; p < 2; p++) {
@@ -6365,6 +6582,8 @@ function destroyHero(pi, li, killer, opts) {
       if (p === pi && f.onFriendlyDeath) runOp({ op: "pulse", n: f.onFriendlyDeath.pulse }, p, { sourceName: cardById(heroAt(t).cardId).name });
     }
   }
+  emit("friendlyDied", pi, {});
+  emit("enemyDied", 1 - pi, {});
   checkWin();
 }
 
@@ -6467,6 +6686,7 @@ function playRelic(pi, handIdx, laneIdx) {
   P.hand.splice(handIdx, 1);
   P.lanes[laneIdx].hero.relics.push({ uid: uid(), cardId: card.id, counters: 0 });
   log(`${P.name} equips ${card.name} to ${cardById(P.lanes[laneIdx].hero.cardId).name}.`, P.isAI ? "ai" : "");
+  emit("playRelic", pi, {});
 }
 
 function setHex(pi, handIdx, laneIdx) {
@@ -6524,6 +6744,7 @@ async function playSpell(pi, handIdx) { // pact or incantation
     const ctx = { sourceName: card.name };
     for (const op of ops) { if (ctx.abort) break; await runOp(op, pi, ctx); }
   } else if (!P.isAI) UI.toast("This card's effect isn't scripted — resolve it by hand (sandbox tools).");
+  if (card.type === "incantation") emit("castIncantation", pi, {});
 }
 
 /* ------------------------------ legality ------------------------------ */
@@ -6563,20 +6784,55 @@ function playOptions(pi, handIdx) {
 
 /* ------------------------------ combat ------------------------------ */
 
+function heroFlag(pos, flag) {
+  const h = heroAt(pos);
+  if (!h) return false;
+  const f = fx(h.cardId).flags;
+  return !!(f && f[flag]);
+}
+// Is this Hero currently protected (cannot be attacked / targeted by enemy effects)?
+function isProtected(pos) {
+  const h = heroAt(pos);
+  if (!h) return false;
+  const f = fx(h.cardId).flags;
+  if (!f || !f.protect) return false;
+  const others = heroesOf(pos.pi).filter(t => t.li !== pos.li);
+  switch (f.protect) {
+    case "neighbor": return others.some(t => Math.abs(t.li - pos.li) === 1);
+    case "otherHero": return others.length > 0;
+    case "untilAttack": return !h.hasAttacked;
+    case "didntAttackLast": return G.active !== pos.pi && h.attackedTurn !== G.gt - 1;
+    default: return false;
+  }
+}
+// Which enemy lane(s) is this attacker allowed to hit, honoring taunt + protection + attackAnyLane?
+function attackableEnemyLanes(pi) {
+  const O = 1 - pi;
+  let enemies = heroesOf(O).filter(t => !isProtected(t));
+  const taunts = enemies.filter(t => heroFlag(t, "taunt"));
+  if (taunts.length) enemies = taunts;
+  return enemies;
+}
+
 function legalTargetsFor(pi, attackerLis) {
   // returns {heroes:[{pi,li}], face:bool}
   const O = 1 - pi;
   const free = window.UI && UI.freeTargeting();
-  const enemyHeroes = heroesOf(O);
-  if (free) return { heroes: enemyHeroes, face: true };
-  if (!enemyHeroes.length) return { heroes: [], face: true };
+  const targetable = attackableEnemyLanes(pi);
+  if (free) return { heroes: heroesOf(O), face: true };
+  const anyBoard = heroesOf(O).length > 0;
+  // face damage only when the opponent has no Heroes on the board at all
+  if (!anyBoard) return { heroes: [], face: true };
+  if (!targetable.length) return { heroes: [], face: false };
   if (attackerLis.length === 1) {
     const li = attackerLis[0];
-    if (heroAt({ pi: O, li })) return { heroes: [{ pi: O, li }], face: false };
-    return { heroes: enemyHeroes, face: false };
+    if (heroFlag({ pi, li }, "attackAnyLane")) return { heroes: targetable, face: false };
+    const opp = { pi: O, li };
+    if (heroAt(opp) && !isProtected(opp) && (!targetable.some(t => heroFlag(t, "taunt")) || heroFlag(opp, "taunt"))) return { heroes: [opp], face: false };
+    return { heroes: targetable, face: false };
   }
-  // onslaught: each attacker must have empty opposing lane OR target its own opposing hero
-  const shared = enemyHeroes.filter(t => attackerLis.every(li => !heroAt({ pi: O, li }) || li === t.li));
+  // onslaught: each attacker must have empty opposing lane OR target its own opposing hero (unless it can attack any lane)
+  const shared = targetable.filter(t => attackerLis.every(li => heroFlag({ pi, li }, "attackAnyLane") || !heroAt({ pi: O, li }) || li === t.li));
   return { heroes: shared, face: false };
 }
 
@@ -6606,13 +6862,14 @@ async function fireCombat(event, actorPi, actorLi, targetPi, targetLi) {
     if (tr.event !== event) continue;
     if (tr.scope === "selfFirst") { if (!actor) continue; actor.atkTrig = actor.atkTrig || {}; if (actor.atkTrig[src]) continue; actor.atkTrig[src] = true; }
     const op = tr.op, PA = G.players[actorPi];
-    if (op.kind === "pulse") { PA.pulse += op.n; log(`${PA.name} gains ${op.n} Pulse (${src}).`, PA.isAI ? "ai" : ""); }
+    if (op.kind === "pulse") { gainPulse(actorPi, op.n, src); }
     else if (op.kind === "draw") { for (let i = 0; i < op.n; i++) drawCard(actorPi); }
-    else if (op.kind === "healSelf" && actor) { const healed = Math.min(actor.dmg, op.n); actor.dmg -= healed; if (healed) log(`${src} heals ${healed}.`); }
+    else if (op.kind === "healSelf" && actor) { const healed = Math.min(actor.dmg, op.n); actor.dmg -= healed; if (healed) { log(`${src} heals ${healed}.`); emit("heal", actorPi, {}); } }
     else if (op.kind === "buffSelf" && actor) { actor.permAtk += op.atk || 0; actor.permHp += op.hp || 0; log(`${src} permanently gains +${op.atk || 0}/+${op.hp || 0}.`); }
     else if (op.kind === "reduceTarget") { const tg = heroAt({ pi: targetPi, li: targetLi }); if (tg) { tg.redAtk += op.atk || 0; log(`${cardById(tg.cardId).name} gets -${op.atk} Attack permanently (${src}).`); } }
     else if (op.kind === "damageOpposing") { if (heroAt({ pi: 1 - actorPi, li: actorLi })) dealDamage({ pi: 1 - actorPi, li: actorLi }, op.n, { sourceName: src }); }
   }
+  if (event === "kill") emit("enemyKilledByYourHero", actorPi, {});
 }
 
 async function resolveAttack(pi, attackerLis, target) {
@@ -6620,7 +6877,7 @@ async function resolveAttack(pi, attackerLis, target) {
   const P = G.players[pi], O = G.players[1 - pi];
   attackerLis = attackerLis.filter(li => canAttack(pi, li));
   if (!attackerLis.length) return;
-  for (const li of attackerLis) heroAt({ pi, li }).attacksUsed++;
+  for (const li of attackerLis) { const h = heroAt({ pi, li }); h.attacksUsed++; h.hasAttacked = true; h.attackedTurn = G.gt; }
   const names = attackerLis.map(li => cardById(heroAt({ pi, li }).cardId).name).join(" + ");
   for (const li of attackerLis) await fireCombat("declareAttack", pi, li, target.face ? -1 : 1 - pi, target.li);
 
@@ -6628,6 +6885,7 @@ async function resolveAttack(pi, attackerLis, target) {
     const total = attackerLis.reduce((s, li) => s + effAtk(pi, li), 0);
     O.mortality -= total;
     log(`${names} attack${attackerLis.length > 1 ? "" : "s"} directly: ${O.name} loses ${total} Mortality!`, P.isAI ? "ai" : "");
+    if (total > 0) emit("loseMortality", 1 - pi, {});
     // Skarn-style: "whenever he deals damage directly to Mortality, draw"
     for (const li of attackerLis) await fireCombat("mortalityDamage", pi, li, -1, -1);
     checkWin();
@@ -6645,14 +6903,18 @@ async function resolveAttack(pi, attackerLis, target) {
   const alive = attackerLis.filter(li => heroAt({ pi, li }));
   if (!alive.length) { log(`All attackers died before combat!`); return; }
 
+  // "when X fights, the opposing Hero's Relics/Aux grant it no stats" — strip
+  // the defender's equipment if any attacker has it; strip attackers' if the defender has it
+  const defBare = alive.some(li => heroFlag({ pi, li }, "ignoreEnemyEquip"));
+  const atkBare = heroFlag(ctx.defender, "ignoreEnemyEquip");
   const atkOf = (li) => {
-    let a = effAtk(pi, li);
+    let a = effAtk(pi, li, atkBare);
     if (combat.atkSet != null) a = combat.atkSet;
     if (combat.swap) a = curHp(pi, li);
     return Math.max(0, a + combat.atkMod);
   };
   const defHero = heroAt(ctx.defender);
-  const defAtk = Math.max(0, effAtk(1 - pi, dLi) + (combat.defAtkMod || 0));
+  const defAtk = Math.max(0, effAtk(1 - pi, dLi, defBare) + (combat.defAtkMod || 0));
   const defName = cardById(defHero.cardId).name;
 
   if (alive.length === 1) {
