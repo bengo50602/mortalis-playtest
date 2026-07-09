@@ -5440,6 +5440,15 @@ function parseOp(cl) {
   if ((m = cl.match(/^(?:choose a Hero you control: )?it may attack twice this turn$/i))) return { op: "attackTwice", target: "self" };
   // forge counters (N) on a chosen relic
   if ((m = cl.match(/^[Pp]lace (\d+) forge counters? on a Relic you control$/i))) { const ops = []; for (let i = 0; i < +m[1]; i++) ops.push({ op: "forgeCounterChoice" }); return ops; }
+  // ---- cost reduction / next-card modifiers ----
+  if ((m = cl.match(/^the next (\w+ )?Hero you play(?: this game| this turn)? costs (\d+) less Pulse(?: and enters play with \+(\d+) Attack and \+(\d+) Health permanently)?$/i)))
+    return { op: "grantNextHero", discount: +m[2], buffAtk: +(m[3] || 0), buffHp: +(m[4] || 0), realm: m[1] ? m[1].trim() : null, life: /this turn/i.test(cl) ? "turn" : "game" };
+  if ((m = cl.match(/^the next (\w+ )?Hero you play(?: this game| this turn)? enters play with \+(\d+) Attack(?: and \+(\d+) Health)? permanently$/i)))
+    return { op: "grantNextHero", discount: 0, buffAtk: +m[2], buffHp: +(m[3] || 0), realm: m[1] ? m[1].trim() : null, life: /this turn/i.test(cl) ? "turn" : "game" };
+  if ((m = cl.match(/^make your next (\w+ )?Hero cost (\d+) less Pulse$/i)))
+    return { op: "grantNextHero", discount: +m[2], buffAtk: 0, buffHp: 0, realm: m[1] ? m[1].trim() : null, life: "game" };
+  if ((m = cl.match(/^Relics you play this turn cost (\d+) less Pulse$/i))) return { op: "grantRelicDiscountTurn", discount: +m[1] };
+  if ((m = cl.match(/^(?:At the start of your next turn, )?your flat base Pulse gain is (\d+) instead of 5$/i))) return { op: "pulseNextTurn", amount: +m[1] };
   // ---- Break the Line (Karakhorde): grant attack-any-lane + disable enemy prevent/block/redirect ----
   if (/all Heroes you control may attack any enemy lane/i.test(cl) && /cannot trigger/i.test(cl)) return { op: "breakLine" };
   // ---- Joint Strike (Oathenhall) ----
@@ -5456,6 +5465,7 @@ function parseOp(cl) {
   if ((m = cl.match(/^destroy a Hero you control(?: in any lane)?$/i))) return { op: "sacrifice" };
   if ((m = cl.match(/^Gain Pulse equal to that Hero's cost(?:, immediately and only once)?$/i))) return { op: "pulseLastCost", mult: 1 };
   if ((m = cl.match(/^destroy a Relic you control$/i))) return { op: "sacrificeRelic" };
+  if ((m = cl.match(/^(?:destroy|sacrifice) an Auxiliary card you control$/i))) return { op: "sacrificeAux" };
   if ((m = cl.match(/^Gain Pulse equal to double that Relic's printed cost$/i))) return { op: "pulseLastCost", mult: 2 };
   if ((m = cl.match(new RegExp(`^lose ${NUM} Mortality$`, "i")))) return { op: "mortality", n: -+m[1] };
   if ((m = cl.match(/^deal damage to an enemy Hero equal to the current Attack of your Hero in the same lane$/i))) return { op: "furyDamage" };
@@ -5976,7 +5986,7 @@ function uid() { return UID++; }
 function newGame(opts) {
   UNDO = [];
   const mkPlayer = (name, isAI, realms) => ({
-    name, isAI, mortality: C().startingMortality, pulse: 0, fatigue: 0, turnCount: 0, championUid: null, discard: [],
+    name, isAI, mortality: C().startingMortality, pulse: 0, fatigue: 0, turnCount: 0, championUid: null, discard: [], mods: [], heroesPlayedTurn: 0, relicDiscountTurn: 0, relicDiscountExpire: -1, pulseOverrideGt: -1, pulseOverrideAmt: 5,
     realms: realms.slice(0, C().lanes),
     lanes: realms.slice(0, C().lanes).map(r => ({ realm: r, hero: null, aux: [null, null] })),
     slots: new Array(C().sharedSlots).fill(null),
@@ -6154,7 +6164,12 @@ function startTurn() {
   P.turnCount = (P.turnCount || 0) + 1;
   const sched = C().laneUnlockTurns || [];
   sched.forEach((t, li) => { if (t === P.turnCount && t > 1 && li < P.lanes.length) log(`${P.name}'s Lane ${li + 1} (${P.lanes[li].realm}) unlocks!`, P.isAI ? "ai" : ""); });
-  P.pulse += C().pulsePerTurn;
+  // per-turn resets + this-turn cost modifiers
+  P.heroesPlayedTurn = 0;
+  if (P.mods) P.mods = P.mods.filter(m => m.life !== "turn");   // "this turn" next-Hero mods expire
+  const basePulse = (P.pulseOverrideGt === G.gt) ? P.pulseOverrideAmt : C().pulsePerTurn;
+  if (P.pulseOverrideGt === G.gt) log(`${P.name}'s base Pulse gain is ${basePulse} this turn.`);
+  P.pulse += basePulse;
   const skipDraw = C().firstPlayerSkipsDraw && G.gt === 1 && pi === G.firstPlayer;
   log(`— ${P.name}'s turn (turn ${Math.ceil(G.gt / 2)}) —`, P.isAI ? "ai turnhdr" : "turnhdr");
   if (!skipDraw) for (let i = 0; i < C().drawPerTurn; i++) drawCard(pi);
@@ -6344,6 +6359,16 @@ async function runOp(op, pi, ctx) {
       log(`${P.name} destroys own Relic ${cardById(pick.r.cardId).name}.`);
       break;
     }
+    case "sacrificeAux": {
+      const auxes = [];
+      G.players[pi].lanes.forEach((L, li) => { const seen = new Set(); for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); auxes.push({ li, a }); } });
+      if (!auxes.length) { log(`No Auxiliary card to destroy — effect fizzles.`); ctx.abort = true; break; }
+      let pick = auxes[0];
+      if (!P.isAI && auxes.length > 1) { const idx = promptPick("Destroy which Auxiliary card?", auxes.map(o => `${cardById(o.a.cardId).name} (lane ${o.li + 1})`)); if (idx == null) { ctx.abort = true; break; } pick = auxes[idx]; }
+      removeAux(pi, pick.li, pick.a.uid);
+      log(`${P.name} destroys own Auxiliary ${cardById(pick.a.cardId).name}.`);
+      break;
+    }
     case "pulseLastCost":
       if (ctx.abort) break;
       P.pulse += (ctx.lastCost || 0) * (op.mult || 1);
@@ -6414,6 +6439,21 @@ async function runOp(op, pi, ctx) {
       if (lh && lh.relics.length) { const r = lh.relics.sort((a, b) => (b.counters || 0) - (a.counters || 0))[0]; r.counters = (r.counters || 0) + 1; log(`${cardById(r.cardId).name} gains a forge counter (${r.counters}).`); }
       break;
     }
+    case "grantNextHero":
+      P.mods = P.mods || [];
+      P.mods.push({ type: "nextHero", discount: op.discount || 0, buffAtk: op.buffAtk || 0, buffHp: op.buffHp || 0, realm: op.realm || null, life: op.life || "game", bornGt: G.gt });
+      log(`${P.name}: your next ${op.realm ? op.realm + " " : ""}Hero${op.discount ? ` costs ${op.discount} less` : ""}${op.buffAtk || op.buffHp ? ` enters with +${op.buffAtk || 0}/+${op.buffHp || 0}` : ""}.`);
+      break;
+    case "grantRelicDiscountTurn":
+      P.relicDiscountTurn = (P.relicDiscountTurn || 0) + op.discount;
+      P.relicDiscountExpire = G.gt;
+      log(`${P.name}: Relics you play this turn cost ${op.discount} less.`);
+      break;
+    case "pulseNextTurn":
+      P.pulseOverrideGt = G.gt + 2;   // your next turn
+      P.pulseOverrideAmt = op.amount;
+      log(`${P.name}: next turn's base Pulse gain will be ${op.amount}.`);
+      break;
     case "moveRelic": {
       const owned = [];
       G.players[pi].lanes.forEach((L, li) => { if (L.hero) L.hero.relics.forEach(r => owned.push({ li, r })); });
@@ -6938,11 +6978,13 @@ async function fireHexes(ownerPi, event, ctx) {
     if (f.hexTrig.event !== event) continue;
     if ((event === "attackLane" || event === "laneHeroDied") && s.laneIdx !== ctx.laneIdx) continue;
     const card = cardById(s.cardId);
-    if (P.pulse < card.cost) { log(`${P.name}'s Hex "${card.name}" cannot be paid for — it fizzles.`); P.slots[si] = null; continue; }
+    let hexCost = card.cost;   // opponent's Mother Vhûl aux taxes your Hexes
+    G.players[1 - ownerPi].lanes.forEach(L => { const seen = new Set(); for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); const m = (cardById(a.cardId).auxText || "").match(/your opponent's Hexes cost (\d+) additional Pulse/i); if (m) hexCost += +m[1]; } });
+    if (P.pulse < hexCost) { log(`${P.name}'s Hex "${card.name}" cannot be paid for — it fizzles.`); P.slots[si] = null; continue; }
     let pay = true;
-    if (!P.isAI) pay = confirm(`Your Hex "${card.name}" triggered!\n\n${card.text}\n\nPay ${card.cost} Pulse to resolve it? (Cancel = fizzle)`);
+    if (!P.isAI) pay = confirm(`Your Hex "${card.name}" triggered!\n\n${card.text}\n\nPay ${hexCost} Pulse to resolve it? (Cancel = fizzle)`);
     if (!pay) { log(`Your Hex "${card.name}" fizzles (declined).`); P.slots[si] = null; continue; }
-    P.pulse -= card.cost;
+    P.pulse -= hexCost;
     log(`${P.name}'s Hex triggers: ${card.name}!`, P.isAI ? "ai" : "");
     const opCtx = Object.assign({ sourceName: card.name, laneIdx: s.laneIdx }, ctx);
     for (const op of f.hexTrig.ops) {
@@ -6983,12 +7025,34 @@ function canPlayNameCheck(pi, card) {
 function hasRealmAccess(pi, card) { return G.players[pi].lanes.some(L => L.realm === card.realm); }
 function openSlotIdx(pi) { return G.players[pi].slots.findIndex(s => !s); }
 
+// Net Hero cost: static reductions (Josselin), opponent increases (Nharessa),
+// and a matching pending "next Hero" discount. Does not consume the pending mod.
+function heroCostOf(pi, card) {
+  let cost = card.cost;
+  const first = (G.players[pi].heroesPlayedTurn || 0) === 0;
+  if (first) for (const pos of heroesOf(pi)) if (/the first Hero you play each turn costs 1 less Pulse/i.test(cardById(heroAt(pos).cardId).text || "")) { cost -= 1; break; }
+  if (first) { // opponent's Nharessa-aux taxes your first Hero
+    let tax = 0;
+    G.players[1 - pi].lanes.forEach(L => { const seen = new Set(); for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); if (/the first Hero your opponent plays each turn costs them 1 additional Pulse/i.test(cardById(a.cardId).auxText || "")) tax += 1; } });
+    cost += tax;
+  }
+  const mod = pendingHeroMod(pi, card);
+  if (mod) cost -= mod.discount;
+  return Math.max(1, cost);
+}
+function pendingHeroMod(pi, card) {
+  return (G.players[pi].mods || []).find(m => m.type === "nextHero" && (!m.realm || m.realm.toLowerCase() === card.realm.toLowerCase()));
+}
+
 async function playHero(pi, handIdx, laneIdx) {
   const P = G.players[pi];
   const card = cardById(P.hand[handIdx]);
-  P.pulse -= card.cost;
+  const mod = pendingHeroMod(pi, card);
+  P.pulse -= heroCostOf(pi, card);
   P.hand.splice(handIdx, 1);
   P.lanes[laneIdx].hero = heroInst(card.id);
+  if (mod) { const h = P.lanes[laneIdx].hero; h.permAtk += mod.buffAtk || 0; h.permHp += mod.buffHp || 0; P.mods = P.mods.filter(x => x !== mod); if (mod.buffAtk || mod.buffHp) log(`${card.name} enters with +${mod.buffAtk || 0}/+${mod.buffHp || 0}.`); }
+  P.heroesPlayedTurn = (P.heroesPlayedTurn || 0) + 1;
   log(`${P.name} plays ${card.name} (${card.atk}/${card.hp}) in lane ${laneIdx + 1} (${card.realm}).`, P.isAI ? "ai" : "");
   // opponent "when your opponent plays a Hero" hexes
   await fireHexes(1 - pi, "oppHeroPlayed", { played: { pi, li: laneIdx } });
@@ -7033,9 +7097,17 @@ function relicCostReduction(pi) {
   let r = 0;
   for (const pos of heroesOf(pi)) { const m = (cardById(heroAt(pos).cardId).text || "").match(/your Relics cost (\d+) less Pulse/i); if (m) r += +m[1]; }
   G.players[pi].lanes.forEach(L => { const seen = new Set(); for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); const m = (cardById(a.cardId).auxText || "").match(/Relics you play cost (\d+) less Pulse/i); if (m) r += +m[1]; } });
+  const P = G.players[pi];
+  if (P.relicDiscountExpire === G.gt) r += P.relicDiscountTurn || 0;   // Masterwork "this turn"
   return r;
 }
 function relicCostOf(pi, card) { return Math.max(1, card.cost - relicCostReduction(pi)); }
+// Incantation cost: Ostrellan aux ("your Incantations cost 1 less Pulse").
+function spellCostOf(pi, card) {
+  let cost = card.cost;
+  if (card.type === "incantation") G.players[pi].lanes.forEach(L => { const seen = new Set(); for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); const m = (cardById(a.cardId).auxText || "").match(/your Incantations cost (\d+) less Pulse/i); if (m) cost -= +m[1]; } });
+  return Math.max(1, cost);
+}
 
 function playRelic(pi, handIdx, laneIdx) {
   const P = G.players[pi];
@@ -7087,7 +7159,7 @@ async function playSpell(pi, handIdx) { // pact or incantation
   const P = G.players[pi];
   const card = cardById(P.hand[handIdx]);
   const si = openSlotIdx(pi);
-  P.pulse -= card.cost;
+  P.pulse -= spellCostOf(pi, card);
   P.hand.splice(handIdx, 1);
   log(`${P.name} plays ${card.type === "pact" ? "Pact" : "Incantation"}: ${card.name} — "${card.text}"`, P.isAI ? "ai" : "");
   if (card.type === "incantation") {
@@ -7120,7 +7192,7 @@ function playOptions(pi, handIdx) {
     if (canPlayNameCheck(pi, card)) {
       P.lanes.forEach((L, li) => {
         if (!laneUnlocked(pi, li)) return;
-        if (L.realm === card.realm && !L.hero && P.pulse >= card.cost) opts.heroLanes.push(li);
+        if (L.realm === card.realm && !L.hero && P.pulse >= heroCostOf(pi, card)) opts.heroLanes.push(li);
         const freeAux = L.aux.filter(a => !a).length;
         if (L.realm === card.realm && freeAux >= (card.auxSlots || 1) && P.pulse >= opts.auxCost) opts.auxLanes.push(li);
       });
@@ -7137,7 +7209,7 @@ function playOptions(pi, handIdx) {
   } else if (card.type === "rite") {
     if (openSlotIdx(pi) >= 0 && P.pulse >= card.cost) P.lanes.forEach((L, li) => { if (laneUnlocked(pi, li)) opts.riteLanes.push(li); });
   } else {
-    opts.spell = openSlotIdx(pi) >= 0 && P.pulse >= card.cost;
+    opts.spell = openSlotIdx(pi) >= 0 && P.pulse >= spellCostOf(pi, card);
   }
   return opts;
 }
@@ -7317,6 +7389,7 @@ async function resolveAttack(pi, attackerLis, target) {
   let dLi = target.li;
   const combat = { atkMod: 0, atkSet: null, swap: false, blocked: false };
   const ctx = { laneIdx: dLi, combat, attacker: { pi, li: attackerLis[0] }, defender: { pi: 1 - pi, li: dLi } };
+  if (!heroAt(ctx.defender)) { log(`No Hero in the targeted lane — attack fizzles.`); return; }
   log(`${names} attack${attackerLis.length > 1 ? " (Onslaught)" : "s"} ${cardById(heroAt(ctx.defender).cardId).name}.`, P.isAI ? "ai" : "");
   // defender may pull a single attacker onto a protector Hero
   if (attackerLis.length === 1) { await defensiveRedirect(pi, ctx); dLi = ctx.defender.li; ctx.laneIdx = dLi; }
