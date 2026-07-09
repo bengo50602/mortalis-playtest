@@ -179,7 +179,7 @@ async function runSmokeTest() {
         mkG(c.realm); stageBoards(c.realm);
         if (f.hexTrig && f.hexTrig !== "manual") {
           const ev = f.hexTrig.event;
-          G.players[0].slots[1] = { uid: uid(), cardId: c.id, kind: "hex", faceDown: true, laneIdx: 2 };
+          G.players[0].slots[1] = { uid: uid(), cardId: c.id, kind: "hex", faceDown: true, laneIdx: f.hexNeighborLane ? 1 : 2 };
           const pre = fullSnap();
           if (ev === "attackLane") {
             const combat = { atkMod: 0, atkSet: null, swap: false, blocked: false };
@@ -202,6 +202,20 @@ async function runSmokeTest() {
             await fireHexes(0, ev, {});
           } else if (ev === "oppSupportPlayed") {
             await fireHexes(0, "oppSupportPlayed", { playedSupport: { kind: "aux", tpi: 1, li: 2, uid: G.players[1].lanes[2].aux[0].uid } });
+          } else if (ev === "postCombat") {
+            await fireHexes(0, "postCombat", { laneIdx: 2, attacker: { pi: 1, li: 1 }, defender: { pi: 0, li: 2 }, defenderTookDamage: true });
+          } else if (ev === "ownAttack") {
+            const combat = { atkMod: 0 };
+            await fireHexes(0, "ownAttack", { laneIdx: 2, combat });
+          } else if (ev === "oppEndTurn") {
+            G.players[0].slots[1].laneIdx = 2;
+            await fireHexes(0, "oppEndTurn", {});
+          } else if (ev === "tookDamage") {
+            await fireHexes(0, "tookDamage", { laneIdx: 2, defender: { pi: 0, li: 2 } });
+          } else if (ev === "statReduced") {
+            await fireHexes(0, "statReduced", { reducedAt: { pi: 0, li: 2 } });
+          } else if (ev === "friendlyKill") {
+            await fireHexes(0, "friendlyKill", { laneIdx: 2, victor: { pi: 0, li: 2 } });
           }
           if (!f.hexTrig.persistent && G.players[0].slots[1]) issues.push([c.name, "hex", "one-shot hex not consumed after trigger"]);
         }
