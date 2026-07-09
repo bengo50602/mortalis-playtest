@@ -70,6 +70,7 @@ function norm(s) { return s.replace(/[−–]/g, "-"); }
 
 function parseScope(s, sourceKind) {
   s = s.toLowerCase();
+  if (/your champion/.test(s)) return { scope: "champion" };
   if (/all other heroes you control/.test(s)) return { scope: "allFriendly", excludeSelf: true };
   const mRealm = s.match(/all (?:other )?([a-z]+) heroes you control|all your ([a-z]+) heroes/);
   if (mRealm) {
@@ -106,7 +107,8 @@ function parseOp(cl) {
     const perm = /permanently/i.test(cl), tot = /until end of turn/i.test(cl);
     return { op: "buff", atk: +m[1], hp: +(m[2] || 0), target: "allOwn", perm, dur: tot ? 0 : 0 };
   }
-  if ((m = cl.match(new RegExp(`^all other Heroes you control gain \\+${NUM} Attack and \\+${NUM} Health permanently$`, "i")))) return { op: "buff", atk: +m[1], hp: +m[2], target: "allOwnOther", perm: true };
+  if ((m = cl.match(new RegExp(`^(?:all|each) other Hero(?:es)? you control gains? \\+${NUM} Attack and \\+${NUM} Health permanently$`, "i")))) return { op: "buff", atk: +m[1], hp: +m[2], target: "allOwnOther", perm: true };
+  if ((m = cl.match(new RegExp(`^all other Heroes you control have \\+${NUM} Attack$`, "i")))) return { op: "buff", atk: +m[1], hp: 0, target: "allOwnOther", dur: 0 };
   if ((m = cl.match(new RegExp(`^(?:all|each|every) Hero(?:es)? you control heals? ${NUM} Health(?: and gains? \\+${NUM} Health permanently)?$`, "i")))) return { op: "heal", n: +m[1], permHp: +(m[2] || 0), target: "allOwn" };
   if ((m = cl.match(new RegExp(`^a Hero you control heals ${NUM} Health(?: and gains? \\+${NUM} Health permanently)?$`, "i")))) return { op: "heal", n: +m[1], permHp: +(m[2] || 0), target: "ownChoice" };
   if ((m = cl.match(new RegExp(`^it heals ${NUM} Health$`, "i")))) return { op: "heal", n: +m[1], target: "self" };
@@ -134,6 +136,17 @@ function parseOp(cl) {
   if ((m = cl.match(/^(?:choose a Hero you control: )?it may attack twice this turn$/i))) return { op: "attackTwice", target: "self" };
   // forge counters (N) on a chosen relic
   if ((m = cl.match(/^[Pp]lace (\d+) forge counters? on a Relic you control$/i))) { const ops = []; for (let i = 0; i < +m[1]; i++) ops.push({ op: "forgeCounterChoice" }); return ops; }
+  // ---- Joint Strike (Oathenhall) ----
+  if (/attack one enemy lane together as a single combat/i.test(cl)) {
+    const self = /and a Hero you control in a lane neighboring/i.test(cl);
+    return { op: "jointStrike", initiator: self ? "self" : "any" };
+  }
+  // ---- Champion (Oathenhall) ----
+  if ((m = cl.match(/^(?:you may )?Knight (?:a|another|this) Hero you control(?:\s*[—–-]\s*it becomes your Champion)?(?:\s*[—–-]\s*and it gains \+(\d+) Attack(?: and \+(\d+) Health)? permanently)?$/i)))
+    return { op: "knight", target: /Knight this Hero/i.test(cl) ? "self" : "ownChoice", buff: (m[1] ? { atk: +m[1], hp: +(m[2] || 0) } : null) };
+  if ((m = cl.match(/^you may Knight this Hero(?:\s*[—–-]\s*it becomes your Champion)?$/i))) return { op: "knight", target: "self" };
+  if ((m = cl.match(new RegExp(`^your Champion gains \\+${NUM} Attack and \\+${NUM} Health permanently$`, "i")))) return { op: "buff", atk: +m[1], hp: +m[2], target: "champion", perm: true };
+  if ((m = cl.match(new RegExp(`^your Champion has \\+${NUM} Attack and may attack twice$`, "i")))) return [{ op: "buff", atk: +m[1], hp: 0, target: "champion", dur: 0 }, { op: "attackTwice", target: "champion" }];
   if ((m = cl.match(/^destroy a Hero you control(?: in any lane)?$/i))) return { op: "sacrifice" };
   if ((m = cl.match(/^Gain Pulse equal to that Hero's cost(?:, immediately and only once)?$/i))) return { op: "pulseLastCost", mult: 1 };
   if ((m = cl.match(/^destroy a Relic you control$/i))) return { op: "sacrificeRelic" };
@@ -240,6 +253,8 @@ function parseOps(text) {
   text = (text || "").trim()
     .replace(/^When this (Incantation|Pact) resolves,\s*/i, "")
     .replace(/\s*\([^)]*\)/g, "")
+    .replace(/^until end of turn:\s*/i, "")
+    .replace(/^until the (?:end|start) of your next turn,?\s*/i, "")
     .replace(/\s*Then destroy this card\.?$/i, "")
     .replace(/\s*then destroy this Rite\.?$/i, "")
     .replace(/ from your hand/gi, "")
@@ -274,13 +289,22 @@ function parseOps(text) {
 function compileContinuous(text, sourceKind, out) {
   for (const s of sentences(text)) {
     if (!/continuously|while equipped|while in this slot|while .* is in play|while this card is in play/i.test(s)) continue;
+    // Squire's Oathband: "+10/+10 — or +20/+20 if this Hero is your Champion"
+    const cond = norm(s).match(/\+(\d+) Attack and \+(\d+) Health — or \+(\d+) Attack and \+(\d+) Health if this Hero is your Champion/i);
+    if (cond) {
+      out.cont.push({ atk: +cond[1], hp: +cond[2], scope: sourceKind === "relic" ? "equipped" : "laneHero" });
+      out.cont.push({ atk: +cond[3] - +cond[1], hp: +cond[4] - +cond[2], scope: "equippedIfChampion" });
+      out.autoBits.push("champion aura");
+      continue;
+    }
     const stat = parseStatClause(s);
     if (!stat) continue;
     const sc = parseScope(s, sourceKind);
     if (sc) { out.cont.push(Object.assign({ atk: stat.atk, hp: stat.hp }, sc)); out.autoBits.push("aura"); }
   }
-  if (/may attack a second time each turn/i.test(text)) {
-    out.props.push({ scope: sourceKind === "aux" ? "laneHero" : "equipped", maxAttacks: 2 });
+  if (/may attack (?:a second time|twice|an additional time) each turn/i.test(text)) {
+    const scope = /your champion/i.test(text) ? "champion" : (sourceKind === "aux" ? "laneHero" : "equipped");
+    out.props.push({ scope, maxAttacks: 2 });
     out.autoBits.push("extra attack");
   }
 }
@@ -421,6 +445,12 @@ function compileHex(card, out) {
     ev = "laneHeroDied";
     ops.push({ op: "pulseLastCost", mult: 1 });
     if (/draw 1 card/i.test(t)) ops.push({ op: "draw", n: 1 });
+  } else if (/^When the Hero in this lane (?:dies|is destroyed)/i.test(t)) {
+    ev = "laneHeroDied";
+    const rest = t.replace(/^When the Hero in this lane (?:dies|is destroyed)(?: in combat)?(?: \([^)]*\))?,\s*/i, "")
+      .replace(/\s*After this effect triggers once, destroy this card\.?$/i, "");
+    const parsed = parseOps(rest);
+    if (parsed) ops.push(...parsed);
   } else if (/^When your opponent plays a Hero/i.test(t)) {
     ev = "oppHeroPlayed";
     if ((m = t.match(new RegExp(`enters play with -${NUM} Attack(?: and -${NUM} Health)? permanently`, "i")))) {
@@ -513,6 +543,17 @@ function compileActivated(text, list, bits) {
     list.push({ cost, ops, raw: (cost ? `pay ${cost} Pulse — ` : "") + m[2] });
     if (ops) bits.push("activated ability");
   }
+  // Joint Strike abilities whose wording lacks "you may" (e.g. "Once per turn,
+  // Elsbeth and a Hero you control ... may attack one enemy lane together ...")
+  if (!list.some(a => a.ops && a.ops.some(o => o.op === "jointStrike"))) {
+    const jm = norm(text || "").match(/Once per turn,?[^.]*?may attack one enemy lane together as a single combat[^.]*\./i);
+    if (jm) {
+      const self = /and a Hero you control in a lane neighboring/i.test(jm[0]);
+      const costM = jm[0].match(/pay (\d+) Pulse/i);
+      list.push({ cost: costM ? +costM[1] : 0, ops: [{ op: "jointStrike", initiator: self ? "self" : "any" }], raw: (costM ? `pay ${costM[1]} Pulse — ` : "") + "Joint Strike" });
+      bits.push("activated ability");
+    }
+  }
 }
 
 function compileCard(card) {
@@ -541,6 +582,8 @@ function compileCard(card) {
       compileRecurring(card.text, out);
       compileCombatTriggers(card.text, out.combatTrig, out.autoBits);
       compileActivated(card.text, out.activated, out.autoBits);
+      const rm = norm(card.text).match(/When this Relic is equipped, (.*?)\.?$/i);
+      if (rm) { out.onEquip = parseOps(rm[1]); if (out.onEquip) out.autoBits.push("on-equip"); }
     } else if (card.type === "hex") {
       compileHex(card, out);
     } else if (card.type === "rite") {
@@ -573,7 +616,7 @@ function uid() { return UID++; }
 function newGame(opts) {
   UNDO = [];
   const mkPlayer = (name, isAI, realms) => ({
-    name, isAI, mortality: C().startingMortality, pulse: 0, fatigue: 0, turnCount: 0,
+    name, isAI, mortality: C().startingMortality, pulse: 0, fatigue: 0, turnCount: 0, championUid: null,
     realms: realms.slice(0, C().lanes),
     lanes: realms.slice(0, C().lanes).map(r => ({ realm: r, hero: null, aux: [null, null] })),
     slots: new Array(C().sharedSlots).fill(null),
@@ -670,6 +713,8 @@ function auraHits(e, spi, sli, tpi, tli, src) {
   const sHero = G.players[spi].lanes[sli].hero;
   switch (e.scope) {
     case "equipped": return src.equippedHere && spi === tpi && sli === tli;
+    case "equippedIfChampion": return src.equippedHere && spi === tpi && sli === tli && isChampion({ pi: tpi, li: tli });
+    case "champion": return spi === tpi && isChampion({ pi: tpi, li: tli });
     case "laneHero": return spi === tpi && sli === tli;
     case "allFriendly":
       if (spi !== tpi) return false;
@@ -1065,6 +1110,18 @@ async function runOp(op, pi, ctx) {
       }
       break;
     }
+    case "jointStrike": {
+      await initiateJointStrike(pi, { initiator: op.initiator, laneIdx: ctx.laneIdx });
+      break;
+    }
+    case "knight": {
+      let targets = await resolveTargets(op, pi, ctx);
+      const t = targets[0];
+      if (!t) { log(`No Hero to Knight.`); break; }
+      knight(pi, t);
+      if (op.buff) { heroAt(t).permAtk += op.buff.atk || 0; heroAt(t).permHp += op.buff.hp || 0; if (op.buff.atk || op.buff.hp) log(`${nameOf(t)} gains +${op.buff.atk || 0}/+${op.buff.hp || 0} permanently.`); }
+      break;
+    }
     case "healthTransfer": {
       // move up to N max+current Health from the source lane Hero to a chosen ally
       const src = ctx.laneIdx != null ? heroAt({ pi, li: ctx.laneIdx }) : null;
@@ -1114,6 +1171,26 @@ function heroesOf(pi) {
   return out;
 }
 
+/* ------------------------------ Champion ------------------------------ */
+function isChampion(pos) {
+  const h = heroAt(pos);
+  return !!(h && G.players[pos.pi].championUid === h.uid);
+}
+function championPos(pi) {
+  const u = G.players[pi].championUid;
+  if (!u) return null;
+  for (let li = 0; li < G.players[pi].lanes.length; li++) {
+    const h = G.players[pi].lanes[li].hero;
+    if (h && h.uid === u) return { pi, li };
+  }
+  return null;
+}
+function knight(pi, pos) {
+  if (!heroAt(pos)) return;
+  G.players[pi].championUid = heroAt(pos).uid;
+  log(`${G.players[pi].name} Knights ${cardById(heroAt(pos).cardId).name} as their Champion.`, G.players[pi].isAI ? "ai" : "");
+}
+
 async function resolveTargets(op, pi, ctx) {
   // enemy Heroes protected by "cannot be targeted by enemy card effects" are skipped
   const enemies = heroesOf(1 - pi).filter(t => !isProtected(t)), own = heroesOf(pi);
@@ -1126,6 +1203,7 @@ async function resolveTargets(op, pi, ctx) {
     case "killer": return ctx.killer && heroAt(ctx.killer) ? [ctx.killer] : [];
     case "played": return ctx.played ? [ctx.played] : [];
     case "allEnemy": return enemies;
+    case "champion": { const cp = championPos(pi); return cp ? [cp] : []; }
     case "self": return ctx.laneIdx != null && heroAt({ pi, li: ctx.laneIdx }) ? [{ pi, li: ctx.laneIdx }] : [];
     case "allOwn": return own.filter(t => {
       const r = cardById(heroAt(t).cardId).realm;
@@ -1307,6 +1385,7 @@ function destroyHero(pi, li, killer, opts) {
   if (!h) return;
   const c = cardById(h.cardId);
   P.lanes[li].hero = null;
+  if (P.championUid === h.uid) P.championUid = null;   // Champion status ends with the Hero
   log(`${c.name} dies.${h.relics.length ? " Its Relics are destroyed." : ""}`);
   if (opts.overkill > 0) {
     const cap = C().overkillCap;
@@ -1433,6 +1512,8 @@ function playRelic(pi, handIdx, laneIdx) {
   P.lanes[laneIdx].hero.relics.push({ uid: uid(), cardId: card.id, counters: 0 });
   log(`${P.name} equips ${card.name} to ${cardById(P.lanes[laneIdx].hero.cardId).name}.`, P.isAI ? "ai" : "");
   emit("playRelic", pi, {});
+  const oe = fx(card.id).onEquip;
+  if (oe) { const ctx = { laneIdx, sourceName: card.name }; for (const op of oe) runOp(op, pi, ctx); }
 }
 
 function setHex(pi, handIdx, laneIdx) {
@@ -1704,6 +1785,103 @@ async function resolveAttack(pi, attackerLis, target) {
   }
   checkWin();
 }
+
+/* ---------------------------- Joint Strike ---------------------------- */
+// Total the +N Attack "during Joint Strikes" bonuses from anything you control.
+function jointStrikeBonus(pi) {
+  let b = 0;
+  for (const pos of heroesOf(pi)) {
+    const c = cardById(heroAt(pos).cardId);
+    let m = (c.text || "").match(/Heroes you control gain \+(\d+) Attack during Joint Strikes/i);
+    if (m) b += +m[1];
+  }
+  for (const L of G.players[pi].lanes) {
+    const seen = new Set();
+    for (const a of L.aux) if (a && !seen.has(a.uid)) {
+      seen.add(a.uid);
+      const at = cardById(a.cardId).auxText || "";
+      let m = at.match(/(?:gain|gains) \+(\d+) Attack (?:during Joint Strikes|for that combat)/i);
+      if (m && /Joint Strike/i.test(at)) b += +m[1];
+    }
+  }
+  return b;
+}
+
+// Two neighboring Heroes attack one enemy lane as a single combat: Attacks are
+// summed (+bonuses); if they win, defender takes the difference; if they lose,
+// the return damage is split as evenly as possible (in 10s) between the two.
+async function jointStrike(pi, lanes, target) {
+  const O = 1 - pi;
+  lanes = lanes.filter(li => heroAt({ pi, li }));
+  if (lanes.length < 2 || Math.abs(lanes[0] - lanes[1]) !== 1) { log(`Joint Strike needs two Heroes in neighboring lanes.`); return; }
+  for (const li of lanes) { const h = heroAt({ pi, li }); h.attacksUsed++; h.hasAttacked = true; h.attackedTurn = G.gt; }
+  const bonus = jointStrikeBonus(pi);
+  const names = lanes.map(li => cardById(heroAt({ pi, li }).cardId).name).join(" & ");
+  for (const li of lanes) await fireCombat("declareAttack", pi, li, target && target.face ? -1 : O, target ? target.li : -1);
+
+  if (target && target.face) {
+    const total = lanes.reduce((s, li) => s + effAtk(pi, li) + bonus, 0);
+    G.players[O].mortality -= total;
+    log(`Joint Strike — ${names} hit directly for ${total}!`, G.players[pi].isAI ? "ai" : "");
+    if (total > 0) emit("loseMortality", O, {});
+    checkWin(); return;
+  }
+  const dLi = target.li;
+  const def = { pi: O, li: dLi };
+  if (!heroAt(def)) { log(`Joint Strike target is gone.`); return; }
+  const defBare = lanes.some(li => heroFlag({ pi, li }, "ignoreEnemyEquip"));
+  const total = lanes.reduce((s, li) => s + effAtk(pi, li) + bonus, 0);
+  const defAtk = effAtk(O, dLi, defBare);
+  const defName = cardById(heroAt(def).cardId).name;
+  log(`Joint Strike — ${names} (combined ${total}${bonus ? `, +${bonus} bonus` : ""}) vs ${defName} (${defAtk}).`, G.players[pi].isAI ? "ai" : "");
+  if (total > defAtk) {
+    const dmg = total - defAtk;
+    const defThere = heroAt(def);
+    dealDamage(def, dmg, { combat: true, killer: { pi, li: lanes[0] }, sourceName: "Joint Strike" });
+    for (const li of lanes) if (heroAt({ pi, li })) await fireCombat("dealDamage", pi, li, O, dLi);
+    if (defThere && !heroAt(def)) await fireCombat("kill", pi, lanes[0], O, dLi);
+  } else if (defAtk > total) {
+    const D = defAtk - total;
+    const h1 = Math.ceil(D / 20) * 10, h2 = D - h1;   // split as evenly as possible, in 10s
+    log(`Joint Strike repelled — return ${D} split ${h1}/${h2}.`);
+    const share = [h1, h2];
+    lanes.forEach((li, i) => { if (heroAt({ pi, li }) && share[i] > 0) dealDamage({ pi, li }, share[i], { combat: true, killer: def, sourceName: "Joint Strike" }); });
+  } else log(`Joint Strike evenly matched — no damage.`);
+  checkWin();
+}
+
+// Choose the two Heroes and target for a Joint Strike, then resolve it.
+// initiator: "self" (must include the source lane) or "any" (any neighboring pair).
+async function initiateJointStrike(pi, ctx) {
+  const P = G.players[pi];
+  const ready = (li) => heroAt({ pi, li }) && canAttack(pi, li);
+  const lanesN = P.lanes.length;
+  // build candidate neighboring pairs
+  const pairs = [];
+  for (let a = 0; a < lanesN - 1; a++) if (ready(a) && ready(a + 1)) pairs.push([a, a + 1]);
+  let usable = pairs;
+  if (ctx.initiator === "self" && ctx.laneIdx != null) usable = pairs.filter(pr => pr.includes(ctx.laneIdx));
+  if (!usable.length) { if (!P.isAI) UI.toast("No two neighboring Heroes are ready to Joint Strike."); return; }
+  // pick the pair
+  let pair;
+  if (P.isAI) pair = usable.sort((x, y) => (effAtk(pi, y[0]) + effAtk(pi, y[1])) - (effAtk(pi, x[0]) + effAtk(pi, x[1])))[0];
+  else {
+    const idx = promptPick("Joint Strike — which pair of neighboring Heroes?", usable.map(pr => `${cardById(heroAt({ pi, li: pr[0] }).cardId).name} + ${cardById(heroAt({ pi, li: pr[1] }).cardId).name}`));
+    if (idx == null) return;
+    pair = usable[idx];
+  }
+  // the pair coordinates on any one enemy lane they can reach (taunt/protection honored)
+  const reachable = attackableEnemyLanes(pi);
+  let tgt;
+  if (reachable.length) {
+    if (P.isAI) tgt = reachable.sort((a, b) => effAtk(O_of(pi), a.li) - effAtk(O_of(pi), b.li))[0];
+    else tgt = await UI.pickHero("Joint Strike — choose the target", reachable);
+    if (!tgt) return;
+  } else if (!heroesOf(O_of(pi)).length) tgt = { face: true };
+  else { if (!P.isAI) UI.toast("No legal Joint Strike target."); return; }
+  await jointStrike(pi, pair, tgt);
+}
+function O_of(pi) { return 1 - pi; }
 
 /* ================================== AI ================================== */
 
