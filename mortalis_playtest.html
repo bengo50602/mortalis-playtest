@@ -5434,6 +5434,8 @@ function parseOp(cl) {
   if ((m = cl.match(/^(?:choose a Hero you control: )?it may attack twice this turn$/i))) return { op: "attackTwice", target: "self" };
   // forge counters (N) on a chosen relic
   if ((m = cl.match(/^[Pp]lace (\d+) forge counters? on a Relic you control$/i))) { const ops = []; for (let i = 0; i < +m[1]; i++) ops.push({ op: "forgeCounterChoice" }); return ops; }
+  // ---- Break the Line (Karakhorde): grant attack-any-lane + disable enemy prevent/block/redirect ----
+  if (/all Heroes you control may attack any enemy lane/i.test(cl) && /cannot trigger/i.test(cl)) return { op: "breakLine" };
   // ---- Joint Strike (Oathenhall) ----
   if (/attack one enemy lane together as a single combat/i.test(cl)) {
     const self = /and a Hero you control in a lane neighboring/i.test(cl);
@@ -5661,7 +5663,36 @@ function compileFlags(text, out, bits) {
     else if (/did not attack during your previous turn/i.test(t)) f.protect = "didntAttackLast";
     if (f.protect) bits.push("conditional protection");
   }
+  let am;
+  if ((am = t.match(/Enemy Heroes attacking \w+ have [-−–](\d+) Attack for that combat/i))) { f.attackerPenalty = +am[1]; bits.push("attacker penalty"); }
   if (Object.keys(f).length) out.flags = f;
+}
+
+// Defender-side redirect: "when an enemy attacks a Hero you control [in a
+// neighboring lane], you may [pay N] redirect that attack to <protector>."
+function parseRedirect(text) {
+  const t = norm(text || "");
+  if (!/redirect that attack|pull that attack to this Hero/i.test(t)) return null;
+  if (/another enemy Hero/i.test(t)) return null;           // that's an offensive redirect (Whispered Treason)
+  const costM = t.match(/pay (\d+) Pulse/i);
+  return {
+    applies: /neighboring lane|another of your lanes/i.test(t) ? "neighbor" : "any",
+    cost: costM ? +costM[1] : 0,
+    optional: /you may/i.test(t),
+    oncePerTurn: /once per turn/i.test(t),
+  };
+}
+
+// Bodyguard: "when a Hero you control [in a neighboring lane] would take combat
+// damage, you may have <protector> take half of that damage instead."
+function parseBodyguard(text) {
+  const t = norm(text || "");
+  if (!/take half of that damage instead/i.test(t)) return null;
+  return {
+    applies: /regardless of lane/i.test(t) ? "any" : "neighbor",
+    optional: /you may/i.test(t),
+    oncePerTurn: /once per turn/i.test(t),
+  };
 }
 
 // "When <Name> dies, <effect>." → out.onDeath (ops run from destroyHero)
@@ -5735,6 +5766,9 @@ function compileHex(card, out) {
     if ((m = t.match(new RegExp(`that Hero takes ${NUM} damage and has -${NUM} Attack for that combat`, "i")))) { ops.push({ op: "damage", n: +m[1], target: "attacker", pre: true }); ops.push({ op: "combatAtk", n: -+m[2] }); }
     if ((m = t.match(new RegExp(`that Hero gets -${NUM} Attack permanently`, "i")))) ops.push({ op: "statReduce", atk: +m[1], hp: 0, target: "attacker" });
     if ((m = t.match(/swap the attacking Hero's Attack and Health values for that combat/i))) ops.push({ op: "combatSwap" });
+  } else if (/^When an enemy Hero declares an attack against this lane, redirect that attack to another enemy Hero/i.test(t)) {
+    ev = "attackLane";
+    ops.push({ op: "redirectToAlly" });
   } else if ((m = t.match(new RegExp(`^When a Hero in this lane dies, deal ${NUM} damage to whichever Hero killed it(?:, then draw a card)?`, "i")))) {
     ev = "laneHeroDied";
     ops.push({ op: "damage", n: +m[1], target: "killer" });
@@ -5865,6 +5899,10 @@ function compileCard(card) {
       compileListen(card.text, out.listen, out.autoBits);
       compileOnDeath(card.text, out, out.autoBits);
       compileFlags(card.text, out, out.autoBits);
+      const hRed = parseRedirect(card.text); if (hRed) { out.redirect = Object.assign({ protector: "self" }, hRed); out.autoBits.push("attack redirect"); }
+      const hBg = parseBodyguard(card.text); if (hBg) { out.bodyguard = Object.assign({ protector: "self" }, hBg); out.autoBits.push("bodyguard"); }
+      const aRed = parseRedirect(card.auxText); if (aRed) { out.auxRedirect = Object.assign({ protector: "laneHero" }, aRed); out.auxAutoBits.push("attack redirect"); }
+      const aBg = parseBodyguard(card.auxText); if (aBg) { out.auxBodyguard = Object.assign({ protector: "laneHero" }, aBg); out.auxAutoBits.push("bodyguard"); }
       compileActivated(card.text, out.activated, out.autoBits);
       compileActivated(card.auxText, out.auxActivated, out.auxAutoBits);
       const em = norm(card.text).match(/^When .+? enters play, (.*?)(?:\. While |\.$|$)/i);
@@ -5882,8 +5920,11 @@ function compileCard(card) {
       compileActivated(card.text, out.activated, out.autoBits);
       const rm = norm(card.text).match(/When this Relic is equipped, (.*?)\.?$/i);
       if (rm) { out.onEquip = parseOps(rm[1]); if (out.onEquip) out.autoBits.push("on-equip"); }
+      const rRed = parseRedirect(card.text); if (rRed) { out.redirect = Object.assign({ protector: "equipped" }, rRed); out.autoBits.push("attack redirect"); }
+      const rBg = parseBodyguard(card.text); if (rBg) { out.bodyguard = Object.assign({ protector: "equipped" }, rBg); out.autoBits.push("bodyguard"); }
     } else if (card.type === "hex") {
       compileHex(card, out);
+      const xRed = parseRedirect(card.text); if (xRed && (!out.hexTrig || out.hexTrig === "manual")) { out.hexRedirect = Object.assign({ protector: "laneHero" }, xRed); out.autoBits.push("attack redirect"); }
     } else if (card.type === "rite") {
       compileRite(card, out);
     } else {
@@ -5897,7 +5938,7 @@ function compileCard(card) {
 function autoLevel(card) {
   const f = fx(card.id);
   const bits = f.autoBits.concat(f.auxAutoBits || []);
-  if (card.type === "hex") return f.hexTrig && f.hexTrig !== "manual" ? "auto" : "manual";
+  if (card.type === "hex") return (f.hexTrig && f.hexTrig !== "manual") || f.hexRedirect ? "auto" : "manual";
   if (card.type === "rite") return f.rite && f.rite.payoff !== "manual" ? "auto" : "manual";
   if (card.type === "pact" || card.type === "incantation") return f.spellOps !== "manual" ? "auto" : "manual";
   return bits.length ? "partial" : "manual";
@@ -6412,6 +6453,11 @@ async function runOp(op, pi, ctx) {
       await initiateJointStrike(pi, { initiator: op.initiator, laneIdx: ctx.laneIdx });
       break;
     }
+    case "breakLine": {
+      P.breakLineTurn = G.gt;
+      log(`${P.name}: this turn, your Heroes may attack any lane and the enemy can't prevent, block, or redirect.`);
+      break;
+    }
     case "knight": {
       let targets = await resolveTargets(op, pi, ctx);
       const t = targets[0];
@@ -6629,6 +6675,22 @@ function dealDamage(t, amount, opts) {
   const h = heroAt(t);
   if (!h || amount <= 0) return 0;
   const c = cardById(h.cardId);
+  // a bodyguard may soak half of incoming combat damage (rounded to nearest 10)
+  if (opts.combat && !opts.noBodyguard) {
+    const bg = findBodyguard(t.pi, t);
+    if (bg) {
+      const half = Math.round(amount / 2 / 10) * 10;
+      const P = G.players[t.pi];
+      let doIt = half > 0 && (!bg.src.optional || (P.isAI ? curHp(bg.pos.pi, bg.pos.li) > half : confirm(`Have ${cardById(heroAt(bg.pos).cardId).name} take ${half} of the ${amount} combat damage? (${bg.name})`)));
+      if (doIt) {
+        if (bg.src.oncePerTurn) bg.holder.bgTurn = G.gt;
+        log(`${bg.name}: ${cardById(heroAt(bg.pos).cardId).name} soaks ${half} of the damage.`);
+        dealDamage(bg.pos, half, { combat: true, noBodyguard: true, sourceName: "bodyguard" });
+        amount -= half;
+        if (amount <= 0) return 0;
+      }
+    }
+  }
   // wards absorb damage before it reaches Health
   if (h.ward > 0) {
     const absorbed = Math.min(h.ward, amount);
@@ -6738,6 +6800,16 @@ async function fireHexes(ownerPi, event, ctx) {
       else if (op.op === "combatSwap" && ctx.combat) ctx.combat.swap = true;
       else if (op.op === "block" && ctx.combat) { ctx.combat.blocked = true; if (op.removeOne) ctx.combat.blockRemoveOne = true; }
       else if (op.op === "negate" && ctx.negate) ctx.negate.negated = true;
+      else if (op.op === "redirectToAlly" && ctx.combat && ctx.attacker) {
+        // send the attacker at its own ally (another Hero the attacker controls)
+        const api = ctx.attacker.pi;
+        const allies = heroesOf(api).filter(a => a.li !== ctx.attacker.li);
+        if (allies.length) {
+          const pick = G.players[ownerPi].isAI ? allies.sort((a, b) => effAtk(api, b.li) - effAtk(api, a.li))[0] : (await UI.pickHero("Redirect the attacker at which of its allies?", allies)) || allies[0];
+          ctx.combat.redirectDefender = pick;
+          log(`${G.players[ownerPi].name}'s Whispered Treason turns the attacker against ${cardById(heroAt(pick).cardId).name}!`, G.players[ownerPi].isAI ? "ai" : "");
+        }
+      }
       else await runOp(op, ownerPi, opCtx);
     }
     if (!f.hexTrig.persistent) P.slots[si] = null;
@@ -6914,7 +6986,7 @@ function heroFlag(pos, flag) {
   if (!h) return false;
   const f = fx(h.cardId).flags;
   if (f && f[flag]) return true;
-  if (flag === "attackAnyLane" && h.grantAnyLane) return true;
+  if (flag === "attackAnyLane" && (h.grantAnyLane || G.players[pos.pi].breakLineTurn === G.gt)) return true;
   return false;
 }
 // Is this Hero currently protected (cannot be attacked / targeted by enemy effects)?
@@ -6999,6 +7071,66 @@ async function fireCombat(event, actorPi, actorLi, targetPi, targetLi) {
   if (event === "kill") { emit("enemyKilledByYourHero", actorPi, {}); tickRites(actorPi, "kill"); }
 }
 
+// Gather defender-side redirect sources for player dpi (Heroes, their Relics,
+// Auxes [protector = lane Hero], and face-down Hexes [protector = lane Hero]).
+function redirectSourcesFor(dpi) {
+  const out = [];
+  for (const pos of heroesOf(dpi)) {
+    const h = heroAt(pos), f = fx(h.cardId);
+    if (f.redirect) out.push({ src: f.redirect, pos, holder: h, name: cardById(h.cardId).name });
+    for (const r of h.relics) { const rf = fx(r.cardId); if (rf.redirect) out.push({ src: rf.redirect, pos, holder: r, name: cardById(r.cardId).name }); }
+  }
+  G.players[dpi].lanes.forEach((L, li) => {
+    if (!L.hero) return;
+    const seen = new Set();
+    for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); const af = fx(a.cardId); if (af.auxRedirect) out.push({ src: af.auxRedirect, pos: { pi: dpi, li }, holder: a, name: cardById(a.cardId).name }); }
+  });
+  G.players[dpi].slots.forEach((s, si) => {
+    if (s && s.kind === "hex") { const hf = fx(s.cardId); const lh = G.players[dpi].lanes[s.laneIdx] && G.players[dpi].lanes[s.laneIdx].hero; if (hf.hexRedirect && lh) out.push({ src: hf.hexRedirect, pos: { pi: dpi, li: s.laneIdx }, holder: s, name: cardById(s.cardId).name, hexSlot: si, hexCard: cardById(s.cardId) }); }
+  });
+  return out;
+}
+function redirectDisabled(attackerPi) { return G.players[attackerPi].breakLineTurn === G.gt; }
+
+// Before a single-attacker combat resolves, the defending player may pull the
+// attack onto a protector Hero (Tessio, Corvazzo, Escort Detail, Colossus, ...).
+async function defensiveRedirect(attackerPi, ctx) {
+  if (redirectDisabled(attackerPi)) return;
+  const dpi = 1 - attackerPi, dLi = ctx.defender.li, P = G.players[dpi];
+  const cands = redirectSourcesFor(dpi).filter(s =>
+    s.pos.li !== dLi && !isProtected(s.pos) &&
+    (s.src.applies !== "neighbor" || Math.abs(s.pos.li - dLi) === 1) &&
+    P.pulse >= (s.src.cost || 0) &&
+    !(s.src.oncePerTurn && s.holder.redirTurn === G.gt));
+  for (const s of cands) {
+    let doIt;
+    if (!s.src.optional) doIt = true;
+    else if (P.isAI) doIt = curHp(s.pos.pi, s.pos.li) > curHp(dpi, dLi) && (s.src.cost <= 2 || P.pulse >= s.src.cost + 2);
+    else doIt = confirm(`Redirect the attack onto ${cardById(heroAt(s.pos).cardId).name}? (${s.name}${s.src.cost ? `, pay ${s.src.cost} Pulse` : ""})`);
+    if (!doIt) continue;
+    if (s.src.cost) P.pulse -= s.src.cost;
+    if (s.src.oncePerTurn) s.holder.redirTurn = G.gt;
+    if (s.hexSlot != null) P.slots[s.hexSlot] = null;   // one-shot Hex consumed
+    log(`${P.name} redirects the attack onto ${cardById(heroAt(s.pos).cardId).name} (${s.name}).`, P.isAI ? "ai" : "");
+    emit("attackDeflected", dpi, {});
+    ctx.defender = { pi: dpi, li: s.pos.li };
+    return;
+  }
+}
+
+// Find a bodyguard willing to soak half the combat damage aimed at targetPos.
+function findBodyguard(dpi, targetPos) {
+  const list = [];
+  for (const pos of heroesOf(dpi)) {
+    const h = heroAt(pos), f = fx(h.cardId);
+    if (f.bodyguard) list.push({ src: f.bodyguard, pos, holder: h, name: cardById(h.cardId).name });
+    for (const r of h.relics) { const rf = fx(r.cardId); if (rf.bodyguard) list.push({ src: rf.bodyguard, pos, holder: r, name: cardById(r.cardId).name }); }
+  }
+  return list.find(b => b.pos.li !== targetPos.li &&
+    (b.src.applies !== "neighbor" || Math.abs(b.pos.li - targetPos.li) === 1) &&
+    !(b.src.oncePerTurn && b.holder.bgTurn === G.gt) && curHp(b.pos.pi, b.pos.li) > 0);
+}
+
 async function resolveAttack(pi, attackerLis, target) {
   // target: {face:true} or {pi,li}
   const P = G.players[pi], O = G.players[1 - pi];
@@ -7019,11 +7151,15 @@ async function resolveAttack(pi, attackerLis, target) {
     return;
   }
 
-  const dLi = target.li;
+  let dLi = target.li;
   const combat = { atkMod: 0, atkSet: null, swap: false, blocked: false };
   const ctx = { laneIdx: dLi, combat, attacker: { pi, li: attackerLis[0] }, defender: { pi: 1 - pi, li: dLi } };
   log(`${names} attack${attackerLis.length > 1 ? " (Onslaught)" : "s"} ${cardById(heroAt(ctx.defender).cardId).name}.`, P.isAI ? "ai" : "");
+  // defender may pull a single attacker onto a protector Hero
+  if (attackerLis.length === 1) { await defensiveRedirect(pi, ctx); dLi = ctx.defender.li; ctx.laneIdx = dLi; }
   await fireHexes(1 - pi, "attackLane", ctx);
+  if (P.breakLineTurn === G.gt) { combat.blocked = false; combat.prevent = 0; combat.redirectDefender = null; }   // Break the Line ignores prevention/redirect
+  if (combat.redirectDefender && heroAt(combat.redirectDefender)) { ctx.defender = combat.redirectDefender; dLi = ctx.defender.li; ctx.laneIdx = dLi; }
   if (combat.blocked) { log(`The attack is blocked!`); return; }
   if (!heroAt(ctx.defender)) { log(`The defender is already gone — attack ends.`); return; }
   // pre-damage may have killed attackers
@@ -7034,13 +7170,14 @@ async function resolveAttack(pi, attackerLis, target) {
   // the defender's equipment if any attacker has it; strip attackers' if the defender has it
   const defBare = alive.some(li => heroFlag({ pi, li }, "ignoreEnemyEquip"));
   const atkBare = heroFlag(ctx.defender, "ignoreEnemyEquip");
+  const defHero = heroAt(ctx.defender);
+  const atkPenalty = (fx(defHero.cardId).flags || {}).attackerPenalty || 0;   // Kaeso etc.
   const atkOf = (li) => {
     let a = effAtk(pi, li, atkBare);
     if (combat.atkSet != null) a = combat.atkSet;
     if (combat.swap) a = curHp(pi, li);
-    return Math.max(0, a + combat.atkMod);
+    return Math.max(0, a + combat.atkMod - atkPenalty);
   };
-  const defHero = heroAt(ctx.defender);
   const defAtk = Math.max(0, effAtk(1 - pi, dLi, defBare) + (combat.defAtkMod || 0));
   const defName = cardById(defHero.cardId).name;
 
