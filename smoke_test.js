@@ -196,6 +196,12 @@ async function runSmokeTest() {
             const negate = { negated: false };
             await fireHexes(0, "oppIncant", { negate });
             if (!negate.negated) issues.push([c.name, "hex", "counterspell hex did not negate"]);
+          } else if (ev === "onslaughtFailed") {
+            await fireHexes(0, "onslaughtFailed", { laneIdx: 2, onslaughtAttackers: [{ pi: 1, li: 0 }, { pi: 1, li: 1 }] });
+          } else if (ev === "friendlySacrificed" || ev === "friendlyDiedAny" || ev === "friendlyKill") {
+            await fireHexes(0, ev, {});
+          } else if (ev === "oppSupportPlayed") {
+            await fireHexes(0, "oppSupportPlayed", { playedSupport: { kind: "aux", tpi: 1, li: 2, uid: G.players[1].lanes[2].aux[0].uid } });
           }
           if (!f.hexTrig.persistent && G.players[0].slots[1]) issues.push([c.name, "hex", "one-shot hex not consumed after trigger"]);
         }
