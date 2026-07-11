@@ -147,8 +147,15 @@ overkill_m = re.search(
     r"capped at a maximum of \*{0,2}(\d+)\*{0,2} Mortality per Hero killed", core)
 
 lane_unlocks = [1, 1, 1, 1]
+# v1.8 wording: "**Lane 3:** unlocks at the start of each player's **3rd turn**"
 for lane, turn in re.findall(
         r"\*\*Lane (\d+):\*\* unlocks at the start of each player's \*\*(\d+)(?:st|nd|rd|th) turn\*\*", core):
+    idx = int(lane) - 1
+    if 0 <= idx < 4:
+        lane_unlocks[idx] = int(turn)
+# v1.10 wording: "**Lane position 1 (one outer Lane):** unlocks at the start of each player's **3rd turn**"
+for lane, turn in re.findall(
+        r"\*\*Lane position (\d+)[^:*]*:\*\* unlocks at the start of each player's \*\*(\d+)(?:st|nd|rd|th) turn\*\*", core):
     idx = int(lane) - 1
     if 0 <= idx < 4:
         lane_unlocks[idx] = int(turn)

@@ -103,13 +103,14 @@ async function runSmokeTest() {
           const reaches = [].concat(f.cont).some(e => ["neighbors", "opposingEnemy", "allEnemy", "allFriendly"].includes(e.scope));
           if (reaches && nb0 === nb1 && en0 === en1) issues.push([c.name, "hero-remote-aura", "aura scope declared but no neighbor/opposing/board effect measured"]);
         }
-        // passive "whenever takes damage" growth
+        // passive "whenever takes damage" growth (permanent or temporary)
         if (f.onDamaged) {
           mkG(c.realm);
           G.players[0].lanes[0].hero = heroInst(c.id);
-          const pa = G.players[0].lanes[0].hero.permAtk;
+          const h0 = G.players[0].lanes[0].hero;
+          const pa = h0.permAtk, tn = h0.temp.length;
           dealDamage({ pi: 0, li: 0 }, 20, { sourceName: "test" });
-          if (G.players[0].lanes[0].hero && G.players[0].lanes[0].hero.permAtk === pa) issues.push([c.name, "hero-onDamaged", "damage-growth trigger did not raise Attack"]);
+          if (G.players[0].lanes[0].hero && h0.permAtk === pa && h0.temp.length === tn) issues.push([c.name, "hero-onDamaged", "damage-growth trigger did not raise Attack"]);
         }
         // start-of-turn ops shouldn't crash
         mkG(c.realm); stageBoards(c.realm);

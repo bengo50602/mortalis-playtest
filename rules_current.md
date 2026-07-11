@@ -1,5 +1,5 @@
 # MORTALIS: REALMS
-## Core Rules — Draft v1.8 (Combined Edition: Core Rules + All 15 Realm Card Sets)
+## Core Rules — Draft v1.10 (Combined Edition: Core Rules + All 15 Realm Card Sets)
 
 ## 1. Overview & Win Condition
 
@@ -71,13 +71,15 @@ Each turn follows a simple sequence:
 - **Lane adjacency:** Lanes are arranged in a fixed left-to-right order, set when you choose your Realms before the match. A "neighboring" Lane (referenced by some card effects) means a Lane physically adjacent to it — a middle Lane has 2 neighbors, an end Lane has 1 (or 0 if you're only running a single Lane).
 
 ### Staggered Lane Unlocks
-Lanes do **not** all open at once. They unlock on a fixed schedule tied to each player's own turn count, so the early game is a build-up phase rather than a race to flood the board:
+Lanes do **not** all open at once. They unlock from the **center outward** on a fixed schedule tied to each player's own turn count, so the early game is a build-up phase rather than a race to flood the board. Number the four Lane positions 1–4 left to right; Lanes 2 and 3 are the two **middle** Lanes and Lanes 1 and 4 are the **outer** Lanes.
 
-- **Lanes 1 and 2:** open from the start of the game (each player's turn 1)
-- **Lane 3:** unlocks at the start of each player's **3rd turn**
-- **Lane 4:** unlocks at the start of each player's **5th turn**
+- **The two middle Lanes (positions 2 and 3):** open from the start of the game (each player's turn 1)
+- **Lane position 1 (one outer Lane):** unlocks at the start of each player's **3rd turn**
+- **Lane position 4 (the other outer Lane):** unlocks at the start of each player's **5th turn**
 
-A Hero, Relic, or Auxiliary card may only be played into, and only occupies, an **unlocked** Lane. A locked Lane cannot be attacked into or targeted, and it cannot hold cards. The schedule is per-player and symmetric — the player going second reaches each unlock on their own corresponding turn. If you run fewer than 4 Realms, you simply have fewer Lanes; the unlock timings for the Lanes you do have are unchanged (i.e., your 3rd Lane, if you have one, still opens on turn 3).
+A Hero, Relic, or Auxiliary card may only be played into, and only occupies, an **unlocked** Lane. A locked Lane cannot be attacked into or targeted, and it cannot hold cards. The schedule is per-player and symmetric, and the Lane positions are fixed and mirrored between the two players — so when a new Lane opens, both players' Lanes in that position open on their respective turns, sitting **directly across from each other**. (Position 1 opens on turn 3 for both players; position 4 opens on turn 5 for both.)
+
+Because Lanes open from the center, the two starting Lanes are **neighbors** of each other, and each outer Lane that opens later becomes the neighbor of the middle Lane beside it. This means adjacency-based effects (formations, Joint Strikes, "neighboring lane" bonuses) come online immediately for your opening pair and extend outward as the board grows. If you run fewer than 4 Realms, you simply have fewer Lanes: with 2 Lanes you use the two middle positions from turn 1; with 3, your third (outer) Lane opens on turn 3.
 
 - Total Heroes in play at once = number of **unlocked** Lanes filled (max 4, and fewer in the early turns)
 
@@ -215,13 +217,13 @@ When this card enters play, deal 20 damage to the Hero in this lane.
 
 **Gunnhild Stormscar**
 Hero Mode — Cost: 5 Pulse | Attack/Health: 90/60 | Rarity: Uncommon
-While Gunnhild is in play, all other Fangrend Heroes you control continuously have +20 Attack.
-Auxiliary Mode — Cost: 3 Pulse | 2 slots
-While in this slot, all Fangrend Heroes you control continuously have +20 Attack (board-wide, not just this lane).
+When Gunnhild destroys an enemy Hero in combat, she deals 20 damage to the enemy Hero in a lane neighboring the one she attacked, if any. (Her fury carries through the line.)
+Auxiliary Mode — Cost: 3 Pulse | 1 slot
+While in this slot, the first time each turn the Hero in this lane destroys an enemy Hero in combat, deal 20 damage to your opponent's Mortality.
 
 **Threnn, Widow of the Gale**
 Hero Mode — Cost: 8 Pulse | Attack/Health: 180/60 | Rarity: Ultra-Rare
-While Threnn is in play, whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Threnn permanently gains +30 Attack.
+While Threnn is in play, whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Threnn permanently gains +20 Attack.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
 
@@ -233,33 +235,33 @@ At the start of each of your turns, if the Hero in this lane attacked during you
 
 **Snarl, the Wound-Fed**
 Hero Mode — Cost: 2 Pulse | Attack/Health: 40/20 | Rarity: Common
-Whenever Snarl takes damage, he permanently gains 10 Attack.
+Whenever Snarl takes damage, he gains +10 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane heals 10 Health at the start of each of your turns.
 
 **Hilde Scartongue**
 Hero Mode — Cost: 4 Pulse | Attack/Health: 80/40 | Rarity: Uncommon
-Whenever Hilde takes damage, she permanently gains Attack equal to the damage taken.
+Whenever Hilde takes damage, she gains Attack equal to the damage taken until the end of your next turn.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, at the end of each of your turns, the Hero in this lane takes 10 damage.
 
 **Ragna, the Undying Fang**
 Hero Mode — Cost: 6 Pulse | Attack/Health: 130/50 | Rarity: Rare
-Whenever Ragna takes damage, she permanently gains Attack equal to the damage taken. The first time Ragna would die from damage each game, instead reduce her Health to 10 and she survives — when this happens, she only gains Attack equal to the amount of damage that was needed to reduce her Health to 0, not the full amount dealt (any excess/overkill damage grants no bonus Attack).
+Whenever Ragna takes damage, she permanently gains Attack equal to the damage taken (maximum +30 Attack per turn from this effect). The first time Ragna would die from damage each game, instead reduce her Health to 10 and she survives — when this happens, she only gains Attack equal to the amount of damage that was needed to reduce her Health to 0, not the full amount dealt (any excess/overkill damage grants no bonus Attack).
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 While in this slot, once per turn you may pay 2 Pulse to give the Hero in this lane +20 Attack until the end of the current turn.
 
 **Vrist, Harbinger of Wounds**
 Hero Mode — Cost: 8 Pulse | Attack/Health: 160/80 | Rarity: Ultra-Rare
-Whenever Vrist takes damage, he permanently gains Attack equal to the damage taken. While Vrist is in play, whenever another Fangrend Hero you control takes damage, that Hero also permanently gains Attack equal to half the damage taken, rounded down to the nearest 10.
+Whenever Vrist takes damage, he permanently gains Attack equal to the damage taken (maximum +30 Attack per turn from this effect). While Vrist is in play, whenever another Fangrend Hero you control takes damage, that Hero also permanently gains Attack equal to half the damage taken, rounded down to the nearest 10 (maximum +20 Attack per turn per Hero from this effect).
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, whenever any Hero you control dies, the Hero in this lane permanently gains 20 Attack. At the end of each of your turns, the Hero in this lane takes 10 damage.
 
 **Skoldir, the Last Howl**
 Hero Mode — Cost: 10 Pulse | Attack/Health: 220/80 | Rarity: Eternal
-Whenever Skoldir takes damage, he permanently gains Attack equal to double the damage taken. When Skoldir dies, deal damage equal to half his current Attack (rounded down to the nearest 10) to up to 2 enemy Heroes of your choice.
+Whenever Skoldir takes damage, he permanently gains Attack equal to half the damage taken, rounded down to the nearest 10 (maximum +30 Attack per turn from this effect). When Skoldir dies, deal damage equal to half his current Attack (rounded down to the nearest 10, maximum 60) to up to 2 enemy Heroes of your choice.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
-While in this slot, the Hero in this lane may attack a second time each turn.
+While in this slot, once per turn, you may pay 2 Pulse: the Hero in this lane may attack a second time this turn.
 
 ### Relics
 
@@ -561,7 +563,7 @@ While in this slot, your Incantations cost 1 less Pulse (minimum 1).
 
 **Vhessune, the Living Sigil**
 Hero Mode — Cost: 10 Pulse | Attack/Health: 170/130 | Rarity: Eternal
-While Vhessune is in play, whenever any player declares an attack, gain 1 Pulse. Once per turn, you may pay 5 Pulse to destroy any one enemy Relic, Auxiliary card, Hex, Rite, or Pact.
+While Vhessune is in play, whenever any player declares an attack, gain 1 Pulse (maximum 3 Pulse per round from this effect). Once per turn, you may pay 5 Pulse to destroy any one enemy Relic, Auxiliary card, Hex, Rite, or Pact.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 When this card enters play, destroy up to 2 enemy Relic and/or enemy Auxiliary cards. While in this slot, whenever an enemy Hero is destroyed, gain 3 Pulse.
 
@@ -847,7 +849,7 @@ While in this slot, all Heroes you control continuously have +20 Health.
 
 **Benedar, Broker of Shields**
 Hero Mode — Cost: 6 Pulse | Attack/Health: 70/110 | Rarity: Rare
-Once per turn, you may pay 3 Pulse: the first attack declared against any Hero you control during your opponent's next turn is blocked — no combat occurs and no damage is dealt to either side.
+Once per turn, you may pay 2 Pulse: the first attack declared against any Hero you control during your opponent's next turn is blocked — no combat occurs and no damage is dealt to either side.
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 Once per turn, when a Hero you control is attacked, you may pay 2 Pulse to redirect that attack to the Hero in this lane instead.
 
@@ -884,7 +886,7 @@ While equipped, the first time each turn this Hero would take combat damage, pre
 While equipped, this Hero continuously has +20 Attack and +40 Health. At the start of each of your turns, gain 1 Pulse.
 
 **Colossus of the Harbor Gate** — 2 slots | Cost: 5 Pulse
-While equipped, this Hero continuously has +80 Health. When an enemy Hero redirects an attack into another of your lanes, you may pay 1 Pulse to pull that attack to this Hero instead.
+While equipped, this Hero continuously has +80 Health. When an enemy Hero redirects an attack into another of your lanes, you may pull that attack to this Hero instead (no cost).
 
 ### Hexes
 *(Played face-down, cost paid at the moment they trigger, may be paid for during either player's turn)*
@@ -1612,9 +1614,9 @@ While in this slot, your Champion continuously has +10 Attack and +10 Health, an
 
 **Sir Gareth Twicesworn**
 Hero Mode — Cost: 6 Pulse | Attack/Health: 80/100 | Rarity: Rare
-Once per turn, you may pay 3 Pulse: choose another Hero you control — it may attack twice this turn.
+Once per turn, you may pay 4 Pulse: choose another Hero you control — it may attack twice this turn.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
-While in this slot, once per turn, you may pay 3 Pulse: a Hero you control in a lane neighboring this one may attack twice this turn.
+While in this slot, once per turn, you may pay 4 Pulse: a Hero you control in a lane neighboring this one may attack twice this turn.
 
 **Warden Elsbeth of the Twin Banners**
 Hero Mode — Cost: 6 Pulse | Attack/Health: 90/90 | Rarity: Rare
@@ -1636,7 +1638,7 @@ While in this slot, at the start of each of your turns, gain 1 Pulse; if you con
 
 **High King Aldemar Oathenkeeper**
 Hero Mode — Cost: 10 Pulse | Attack/Health: 140/160 | Rarity: Eternal
-When Aldemar enters play, Knight a Hero you control — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old). While Aldemar is in play, your Champion continuously has +30 Attack and +30 Health and may attack twice each turn, and at the start of each of your turns you gain 1 Pulse and draw 1 card.
+When Aldemar enters play, Knight a Hero you control — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old). While Aldemar is in play, your Champion continuously has +30 Attack and +30 Health, and once per turn you may pay 2 Pulse for your Champion to attack a second time that turn. At the start of each of your turns, gain 1 Pulse and draw 1 card.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While in this slot, once per turn, two Heroes you control in neighboring lanes may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike), and Heroes you control gain +10 Attack during Joint Strikes.
 
@@ -1772,7 +1774,7 @@ While in this slot, whenever you sacrifice a Hero, all other Heroes you control 
 
 **Tecuani, the Jaguar Ascendant**
 Hero Mode — Cost: 6 Pulse | Attack/Health: 110/70 | Rarity: Rare
-When Tecuani enters play, you may sacrifice up to 2 other Heroes you control: for each Hero sacrificed, Tecuani gains +40 Attack and +30 Health permanently.
+When Tecuani enters play, you may sacrifice up to 2 other Heroes you control: for each Hero sacrificed, Tecuani gains +40 Attack and +30 Health permanently and you draw 1 card.
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 When this card enters play, you may sacrifice a Hero you control: deal damage equal to half that Hero's printed Attack (rounded to the nearest 10) to an enemy Hero of your choice. Then destroy this card.
 
@@ -1848,7 +1850,7 @@ Starting the turn after this Rite is played, count 4 of your turns. At the end o
 *(Risk/reward, cost varies by card)*
 
 **The Great Offering** — Cost: 1 Pulse
-When this Pact resolves, sacrifice a Hero you control. A Hero you control gains +40 Attack and +40 Health permanently.
+When this Pact resolves, sacrifice a Hero you control. A Hero you control gains +40 Attack and +40 Health permanently, and you draw 1 card.
 
 **Hearts for the Altar** — Cost: 2 Pulse
 When this Pact resolves, sacrifice an Auxiliary card you control. Gain 3 Pulse and draw 1 card.
@@ -1932,19 +1934,19 @@ While in this slot, when the Hero in this lane dies, all Heroes you control heal
 
 **Mother Superior Aldith**
 Hero Mode — Cost: 8 Pulse | Attack/Health: 90/150 | Rarity: Ultra-Rare
-While Aldith is in play, all enemy Hero attacks must target Aldith's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane. Aldith takes 10 less combat damage. When Aldith dies, each other Hero you control gains +20 Attack and +30 Health permanently, and you draw 2 cards.
+While Aldith is in play, all enemy Hero attacks must target Aldith's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane. Aldith takes 10 less combat damage, and enemy Heroes that attack Aldith take 20 damage after that combat resolves. When Aldith dies, each other Hero you control gains +20 Attack and +30 Health permanently, and you draw 2 cards.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, whenever any Hero you control dies, gain 2 Pulse and each remaining Hero you control heals 20 Health.
 
 **Pilgrim-Saint Wendreth**
 Hero Mode — Cost: 8 Pulse | Attack/Health: 90/150 | Rarity: Ultra-Rare
-Once per turn, you may move up to 30 Health from Wendreth to another Hero you control (as a permanent transfer of current and maximum Health). While Wendreth is in play, all enemy Hero attacks must target Wendreth's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane.
+Once per turn, you may move up to 30 Health from Wendreth to another Hero you control (as a permanent transfer of current and maximum Health). While Wendreth is in play, all enemy Hero attacks must target Wendreth's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane, and enemy Heroes that attack Wendreth take 20 damage after that combat resolves.
 Auxiliary Mode — Cost: 6 Pulse | 1 slot
 While in this slot, once per turn, when a Hero you control would take lethal combat damage, prevent 20 of that damage.
 
 **Saint Alberic the Ever-Open Door**
 Hero Mode — Cost: 10 Pulse | Attack/Health: 110/190 | Rarity: Eternal
-While Alberic is in play, all enemy Hero attacks must target Alberic's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane, and at the start of each of your turns, each Hero you control heals 20 Health. When Alberic dies, each other Hero you control gains +30 Attack and +30 Health permanently, you gain 3 Pulse, and you draw 2 cards.
+While Alberic is in play, all enemy Hero attacks must target Alberic's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Alberic take 20 damage after that combat resolves, and at the start of each of your turns, each Hero you control heals 20 Health. When Alberic dies, each other Hero you control gains +30 Attack and +30 Health permanently, you gain 3 Pulse, and you draw 2 cards.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While in this slot, whenever a Hero you control dies, each remaining Hero you control gains +10 Attack and +10 Health permanently and heals 20 Health.
 
@@ -2354,7 +2356,7 @@ When this Incantation resolves, every enemy Hero loses 10 Health (stat reduction
 Hero Mode — Cost: 2 Pulse | Attack/Health: 20/40 | Rarity: Common
 When Serelle enters play, a Hero you control gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health).
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
-While in this slot, at the start of each of your turns, the Hero in this lane gains a ward that prevents the next 10 damage it would take (wards stack and absorb damage before Health).
+While in this slot, at the start of each of your turns, the Hero in this lane gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health).
 
 **Brother Lumen**
 Hero Mode — Cost: 2 Pulse | Attack/Health: 20/40 | Rarity: Common
@@ -2394,9 +2396,9 @@ While in this slot, whenever a Hero you control is healed by a card effect, it a
 
 **Warden-Cleric Osgood Bright**
 Hero Mode — Cost: 6 Pulse | Attack/Health: 70/110 | Rarity: Rare
-While Osgood is in play, whenever a Hero you control's ward is fully consumed (reduced to 0 by damage), that Hero heals 20 Health.
+While Osgood is in play, whenever a Hero you control's ward is fully consumed (reduced to 0 by damage), that Hero heals 30 Health.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
-While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 10 damage it would take (wards stack).
+While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack).
 
 **High Oracle Vessamine**
 Hero Mode — Cost: 8 Pulse | Attack/Health: 100/140 | Rarity: Ultra-Rare
@@ -2414,7 +2416,7 @@ While in this slot, once per turn, when a Hero you control would take lethal com
 Hero Mode — Cost: 10 Pulse | Attack/Health: 120/180 | Rarity: Eternal
 At the start of each of your turns, gain 2 Pulse, each Hero you control heals 20 Health, and one Hero you control of your choice gains a ward that prevents the next 20 damage it would take (wards stack). Once per turn, you may pay 2 Pulse: remove all enemy-imposed stat reductions and negative effects from a Hero you control, restoring the stats it would have without them.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
-While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 10 damage it would take (wards stack) and heals 10 Health. Whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn).
+While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack) and heals 10 Health. Whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn).
 
 ### Relics
 
@@ -2428,7 +2430,7 @@ While equipped, at the start of each of your turns, this Hero heals 20 Health.
 While equipped, this Hero continuously has +20 Health. The first time each turn this Hero's ward absorbs damage, it gains a ward that prevents the next 10 damage it would take (wards stack).
 
 **Vestments of the First Light** — 2 slots | Cost: 4 Pulse
-While equipped, this Hero continuously has +20 Attack and +40 Health. At the start of each of your turns, this Hero gains a ward that prevents the next 10 damage it would take (wards stack).
+While equipped, this Hero continuously has +20 Attack and +40 Health. At the start of each of your turns, this Hero gains a ward that prevents the next 20 damage it would take (wards stack).
 
 **The Sanctavere Reliquary** — 2 slots | Cost: 5 Pulse
 While equipped, this Hero continuously has +30 Attack and +50 Health. Once per turn, you may pay 1 Pulse: remove all enemy-imposed stat reductions and negative effects from this Hero (restoring the stats it would have without them), and it heals 20 Health.

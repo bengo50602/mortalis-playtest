@@ -145,10 +145,10 @@ window.DEFAULT_DATA = {
    "atk": 90,
    "hp": 60,
    "rarity": "Uncommon",
-   "text": "While Gunnhild is in play, all other Fangrend Heroes you control continuously have +20 Attack.",
+   "text": "When Gunnhild destroys an enemy Hero in combat, she deals 20 damage to the enemy Hero in a lane neighboring the one she attacked, if any. (Her fury carries through the line.)",
    "auxCost": 3,
-   "auxSlots": 2,
-   "auxText": "While in this slot, all Fangrend Heroes you control continuously have +20 Attack (board-wide, not just this lane)."
+   "auxSlots": 1,
+   "auxText": "While in this slot, the first time each turn the Hero in this lane destroys an enemy Hero in combat, deal 20 damage to your opponent's Mortality."
   },
   {
    "id": "fangrend--threnn-widow-of-the-gale",
@@ -159,7 +159,7 @@ window.DEFAULT_DATA = {
    "atk": 180,
    "hp": 60,
    "rarity": "Ultra-Rare",
-   "text": "While Threnn is in play, whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Threnn permanently gains +30 Attack.",
+   "text": "While Threnn is in play, whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Threnn permanently gains +20 Attack.",
    "auxCost": 6,
    "auxSlots": 2,
    "auxText": "While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice."
@@ -187,7 +187,7 @@ window.DEFAULT_DATA = {
    "atk": 40,
    "hp": 20,
    "rarity": "Common",
-   "text": "Whenever Snarl takes damage, he permanently gains 10 Attack.",
+   "text": "Whenever Snarl takes damage, he gains +10 Attack until the end of your next turn.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane heals 10 Health at the start of each of your turns."
@@ -201,7 +201,7 @@ window.DEFAULT_DATA = {
    "atk": 80,
    "hp": 40,
    "rarity": "Uncommon",
-   "text": "Whenever Hilde takes damage, she permanently gains Attack equal to the damage taken.",
+   "text": "Whenever Hilde takes damage, she gains Attack equal to the damage taken until the end of your next turn.",
    "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, at the end of each of your turns, the Hero in this lane takes 10 damage."
@@ -215,7 +215,7 @@ window.DEFAULT_DATA = {
    "atk": 130,
    "hp": 50,
    "rarity": "Rare",
-   "text": "Whenever Ragna takes damage, she permanently gains Attack equal to the damage taken. The first time Ragna would die from damage each game, instead reduce her Health to 10 and she survives — when this happens, she only gains Attack equal to the amount of damage that was needed to reduce her Health to 0, not the full amount dealt (any excess/overkill damage grants no bonus Attack).",
+   "text": "Whenever Ragna takes damage, she permanently gains Attack equal to the damage taken (maximum +30 Attack per turn from this effect). The first time Ragna would die from damage each game, instead reduce her Health to 10 and she survives — when this happens, she only gains Attack equal to the amount of damage that was needed to reduce her Health to 0, not the full amount dealt (any excess/overkill damage grants no bonus Attack).",
    "auxCost": 4,
    "auxSlots": 1,
    "auxText": "While in this slot, once per turn you may pay 2 Pulse to give the Hero in this lane +20 Attack until the end of the current turn."
@@ -229,7 +229,7 @@ window.DEFAULT_DATA = {
    "atk": 160,
    "hp": 80,
    "rarity": "Ultra-Rare",
-   "text": "Whenever Vrist takes damage, he permanently gains Attack equal to the damage taken. While Vrist is in play, whenever another Fangrend Hero you control takes damage, that Hero also permanently gains Attack equal to half the damage taken, rounded down to the nearest 10.",
+   "text": "Whenever Vrist takes damage, he permanently gains Attack equal to the damage taken (maximum +30 Attack per turn from this effect). While Vrist is in play, whenever another Fangrend Hero you control takes damage, that Hero also permanently gains Attack equal to half the damage taken, rounded down to the nearest 10 (maximum +20 Attack per turn per Hero from this effect).",
    "auxCost": 6,
    "auxSlots": 2,
    "auxText": "While in this slot, whenever any Hero you control dies, the Hero in this lane permanently gains 20 Attack. At the end of each of your turns, the Hero in this lane takes 10 damage."
@@ -243,10 +243,10 @@ window.DEFAULT_DATA = {
    "atk": 220,
    "hp": 80,
    "rarity": "Eternal",
-   "text": "Whenever Skoldir takes damage, he permanently gains Attack equal to double the damage taken. When Skoldir dies, deal damage equal to half his current Attack (rounded down to the nearest 10) to up to 2 enemy Heroes of your choice.",
+   "text": "Whenever Skoldir takes damage, he permanently gains Attack equal to half the damage taken, rounded down to the nearest 10 (maximum +30 Attack per turn from this effect). When Skoldir dies, deal damage equal to half his current Attack (rounded down to the nearest 10, maximum 60) to up to 2 enemy Heroes of your choice.",
    "auxCost": 8,
    "auxSlots": 2,
-   "auxText": "While in this slot, the Hero in this lane may attack a second time each turn."
+   "auxText": "While in this slot, once per turn, you may pay 2 Pulse: the Hero in this lane may attack a second time this turn."
   },
   {
    "id": "fangrend--fangrend-warpaint",
@@ -897,7 +897,7 @@ window.DEFAULT_DATA = {
    "atk": 170,
    "hp": 130,
    "rarity": "Eternal",
-   "text": "While Vhessune is in play, whenever any player declares an attack, gain 1 Pulse. Once per turn, you may pay 5 Pulse to destroy any one enemy Relic, Auxiliary card, Hex, Rite, or Pact.",
+   "text": "While Vhessune is in play, whenever any player declares an attack, gain 1 Pulse (maximum 3 Pulse per round from this effect). Once per turn, you may pay 5 Pulse to destroy any one enemy Relic, Auxiliary card, Hex, Rite, or Pact.",
    "auxCost": 8,
    "auxSlots": 2,
    "auxText": "When this card enters play, destroy up to 2 enemy Relic and/or enemy Auxiliary cards. While in this slot, whenever an enemy Hero is destroyed, gain 3 Pulse."
@@ -1509,7 +1509,7 @@ window.DEFAULT_DATA = {
    "atk": 70,
    "hp": 110,
    "rarity": "Rare",
-   "text": "Once per turn, you may pay 3 Pulse: the first attack declared against any Hero you control during your opponent's next turn is blocked — no combat occurs and no damage is dealt to either side.",
+   "text": "Once per turn, you may pay 2 Pulse: the first attack declared against any Hero you control during your opponent's next turn is blocked — no combat occurs and no damage is dealt to either side.",
    "auxCost": 4,
    "auxSlots": 1,
    "auxText": "Once per turn, when a Hero you control is attacked, you may pay 2 Pulse to redirect that attack to the Hero in this lane instead."
@@ -1599,7 +1599,7 @@ window.DEFAULT_DATA = {
    "type": "relic",
    "slots": 2,
    "cost": 5,
-   "text": "While equipped, this Hero continuously has +80 Health. When an enemy Hero redirects an attack into another of your lanes, you may pay 1 Pulse to pull that attack to this Hero instead."
+   "text": "While equipped, this Hero continuously has +80 Health. When an enemy Hero redirects an attack into another of your lanes, you may pull that attack to this Hero instead (no cost)."
   },
   {
    "id": "gildharbor--toll-gate",
@@ -3130,10 +3130,10 @@ window.DEFAULT_DATA = {
    "atk": 80,
    "hp": 100,
    "rarity": "Rare",
-   "text": "Once per turn, you may pay 3 Pulse: choose another Hero you control — it may attack twice this turn.",
+   "text": "Once per turn, you may pay 4 Pulse: choose another Hero you control — it may attack twice this turn.",
    "auxCost": 4,
    "auxSlots": 2,
-   "auxText": "While in this slot, once per turn, you may pay 3 Pulse: a Hero you control in a lane neighboring this one may attack twice this turn."
+   "auxText": "While in this slot, once per turn, you may pay 4 Pulse: a Hero you control in a lane neighboring this one may attack twice this turn."
   },
   {
    "id": "oathenhall--warden-elsbeth-of-the-twin-banners",
@@ -3186,7 +3186,7 @@ window.DEFAULT_DATA = {
    "atk": 140,
    "hp": 160,
    "rarity": "Eternal",
-   "text": "When Aldemar enters play, Knight a Hero you control — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old). While Aldemar is in play, your Champion continuously has +30 Attack and +30 Health and may attack twice each turn, and at the start of each of your turns you gain 1 Pulse and draw 1 card.",
+   "text": "When Aldemar enters play, Knight a Hero you control — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old). While Aldemar is in play, your Champion continuously has +30 Attack and +30 Health, and once per turn you may pay 2 Pulse for your Champion to attack a second time that turn. At the start of each of your turns, gain 1 Pulse and draw 1 card.",
    "auxCost": 8,
    "auxSlots": 2,
    "auxText": "While in this slot, once per turn, two Heroes you control in neighboring lanes may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike), and Heroes you control gain +10 Attack during Joint Strikes."
@@ -3471,7 +3471,7 @@ window.DEFAULT_DATA = {
    "atk": 110,
    "hp": 70,
    "rarity": "Rare",
-   "text": "When Tecuani enters play, you may sacrifice up to 2 other Heroes you control: for each Hero sacrificed, Tecuani gains +40 Attack and +30 Health permanently.",
+   "text": "When Tecuani enters play, you may sacrifice up to 2 other Heroes you control: for each Hero sacrificed, Tecuani gains +40 Attack and +30 Health permanently and you draw 1 card.",
    "auxCost": 4,
    "auxSlots": 1,
    "auxText": "When this card enters play, you may sacrifice a Hero you control: deal damage equal to half that Hero's printed Attack (rounded to the nearest 10) to an enemy Hero of your choice. Then destroy this card."
@@ -3641,7 +3641,7 @@ window.DEFAULT_DATA = {
    "name": "The Great Offering",
    "type": "pact",
    "cost": 1,
-   "text": "When this Pact resolves, sacrifice a Hero you control. A Hero you control gains +40 Attack and +40 Health permanently."
+   "text": "When this Pact resolves, sacrifice a Hero you control. A Hero you control gains +40 Attack and +40 Health permanently, and you draw 1 card."
   },
   {
    "id": "zolthec--hearts-for-the-altar",
@@ -3812,7 +3812,7 @@ window.DEFAULT_DATA = {
    "atk": 90,
    "hp": 150,
    "rarity": "Ultra-Rare",
-   "text": "While Aldith is in play, all enemy Hero attacks must target Aldith's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane. Aldith takes 10 less combat damage. When Aldith dies, each other Hero you control gains +20 Attack and +30 Health permanently, and you draw 2 cards.",
+   "text": "While Aldith is in play, all enemy Hero attacks must target Aldith's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane. Aldith takes 10 less combat damage, and enemy Heroes that attack Aldith take 20 damage after that combat resolves. When Aldith dies, each other Hero you control gains +20 Attack and +30 Health permanently, and you draw 2 cards.",
    "auxCost": 6,
    "auxSlots": 2,
    "auxText": "While in this slot, whenever any Hero you control dies, gain 2 Pulse and each remaining Hero you control heals 20 Health."
@@ -3826,7 +3826,7 @@ window.DEFAULT_DATA = {
    "atk": 90,
    "hp": 150,
    "rarity": "Ultra-Rare",
-   "text": "Once per turn, you may move up to 30 Health from Wendreth to another Hero you control (as a permanent transfer of current and maximum Health). While Wendreth is in play, all enemy Hero attacks must target Wendreth's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane.",
+   "text": "Once per turn, you may move up to 30 Health from Wendreth to another Hero you control (as a permanent transfer of current and maximum Health). While Wendreth is in play, all enemy Hero attacks must target Wendreth's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane, and enemy Heroes that attack Wendreth take 20 damage after that combat resolves.",
    "auxCost": 6,
    "auxSlots": 1,
    "auxText": "While in this slot, once per turn, when a Hero you control would take lethal combat damage, prevent 20 of that damage."
@@ -3840,7 +3840,7 @@ window.DEFAULT_DATA = {
    "atk": 110,
    "hp": 190,
    "rarity": "Eternal",
-   "text": "While Alberic is in play, all enemy Hero attacks must target Alberic's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane, and at the start of each of your turns, each Hero you control heals 20 Health. When Alberic dies, each other Hero you control gains +30 Attack and +30 Health permanently, you gain 3 Pulse, and you draw 2 cards.",
+   "text": "While Alberic is in play, all enemy Hero attacks must target Alberic's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Alberic take 20 damage after that combat resolves, and at the start of each of your turns, each Hero you control heals 20 Health. When Alberic dies, each other Hero you control gains +30 Attack and +30 Health permanently, you gain 3 Pulse, and you draw 2 cards.",
    "auxCost": 8,
    "auxSlots": 2,
    "auxText": "While in this slot, whenever a Hero you control dies, each remaining Hero you control gains +10 Attack and +10 Health permanently and heals 20 Health."
@@ -4684,7 +4684,7 @@ window.DEFAULT_DATA = {
    "text": "When Serelle enters play, a Hero you control gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health).",
    "auxCost": 1,
    "auxSlots": 1,
-   "auxText": "While in this slot, at the start of each of your turns, the Hero in this lane gains a ward that prevents the next 10 damage it would take (wards stack and absorb damage before Health)."
+   "auxText": "While in this slot, at the start of each of your turns, the Hero in this lane gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health)."
   },
   {
    "id": "brightmantle--brother-lumen",
@@ -4779,10 +4779,10 @@ window.DEFAULT_DATA = {
    "atk": 70,
    "hp": 110,
    "rarity": "Rare",
-   "text": "While Osgood is in play, whenever a Hero you control's ward is fully consumed (reduced to 0 by damage), that Hero heals 20 Health.",
+   "text": "While Osgood is in play, whenever a Hero you control's ward is fully consumed (reduced to 0 by damage), that Hero heals 30 Health.",
    "auxCost": 4,
    "auxSlots": 2,
-   "auxText": "While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 10 damage it would take (wards stack)."
+   "auxText": "While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack)."
   },
   {
    "id": "brightmantle--high-oracle-vessamine",
@@ -4824,7 +4824,7 @@ window.DEFAULT_DATA = {
    "text": "At the start of each of your turns, gain 2 Pulse, each Hero you control heals 20 Health, and one Hero you control of your choice gains a ward that prevents the next 20 damage it would take (wards stack). Once per turn, you may pay 2 Pulse: remove all enemy-imposed stat reductions and negative effects from a Hero you control, restoring the stats it would have without them.",
    "auxCost": 8,
    "auxSlots": 2,
-   "auxText": "While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 10 damage it would take (wards stack) and heals 10 Health. Whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn)."
+   "auxText": "While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack) and heals 10 Health. Whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn)."
   },
   {
    "id": "brightmantle--dawnlight-pendant",
@@ -4860,7 +4860,7 @@ window.DEFAULT_DATA = {
    "type": "relic",
    "slots": 2,
    "cost": 4,
-   "text": "While equipped, this Hero continuously has +20 Attack and +40 Health. At the start of each of your turns, this Hero gains a ward that prevents the next 10 damage it would take (wards stack)."
+   "text": "While equipped, this Hero continuously has +20 Attack and +40 Health. At the start of each of your turns, this Hero gains a ward that prevents the next 20 damage it would take (wards stack)."
   },
   {
    "id": "brightmantle--the-sanctavere-reliquary",
@@ -5019,9 +5019,9 @@ window.DEFAULT_DATA = {
   "relicRealmLocked": true,
   "overkillCap": 30,
   "laneUnlockTurns": [
-   1,
-   1,
    3,
+   1,
+   1,
    5
   ]
  }
