@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mortalis: Realms — Playtest Lab</title>
+<style>
+  body { margin: 0; background: #f4f2ec; font-family: 'Segoe UI', 'Helvetica Neue', sans-serif; color: #1c1a16; }
+  header { background: #1d2027; color: #e8e4d8; padding: 18px 28px; }
+  header h1 { margin: 0; font-size: 20px; font-family: Georgia, serif; }
+  header p { margin: 4px 0 0; font-size: 13px; color: #9daac6; }
+  #controls { display: flex; gap: 12px; align-items: center; padding: 16px 28px; flex-wrap: wrap; background: #fff; border-bottom: 1px solid #ddd8ca; }
+  button { font-size: 14px; padding: 8px 16px; border: 1px solid #c9c5b8; border-radius: 8px; background: #fff; cursor: pointer; }
+  button:hover { background: #f0ede4; }
+  button.primary { background: #1d2027; color: #fff; border-color: #1d2027; }
+  button:disabled { opacity: 0.5; cursor: default; }
+  input[type=number] { width: 70px; font-size: 14px; padding: 6px; border: 1px solid #c9c5b8; border-radius: 8px; }
+  #progress { font-size: 13px; color: #55534b; }
+  main { padding: 20px 28px; max-width: 1100px; }
+  section { background: #fff; border: 1px solid #ddd8ca; border-radius: 10px; padding: 16px 20px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 4px; font-size: 16px; }
+  section p.sub { margin: 0 0 12px; font-size: 12.5px; color: #6b6960; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 5px 10px; border-bottom: 1px solid #eee8da; vertical-align: top; }
+  th { color: #6b6960; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .ok { color: #2e7d4f; } .warn { color: #b26a00; } .bad { color: #b3352c; }
+  .pill { display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 10px; border: 1px solid #c9c5b8; margin-right: 4px; }
+  .muted { color: #8a877c; }
+  #summary { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+  .stat { background: #fff; border: 1px solid #ddd8ca; border-radius: 10px; padding: 12px 18px; min-width: 120px; }
+  .stat .n { font-size: 24px; font-weight: 600; } .stat .l { font-size: 12px; color: #6b6960; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Mortalis: Realms — Playtest Lab</h1>
+  <p>Runs full AI-vs-AI games at maximum speed and flags cards whose effects never behave the way their text says.</p>
+</header>
+<div id="controls">
+  <label>Games: <input type="number" id="n-games" value="60" min="1" max="500"></label>
+  <button class="primary" id="btn-run">Run playtest</button>
+  <button id="btn-smoke">Run staged effect check</button>
+  <span id="progress"></span>
+</div>
+<main>
+  <div id="summary"></div>
+  <div id="report"></div>
+</main>
+
+<script src="cards.js"></script>
+<script src="rules.js"></script>
+<script src="engine.js"></script>
+<script src="smoke_test.js"></script>
+<script>
+/* ---------- isolated setup: never touch the real app's saved data ---------- */
+window.UI = {
+  render() {}, onLog() {}, toast() {}, freeTargeting: () => false,
+  pickHero: async (msg, cands) => cands && cands.length ? cands[0] : null,
+  pickHandCard: async () => null, pickOption: async () => 0,
+};
+window.confirm = () => true;
+window.prompt = () => null;
+DB = baseData();          // published card data, ignoring any local edits
+recompileAll();
+const origTimeout = window.setTimeout.bind(window);
+window.setTimeout = (fn, ms) => origTimeout(fn, 0);   // AI thinks at full speed
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;");
+
+/* ---------- classification: which cards can prove themselves in logs ---------- */
+// Pure auras / static flags never write log lines, so game telemetry can't judge
+// them — the staged effect check covers those instead.
+function silentByNature(c) {
+  const f = fx(c.id);
+  const loud = (f.sot || []).length || (f.eot || []).length || f.onEnter || f.onDeath || (f.listen || []).length ||
+    (f.combatTrig || []).length || (f.activated || []).some(a => a.ops) || (f.auxActivated || []).some(a => a.ops) ||
+    f.auxOnEnter || f.onDamaged || f.onEnemyDeath || f.onFriendlyDeath || f.preFight || f.auxPreFight ||
+    f.spellOps && f.spellOps !== "manual" || f.rite || f.hexTrig;
+  return !loud;
+}
+
+/* ---------- telemetry ---------- */
+let stats = null;
+function freshStats() {
+  stats = { games: 0, crashes: [], perCard: {} };
+  for (const c of DB.cards) stats.perCard[c.id] = { name: c.name, realm: c.realm, type: c.type, played: 0, mentions: 0 };
+}
+
+function harvestLogs(logArr) {
+  // "plays X", "sets a face-down Hex" = played; any other mention = effect activity
+  const nameOf = {};
+  for (const c of DB.cards) nameOf[c.name] = c.id;
+  const playedRe = /plays ([^(]+?) \(|plays ([^(]+?) as|attaches ([^.]+?) to|sets a face-down Hex|casts ([^.!]+?)[.!]|plays ([^.!]+?)[.!]/;
+  for (const l of logArr) {
+    for (const c of DB.cards) {
+      if (!l.msg.includes(c.name)) continue;
+      const s = stats.perCard[c.id];
+      const isPlay = new RegExp("(plays|casts|attaches|sets) [^.]*" + c.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).test(l.msg)
+        || new RegExp(c.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + " (attacks|attack)").test(l.msg);
+      if (isPlay) s.played++;
+      else s.mentions++;
+    }
+  }
+}
+
+/* ---------- AI ability usage (the built-in AI never activates once-per-turn abilities,
+   so the Lab fires affordable ones at the start of each AI turn to exercise those cards) ---------- */
+async function aiUseAbilities() {
+  const pi = 1, P = G.players[pi];
+  for (const t of heroesOf(pi)) {
+    const h = heroAt(t);
+    if (!h) continue;
+    const f = fx(h.cardId);
+    for (let i = 0; i < (f.activated || []).length; i++) {
+      const ab = f.activated[i];
+      if (ab.ops && P.pulse >= ab.cost + 3) await activateAbility(pi, t.li, h, cardById(h.cardId).name, ab, "lab-h" + i);
+    }
+    for (const r of h.relics) {
+      const rf = fx(r.cardId);
+      for (let i = 0; i < (rf.activated || []).length; i++) {
+        const ab = rf.activated[i];
+        if (ab.ops && P.pulse >= ab.cost + 3) await activateAbility(pi, t.li, r, cardById(r.cardId).name, ab, "lab-r" + i, r);
+      }
+    }
+  }
+  for (let li = 0; li < P.lanes.length; li++) {
+    const seenA = new Set();
+    for (const a of P.lanes[li].aux) if (a && !seenA.has(a.uid)) {
+      seenA.add(a.uid);
+      const af = fx(a.cardId);
+      for (let i = 0; i < (af.auxActivated || []).length; i++) {
+        const ab = af.auxActivated[i];
+        if (ab.ops && P.pulse >= ab.cost + 3) await activateAbility(pi, li, a, cardById(a.cardId).name, ab, "lab-a" + i);
+      }
+    }
+  }
+}
+
+/* ---------- self-play games ---------- */
+async function playGames(n) {
+  freshStats();
+  const realms = realmNames();
+  const pick = () => { const a = []; while (a.length < 4) a.push(realms[Math.floor(Math.random() * realms.length)]); return a; };
+  for (let g = 0; g < n; g++) {
+    $("progress").textContent = `Game ${g + 1} / ${n}…`;
+    await new Promise(r => origTimeout(r, 0));
+    try {
+      newGame({ playerRealms: pick(), aiRealms: pick(), difficulty: "medium", first: Math.random() < 0.5 ? 0 : 1 });
+      G.players.forEach(p => p.isAI = true);
+      let guard = 0;
+      while (!G.over && G.gt < 80 && guard++ < 200) {
+        if (G.active === 0) { G.players.reverse(); G.active = 1; G.firstPlayer = 1 - G.firstPlayer; }
+        await aiUseAbilities();
+        if (!G.over) await aiTakeTurn();
+      }
+      harvestLogs(G.log);
+      stats.games++;
+    } catch (e) {
+      const last = (G && G.log.length) ? G.log[G.log.length - 1].msg : "(no log)";
+      stats.crashes.push({ err: String(e && e.message || e), after: last, stack: String(e && e.stack || "").split("\n")[1] || "" });
+    }
+  }
+  $("progress").textContent = `Done — ${stats.games} games completed, ${stats.crashes.length} crashed.`;
+  renderReport();
+}
+
+/* ---------- report ---------- */
+function renderReport() {
+  const played = Object.values(stats.perCard).filter(s => s.played > 0);
+  const suspects = [];
+  for (const c of DB.cards) {
+    const s = stats.perCard[c.id];
+    if (s.played >= 3 && s.mentions === 0 && !silentByNature(c)) suspects.push(s);
+  }
+  suspects.sort((a, b) => b.played - a.played);
+  const untested = Object.values(stats.perCard).filter(s => s.played === 0).length;
+
+  $("summary").innerHTML = `
+    <div class="stat"><div class="n">${stats.games}</div><div class="l">games played</div></div>
+    <div class="stat"><div class="n">${played.length} / ${DB.cards.length}</div><div class="l">cards seen in play</div></div>
+    <div class="stat"><div class="n ${stats.crashes.length ? "bad" : "ok"}">${stats.crashes.length}</div><div class="l">crashes</div></div>
+    <div class="stat"><div class="n ${suspects.length ? "warn" : "ok"}">${suspects.length}</div><div class="l">suspect cards</div></div>`;
+
+  let html = "";
+  if (stats.crashes.length) {
+    const grouped = {};
+    for (const cr of stats.crashes) { const k = cr.err; grouped[k] = grouped[k] || { n: 0, after: cr.after, stack: cr.stack }; grouped[k].n++; }
+    html += `<section><h2 class="bad">Crashes</h2><p class="sub">A game halted mid-run — the "last log line" tells you which card acted right before it broke. Report these to Claude.</p>
+      <table><tr><th>Error</th><th>Times</th><th>Last log line before crash</th><th>Where</th></tr>` +
+      Object.entries(grouped).map(([k, v]) => `<tr><td class="bad">${esc(k)}</td><td>${v.n}</td><td>${esc(v.after)}</td><td class="muted">${esc(v.stack)}</td></tr>`).join("") + "</table></section>";
+  }
+  html += `<section><h2 class="${suspects.length ? "warn" : "ok"}">${suspects.length ? "Suspect cards" : "No suspect cards"}</h2>
+    <p class="sub">These were played at least 3 times but their effect never once showed up in the game log, even though their scripted effect should produce visible actions. Auras and static bonuses are excluded (the staged check covers those). Some may be situational effects whose trigger never occurred — more games sharpens this list.</p>`;
+  if (suspects.length) html += `<table><tr><th>Card</th><th>Realm</th><th>Type</th><th>Times played</th></tr>` +
+    suspects.map(s => `<tr><td>${esc(s.name)}</td><td>${esc(s.realm)}</td><td>${esc(s.type)}</td><td>${s.played}</td></tr>`).join("") + "</table>";
+  html += "</section>";
+  html += `<section><h2>Coverage</h2><p class="sub">${untested} cards were never drawn-and-played across these games — run more games (or note them for manual testing) to cover everything. Nothing is wrong with them; they just haven't been exercised yet.</p></section>`;
+  $("report").innerHTML = html;
+}
+
+/* ---------- staged effect check (smoke test) ---------- */
+async function stagedCheck() {
+  $("progress").textContent = "Running staged effect check on every card…";
+  await new Promise(r => origTimeout(r, 0));
+  let issues;
+  try { issues = await runSmokeTest(); } catch (e) { $("progress").textContent = "Staged check crashed: " + e.message; return; }
+  issues = issues || [];
+  $("progress").textContent = `Staged check done — ${issues.length} findings.`;
+  const html = `<section><h2 class="${issues.length ? "warn" : "ok"}">${issues.length ? issues.length + " staged findings" : "Staged check: every card's scripted effect produced its expected result"}</h2>
+    <p class="sub">Each card was placed into a controlled board and its compiled effect fired directly; a finding means the effect produced no state change or the wrong stat totals.</p>` +
+    (issues.length ? `<table><tr><th>Card</th><th>Part</th><th>Finding</th></tr>` +
+      issues.map(i => `<tr><td>${esc(i[0])}</td><td>${esc(i[1])}</td><td>${esc(i[2])}</td></tr>`).join("") + "</table>" : "") + "</section>";
+  $("report").innerHTML = html + $("report").innerHTML;
+}
+
+$("btn-run").onclick = async () => { $("btn-run").disabled = $("btn-smoke").disabled = true; await playGames(Math.max(1, +$("n-games").value || 60)); $("btn-run").disabled = $("btn-smoke").disabled = false; };
+$("btn-smoke").onclick = async () => { $("btn-run").disabled = $("btn-smoke").disabled = true; await stagedCheck(); $("btn-run").disabled = $("btn-smoke").disabled = false; };
+</script>
+</body>
+</html>

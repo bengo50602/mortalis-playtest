@@ -56,7 +56,8 @@ async function runSmokeTest() {
     let atk = 0, hp = 0;
     for (const e of contList) {
       if (e.scope === "equipped" || e.scope === "laneHero") { atk += e.atk; hp += e.hp; }
-      else if (e.scope === "allFriendly" && !e.excludeSelf && (!e.realmFilter || e.realmFilter === cardRealm)) { atk += e.atk; hp += e.hp; }
+      else if (e.scope === "allFriendly" && !e.excludeSelf && (!e.realmFilter || e.realmFilter === cardRealm)
+               && !(e.otherRealmFilter && e.otherRealmFilter === cardRealm)) { atk += e.atk; hp += e.hp; }
     }
     return { atk, hp };
   }
@@ -100,7 +101,8 @@ async function runSmokeTest() {
           // recompute after (auras are computed live, so just read again with hero present vs absent)
           G.players[0].lanes[1].hero = null;
           const nb1 = effAtk(0, 2) + effMaxHp(0, 2), en1 = effAtk(1, 1) + effMaxHp(1, 1);
-          const reaches = [].concat(f.cont).some(e => ["neighbors", "opposingEnemy", "allEnemy", "allFriendly"].includes(e.scope));
+          // otherRealmFilter auras hit nothing in the staged same-realm board — skip them
+          const reaches = [].concat(f.cont).some(e => ["neighbors", "opposingEnemy", "allEnemy", "allFriendly"].includes(e.scope) && !(e.otherRealmFilter && e.otherRealmFilter === c.realm));
           if (reaches && nb0 === nb1 && en0 === en1) issues.push([c.name, "hero-remote-aura", "aura scope declared but no neighbor/opposing/board effect measured"]);
         }
         // passive "whenever takes damage" growth (permanent or temporary)
