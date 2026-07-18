@@ -5633,6 +5633,11 @@ function parseOp(cl) {
   if ((m = cl.match(new RegExp(`^a Hero you control heals ${NUM} Health$`, "i")))) return { op: "heal", n: +m[1], target: "ownChoice" };
   if ((m = cl.match(new RegExp(`^(?:\\w+|this Hero) gains \\+${NUM} Attack(?: and \\+${NUM} Health)? permanently$`, "i")))) return { op: "buff", atk: +m[1], hp: +(m[2] || 0), target: "laneHero", perm: true };
   if ((m = cl.match(/^destroy an enemy Relic or enemy Auxiliary card$/i))) return { op: "destroySupport", n: 1 };
+  if ((m = cl.match(/^destroy a Relic or Auxiliary card affecting an enemy Hero$/i))) return { op: "destroySupport", n: 1 };
+  if ((m = cl.match(/^destroy a Hex targeting this lane$/i))) return { op: "destroyHexOpposing" };
+  if ((m = cl.match(/^remove all enemy-imposed stat reductions and negative effects from all Heroes you control(?:, restoring the stats they would have without them)?$/i))) return { op: "removeReductions", target: "allOwn" };
+  if ((m = cl.match(/^remove all enemy-imposed stat reductions and negative effects from this Hero(?:, restoring[^,]*)?$/i))) return { op: "removeReductions", target: "itOrLane" };
+  if ((m = cl.match(/^it heals (\d+) Health$/i))) return { op: "heal", n: +m[1], target: "itOrLane" };
   if ((m = cl.match(/^destroy any one enemy Relic, Auxiliary card, Hex, Rite, or Pact$/i))) return { op: "destroyAnyEnemy" };
   if ((m = cl.match(new RegExp(`^destroy an enemy Hero(?: in [^ ]+ opposing lane)?(?: that has| with) ${NUM} or less Health remaining$`, "i")))) return { op: "executeHero", max: +m[1] };
   if ((m = cl.match(/^choose another Hero you control — it may attack twice this turn$/i))) return { op: "attackTwice", target: "ownChoice" };
@@ -5810,6 +5815,7 @@ function compileListen(text, out, bits) {
   if ((m = t.match(new RegExp(`[Ww]henever you play a Relic, \\w+ gains \\+${NUM} Attack and \\+${NUM} Health permanently`, "i")))) push("playRelic", { k: "buffSelf", atk: +m[1], hp: +m[2], perm: true }, "grows on Relic play");
   if ((m = t.match(new RegExp(`whenever an enemy Hero dies from combat damage dealt by one of your Heroes, \\w+ permanently gains \\+${NUM} Attack`, "i")))) push("enemyKilledByYourHero", { k: "buffSelf", atk: +m[1], perm: true }, "grows when your Hero kills");
   if ((m = t.match(new RegExp(`whenever you heal a Hero with a card effect, gain ${NUM} Pulse(?: \\(maximum (\\d+) per turn\\))?`, "i")))) push("heal", { k: "pulse", n: +m[1] }, "Pulse on heal", m[2] ? +m[2] : 0);
+  if ((m = t.match(new RegExp(`[Ww]henever you gain Pulse from a card effect, \\w+ heals ${NUM} Health`, "i")))) push("gainPulse", { k: "healSelfN", n: +m[1] }, "heals on Pulse gain");
   if ((m = t.match(new RegExp(`whenever a Hero you control's ward is fully consumed[^,]*, that Hero heals ${NUM} Health`, "i")))) push("wardConsumed", { k: "healEvent", n: +m[1] }, "heal on ward break");
   if ((m = t.match(new RegExp(`whenever a Hero you control dies, all remaining Heroes you control gain \\+${NUM} Attack and \\+${NUM} Health permanently`, "i")))) push("friendlyDied", { k: "buffAll", atk: +m[1], hp: +m[2], perm: true }, "team grows on death");
   if ((m = t.match(new RegExp(`whenever an enemy Hero dies, all remaining enemy Heroes get [-−–]${NUM} Attack permanently`, "i")))) push("enemyDied", { k: "reduceAll", atk: +m[1] }, "enemies wither on death");
@@ -6164,6 +6170,7 @@ const SCANNED_HERO = [
   [/When \w+ declares an attack, the defending Hero gets [-−–]\d+ Attack and \w+ gains \+\d+ Attack, for that combat only/i, "attack-drain"],
   [/Whenever \w+ declares an attack, (?:he|she|it) gains \+\d+ Attack permanently/i, "momentum"],
   [/whenever your opponent plays a Hero, all enemy Heroes get [-−–]\d+ Attack until the end of your next turn/i, "dread presence"],
+  [/Once per turn, when [\w ]+ is attacked and survives the combat, (?:he|she|it) may immediately attack the Hero that attacked/i, "counterattacker"],
 ];
 const SCANNED_AUX = [
   [/enemy Heroes attacking this lane have [-−–]\d+ Attack during that combat/i, "lane intimidation"],
@@ -6237,6 +6244,9 @@ function compileCard(card) {
       if (rpf) { out.preFight = { red: +rpf[1], atk: +rpf[2], heal: 0 }; out.autoBits.push("pre-combat drain"); }
       if (/participates in an Onslaught, all participating Heroes gain \+\d+ Attack/i.test(norm(card.text))) out.autoBits.push("onslaught leader");
       if (/[Ww]hen this Hero declares an attack, the defending Hero gets [-−–]\d+ Attack and this Hero gains \+\d+ Attack, for that combat only/.test(norm(card.text))) out.autoBits.push("attack-drain");
+      if (/Whenever the equipped Hero dies, deal \d+ damage to whichever Hero killed it/i.test(norm(card.text))) out.autoBits.push("death revenge");
+      if (/The first time this Hero would die, it instead survives with \d+ Health/i.test(norm(card.text))) out.autoBits.push("death ward");
+      if (/cannot redirect its attacks.*only attack this Hero'?s lane/i.test(card.text || "")) out.autoBits.push("pins the opposing Hero");
       const pv = norm(card.text).match(/the first time each turn this Hero (?:would take|takes) combat damage, prevent (\d+) of that damage/i);
       if (pv) { out.preventFirst = +pv[1]; out.autoBits.push("combat prevention"); }
       const rBg = parseBodyguard(card.text); if (rBg) { out.bodyguard = Object.assign({ protector: "equipped" }, rBg); out.autoBits.push("bodyguard"); }
@@ -6730,6 +6740,15 @@ async function runOp(op, pi, ctx) {
       if (!ctx.sacAtk) break;
       const gain = Math.round(ctx.sacAtk / 2 / 10) * 10;
       await runOp({ op: "buff", atk: gain, hp: 0, target: "ownChoice", perm: true }, pi, ctx);
+      break;
+    }
+    case "destroyHexOpposing": {   // Halo of the Everwatch: pop an enemy face-down Hex on the mirror lane
+      const os2 = O.slots;
+      let idx2 = os2.findIndex(s2 => s2 && s2.kind === "hex" && s2.laneIdx === ctx.laneIdx);
+      if (idx2 < 0) idx2 = os2.findIndex(s2 => s2 && s2.kind === "hex");
+      if (idx2 < 0) { log(`No enemy Hex to destroy.`); break; }
+      log(`${ctx.sourceName || "Effect"} destroys an enemy face-down Hex (${cardById(os2[idx2].cardId).name})!`);
+      os2[idx2] = null;
       break;
     }
     case "buffSacCost": {   // Huemac: a Hero you control gains 10 × the sacrifice's printed cost
@@ -7417,6 +7436,7 @@ async function resolveTargets(op, pi, ctx) {
     case "self": return ctx.laneIdx != null && heroAt({ pi, li: ctx.laneIdx }) ? [{ pi, li: ctx.laneIdx }] : [];
     case "lastChosen": return ctx.lastChosen && heroAt(ctx.lastChosen) ? [ctx.lastChosen] : [];
     case "onslaughtAttackers": return (ctx.onslaughtAttackers || []).filter(t => heroAt(t));
+    case "itOrLane": return ctx.lastChosen && heroAt(ctx.lastChosen) ? [ctx.lastChosen] : (ctx.laneIdx != null && heroAt({ pi, li: ctx.laneIdx }) ? [{ pi, li: ctx.laneIdx }] : []);
     case "victor": return ctx.victor && heroAt(ctx.victor) ? [ctx.victor] : [];
     case "allOwn": return own.filter(t => {
       const r = cardById(heroAt(t).cardId).realm;
@@ -7518,6 +7538,7 @@ function applyListen(dd, pi, pos, h, data) {
     else h.temp.push({ atk: dd.atk || 0, hp: dd.hp || 0, until: G.gt + (dd.dur || 0) });
     log(`${nm} gains +${dd.atk || 0}/+${dd.hp || 0}${dd.perm ? " permanently" : ""}.`);
   } else if (dd.k === "healEvent") { const tg = heroAt(data.at); if (tg) { const hd = Math.min(tg.dmg, dd.n); tg.dmg -= hd; if (hd) log(`${cardById(tg.cardId).name} heals ${hd} (${nm}).`); } }
+  else if (dd.k === "healSelfN") { const hd = Math.min(h.dmg, dd.n); if (hd) { h.dmg -= hd; log(`${nm} heals ${hd}.`); } }
   else if (dd.k === "buffAll") {
     for (const t of heroesOf(pi)) {
       if (dd.other && t.li === pos.li) continue;
@@ -7689,6 +7710,19 @@ function destroyHero(pi, li, killer, opts) {
       }
     }
   }
+  // Sarcophagus Plate: the first death is survived with N Health, consuming the Relic
+  for (const r of h.relics) {
+    const sm2 = norm(cardById(r.cardId).text || "").match(/The first time this Hero would die, it instead survives with (\d+) Health, then destroy this Relic/i);
+    if (sm2) {
+      h.relics = h.relics.filter(x => x !== r);
+      const mx = effMaxHp(pi, li);
+      if (mx > 0) {
+        h.dmg = Math.max(0, mx - +sm2[1]);
+        log(`${cardById(r.cardId).name} shatters — ${c.name} survives with ${Math.min(mx, +sm2[1])} Health!`);
+        return;
+      }
+    }
+  }
   G.deathGt = G.deathGt || {}; G.deathGt[pi] = G.gt;
   P.lanes[li].hero = null;
   if (P.championUid === h.uid) P.championUid = null;   // Champion status ends with the Hero
@@ -7699,6 +7733,11 @@ function destroyHero(pi, li, killer, opts) {
     P.mortality -= ov;
     log(`Overkill: ${P.name} loses ${ov} Mortality${ov < opts.overkill ? ` (capped at ${cap})` : ""}.`);
     emit("loseMortality", pi, {});
+  }
+  // Chain of the Bound Storm: the dead Hero's Relic strikes back at the killer
+  for (const r of h.relics) {
+    const cm2 = norm(cardById(r.cardId).text || "").match(/Whenever the equipped Hero dies, deal (\d+) damage to whichever Hero killed it/i);
+    if (cm2 && killer && heroAt(killer)) dealDamage(killer, +cm2[1], { sourceName: cardById(r.cardId).name });
   }
   // the dying Hero's own "when this Hero dies" effect
   const selfDeath = fx(c.id).onDeath;
@@ -8125,6 +8164,12 @@ function legalTargetsFor(pi, attackerLis) {
     const li = attackerLis[0];
     if (heroFlag({ pi, li }, "attackAnyLane")) return { heroes: targetable, face: false };
     if (heroFlag({ pi, li }, "anyLaneNotOpp")) return { heroes: targetable.filter(t => t.li !== li || heroFlag(t, "taunt")), face: false };
+    // Chains of the Red Gate: a Relic on the Hero across the way pins this attacker to its opposing lane
+    {
+      const oppH = heroAt({ pi: O, li });
+      if (oppH && oppH.relics.some(r => /cannot redirect its attacks.*only attack this Hero'?s lane/i.test(cardById(r.cardId).text || "")))
+        return { heroes: targetable.some(t => t.li === li) ? [{ pi: O, li }] : [], face: false };
+    }
     const opp = { pi: O, li };
     if (heroAt(opp) && !isProtected(opp) && (!targetable.some(t => heroFlag(t, "taunt")) || heroFlag(opp, "taunt"))) return { heroes: [opp], face: false };
     return { heroes: targetable, face: false };
@@ -8585,6 +8630,19 @@ async function resolveAttack(pi, attackerLis, target) {
     if (heroAt(ctx.defender) && heroAt({ pi, li: alive[0] })) {
       const tookDmg = aAtk > defAtk;
       await fireHexes(1 - pi, "postCombat", { laneIdx: dLi, attacker: { pi, li: alive[0] }, defender: ctx.defender, defenderTookDamage: tookDmg });
+      // Sir Aldous: once per turn, the survivor may strike back at his attacker
+      const dh4 = heroAt(ctx.defender);
+      if (dh4 && heroAt({ pi, li: alive[0] }) && !isSilenced(dh4)) {
+        const am4 = norm(cardById(dh4.cardId).text || "").match(/Once per turn, when [\w ]+ is attacked and survives the combat, (?:he|she|it) may immediately attack the Hero that attacked (?:him|her|it)/i);
+        if (am4 && dh4.counterGt !== G.gt) {
+          const DP = G.players[ctx.defender.pi];
+          if (DP.isAI || confirm(`${cardById(dh4.cardId).name}: counterattack ${cardById(heroAt({ pi, li: alive[0] }).cardId).name}?`)) {
+            dh4.counterGt = G.gt;
+            log(`${cardById(dh4.cardId).name} counterattacks!`, DP.isAI ? "ai" : "");
+            await miniCombat(ctx.defender, { pi, li: alive[0] });
+          }
+        }
+      }
     }
   } else {
     // Onslaught: attackers' Attack is summed and treated as one collective value,
