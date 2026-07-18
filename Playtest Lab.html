@@ -83,15 +83,24 @@ function silentByNature(c) {
 /* ---------- telemetry ---------- */
 let stats = null;
 function freshStats() {
-  stats = { games: 0, crashes: [], perCard: {} };
-  for (const c of DB.cards) stats.perCard[c.id] = { name: c.name, realm: c.realm, type: c.type, played: 0, mentions: 0 };
+  stats = { games: 0, crashes: [], perCard: {}, realms: {}, staged: null };
+  for (const c of DB.cards) stats.perCard[c.id] = { name: c.name, realm: c.realm, type: c.type, played: 0, mentions: 0, games: 0, wins: 0 };
+  for (const r of realmNames()) stats.realms[r] = { games: 0, wins: 0 };
 }
 
+// direct play instrumentation: record exactly who played which card
+let PLAY_TRACK = null;
+const _playHero = playHero, _playAux = playAux;
+playHero = async function (pi, hi, li) { if (PLAY_TRACK) PLAY_TRACK[pi].add(G.players[pi].hand[hi]); return _playHero(pi, hi, li); };
+playAux = async function (pi, hi, li) { if (PLAY_TRACK) PLAY_TRACK[pi].add(G.players[pi].hand[hi]); return _playAux(pi, hi, li); };
+for (const fn of ["playRelic", "setHex", "playRite"]) {
+  const orig = window[fn];
+  if (typeof orig === "function") window[fn] = function (pi, hi, li) { if (PLAY_TRACK) PLAY_TRACK[pi].add(G.players[pi].hand[hi]); return orig(pi, hi, li); };
+}
+const _playSpell = window.playSpell;
+if (typeof _playSpell === "function") window.playSpell = async function (pi, hi) { if (PLAY_TRACK) PLAY_TRACK[pi].add(G.players[pi].hand[hi]); return _playSpell.apply(null, arguments); };
+
 function harvestLogs(logArr) {
-  // "plays X", "sets a face-down Hex" = played; any other mention = effect activity
-  const nameOf = {};
-  for (const c of DB.cards) nameOf[c.name] = c.id;
-  const playedRe = /plays ([^(]+?) \(|plays ([^(]+?) as|attaches ([^.]+?) to|sets a face-down Hex|casts ([^.!]+?)[.!]|plays ([^.!]+?)[.!]/;
   for (const l of logArr) {
     for (const c of DB.cards) {
       if (!l.msg.includes(c.name)) continue;
@@ -102,6 +111,19 @@ function harvestLogs(logArr) {
       else s.mentions++;
     }
   }
+}
+
+/* ---------- realm lineup variety: distinct quads, doubles, mono, wildcard ---------- */
+function pickRealms() {
+  const all = realmNames().slice();
+  for (let i = all.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [all[i], all[j]] = [all[j], all[i]]; }
+  const roll = Math.random();
+  if (roll < 0.5) return all.slice(0, 4);                                   // 4 distinct realms
+  if (roll < 0.75) return [all[0], all[0], all[1], all[2]];                 // one doubled
+  if (roll < 0.9) return [all[0], all[0], all[0], all[0]];                  // mono
+  const a = [];                                                             // anything goes
+  while (a.length < 4) a.push(all[Math.floor(Math.random() * all.length)]);
+  return a;
 }
 
 /* ---------- AI ability usage (the built-in AI never activates once-per-turn abilities,
@@ -140,23 +162,38 @@ async function aiUseAbilities() {
 /* ---------- self-play games ---------- */
 async function playGames(n) {
   freshStats();
-  const realms = realmNames();
-  const pick = () => { const a = []; while (a.length < 4) a.push(realms[Math.floor(Math.random() * realms.length)]); return a; };
+  // staged effect check first, folded into the same report
+  $("progress").textContent = "Staged effect check…";
+  await new Promise(r => origTimeout(r, 0));
+  try { stats.staged = (await runSmokeTest()) || []; } catch (e) { stats.staged = [["(smoke test)", "runner", "crashed: " + e.message]]; }
   for (let g = 0; g < n; g++) {
     $("progress").textContent = `Game ${g + 1} / ${n}…`;
     await new Promise(r => origTimeout(r, 0));
     try {
-      newGame({ playerRealms: pick(), aiRealms: pick(), difficulty: "medium", first: Math.random() < 0.5 ? 0 : 1 });
-      G.players.forEach(p => p.isAI = true);
+      newGame({ playerRealms: pickRealms(), aiRealms: pickRealms(), difficulty: "medium", first: Math.random() < 0.5 ? 0 : 1 });
+      G.players.forEach((p, i) => { p.isAI = true; p.labIdx = i; });
+      const trackByIdx = [new Set(), new Set()];
       let guard = 0;
       while (!G.over && G.gt < 80 && guard++ < 200) {
         if (G.active === 0) { G.players.reverse(); G.active = 1; G.firstPlayer = 1 - G.firstPlayer; }
+        PLAY_TRACK = [trackByIdx[G.players[0].labIdx], trackByIdx[G.players[1].labIdx]];
         await aiUseAbilities();
         if (!G.over) await aiTakeTurn();
       }
+      PLAY_TRACK = null;
       harvestLogs(G.log);
+      if (G.over) {
+        const winIdx = G.players[G.winner].labIdx;
+        for (let p = 0; p < 2; p++) {
+          const won = p === winIdx;
+          for (const id of trackByIdx[p]) { const s = stats.perCard[id]; if (s) { s.games++; if (won) s.wins++; } }
+          const pl = G.players.find(x => x.labIdx === p);
+          for (const r of new Set(pl.realms)) { stats.realms[r].games++; if (won) stats.realms[r].wins++; }
+        }
+      }
       stats.games++;
     } catch (e) {
+      PLAY_TRACK = null;
       const last = (G && G.log.length) ? G.log[G.log.length - 1].msg : "(no log)";
       stats.crashes.push({ err: String(e && e.message || e), after: last, stack: String(e && e.stack || "").split("\n")[1] || "" });
     }
@@ -166,6 +203,7 @@ async function playGames(n) {
 }
 
 /* ---------- report ---------- */
+function pct(w, g) { return g ? Math.round(100 * w / g) : 0; }
 function renderReport() {
   const played = Object.values(stats.perCard).filter(s => s.played > 0);
   const suspects = [];
@@ -174,28 +212,62 @@ function renderReport() {
     if (s.played >= 3 && s.mentions === 0 && !silentByNature(c)) suspects.push(s);
   }
   suspects.sort((a, b) => b.played - a.played);
-  const untested = Object.values(stats.perCard).filter(s => s.played === 0).length;
+  const staged = stats.staged || [];
+  const brokenCount = suspects.length + staged.length + (stats.crashes.length ? 1 : 0);
+
+  // viability: winrate when played, minimum sample
+  const MIN_G = 8;
+  const rated = Object.values(stats.perCard).filter(s => s.games >= MIN_G);
+  const weak = rated.filter(s => pct(s.wins, s.games) <= 35).sort((a, b) => pct(a.wins, a.games) - pct(b.wins, b.games));
+  const strong = rated.filter(s => pct(s.wins, s.games) >= 65).sort((a, b) => pct(b.wins, b.games) - pct(a.wins, a.games));
+  const untested = Object.values(stats.perCard).filter(s => s.games === 0).length;
 
   $("summary").innerHTML = `
     <div class="stat"><div class="n">${stats.games}</div><div class="l">games played</div></div>
-    <div class="stat"><div class="n">${played.length} / ${DB.cards.length}</div><div class="l">cards seen in play</div></div>
-    <div class="stat"><div class="n ${stats.crashes.length ? "bad" : "ok"}">${stats.crashes.length}</div><div class="l">crashes</div></div>
-    <div class="stat"><div class="n ${suspects.length ? "warn" : "ok"}">${suspects.length}</div><div class="l">suspect cards</div></div>`;
+    <div class="stat"><div class="n">${DB.cards.length - untested} / ${DB.cards.length}</div><div class="l">cards exercised</div></div>
+    <div class="stat"><div class="n ${brokenCount ? "bad" : "ok"}">${brokenCount ? brokenCount : "0"}</div><div class="l">effects not working</div></div>
+    <div class="stat"><div class="n ${weak.length ? "warn" : "ok"}">${weak.length}</div><div class="l">possibly too weak</div></div>
+    <div class="stat"><div class="n ${strong.length ? "warn" : "ok"}">${strong.length}</div><div class="l">possibly too strong</div></div>`;
 
   let html = "";
+
+  /* ---- 1. EFFECTS NOT WORKING ---- */
+  html += `<section><h2 class="${brokenCount ? "bad" : "ok"}">${brokenCount ? "Effects not working" : "Effects: everything worked"}</h2>
+    <p class="sub">Combined from three detectors: staged per-card checks, live-game telemetry, and crashes.</p>`;
+  if (staged.length) html += `<h3 style="font-size:13px;margin:10px 0 4px;">Staged check findings (effect fired but did nothing / wrong numbers)</h3>
+    <table><tr><th>Card</th><th>Part</th><th>Finding</th></tr>` +
+    staged.map(i => `<tr><td>${esc(i[0])}</td><td>${esc(i[1])}</td><td>${esc(i[2])}</td></tr>`).join("") + "</table>";
+  if (suspects.length) html += `<h3 style="font-size:13px;margin:10px 0 4px;">Played in real games but effect never visibly acted</h3>
+    <p class="sub">Situational triggers may simply never have fired — more games sharpens this list.</p>
+    <table><tr><th>Card</th><th>Realm</th><th>Type</th><th>Times played</th></tr>` +
+    suspects.map(s => `<tr><td>${esc(s.name)}</td><td>${esc(s.realm)}</td><td>${esc(s.type)}</td><td>${s.played}</td></tr>`).join("") + "</table>";
   if (stats.crashes.length) {
     const grouped = {};
     for (const cr of stats.crashes) { const k = cr.err; grouped[k] = grouped[k] || { n: 0, after: cr.after, stack: cr.stack }; grouped[k].n++; }
-    html += `<section><h2 class="bad">Crashes</h2><p class="sub">A game halted mid-run — the "last log line" tells you which card acted right before it broke. Report these to Claude.</p>
-      <table><tr><th>Error</th><th>Times</th><th>Last log line before crash</th><th>Where</th></tr>` +
-      Object.entries(grouped).map(([k, v]) => `<tr><td class="bad">${esc(k)}</td><td>${v.n}</td><td>${esc(v.after)}</td><td class="muted">${esc(v.stack)}</td></tr>`).join("") + "</table></section>";
+    html += `<h3 style="font-size:13px;margin:10px 0 4px;" class="bad">Crashes (the last log line shows which card acted right before)</h3>
+      <table><tr><th>Error</th><th>Times</th><th>Last log line</th><th>Where</th></tr>` +
+      Object.entries(grouped).map(([k, v]) => `<tr><td class="bad">${esc(k)}</td><td>${v.n}</td><td>${esc(v.after)}</td><td class="muted">${esc(v.stack)}</td></tr>`).join("") + "</table>";
   }
-  html += `<section><h2 class="${suspects.length ? "warn" : "ok"}">${suspects.length ? "Suspect cards" : "No suspect cards"}</h2>
-    <p class="sub">These were played at least 3 times but their effect never once showed up in the game log, even though their scripted effect should produce visible actions. Auras and static bonuses are excluded (the staged check covers those). Some may be situational effects whose trigger never occurred — more games sharpens this list.</p>`;
-  if (suspects.length) html += `<table><tr><th>Card</th><th>Realm</th><th>Type</th><th>Times played</th></tr>` +
-    suspects.map(s => `<tr><td>${esc(s.name)}</td><td>${esc(s.realm)}</td><td>${esc(s.type)}</td><td>${s.played}</td></tr>`).join("") + "</table>";
   html += "</section>";
-  html += `<section><h2>Coverage</h2><p class="sub">${untested} cards were never drawn-and-played across these games — run more games (or note them for manual testing) to cover everything. Nothing is wrong with them; they just haven't been exercised yet.</p></section>`;
+
+  /* ---- 2. NON-VIABLE / OVERPERFORMING CARDS ---- */
+  html += `<section><h2 class="${weak.length ? "warn" : "ok"}">${weak.length ? "Possibly non-viable cards" : "No clearly non-viable cards yet"}</h2>
+    <p class="sub">Cards whose owner won ≤35% of games in which the card was played (minimum ${MIN_G} games). AI decks are semi-random, so treat this as a shortlist for your own judgment, not a verdict — the more games, the more reliable.</p>`;
+  if (weak.length) html += `<table><tr><th>Card</th><th>Realm</th><th>Type</th><th>Winrate when played</th><th>Games</th></tr>` +
+    weak.map(s => `<tr><td>${esc(s.name)}</td><td>${esc(s.realm)}</td><td>${esc(s.type)}</td><td class="warn">${pct(s.wins, s.games)}%</td><td>${s.games}</td></tr>`).join("") + "</table>";
+  if (strong.length) html += `<h3 style="font-size:13px;margin:12px 0 4px;">Possibly too strong (winrate ≥65% when played)</h3>
+    <table><tr><th>Card</th><th>Realm</th><th>Type</th><th>Winrate when played</th><th>Games</th></tr>` +
+    strong.map(s => `<tr><td>${esc(s.name)}</td><td>${esc(s.realm)}</td><td>${esc(s.type)}</td><td class="warn">${pct(s.wins, s.games)}%</td><td>${s.games}</td></tr>`).join("") + "</table>";
+  html += "</section>";
+
+  /* ---- 3. REALM BALANCE ---- */
+  const realmRows = Object.entries(stats.realms).filter(([, v]) => v.games > 0).sort((a, b) => pct(b[1].wins, b[1].games) - pct(a[1].wins, a[1].games));
+  html += `<section><h2>Realm balance</h2><p class="sub">Winrate of decks containing each Realm (lineups vary: distinct quads, doubled, mono). 45–55% is healthy; persistent outliers deserve a look.</p>
+    <table><tr><th>Realm</th><th>Winrate</th><th>Deck appearances</th></tr>` +
+    realmRows.map(([r, v]) => { const p = pct(v.wins, v.games); const cls = p >= 58 || p <= 42 ? "warn" : "ok"; return `<tr><td>${esc(r)}</td><td class="${cls}">${p}%</td><td>${v.games}</td></tr>`; }).join("") + "</table></section>";
+
+  /* ---- 4. COVERAGE ---- */
+  html += `<section><h2>Coverage</h2><p class="sub">${untested} cards were never drawn-and-played across these games. Nothing is wrong with them — they just haven't been exercised yet. Run more games to cover everything.</p></section>`;
   $("report").innerHTML = html;
 }
 
