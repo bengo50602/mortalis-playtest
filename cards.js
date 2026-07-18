@@ -1101,7 +1101,7 @@ window.DEFAULT_DATA = {
    "text": "When Skitter enters play, an enemy Hero of your choice gets −20 Attack until the end of your next turn.",
    "auxCost": 1,
    "auxSlots": 1,
-   "auxText": "When this card enters play, an enemy Hero of your choice permanently loses 20 Health (this is a stat reduction, not damage), then destroy this card."
+   "auxText": "When this card enters play, an enemy Hero of your choice loses 20 Health (stat reduction), then destroy this card."
   },
   {
    "id": "balemaw--vessa-the-whisper-tongue",
@@ -2065,7 +2065,7 @@ window.DEFAULT_DATA = {
    "atk": 40,
    "hp": 20,
    "rarity": "Common",
-   "text": "Temu may attack any enemy lane, not just his opposing or neighboring lanes.",
+   "text": "Temu may attack any enemy lane except his directly opposing lane.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane may attack any enemy lane."

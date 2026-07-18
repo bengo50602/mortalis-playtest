@@ -193,6 +193,7 @@ function parseOp(cl) {
   if ((m = cl.match(new RegExp(`^(?:That Hero|the chosen Hero|It|it) (?:also )?gains \\+${NUM} Attack(?: and \\+${NUM} Health)? permanently$`, "i")))) return { op: "buff", atk: +m[1], hp: +(m[2] || 0), target: "lastChosen", perm: true };
   if ((m = cl.match(new RegExp(`^(?:it|It) also heals ${NUM} Health$`, "i")))) return { op: "heal", n: +m[1], target: "lastChosen" };
   if ((m = cl.match(new RegExp(`^Another Hero you control permanently gains Attack equal to half the destroyed Hero's printed Attack$`, "i")))) return { op: "buffHalfSacAtk" };
+  if ((m = cl.match(/^(\w+) gains permanent Attack and Health equal to half the sacrificed Hero's printed Attack and printed Health respectively(?: \(rounded to the nearest 10\))?$/i))) return { op: "buffHalfSacBoth" };
   if ((m = cl.match(new RegExp(`^Two Heroes you control each gain \\+${NUM} Attack until the end of your next turn$`, "i")))) return { op: "buff", atk: +m[1], hp: 0, target: "upToOwn", count: 2, dur: 2 };
   if ((m = cl.match(new RegExp(`^a Hero you control gains \\+${NUM} Attack permanently and loses ${NUM} Health permanently$`, "i")))) return [{ op: "buff", atk: +m[1], hp: 0, target: "ownChoice", perm: true, storeChosen: true }, { op: "statReduce", atk: 0, hp: +m[2], target: "lastChosen" }];
   if ((m = cl.match(/^Gain Pulse equal to its printed cost$/i))) return { op: "pulseLastCost", mult: 1 };
@@ -425,6 +426,7 @@ function compileContinuous(text, sourceKind, out) {
   for (const s of sentences(text)) {
     if (!/continuously|while equipped|while in this slot|while .* is in play|while this card is in play/i.test(s)) continue;
     if (/for that combat/i.test(s)) continue;   // combat-conditional bonuses are not continuous auras
+    if (/whenever/i.test(s)) continue;          // triggered effects are not continuous auras (Huitzilat aux)
     // Squire's Oathband: "+10/+10 — or +20/+20 if this Hero is your Champion"
     const cond = norm(s).match(/\+(\d+) Attack and \+(\d+) Health — or \+(\d+) Attack and \+(\d+) Health if this Hero is your Champion/i);
     if (cond) {
@@ -501,6 +503,7 @@ function compileListen(text, out, bits) {
   const push = (event, dd, label, maxPerTurn) => { out.push({ event, do: dd, maxPerTurn }); bits.push(label); };
   if ((m = t.match(new RegExp(`[Ww]henever you gain Pulse from a card effect, \\w+ gains \\+${NUM} Attack until the end of your next turn`, "i")))) push("gainPulse", { k: "buffSelf", atk: +m[1], dur: 2 }, "grows on Pulse gain");
   if ((m = t.match(new RegExp(`[Ww]henever you lose Mortality, gain ${NUM} Pulse(?: \\(maximum (\\d+) Pulse per turn[^)]*\\))?`, "i")))) push("loseMortality", { k: "pulse", n: +m[1] }, "Pulse on Mortality loss", m[2] ? +m[2] : 0);
+  if ((m = t.match(new RegExp(`[Ww]henever you sacrifice a Hero, gain ${NUM} Pulse`, "i")))) push("sacrifice", { k: "pulse", n: +m[1] }, "Pulse on sacrifice");
   if ((m = t.match(new RegExp(`[Ww]henever you play a Relic, \\w+ gains \\+${NUM} Attack and \\+${NUM} Health permanently`, "i")))) push("playRelic", { k: "buffSelf", atk: +m[1], hp: +m[2], perm: true }, "grows on Relic play");
   if ((m = t.match(new RegExp(`whenever an enemy Hero dies from combat damage dealt by one of your Heroes, \\w+ permanently gains \\+${NUM} Attack`, "i")))) push("enemyKilledByYourHero", { k: "buffSelf", atk: +m[1], perm: true }, "grows when your Hero kills");
   if ((m = t.match(new RegExp(`whenever you heal a Hero with a card effect, gain ${NUM} Pulse(?: \\(maximum (\\d+) per turn\\))?`, "i")))) push("heal", { k: "pulse", n: +m[1] }, "Pulse on heal", m[2] ? +m[2] : 0);
@@ -515,7 +518,8 @@ function compileListen(text, out, bits) {
 function compileFlags(text, bits) {
   const t = norm(text || "");
   const f = {};
-  if (/may attack any enemy lane/i.test(t)) { f.attackAnyLane = true; bits.push("attacks any lane"); }
+  if (/may attack any enemy lane except (?:his|her|its) directly opposing lane/i.test(t)) { f.anyLaneNotOpp = true; bits.push("raider: any lane but opposing"); }
+  else if (/may attack any enemy lane/i.test(t)) { f.attackAnyLane = true; bits.push("attacks any lane"); }
   if (/(?:all enemy Hero attacks must target|enemy Heroes must attack) \w+(?:'s)? lane/i.test(t)) { f.taunt = true; bits.push("taunt"); }
   if (/When \w+ fights, the (?:opposing Hero's equipped Relics|enemy Hero's Relics)[^.]*grant it no Attack or Health for that combat/i.test(t)) { f.ignoreEnemyEquip = true; bits.push("ignores enemy equipment"); }
   if (/^While equipped, this Hero cannot be targeted by enemy card effects\.?$/i.test(t) || (/cannot be targeted by enemy card effects/i.test(t) && !/cannot be attacked/i.test(t))) { f.untargetable = true; bits.push("untargetable"); }
@@ -905,7 +909,7 @@ function compileCard(card) {
       compileContinuous(card.auxText, "aux", aout);
       compileRecurring(card.auxText, aout);
       const am = norm(card.auxText).match(/^When this card enters play, (.*)$/i);
-      if (am) { out.auxOnEnter = parseOps(am[1]); if (out.auxOnEnter) out.auxAutoBits.push("on-enter"); out.auxSelfDestruct = /then destroy this card/i.test(card.auxText); }
+      if (am) { out.auxOnEnter = parseOps(am[1].replace(/[,.]?\s*[Tt]hen destroy this card\.?$/, "")); if (out.auxOnEnter) out.auxAutoBits.push("on-enter"); out.auxSelfDestruct = /then destroy this card/i.test(card.auxText); }
     } else if (card.type === "relic") {
       compileContinuous(card.text, "relic", out);
       compileRecurring(card.text, out);
@@ -1345,6 +1349,7 @@ async function runOp(op, pi, ctx) {
       if (!t) { ctx.abort = true; break; }
       ctx.lastCost = cardById(heroAt(t).cardId).cost;
       ctx.sacAtk = cardById(heroAt(t).cardId).atk;
+      ctx.sacHp = cardById(heroAt(t).cardId).hp;
       log(`${P.name} sacrifices ${nameOf(t)}.`);
       destroyHero(t.pi, t.li, null, { sacrifice: true });
       emit("sacrifice", pi, {});
@@ -1406,6 +1411,15 @@ async function runOp(op, pi, ctx) {
       if (!ctx.sacAtk) break;
       const gain = Math.round(ctx.sacAtk / 2 / 10) * 10;
       await runOp({ op: "buff", atk: gain, hp: 0, target: "ownChoice", perm: true }, pi, ctx);
+      break;
+    }
+    case "buffHalfSacBoth": {   // Huitzilat: source Hero grows by half the sacrifice's printed stats
+      if (!ctx.sacAtk && !ctx.sacHp) break;
+      const src = ctx.laneIdx != null ? heroAt({ pi, li: ctx.laneIdx }) : null;
+      if (!src) break;
+      const ga = Math.round((ctx.sacAtk || 0) / 2 / 10) * 10, gh = Math.round((ctx.sacHp || 0) / 2 / 10) * 10;
+      src.permAtk += ga; src.permHp += gh;
+      log(`${cardById(src.cardId).name} permanently gains +${ga} Attack and +${gh} Health.`);
       break;
     }
     case "damageSacAtk": {
@@ -2122,6 +2136,21 @@ async function resolveTargets(op, pi, ctx) {
 function emit(event, pi, data) {
   if (!G) return;
   data = data || {};
+  // aux-card sacrifice listeners (Huitzilat aux): team buff + Pulse, capped once per turn
+  if (event === "sacrifice") {
+    const seenSac = new Set();
+    for (const L of G.players[pi].lanes) for (const a of L.aux) if (a && !seenSac.has(a.uid)) {
+      seenSac.add(a.uid);
+      const am = norm(cardById(a.cardId).auxText || "").match(/whenever you sacrifice a Hero, all Heroes you control gain \+(\d+) Attack and \+(\d+) Health permanently(?: \(maximum once per turn\))?(?:, and you gain (\d+) Pulse)?/i);
+      if (!am) continue;
+      const once = /maximum once per turn/i.test(cardById(a.cardId).auxText || "");
+      if (once && a.sacGt === G.gt) continue;
+      a.sacGt = G.gt;
+      for (const t of heroesOf(pi)) { const hh = heroAt(t); hh.permAtk += +am[1]; hh.permHp += +am[2]; }
+      log(`${cardById(a.cardId).name}: your Heroes gain +${am[1]}/+${am[2]} permanently.`);
+      if (am[3]) gainPulse(pi, +am[3], cardById(a.cardId).name);
+    }
+  }
   for (const pos of heroesOf(pi)) {
     const h = heroAt(pos);
     const lis = isSilenced(h) ? [] : (fx(h.cardId).listen || []);
@@ -2731,13 +2760,16 @@ function legalTargetsFor(pi, attackerLis) {
   if (attackerLis.length === 1) {
     const li = attackerLis[0];
     if (heroFlag({ pi, li }, "attackAnyLane")) return { heroes: targetable, face: false };
+    if (heroFlag({ pi, li }, "anyLaneNotOpp")) return { heroes: targetable.filter(t => t.li !== li || heroFlag(t, "taunt")), face: false };
     const opp = { pi: O, li };
     if (heroAt(opp) && !isProtected(opp) && (!targetable.some(t => heroFlag(t, "taunt")) || heroFlag(opp, "taunt"))) return { heroes: [opp], face: false };
     return { heroes: targetable, face: false };
   }
   // onslaught: each attacker must have empty opposing lane OR target its own opposing hero (unless it can
   // attack any lane, or the target is a taunt — taunts pull attacks regardless of opposing-lane heroes)
-  const shared = targetable.filter(t => heroFlag(t, "taunt") || attackerLis.every(li => heroFlag({ pi, li }, "attackAnyLane") || !heroAt({ pi: O, li }) || li === t.li));
+  const shared = targetable.filter(t => attackerLis.every(li =>
+    heroFlag({ pi, li }, "anyLaneNotOpp") ? (t.li !== li || heroFlag(t, "taunt")) :
+    (heroFlag(t, "taunt") || heroFlag({ pi, li }, "attackAnyLane") || !heroAt({ pi: O, li }) || li === t.li)));
   return { heroes: shared, face: false };
 }
 

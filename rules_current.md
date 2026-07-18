@@ -664,7 +664,7 @@ While in this slot, the enemy Hero in the lane opposing this one continuously ha
 Hero Mode — Cost: 2 Pulse | Attack/Health: 30/30 | Rarity: Common
 When Skitter enters play, an enemy Hero of your choice gets −20 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
-When this card enters play, an enemy Hero of your choice permanently loses 20 Health (this is a stat reduction, not damage), then destroy this card.
+When this card enters play, an enemy Hero of your choice loses 20 Health (stat reduction), then destroy this card.
 
 **Vessa the Whisper-Tongue**
 Hero Mode — Cost: 3 Pulse | Attack/Health: 50/40 | Rarity: Common
@@ -1114,7 +1114,7 @@ When this Incantation resolves, every enemy Hero gets −10 Attack permanently, 
 
 **Temu, Steppe Scout**
 Hero Mode — Cost: 2 Pulse | Attack/Health: 40/20 | Rarity: Common
-Temu may attack any enemy lane, not just his opposing or neighboring lanes.
+Temu may attack any enemy lane except his directly opposing lane.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane may attack any enemy lane.
 
