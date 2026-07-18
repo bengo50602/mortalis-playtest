@@ -500,7 +500,7 @@ window.DEFAULT_DATA = {
    "atk": 70,
    "hp": 80,
    "rarity": "Uncommon",
-   "text": "While Elowen is in play, all your Luminar Heroes have +20 Attack.",
+   "text": "While Elowen is in play, all Heroes you control from Realms other than Luminar have +10 Attack and +10 Health.",
    "auxCost": 3,
    "auxSlots": 1,
    "auxText": "While in this slot, neighboring Heroes gain +10 Attack and +10 Health."
@@ -2149,7 +2149,7 @@ window.DEFAULT_DATA = {
    "atk": 110,
    "hp": 70,
    "rarity": "Rare",
-   "text": "Subotai may attack any enemy lane. The first time each turn Subotai attacks a lane other than his directly opposing lane, he takes no counter-damage from that combat.",
+   "text": "Subotai may attack any enemy lane. The first time each turn Subotai attacks a lane other than his directly opposing lane, he takes no combat damage from that combat.",
    "auxCost": 4,
    "auxSlots": 2,
    "auxText": "While in this slot, when the Hero in this lane attacks a lane other than its directly opposing lane, it gains +20 Attack for that combat."
@@ -2518,7 +2518,7 @@ window.DEFAULT_DATA = {
    "atk": 110,
    "hp": 130,
    "rarity": "Ultra-Rare",
-   "text": "While both of Thraindor's Relic slots are filled, he continuously has +30 Attack and +30 Health, and his Relics cannot be destroyed by enemy card effects.",
+   "text": "Relics of any Realm may be attached to Thraindor. While Thraindor has at least one Relic equipped, he continuously has +20 Attack and +20 Health, and his Relics cannot be destroyed by enemy card effects.",
    "auxCost": 6,
    "auxSlots": 1,
    "auxText": "While in this slot, once per turn, you may pay 2 Pulse to move a Relic from one Hero you control to another Hero you control (slot limits and realm restrictions still apply)."
@@ -2817,10 +2817,10 @@ window.DEFAULT_DATA = {
    "atk": 90,
    "hp": 90,
    "rarity": "Rare",
-   "text": "While Titus is in play, every Hero you control that has an allied Hero in a neighboring lane continuously has +10 Attack and +10 Health.",
+   "text": "While Titus is in play, Heroes you control in neighboring lanes continuously have +20 Attack.",
    "auxCost": 4,
    "auxSlots": 1,
-   "auxText": "While in this slot, if Heroes you control occupy both lanes neighboring this one, those two Heroes continuously have +20 Attack."
+   "auxText": "While in this slot, neighboring Heroes have +10 Attack."
   },
   {
    "id": "aurelium--consul-aurelia-vanth",
@@ -4125,7 +4125,7 @@ window.DEFAULT_DATA = {
    "atk": 110,
    "hp": 70,
    "rarity": "Rare",
-   "text": "If Varyndra did not attack during your previous turn, then during your opponent's turn she cannot be attacked and cannot be targeted by enemy card effects.",
+   "text": "Enemy Heroes attacking Varyndra's lane or a lane neighboring it have −20 Attack for that combat.",
    "auxCost": 4,
    "auxSlots": 2,
    "auxText": "While in this slot and while another Hero you control occupies a neighboring lane, the Hero in this lane cannot be attacked and cannot be targeted by enemy card effects."
@@ -5004,7 +5004,9 @@ window.DEFAULT_DATA = {
   "startingMortality": 250,
   "pulsePerTurn": 5,
   "startingHand": 7,
-  "deckSize": 50,
+  "maxHand": 8,
+  "firstTurnPulse": 3,
+  "deckSize": 40,
   "copyLimit": 3,
   "lanes": 4,
   "auxSlotsPerLane": 2,

@@ -66,8 +66,14 @@ const UI = {
     if (!G) return;
     $("turn-ind").textContent = G.over ? `GAME OVER — ${G.players[G.winner].name} wins` :
       `Turn ${Math.ceil(G.gt / 2)} — ${G.players[G.active].name}${G.active === 0 ? " (you)" : ""}`;
-    $("prompt").textContent = UI.pending ? UI.pending.msg :
-      (UI.sel.length ? `${UI.sel.length} attacker${UI.sel.length > 1 ? "s" : ""} selected — click a red target (or click Hero again to deselect)` : "");
+    let selMsg = "";
+    if (UI.sel.length) {
+      const lt = legalTargetsFor(0, UI.sel);
+      selMsg = (lt.heroes.length || lt.face)
+        ? `${UI.sel.length} attacker${UI.sel.length > 1 ? "s" : ""} selected — click a red target (or click Hero again to deselect)`
+        : `No legal targets for this attack — a protection, redirect-block, or Onslaught lane rule is preventing it. Click the Hero${UI.sel.length > 1 ? "es" : ""} again to deselect.`;
+    }
+    $("prompt").textContent = UI.pending ? UI.pending.msg : selMsg;
     $("btn-cancel").style.display = UI.pending && UI.pending.allowCancel ? "" : "none";
     $("btn-endturn").disabled = UI.busy || G.over || G.active !== 0 || !!UI.pending;
     $("btn-undo").disabled = UI.busy;

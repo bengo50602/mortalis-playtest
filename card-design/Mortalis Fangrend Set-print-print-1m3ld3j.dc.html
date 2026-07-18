@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style data-omelette-print-defaults>
+@media print {
+  h1, h2, h3, h4, h5, h6 { break-after: avoid; }
+  figure, table, pre, blockquote, img, svg, tr, [class~="card" i] { break-inside: avoid; }
+  img, svg { max-width: 100%; }
+  p { orphans: 3; widows: 3; }
+}
+</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <template id="__bundler_thumbnail" data-bg-color="#1d2027">
+    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <rect width="120" height="120" fill="#1d2027"/>
+      <rect x="30" y="20" width="60" height="80" rx="8" fill="none" stroke="#c8b27a" stroke-width="3"/>
+      <text x="60" y="66" font-family="Georgia, serif" font-size="30" fill="#c8b27a" text-anchor="middle">M</text>
+    </svg>
+  </template>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Barlow:wght@400;500&family=Barlow+Condensed:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #ffffff; padding: 0.35in; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    @page { size: letter; margin: 0; }
+    @media print {
+      body { zoom: 0.84; }
+      h1, h2 { break-after: avoid; }
+      .cardgrid { display: grid !important; grid-template-columns: repeat(2, 400px) !important; gap: 24px !important; }
+      .card { break-inside: avoid; }
+    }
+  </style>
+  <script>
+    addEventListener('load', () => {
+      (async () => {
+        const t0 = Date.now();
+        while (document.querySelectorAll('.card').length < 30 && Date.now() - t0 < 15000) {
+          await new Promise((r) => setTimeout(r, 200));
+        }
+        try { await document.fonts.ready; } catch (e) {}
+        setTimeout(() => window.print(), 800);
+      })();
+    });
+  </script>
+</helmet>
+
+<section style="display: flex; flex-direction: column; gap: 36px; padding: 48px;">
+  <div style="max-width: 900px; display: flex; flex-direction: column; gap: 8px;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: #6b6960;">Fangrend Realm — full set · frame 1a</div>
+    <h1 style="font-family: 'Cinzel', serif; font-size: 34px; color: #1c1a16; margin: 0;">Mortalis: Realms — Fangrend</h1>
+    <p style="font-family: 'Barlow', sans-serif; font-size: 15px; color: #55534b; margin: 0; max-width: 720px;">Art-handoff sheet: all 32 cards with blank art boxes. Hero art window: 368 &times; 178 px, ratio 2.07:1 (58.4 &times; 28.3 mm at standard 63.5 &times; 88.9 mm poker card) — render at 1472 &times; 712 px or larger. All other types: 368 &times; 230 px, ratio 1.60:1 (58.4 &times; 36.5 mm) — render at 1472 &times; 920 px or larger. Images are cropped cover-style, so keep the subject centered.</p>
+  </div>
+
+  <!-- ═══ Heroes ═══ -->
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <h2 style="font-family: 'Cinzel', serif; font-size: 22px; color: #1c1a16; margin: 0; border-bottom: 2px solid #c9c5b8; padding-bottom: 8px;">Heroes</h2>
+    <div class="cardgrid" style="display: flex; flex-wrap: wrap; gap: 28px;">
+      <sc-for list="{{ heroes }}" as="c" hint-placeholder-count="4">
+        <div class="card" style="width: 400px; height: 560px; border-radius: 18px; background: linear-gradient(165deg, #1d2027 0%, #14161c 55%, #101217 100%); border: 1px solid #3a4152; box-shadow: 0 14px 34px rgba(0,0,0,0.35), inset 0 0 0 6px #23262f, inset 0 0 0 7px #454c5e; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box;" data-screen-label="{{ c.name }}">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #4a5670, #232836 70%); border: 2px solid #7c8aa8; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 12px rgba(124,138,168,0.35);">
+              <div style="font-family: 'Cinzel', serif; font-size: 24px; font-weight: 800; color: #dfe6f5; line-height: 1;">{{ c.cost }}</div>
+              <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase; color: #9daac6;">Pulse</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0;">
+              <div style="font-family: 'Cinzel', serif; font-size: 18px; font-weight: 700; color: #e8e4d8; line-height: 1.1;">{{ c.name }}</div>
+              <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; color: #8fa0c0;">Fangrend &middot; Hero</div>
+            </div>
+            <div style="margin-left: auto; flex-shrink: 0; width: 34px; height: 46px; display: flex; align-items: flex-start; justify-content: flex-end; gap: 4px; padding-top: 8px; box-sizing: border-box;">
+              <div style="width: 12px; height: 28px; background: #8fa0c0; clip-path: polygon(0% 0%, 100% 0%, 50% 100%);"></div>
+              <div style="width: 12px; height: 20px; background: #454c5e; clip-path: polygon(0% 0%, 100% 0%, 50% 100%);"></div>
+            </div>
+          </div>
+          <div style="height: 178px; flex-shrink: 0; border-radius: 8px; border: 1px solid #454c5e; overflow: hidden; background: #1b1e26;">
+            {{ c.artEl }}
+          </div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 8px; min-height: 0; justify-content: flex-start;">
+            <div style="background: rgba(35,40,54,0.55); border: 1px solid #333a4a; border-radius: 8px; padding: 9px 12px;">
+              <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: {{ accentColor }}; margin-bottom: 3px;">Hero Mode</div>
+              <div style="font-family: 'Alegreya', serif; font-size: {{ c.heroFs }}px; line-height: 1.38; color: #cfd3de;">{{ c.hero }}</div>
+            </div>
+            <sc-if value="{{ showAuxMode }}" hint-placeholder-val="{{ true }}">
+              <div style="background: rgba(24,27,35,0.7); border: 1px dashed #3a4152; border-radius: 8px; padding: 9px 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;">
+                  <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #8fa0c0;">Auxiliary Mode</div>
+                  <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 1px; color: #7c88a0;">{{ c.auxMeta }}</div>
+                </div>
+                <div style="font-family: 'Alegreya', serif; font-size: {{ c.auxFs }}px; line-height: 1.36; color: #a9aebc; font-style: italic;">{{ c.aux }}</div>
+              </div>
+            </sc-if>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
+            <div style="display: flex; align-items: baseline; gap: 6px;">
+              <span style="font-family: 'Cinzel', serif; font-size: 26px; font-weight: 800; color: #e0a45c;">{{ c.atk }}</span>
+              <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #7c88a0;">ATK</span>
+            </div>
+            <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: {{ c.rarityColor }}; border: 1px solid {{ c.rarityBorder }}; border-radius: 20px; padding: 3px 12px;">{{ c.rarity }}</div>
+            <div style="display: flex; align-items: baseline; gap: 6px;">
+              <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #7c88a0;">HP</span>
+              <span style="font-family: 'Cinzel', serif; font-size: 26px; font-weight: 800; color: #8fbc8f;">{{ c.hp }}</span>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- ═══ Non-hero types ═══ -->
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <h2 style="font-family: 'Cinzel', serif; font-size: 22px; color: #1c1a16; margin: 0; border-bottom: 2px solid #c9c5b8; padding-bottom: 8px;">{{ g.title }}</h2>
+      <div class="cardgrid" style="display: flex; flex-wrap: wrap; gap: 28px;">
+        <sc-for list="{{ g.cards }}" as="c" hint-placeholder-count="3">
+          <div class="card" style="width: 400px; height: 560px; border-radius: 18px; background: linear-gradient(165deg, {{ g.bg1 }} 0%, {{ g.bg2 }} 55%, {{ g.bg3 }} 100%); border: 1px solid {{ g.frame }}; box-shadow: 0 14px 34px rgba(0,0,0,0.35), inset 0 0 0 6px {{ g.inset6 }}, inset 0 0 0 7px {{ g.inset7 }}; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box;" data-screen-label="{{ c.name }}">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 52px; height: 52px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, {{ g.ring1 }}, {{ g.ring2 }} 70%); border: 2px solid {{ g.accent }}; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
+                <div style="font-family: 'Cinzel', serif; font-size: 24px; font-weight: 800; color: #dfe6f5; line-height: 1;">{{ c.cost }}</div>
+                <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase; color: #9daac6;">Pulse</div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0;">
+                <div style="font-family: 'Cinzel', serif; font-size: 18px; font-weight: 700; color: #e8e4d8; line-height: 1.1;">{{ c.name }}</div>
+                <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; color: {{ g.accent2 }};">{{ c.typeLine }}</div>
+              </div>
+              <div style="margin-left: auto; flex-shrink: 0; width: 34px; height: 46px; display: flex; align-items: flex-start; justify-content: flex-end; gap: 4px; padding-top: 8px; box-sizing: border-box;">
+                <div style="width: 12px; height: 28px; background: {{ g.markLight }}; clip-path: polygon(0% 0%, 100% 0%, 50% 100%);"></div>
+                <div style="width: 12px; height: 20px; background: {{ g.markDark }}; clip-path: polygon(0% 0%, 100% 0%, 50% 100%);"></div>
+              </div>
+            </div>
+            <div style="height: 230px; flex-shrink: 0; border-radius: 8px; border: 1px solid {{ g.inset7 }}; overflow: hidden;">
+              {{ c.artEl }}
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+              <div style="background: {{ g.boxBg }}; border: 1px solid {{ g.boxBorder }}; border-radius: 8px; padding: 10px 12px; flex: 1; box-sizing: border-box;">
+                <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: {{ g.accent2 }}; margin-bottom: 4px;">{{ g.label }}</div>
+                <div style="font-family: 'Alegreya', serif; font-size: {{ c.fs }}px; line-height: 1.4; color: {{ g.bodyCol }};">{{ c.text }}</div>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: center; flex-shrink: 0;">
+              <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: {{ g.footCol }}; border: 1px solid {{ g.frame }}; border-radius: 20px; padding: 3px 14px;">{{ c.footer }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-for>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showAuxMode&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Card options&quot;}, &quot;accentColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#c8b27a&quot;, &quot;options&quot;: [&quot;#c8b27a&quot;, &quot;#8fa0c0&quot;, &quot;#a3502e&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Card options&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const rarityStyle = {
+      'Common':     { c: '#8a8f9e', b: '#3a4152' },
+      'Uncommon':   { c: '#8fbc8f', b: '#3d5242' },
+      'Rare':       { c: '#8fa8d8', b: '#3a4a6a' },
+      'Ultra-Rare': { c: '#b79bdc', b: '#4d3f66' },
+      'Eternal':    { c: '#e0c478', b: '#6b5a30' },
+    };
+    const fit = (t) => t.length > 300 ? 11.5 : t.length > 200 ? 12.5 : 13.5;
+    const blank = this.props.blankArt ?? true;
+    const art = (slug, name, tall) => blank
+      ? React.createElement('div', { style: { width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '5px', background: '#14161c', border: '2px dashed #5d6478', borderRadius: '6px', boxSizing: 'border-box', fontFamily: "'JetBrains Mono', monospace", color: '#8a90a0', textAlign: 'center' } },
+          React.createElement('div', { style: { fontSize: '11px', letterSpacing: '2px' } }, 'CHARACTER ART'),
+          React.createElement('div', { style: { fontSize: '14px', color: '#c2c8d4' } }, tall ? '368 \u00d7 230 px' : '368 \u00d7 178 px'),
+          React.createElement('div', { style: { fontSize: '10px' } }, tall ? 'ratio 1.60 : 1 \u00b7 print 58.4 \u00d7 36.5 mm' : 'ratio 2.07 : 1 \u00b7 print 58.4 \u00d7 28.3 mm'),
+          React.createElement('div', { style: { fontSize: '10px' } }, tall ? 'render at 1472 \u00d7 920 px (4\u00d7)' : 'render at 1472 \u00d7 712 px (4\u00d7)'))
+      : React.createElement('img', {
+          src: 'art/' + slug + '.png', alt: name,
+          style: { width: '100%', height: '100%', objectFit: 'cover', display: 'block' },
+        });
+
+    const heroesRaw = [
+      { slug: 'vorka', name: 'Vorka, Stormfang Reaver', cost: 4, atk: 70, hp: 50, rarity: 'Common',
+        hero: 'While Vorka is in play, her Attack is continuously increased by 1 for each point of Health she is currently missing.',
+        auxMeta: '2 Pulse · 1 slot',
+        aux: 'While in this slot, the Hero in this lane continuously has +30 Attack. At the start of each of your turns, that Hero takes 20 damage.' },
+      { slug: 'skarn', name: 'Skarn, the Unbound', cost: 6, atk: 140, hp: 40, rarity: 'Rare',
+        hero: 'While Skarn is in play, whenever he deals damage directly to an opponent\u2019s Mortality, draw 1 card.',
+        auxMeta: '4 Pulse · 2 slots',
+        aux: 'While in this slot, the Hero in this lane deals its full Attack as damage to any enemy Hero it fights in combat, even if that enemy Hero\u2019s Attack is higher (overriding the normal \u201chigher Attack takes no damage\u201d rule for this lane only).' },
+      { slug: 'riko', name: 'Riko, the Ashwolf Pup', cost: 2, atk: 40, hp: 20, rarity: 'Common',
+        hero: 'While Riko is in play, the first time each turn she deals combat damage to an enemy Hero, she gains +20 Attack until the end of your next turn.',
+        auxMeta: '1 Pulse · 1 slot',
+        aux: 'When this card enters play, deal 20 damage to the Hero in this lane.' },
+      { slug: 'gunnhild', name: 'Gunnhild Stormscar', cost: 5, atk: 90, hp: 60, rarity: 'Uncommon',
+        hero: 'While Gunnhild is in play, all other Fangrend Heroes you control continuously have +20 Attack.',
+        auxMeta: '3 Pulse · 2 slots',
+        aux: 'While in this slot, all Fangrend Heroes you control continuously have +20 Attack (board-wide, not just this lane).' },
+      { slug: 'threnn', name: 'Threnn, Widow of the Gale', cost: 8, atk: 180, hp: 60, rarity: 'Ultra-Rare',
+        hero: 'While Threnn is in play, whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Threnn permanently gains +30 Attack.',
+        auxMeta: '6 Pulse · 2 slots',
+        aux: 'While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.' },
+      { slug: 'kessa', name: 'Kessa Windrend', cost: 3, atk: 60, hp: 30, rarity: 'Common',
+        hero: 'Whenever you gain Pulse from a card effect, Kessa gains +20 Attack until the end of your next turn.',
+        auxMeta: '1 Pulse · 1 slot',
+        aux: 'At the start of each of your turns, if the Hero in this lane attacked during your previous turn, gain 1 Pulse.' },
+      { slug: 'snarl', name: 'Snarl, the Wound-Fed', cost: 2, atk: 40, hp: 20, rarity: 'Common',
+        hero: 'Whenever Snarl takes damage, he permanently gains 10 Attack.',
+        auxMeta: '1 Pulse · 1 slot',
+        aux: 'While in this slot, the Hero in this lane heals 10 Health at the start of each of your turns.' },
+      { slug: 'hilde', name: 'Hilde Scartongue', cost: 4, atk: 80, hp: 40, rarity: 'Uncommon',
+        hero: 'Whenever Hilde takes damage, she permanently gains Attack equal to the damage taken.',
+        auxMeta: '2 Pulse · 1 slot',
+        aux: 'While in this slot, at the end of each of your turns, the Hero in this lane takes 10 damage.' },
+      { slug: 'ragna', name: 'Ragna, the Undying Fang', cost: 6, atk: 130, hp: 50, rarity: 'Rare',
+        hero: 'Whenever Ragna takes damage, she permanently gains Attack equal to the damage taken. The first time Ragna would die from damage each game, instead reduce her Health to 10 and she survives \u2014 when this happens, she only gains Attack equal to the amount of damage needed to reduce her Health to 0 (overkill grants no bonus Attack).',
+        auxMeta: '4 Pulse · 1 slot',
+        aux: 'While in this slot, once per turn you may pay 2 Pulse to give the Hero in this lane +20 Attack until the end of the current turn.' },
+      { slug: 'vrist', name: 'Vrist, Harbinger of Wounds', cost: 8, atk: 160, hp: 80, rarity: 'Ultra-Rare',
+        hero: 'Whenever Vrist takes damage, he permanently gains Attack equal to the damage taken. While Vrist is in play, whenever another Fangrend Hero you control takes damage, that Hero also permanently gains Attack equal to half the damage taken, rounded down to the nearest 10.',
+        auxMeta: '6 Pulse · 2 slots',
+        aux: 'While in this slot, whenever any Hero you control dies, the Hero in this lane permanently gains 20 Attack. At the end of each of your turns, the Hero in this lane takes 10 damage.' },
+      { slug: 'skoldir', name: 'Skoldir, the Last Howl', cost: 10, atk: 220, hp: 80, rarity: 'Eternal',
+        hero: 'Whenever Skoldir takes damage, he permanently gains Attack equal to double the damage taken. When Skoldir dies, deal damage equal to half his current Attack (rounded down to the nearest 10) to up to 2 enemy Heroes of your choice.',
+        auxMeta: '8 Pulse · 2 slots',
+        aux: 'While in this slot, the Hero in this lane may attack a second time each turn.' },
+    ];
+
+    const heroes = heroesRaw.map(h => ({
+      ...h,
+      artEl: art(h.slug, h.name),
+      heroFs: fit(h.hero), auxFs: Math.min(fit(h.aux), 12.5),
+      rarityColor: rarityStyle[h.rarity].c, rarityBorder: rarityStyle[h.rarity].b,
+    }));
+
+    const mk = (slug, name, cost, text, footer, typeLine) =>
+      ({ slug, name, cost, text, footer, typeLine, artEl: art(slug, name, true), fs: text.length > 340 ? 12.5 : 14 });
+
+    const groups = [
+      { title: 'Relics', label: 'Relic Effect', accent: '#c8b27a', cards: [
+        mk('warpaint', 'Fangrend Warpaint', 1, 'While equipped, this Hero continuously has +20 Attack.', '1 slot', 'Fangrend · Relic'),
+        mk('storm-horn', 'Cracked Storm-Horn', 2, 'While equipped, whenever this Hero wins a fight (deals damage while taking none), also deal 20 damage to the Hero in the opposing lane, if one is present.', '1 slot', 'Fangrend · Relic'),
+        mk('wolfskin-cloak', 'Wolfskin Cloak', 3, 'While equipped, this Hero continuously has +50 Health.', '1 slot', 'Fangrend · Relic'),
+        mk('reavers-tusk', 'The Reaver\u2019s Tusk', 5, 'While equipped, this Hero continuously has +80 Attack. At the start of each of your turns, this Hero takes 20 damage.', '2 slots', 'Fangrend · Relic'),
+        mk('chain-bound-storm', 'Chain of the Bound Storm', 4, 'While equipped, this Hero continuously has +30 Attack and +30 Health. Whenever the equipped Hero dies, deal 50 damage to whichever Hero killed it. This triggers once, at the moment of death.', '2 slots', 'Fangrend · Relic'),
+      ]},
+      { title: 'Hexes', label: 'Trigger', accent: '#b79bdc', cards: [
+        mk('snapping-ambush', 'Snapping Ambush', 2, 'When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card.', 'Face-down · pay on trigger', 'Fangrend · Hex'),
+        mk('frostbitten-snare', 'Frostbitten Snare', 2, 'When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero\u2019s Attack by 30 for that combat only. After this effect triggers once, destroy this card.', 'Face-down · pay on trigger', 'Fangrend · Hex'),
+        mk('vengeful-howl', 'Vengeful Howl', 3, 'When a Hero in this lane dies, deal 50 damage to whichever Hero killed it. After this effect triggers once, destroy this card.', 'Face-down · pay on trigger', 'Fangrend · Hex'),
+        mk('warded-threshold', 'Warded Threshold', 4, 'The first time each turn an enemy Hero attacks this lane, that attack is blocked \u2014 no combat occurs and no damage is dealt to either side. If this lane\u2019s Hero is instead targeted by an Onslaught, this effect removes one attacking Hero of your choice from the Onslaught \u2014 its Attack no longer counts toward the total and it does not participate in the resulting combat \u2014 while the remaining attackers\u2019 Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns.', 'Face-down · repeatable', 'Fangrend · Hex'),
+        mk('feast-of-wounds', 'Feast of Wounds', 2, 'When an enemy Hero attacks a Hero in this lane, deal 20 damage to the Hero in this lane (yours) before combat damage is calculated. After this effect triggers once, destroy this card.', 'Face-down · pay on trigger', 'Fangrend · Hex'),
+      ]},
+      { title: 'Rites', label: 'Rite', accent: '#8cc9b8', cards: [
+        mk('long-hunt', 'The Long Hunt', 3, 'Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately.', 'Resolves in 3 turns', 'Fangrend · Rite'),
+        mk('slow-thaw', 'The Slow Thaw', 2, 'Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead.', 'Resolves in 2 turns', 'Fangrend · Rite'),
+        mk('oath-unyielding-pack', 'Oath of the Unyielding Pack', 4, 'This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Fangrend Hero you control +20 Attack permanently.', 'Builds 3 counters', 'Fangrend · Rite'),
+        mk('reckoning-storm', 'Reckoning of the Storm', 5, 'Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately.', 'Resolves in 4 turns', 'Fangrend · Rite'),
+      ]},
+      { title: 'Pacts', label: 'Pact', accent: '#d98470', cards: [
+        mk('blood-for-storm', 'Blood for the Storm', 2, 'When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack.', 'Risk / reward', 'Fangrend · Pact'),
+        mk('debt-fang-bone', 'Debt of Fang and Bone', 2, 'When this Pact resolves, discard 2 cards from your hand, then draw 3 cards.', 'Risk / reward', 'Fangrend · Pact'),
+        mk('sacrifice-storm', 'Sacrifice to the Storm', 1, 'When this Pact resolves, destroy a Hero you control in any lane. Gain Pulse equal to that Hero\u2019s cost, immediately and only once.', 'Risk / reward', 'Fangrend · Pact'),
+        mk('reckless-bargain', 'Reckless Bargain', 3, 'When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane.', 'Risk / reward', 'Fangrend · Pact'),
+      ]},
+      { title: 'Incantations', label: 'Incantation', accent: '#8fd0e8', cards: [
+        mk('fury-unleashed', 'Fury Unleashed', 4, 'When this Incantation resolves, deal damage to an enemy Hero equal to the current Attack of your Hero in the same lane.', 'Resolves immediately', 'Fangrend · Incantation'),
+        mk('village-raid', 'Village Raid', 5, 'When this Incantation resolves, discard any number of cards from your hand. Choose one Fangrend Hero you control \u2014 it gains +20 Attack until the end of the current turn for each card discarded this way.', 'Resolves immediately', 'Fangrend · Incantation'),
+        mk('howling-retribution', 'Howling Retribution', 5, 'When this Incantation resolves, choose up to 2 Heroes (any Heroes in play, yours or your opponent\u2019s). Deal 30 damage to each chosen Hero.', 'Resolves immediately', 'Fangrend · Incantation'),
+      ]},
+    ];
+
+    const pals = {
+      'Relics':       { bg1:'#272117', bg2:'#1a160e', bg3:'#141109', frame:'#5e5138', inset6:'#2b2519', inset7:'#6a5c3d', ring1:'#5d5133', ring2:'#2b2519', accent2:'#d8bd80', boxBg:'rgba(58,50,34,0.5)',  boxBorder:'#4a4028', bodyCol:'#d5cfc0', footCol:'#a89a78', markLight:'#a89a78', markDark:'#6a5c3d' },
+      'Hexes':        { bg1:'#231c30', bg2:'#151020', bg3:'#0f0b18', frame:'#4d4166', inset6:'#291f3a', inset7:'#5c4d7a', ring1:'#4a3d63', ring2:'#291f3a', accent2:'#c7aee8', boxBg:'rgba(52,44,74,0.5)',  boxBorder:'#443a5c', bodyCol:'#d2cddd', footCol:'#9d8cb8', markLight:'#9d8cb8', markDark:'#5c4d7a' },
+      'Rites':        { bg1:'#1a2724', bg2:'#0f1917', bg3:'#0b1311', frame:'#3c5a50', inset6:'#1e302b', inset7:'#4a6e62', ring1:'#3a5c50', ring2:'#1e302b', accent2:'#9ed6c6', boxBg:'rgba(38,58,52,0.5)',  boxBorder:'#31504a', bodyCol:'#ccd8d3', footCol:'#7ba396', markLight:'#7ba396', markDark:'#4a6e62' },
+      'Pacts':        { bg1:'#2b1c17', bg2:'#1a100d', bg3:'#130b09', frame:'#653f36', inset6:'#331f19', inset7:'#7a4a3f', ring1:'#6a4033', ring2:'#331f19', accent2:'#e39a86', boxBg:'rgba(64,38,32,0.5)',  boxBorder:'#54332c', bodyCol:'#dccfc9', footCol:'#b07868', markLight:'#b07868', markDark:'#7a4a3f' },
+      'Incantations': { bg1:'#1a2530', bg2:'#101820', bg3:'#0b1118', frame:'#3d5a70', inset6:'#1f2d3a', inset7:'#4a7089', ring1:'#3a5670', ring2:'#1f2d3a', accent2:'#a2dcf2', boxBg:'rgba(36,54,68,0.5)',  boxBorder:'#31485c', bodyCol:'#ccd6dd', footCol:'#7ba0b8', markLight:'#7ba0b8', markDark:'#4a7089' },
+    };
+    const groupsTinted = groups.map(gr => Object.assign({}, gr, pals[gr.title]));
+    return {
+      heroes,
+      groups: groupsTinted,
+      showAuxMode: this.props.showAuxMode ?? true,
+      accentColor: this.props.accentColor ?? '#c8b27a',
+    };
+  }
+}
+</script>
+<script>
+(async () => {
+  if (!document.title || !document.title.trim()) document.title = "Mortalis Fangrend Set-print";
+  // Prepend so page-supplied @page / break rules (deck-stage's margin:0,
+  // author CSS) keep source-order precedence over the baseline.
+  const baseCss = document.createElement('style');
+  baseCss.textContent = "@media print {\n  figure, table { break-inside: avoid; }\n  *, *::before, *::after {\n    print-color-adjust: exact; -webkit-print-color-adjust: exact;\n    backdrop-filter: none !important; -webkit-backdrop-filter: none !important;\n    animation-delay: -99s !important; animation-duration: .001s !important;\n    animation-iteration-count: 1 !important; animation-fill-mode: both !important;\n    animation-play-state: running !important; transition-duration: 0s !important;\n  }\n}";
+  document.head.prepend(baseCss);
+  if (document.readyState === 'loading') {
+    await new Promise((r) => document.addEventListener('DOMContentLoaded', r, { once: true }));
+  }
+  let ds = document.querySelector('deck-stage');
+  // whenDefined never resolves when nothing registers the element, so only
+  // await it when a <deck-stage> tag exists (and race a timeout regardless).
+  if (ds && !customElements.get('deck-stage')) {
+    try {
+      await Promise.race([
+        customElements.whenDefined('deck-stage'),
+        new Promise((r) => setTimeout(r, 3000)),
+      ]);
+    } catch (e) {}
+    ds = document.querySelector('deck-stage');
+  }
+  // dc-runtime assigns window.DCLogic at init and mounts into #dc-root on
+  // DOMContentLoaded; settle on that subtree so React has rendered before
+  // print(). Non-DC pages fall through to weighing body.
+  const isDc = !ds && 'DCLogic' in window;
+  const settleRoot = ds || (isDc ? document.getElementById('dc-root') : null) || document.body;
+  if (settleRoot) {
+    // Weigh only content children — skip script/style/template so inline
+    // Babel/CSS doesn't register as stable "content" before the framework
+    // has mounted anything.
+    const MEDIA = 'img,svg,canvas,video,picture,iframe,embed,object';
+    const weigh = () => {
+      let text = 0, media = 0;
+      for (const c of settleRoot.children) {
+        const t = c.tagName;
+        if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+        text += (c.textContent || '').trim().length;
+        media += c.querySelectorAll(MEDIA).length + (c.matches(MEDIA) ? 1 : 0);
+      }
+      return text + media * 100;
+    };
+    // "Non-zero and stable" alone is not sufficient to mean rendered: generic
+    // body can carry a static shell while async main content is pending, and
+    // #dc-root can carry the root DC's static text while child refs are still
+    // .sc-placeholder boxes. Gate generic on readyState 'complete', and never
+    // accept stability while a dc-runtime placeholder is present.
+    const isGeneric = settleRoot === document.body;
+    const deadline = Date.now() + 15000;
+    let last = -1, stable = 0;
+    while (Date.now() < deadline) {
+      const n = weigh();
+      const ready =
+        (!isGeneric || document.readyState === 'complete') &&
+        !settleRoot.querySelector('.sc-placeholder');
+      if (n > 0 && n === last && ready) { if (++stable >= 2) break; } else { stable = 0; }
+      last = n;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  }
+  // Project support.js may predate runtime default-seeding; push via bridge.
+  if (isDc && window.__dcSetProps && window.__dcRootName) {
+    try {
+      const dpEl = document.querySelector('script[data-dc-script]');
+      const meta = JSON.parse((dpEl && dpEl.getAttribute('data-props')) || '{}');
+      const bag = {};
+      for (const k in meta)
+        if (k[0] !== '$' && meta[k] && meta[k].default !== undefined)
+          bag[k] = meta[k].default;
+      if (Object.keys(bag).length) {
+        window.__dcSetProps(window.__dcRootName(), bag);
+        await new Promise((r) => setTimeout(r, 50));
+      }
+    } catch (e) {}
+  }
+  // Reveal content gated on scroll or visibility before printing. Lazy <img>,
+  // IntersectionObserver fade-ins, and collapsed <details> don't render while
+  // off-screen, so a long page would print with them blank or closed. Open
+  // every <details>, force native-lazy images eager, and scroll the document
+  // through its full height to trip lazy-load + IO; then wait (bounded) for the
+  // newly-triggered images. Inert for deck-stage (slides aren't scroll-gated).
+  try {
+    for (const d of document.querySelectorAll('details')) d.open = true;
+    for (const img of document.querySelectorAll('img[loading="lazy"]'))
+      img.loading = 'eager';
+    const scroller = document.scrollingElement || document.documentElement;
+    const full = Math.max(scroller.scrollHeight, document.body.scrollHeight);
+    const step = window.innerHeight || 800;
+    for (let y = 0; y <= full; y += step) {
+      window.scrollTo(0, y);
+      await new Promise((r) => requestAnimationFrame(r));
+    }
+    window.scrollTo(0, 0);
+    await Promise.race([
+      Promise.all(
+        [...document.images].map((img) =>
+          img.complete
+            ? null
+            : new Promise((res) => {
+                img.addEventListener('load', res, { once: true });
+                img.addEventListener('error', res, { once: true });
+              })
+        )
+      ),
+      new Promise((r) => setTimeout(r, 4000)),
+    ]);
+  } catch (e) {}
+  try { await document.fonts.ready; } catch (e) {}
+  // Jump every animation to its end state so print() never captures a slide
+  // mid-entrance. Ordering matters: the 0s-transition style must be live
+  // BEFORE data-deck-active is set so attribute-keyed transitions don't
+  // start a (now-0s) run from the pre-active base.
+  const st = document.createElement('style');
+  st.textContent = '*,*::before,*::after{animation-delay:-99s !important;animation-duration:.001s !important;animation-iteration-count:1 !important;animation-fill-mode:both !important;animation-play-state:running !important;transition-duration:0s !important}';
+  document.head.appendChild(st);
+  for (const d of document.querySelectorAll('deck-stage')) {
+    for (const c of d.children) {
+      const t = c.tagName;
+      if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+      c.setAttribute('data-deck-active', '');
+    }
+  }
+  // Re-append deck-stage's @page last so no author @page can add a margin and
+  // spill each full-bleed slide onto two sheets. Backstop for old copies.
+  if (ds) {
+    let pg = document.getElementById('deck-stage-print-page');
+    if (!pg) {
+      pg = document.createElement('style');
+      pg.textContent = '@page{size:' + (+ds.getAttribute('width') || 1920) +
+        'px ' + (+ds.getAttribute('height') || 1080) + 'px;margin:0}';
+    }
+    document.body.appendChild(pg);
+  }
+  try {
+    const sweep = () => {
+      for (const a of document.getAnimations()) {
+        try { a.finish(); } catch (e) {
+          try { a.currentTime = (a.effect && a.effect.getComputedTiming().duration) || 0; a.pause(); } catch (e2) {}
+        }
+      }
+    };
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+  } catch (e) {}
+  // A document that owns its print CSS (the doc-page starter injects the
+  // meta at runtime; hand-rolled print designs author it) gets no automatic
+  // page geometry and keeps its forced breaks: strip the injected default
+  // @page — write time cannot see a runtime-injected meta — skip the frame
+  // override below, and skip the fakepage-flattening further down. What
+  // still applies: the print baseline and break-hygiene defaults (no @page
+  // in either; low specificity, so the document's own print CSS wins) and
+  // the break-inside relaxation on >page elements (avoid on those cannot
+  // be honored whoever authored it).
+  var ownsPrint = !!document.querySelector('meta[name="omelette-owns-print" i]');
+  if (ownsPrint) {
+    var dst = document.querySelector('style[data-omelette-print-defaults]');
+    if (dst && dst.textContent) {
+      dst.textContent = dst.textContent.replace(/@page\b[^{}]*\{[^}]*\}/, '');
+    }
+  }
+  // Size the PDF page to the rendered design unless the file opted into
+  // standard paper via @page{size:letter|A4|…} or declared print ownership
+  // via the meta above. Decks own their own @page.
+  // Wrappers (body, …) lose padding+margin so the frame sits at (0,0); the
+  // frame itself loses only margin — its padding is INSIDE the measured
+  // rect and must stay, or content shifts and leaves a gap at bottom/right.
+  var __m = null;
+  try { __m = (() => {
+  var STAMP = true;
+  var docEl = document.documentElement;
+  var doc = { width: docEl.scrollWidth, height: docEl.scrollHeight };
+  // Name-presence check, case-insensitive — the same contract as the
+  // instant-PDF path's runtime check in deck-stage-export.ts. The name is
+  // a string literal here because that file interpolates this script into
+  // its print script, so importing a shared constant from it would be a
+  // cycle; measure.test.ts pins the literal so the two cannot drift apart
+  // silently.
+  var ownsPrint = !!document.querySelector('meta[name="omelette-owns-print" i]');
+
+  var ds = document.querySelector('deck-stage');
+  if (ds) {
+    var dw = Number(ds.getAttribute('width')) || 1920;
+    var dh = Number(ds.getAttribute('height')) || 1080;
+    var n = typeof ds.length === 'number' ? ds.length : ds.children.length;
+    var idx = typeof ds.index === 'number' ? ds.index : 0;
+    var frames = [];
+    for (var i = 0; i < n; i++) frames.push({ left: 0, top: 0, width: dw, height: dh });
+    return { kind: 'deck', source: 'declared', doc: doc, frames: frames,
+      authored: frames.map(function(){return{width:true,height:true}}),
+      deck: { width: dw, height: dh, slideCount: n, index: idx },
+      signals: { paperPage: false, pxPage: false, ownsPrint: ownsPrint } };
+  }
+
+  // Declared kind: a doc-page tag names the kind outright, so no signal
+  // heuristics run (like the deck branch above, signals report false —
+  // they describe inferred classifications only). The tag alone is not
+  // trusted: the element must have upgraded (shadowRoot present), so a
+  // leftover tag whose script was deleted falls through to the heuristics
+  // that handle plain markup.
+  var stageSx = window.scrollX || 0, stageSy = window.scrollY || 0;
+  var dp = document.querySelector('doc-page');
+  if (dp && dp.shadowRoot) {
+    // Crop to the sheet, not the host — the desk around it is screen-only
+    // chrome that must not land in PNG exports.
+    var sheet = dp.shadowRoot.querySelector('.sheet');
+    var sr = (sheet || dp).getBoundingClientRect();
+    return { kind: 'paper-doc', source: 'declared', doc: doc,
+      frames: [{ left: sr.left + stageSx, top: sr.top + stageSy,
+        width: sr.width, height: sr.height }],
+      authored: [{ width: false, height: false }],
+      signals: { paperPage: false, pxPage: false, ownsPrint: ownsPrint } };
+  }
+  var paperPage = false, pxPage = false;
+  var eachRule = function (fn) {
+    for (var s = 0; s < document.styleSheets.length; s++) {
+      var rs; try { rs = document.styleSheets[s].cssRules; } catch (e) { continue; }
+      for (var r = 0; r < rs.length; r++) {
+        fn(rs[r]);
+        if (rs[r].cssRules) for (var n = 0; n < rs[r].cssRules.length; n++) fn(rs[r].cssRules[n]);
+      }
+    }
+  };
+  eachRule(function (r) {
+    if (r.type !== 6) return;
+    var m = /\bsize\s*:\s*([^;}]+)/i.exec(r.cssText || '');
+    if (!m) return;
+    if (/\b(letter|a[3-5]|legal|ledger)\b/i.test(m[1])) paperPage = true;
+    if (/\d+(?:\.\d+)?px\b/i.test(m[1])) pxPage = true;
+  });
+  var signals = { paperPage: paperPage, pxPage: pxPage, ownsPrint: ownsPrint };
+
+  var pxVal = function (v) {
+    var m = /^(\d+(?:\.\d+)?)px$/.exec(v || ''); return m ? +m[1] : 0;
+  };
+  var authoredPx = function (el, prop) {
+    if (pxVal(el.style[prop])) return true;
+    var attr = el.getAttribute(prop);
+    if (attr && /^\d+$/.test(attr)) return true;
+    var hit = false;
+    eachRule(function (r) {
+      if (hit || r.type !== 1 || !r.style) return;
+      try { if (el.matches(r.selectorText) && pxVal(r.style[prop])) hit = true; } catch (e) {}
+    });
+    return hit;
+  };
+
+  var el = document.body, rootPxW = false;
+  for (;;) {
+    var kids = [];
+    for (var c = 0; c < el.children.length; c++) {
+      var t = el.children[c].tagName;
+      if (t !== 'SCRIPT' && t !== 'STYLE' && t !== 'TEMPLATE') kids.push(el.children[c]);
+    }
+    if (kids.length !== 1 || !(kids[0] instanceof HTMLElement)) break;
+    if (STAMP) el.setAttribute('data-om-frame-wrap', '');
+    el = kids[0];
+    rootPxW = authoredPx(el, 'width');
+    if (rootPxW) break;
+  }
+  if (!rootPxW) rootPxW = authoredPx(el, 'width');
+
+  // @page{size:letter} alone is a flowing doc; with a px-width root it's a
+  // fixed sheet pretending to be paper — fall through and size to render.
+  if (paperPage && !rootPxW) {
+    return { kind: 'paper-doc', source: 'inferred', doc: doc, signals: signals,
+      frames: [{ left: 0, top: 0, width: doc.width, height: doc.height }],
+      authored: [{ width: false, height: false }] };
+  }
+
+  var sx = window.scrollX || 0, sy = window.scrollY || 0;
+  var rectOf = function (e) {
+    var r = e.getBoundingClientRect();
+    var oy; try { oy = getComputedStyle(e).overflowY; } catch (err) {}
+    var h = oy === 'visible' ? Math.max(r.height, e.scrollHeight || 0) : r.height;
+    return { left: r.left + sx, top: r.top + sy, width: r.width, height: h };
+  };
+
+  // Multi-frame: off unless the page opts in via data-om-multi-frame on the
+  // stop element — the explicit opt-in is what guards against card grids
+  // and pricing tables that match the geometry but aren't separate
+  // canvases. Two ways to name the frames, explicit first:
+  // 1. Descendants marked data-om-frame-export (the social-frames starter
+  //    marks each asset frame; shells/panels around them are presentation,
+  //    so nesting is expected). Document order.
+  // 2. Fallback, no marked descendants: direct children with an authored px
+  //    width AND height (the original geometry heuristic).
+  // Frames may be different sizes (a gallery mixes 1080×1920 stories with
+  // 728×90 banners); data-om-frame-label rides along for export filenames.
+  if (el.hasAttribute('data-om-multi-frame')) {
+    var visOk = function (e) {
+      var cs; try { cs = getComputedStyle(e); } catch (err) { return false; }
+      return cs.display !== 'none' && cs.visibility !== 'hidden' && cs.position !== 'fixed';
+    };
+    // A frame's crop is its VISUAL box — never the scrollHeight-inflated
+    // rect that rectOf computes for page roots. Shadow-DOM hover controls
+    // (image-slot's Replace bar parks 29px below its host) and similar
+    // escaping UI contribute scrollable overflow to the frame, and the
+    // inflated height both squashes the nominal-size resize and drags
+    // content below the frame into the crop. Zoom-independent; bit every
+    // slot-bearing frame.
+    var frameRectOf = function (e) {
+      var r = e.getBoundingClientRect();
+      return { left: r.left + sx, top: r.top + sy, width: r.width, height: r.height };
+    };
+    var pushCand = function (list, e) {
+      if (!visOk(e)) return;
+      var rc = frameRectOf(e);
+      if (rc.width < 2 || rc.height < 2) return;
+      var lbl = e.getAttribute('data-om-frame-label');
+      if (lbl) rc.label = lbl;
+      list.push(rc);
+    };
+    var cands = [];
+    var marked = el.querySelectorAll('[data-om-frame-export]');
+    if (marked.length) {
+      for (var mk = 0; mk < marked.length; mk++) pushCand(cands, marked[mk]);
+    } else {
+      for (var k = 0; k < el.children.length; k++) {
+        var ch = el.children[k];
+        if (!authoredPx(ch, 'width') || !authoredPx(ch, 'height')) continue;
+        pushCand(cands, ch);
+      }
+    }
+    if (cands.length >= 2) {
+      return { kind: 'multi-frame', source: 'inferred', doc: doc, signals: signals,
+        frames: cands, authored: cands.map(function(){return{width:true,height:true}}) };
+    }
+  }
+
+  if (STAMP) el.setAttribute('data-om-frame', '');
+  return { kind: 'single-canvas', source: 'inferred', doc: doc, signals: signals,
+    frames: [rectOf(el)],
+    authored: [{ width: rootPxW, height: authoredPx(el, 'height') }] };
+})(); } catch (e) {}
+  var frame = null;
+  if (!ownsPrint && __m && __m.kind === 'single-canvas') {
+    var f = __m.frames && __m.frames[0];
+    if (f && f.width >= 200 && f.height >= 200) {
+      frame = f;
+      var fst = document.createElement('style');
+      fst.textContent = '@media print{@page{size:' + Math.ceil(f.width) + 'px ' +
+        Math.ceil(f.height) + 'px;margin:0}' +
+        'html,body,[data-om-frame-wrap]{padding:0!important;margin:0!important;background:none!important}' +
+        '[data-om-frame]{margin:0!important}}';
+      document.body.appendChild(fst);
+    }
+  }
+  // Relax break-inside on oversized elements. An element taller than a
+  // printable page can't honor break-inside: avoid — browsers either overflow
+  // it or push it whole to the next page, leaving a blank gap, then break it
+  // anyway at an arbitrary point. After the final layout (content revealed,
+  // animations jumped), find elements taller than a page that still compute
+  // break-inside: avoid and reset them to auto, so the browser breaks them at
+  // their children's boundaries instead (children keep their own avoid). PAGE_PX
+  // is a conservative portrait estimate at 96 CSS px/in — Letter/A4 usable
+  // height minus our 0.5in margins — so only clearly-oversized elements are
+  // touched and under-page elements still stay whole. Skipped for decks (slides
+  // are sized to the page) and for fixed-size canvases (frame set, or an author
+  // px-based @page) — runs as before for flowing docs on letter/A4.
+  try {
+    if (!ds && !frame && !(__m && __m.signals && __m.signals.pxPage)) {
+      const PAGE_PX = 1024;
+      // Our print defaults add a real @page margin only when the source has
+      // no @page of its own; computed style can't tell us (it reports screen
+      // media), so read the injected rule directly.
+      const defaults = document.querySelector('style[data-omelette-print-defaults]');
+      const pageInset = /@page\s*\{[^}]*margin/.test(defaults ? defaults.textContent || '' : '');
+      const SEL = 'section,article,figure,table,pre,blockquote,[class~="card" i],[class~="page" i],[class~="sheet" i]';
+      for (const el of document.body.querySelectorAll(SEL)) {
+        if (el instanceof HTMLElement && el.offsetHeight > PAGE_PX) {
+          el.setAttribute('data-om-oversized', '');
+          // Fake-paged docs simulate sheets with over-tall break-after:page
+          // boxes; honoring the break spills half-blank pages and ends a
+          // colored box mid-sheet. Flow them, and (only when we own the page
+          // inset) drop the redundant padding/background via the rule below.
+          const cs = getComputedStyle(el);
+          // An owns-print doc's forced breaks are intentional sheet
+          // boundaries, never fake-paged simulation — don't strip them.
+          // The break-inside relaxation above still applies: avoid on a
+          // >page element is impossible to honor whoever authored it.
+          if (
+            !ownsPrint &&
+            (cs.breakAfter === 'page' || cs.pageBreakAfter === 'always')
+          ) {
+            el.setAttribute('data-om-fakepage', '');
+          }
+        }
+      }
+      const ost = document.createElement('style');
+      ost.textContent = '@media print{' +
+        '[data-om-oversized]{break-inside:auto !important;page-break-inside:auto !important}' +
+        '[data-om-fakepage]{break-after:auto !important;page-break-after:auto !important}' +
+        (pageInset ? '[data-om-fakepage]{padding:0 !important;background:none !important}' : '') +
+        '}';
+      document.head.appendChild(ost);
+    }
+  } catch (e) {}
+  // macOS Preview renders Skia-PDF Luminosity soft-masks as opaque grey boxes;
+  // swap the CSS that triggers them for Preview-safe forms.
+  try {
+    for (const el of document.body.querySelectorAll('*')) {
+      const cs = getComputedStyle(el);
+
+      if (cs.boxShadow !== 'none' && cs.filter === 'none') {
+        const outs = [], kept = [];
+        for (const s of cs.boxShadow.split(/,(?![^(]*[)])/)) {
+          const t = s.trim();
+          const m = t.match(/^(rgba?[(][^)]+[)]) (-?[0-9.]+px) (-?[0-9.]+px) ([0-9.]+px) -?[0-9.]+px$/);
+          if (m && parseFloat(m[4]) > 0) outs.push('drop-shadow(' + m[2] + ' ' + m[3] + ' ' + m[4] + ' ' + m[1] + ')');
+          else kept.push(t);
+        }
+        if (outs.length) {
+          el.style.setProperty('filter', outs.join(' '), 'important');
+          el.style.setProperty('box-shadow', kept.join(', ') || 'none', 'important');
+        }
+      }
+
+      const mask = cs.maskImage && cs.maskImage !== 'none' ? cs.maskImage : cs.webkitMaskImage;
+      if (mask && mask !== 'none' && cs.filter === 'none') el.style.setProperty('filter', 'opacity(1)', 'important');
+    }
+  } catch (e) {}
+  setTimeout(() => { try { window.print(); } catch (e) {} }, 200);
+})();
+</script>
+</body>
+</html>

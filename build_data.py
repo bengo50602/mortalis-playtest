@@ -164,6 +164,8 @@ constants = {
     "startingMortality": grab(r"Starting Mortality: \*\*(\d+)\*\*", 250),
     "pulsePerTurn": grab(r"gain a flat \*\*(\d+) Pulse\*\*", 5),
     "startingHand": grab(r"Starting hand size: \*\*(\d+) cards?\*\*", 7),
+    "maxHand": grab(r"\*\*Maximum hand size:\*\* (\d+)", 8),
+    "firstTurnPulse": grab(r"gains only \*\*(\d+) Pulse\*\* on their first turn", 5),
     "deckSize": grab(r"\*\*Deck size:\*\* (\d+) cards", 50),
     "copyLimit": grab(r"\*\*Copy limit:\*\* \d+-(\d+)", 3),
     "lanes": 4, "auxSlotsPerLane": 2,
