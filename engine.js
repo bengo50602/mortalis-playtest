@@ -607,7 +607,8 @@ function compileCombatTriggers(text, out, bits) {
   if ((m = t.match(new RegExp(`whenever (?:this Hero|\\w+) deals combat damage to an enemy Hero, (?:that Hero|it) gets? [-−–]${NUM} Attack permanently`, "i")))) push("dealDamage", "self", { kind: "reduceTarget", atk: +m[1] }, "debuff on combat damage");
   // destroy an enemy Hero in combat → …
   if ((m = t.match(new RegExp(`whenever a Hero you control destroys an enemy Hero in combat, gain ${NUM} Pulse`, "i")))) push("kill", "friendly", { kind: "pulse", n: +m[1] }, "pulse when your Hero kills");
-  if ((m = t.match(new RegExp(`whenever (?:this Hero|\\w+) destroys an enemy Hero in combat, gain ${NUM} Pulse`, "i")))) push("kill", "self", { kind: "pulse", n: +m[1] }, "pulse on kill");
+  if ((m = t.match(new RegExp(`whenever (?:this Hero|\\w+) destroys an enemy Hero in combat, gain ${NUM} Pulse and draws? ${NUM} cards?`, "i")))) push("kill", "self", { kind: "pulseDraw", p: +m[1], d: +m[2] }, "pulse + draw on kill");
+  else if ((m = t.match(new RegExp(`whenever (?:this Hero|\\w+) destroys an enemy Hero in combat, gain ${NUM} Pulse`, "i")))) push("kill", "self", { kind: "pulse", n: +m[1] }, "pulse on kill");
   if ((m = t.match(new RegExp(`whenever (?:this Hero|\\w+) (?:destroys|defeats) an enemy Hero in combat, (?:heal it for|it heals) ${NUM}`, "i")))) push("kill", "self", { kind: "healSelf", n: +m[1] }, "self-heal on kill");
   if ((m = t.match(new RegExp(`whenever (?:this Hero|\\w+) destroys an enemy Hero in combat, (?:it|this Hero) gains \\+${NUM} Attack(?: and \\+${NUM} Health)? permanently`, "i")))) push("kill", "self", { kind: "buffSelf", atk: +m[1], hp: +(m[2] || 0) }, "grow on kill");
   // Rahotep: declare-time drain becomes permanent when the target dies to him
