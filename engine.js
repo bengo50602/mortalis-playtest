@@ -194,6 +194,8 @@ function parseOp(cl) {
   if ((m = cl.match(new RegExp(`^(?:it|It) also heals ${NUM} Health$`, "i")))) return { op: "heal", n: +m[1], target: "lastChosen" };
   if ((m = cl.match(new RegExp(`^Another Hero you control permanently gains Attack equal to half the destroyed Hero's printed Attack$`, "i")))) return { op: "buffHalfSacAtk" };
   if ((m = cl.match(/^(\w+) gains permanent Attack and Health equal to half the sacrificed Hero's printed Attack and printed Health respectively(?: \(rounded to the nearest 10\))?$/i))) return { op: "buffHalfSacBoth" };
+  if ((m = cl.match(/^a Hero you control gains permanent Attack equal to 10 [×x] the sacrificed Hero's printed cost$/i))) return { op: "buffSacCost" };
+  if ((m = cl.match(/^every enemy Hero loses (\d+) Health,? and \w+ gains \+(\d+) Attack permanently and heals (\d+) Health for each enemy Hero affected$/i))) return { op: "marrowfane", red: +m[1], atk: +m[2], heal: +m[3] };
   if ((m = cl.match(new RegExp(`^Two Heroes you control each gain \\+${NUM} Attack until the end of your next turn$`, "i")))) return { op: "buff", atk: +m[1], hp: 0, target: "upToOwn", count: 2, dur: 2 };
   if ((m = cl.match(new RegExp(`^a Hero you control gains \\+${NUM} Attack permanently and loses ${NUM} Health permanently$`, "i")))) return [{ op: "buff", atk: +m[1], hp: 0, target: "ownChoice", perm: true, storeChosen: true }, { op: "statReduce", atk: 0, hp: +m[2], target: "lastChosen" }];
   if ((m = cl.match(/^Gain Pulse equal to its printed cost$/i))) return { op: "pulseLastCost", mult: 1 };
@@ -440,6 +442,7 @@ function compileContinuous(text, sourceKind, out) {
     // conditional self auras (Deepforge)
     if (sourceKind === "hero" && /has (?:a|at least one) Relic equipped/i.test(s)) { out.cont.push({ atk: stat.atk, hp: stat.hp, scope: "selfIfHasRelic" }); out.autoBits.push("conditional aura"); continue; }
     if (sourceKind === "hero" && /both of \w+'s Relic slots are filled/i.test(s)) { out.cont.push({ atk: stat.atk, hp: stat.hp, scope: "selfIfTwoRelics" }); out.autoBits.push("conditional aura"); continue; }
+    if (sourceKind === "hero" && /Heroes you control occupy both lanes neighboring/i.test(s)) { out.cont.push({ atk: stat.atk, hp: stat.hp, scope: "selfIfBothNeighbors" }); out.autoBits.push("conditional aura"); continue; }
     const sc = parseScope(s, sourceKind);
     if (sc) { out.cont.push(Object.assign({ atk: stat.atk, hp: stat.hp }, sc)); out.autoBits.push("aura"); }
   }
@@ -600,7 +603,9 @@ function compileCombatTriggers(text, out, bits) {
   if ((m = t.match(new RegExp(`whenever a Hero you control destroys an enemy Hero in combat, gain ${NUM} Pulse`, "i")))) push("kill", "friendly", { kind: "pulse", n: +m[1] }, "pulse when your Hero kills");
   if ((m = t.match(new RegExp(`whenever (?:this Hero|\\w+) destroys an enemy Hero in combat, gain ${NUM} Pulse`, "i")))) push("kill", "self", { kind: "pulse", n: +m[1] }, "pulse on kill");
   if ((m = t.match(new RegExp(`whenever (?:this Hero|\\w+) (?:destroys|defeats) an enemy Hero in combat, (?:heal it for|it heals) ${NUM}`, "i")))) push("kill", "self", { kind: "healSelf", n: +m[1] }, "self-heal on kill");
-  if ((m = t.match(new RegExp(`whenever (?:this Hero|\\w+) destroys an enemy Hero in combat, it gains \\+${NUM} Attack(?: and \\+${NUM} Health)? permanently`, "i")))) push("kill", "self", { kind: "buffSelf", atk: +m[1], hp: +(m[2] || 0) }, "grow on kill");
+  if ((m = t.match(new RegExp(`whenever (?:this Hero|\\w+) destroys an enemy Hero in combat, (?:it|this Hero) gains \\+${NUM} Attack(?: and \\+${NUM} Health)? permanently`, "i")))) push("kill", "self", { kind: "buffSelf", atk: +m[1], hp: +(m[2] || 0) }, "grow on kill");
+  // Rahotep: declare-time drain becomes permanent when the target dies to him
+  if (/If \w+ destroys that Hero in the combat, both changes become permanent instead/i.test(t)) { const rm4 = t.match(/gains \+(\d+) Attack, for that combat only/i); if (rm4) push("kill", "self", { kind: "buffSelf", atk: +rm4[1], hp: 0 }, "conquest made permanent"); }
   if ((m = t.match(/whenever this Hero deals combat damage to an enemy Hero, you may destroy one Relic attached to that Hero/i))) push("dealDamage", "self", { kind: "destroyTargetRelic" }, "strips relic on hit");
   if ((m = t.match(new RegExp(`The first time each turn \\w+ destroys an enemy Hero in combat, gain ${NUM} Pulse and draw ${NUM} cards?`, "i")))) push("kill", "selfFirst", { kind: "pulseDraw", p: +m[1], d: +m[2] }, "first-kill reward");
   if ((m = t.match(new RegExp(`Once per turn, when \\w+ deals combat damage to an enemy Hero, (?:he|she|it) heals ${NUM} Health`, "i")))) push("dealDamage", "selfFirst", { kind: "healSelf", n: +m[1] }, "self-heal on hit");
@@ -856,6 +861,9 @@ const SCANNED_HERO = [
   [/the first Hero you play each turn costs \d+ less Pulse/i, "first-hero discount"],
   [/Enemy Heroes attacking \w+[’']?s? lane or a lane neighboring it have [-−–]\d+ Attack for that combat/i, "watchful sentinel"],
   [/Relics of any Realm may be attached/i, "universal smith"],
+  [/When \w+ declares an attack, the defending Hero gets [-−–]\d+ Attack and \w+ gains \+\d+ Attack, for that combat only/i, "attack-drain"],
+  [/Whenever \w+ declares an attack, (?:he|she|it) gains \+\d+ Attack permanently/i, "momentum"],
+  [/whenever your opponent plays a Hero, all enemy Heroes get [-−–]\d+ Attack until the end of your next turn/i, "dread presence"],
 ];
 const SCANNED_AUX = [
   [/enemy Heroes attacking this lane have [-−–]\d+ Attack during that combat/i, "lane intimidation"],
@@ -873,6 +881,12 @@ const SCANNED_AUX = [
   [/the first time each turn a Hero you control is sacrificed, return a Hero card of cost \d+ or less from your discard pile/i, "recycles the fallen"],
   [/whenever any Hero you control destroys an enemy Hero in combat, gain \d+ Pulse/i, "victory dividend"],
   [/when you declare an Onslaught, each participating Hero|Heroes you control participating in an Onslaught gain \+\d+ Attack|attacking the same target as the Hero in this lane/i, "onslaught support"],
+  [/when the Hero in this lane is attacked, the attacker gets [-−–]\d+ Attack and the Hero in this lane gains \+\d+ Attack/i, "attack-drain"],
+  [/when the Hero in this lane declares an attack, the defending Hero gets [-−–]\d+ Attack and the Hero in this lane gains \+\d+ Attack/i, "attack-drain"],
+  [/whenever the Hero in this lane declares an attack, it gains \+\d+ Attack until the end of your next turn/i, "momentum"],
+  [/when the Hero in this lane is attacked and a Hero you control occupies a neighboring lane, the attacker has [-−–]\d+ Attack/i, "formation intimidation"],
+  [/whenever an enemy Hero takes combat damage from your Heroes, the Hero in this lane gains \+\d+ Attack permanently/i, "feeds on violence"],
+  [/whenever you sacrifice a Hero, all (?:other )?Heroes you control gain \+\d+ Attack and \+\d+ Health permanently/i, "blood dividend"],
 ];
 
 function compileCard(card) {
@@ -919,6 +933,10 @@ function compileCard(card) {
       if (rm) { out.onEquip = parseOps(rm[1]); if (out.onEquip) out.autoBits.push("on-equip"); }
       const rRed = parseRedirect(card.text); if (rRed) { out.redirect = Object.assign({ protector: "equipped" }, rRed); out.autoBits.push("attack redirect"); }
       out.flags = compileFlags(card.text, out.autoBits) || out.flags;
+      const rpf = norm(card.text).match(/when this Hero fights, before combat,? the opposing Hero loses (\d+) Health \(stat reduction\),? and this Hero gains \+(\d+) Attack for that combat/i);
+      if (rpf) { out.preFight = { red: +rpf[1], atk: +rpf[2], heal: 0 }; out.autoBits.push("pre-combat drain"); }
+      if (/participates in an Onslaught, all participating Heroes gain \+\d+ Attack/i.test(norm(card.text))) out.autoBits.push("onslaught leader");
+      if (/[Ww]hen this Hero declares an attack, the defending Hero gets [-−–]\d+ Attack and this Hero gains \+\d+ Attack, for that combat only/.test(norm(card.text))) out.autoBits.push("attack-drain");
       const pv = norm(card.text).match(/the first time each turn this Hero (?:would take|takes) combat damage, prevent (\d+) of that damage/i);
       if (pv) { out.preventFirst = +pv[1]; out.autoBits.push("combat prevention"); }
       const rBg = parseBodyguard(card.text); if (rBg) { out.bodyguard = Object.assign({ protector: "equipped" }, rBg); out.autoBits.push("bodyguard"); }
@@ -1086,6 +1104,7 @@ function auraHits(e, spi, sli, tpi, tli, src) {
     case "champion": return spi === tpi && isChampion({ pi: tpi, li: tli });
     case "selfIfHasRelic": return spi === tpi && sli === tli && tHero.relics.length > 0;
     case "selfIfTwoRelics": return spi === tpi && sli === tli && tHero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0) >= 2;
+    case "selfIfBothNeighbors": { if (spi !== tpi || sli !== tli) return false; const ls2 = G.players[spi].lanes; return !!(ls2[sli - 1] && ls2[sli - 1].hero) && !!(ls2[sli + 1] && ls2[sli + 1].hero); }
     case "laneHero": return spi === tpi && sli === tli;
     case "allFriendly":
       if (spi !== tpi) return false;
@@ -1411,6 +1430,29 @@ async function runOp(op, pi, ctx) {
       if (!ctx.sacAtk) break;
       const gain = Math.round(ctx.sacAtk / 2 / 10) * 10;
       await runOp({ op: "buff", atk: gain, hp: 0, target: "ownChoice", perm: true }, pi, ctx);
+      break;
+    }
+    case "buffSacCost": {   // Huemac: a Hero you control gains 10 × the sacrifice's printed cost
+      if (!ctx.lastCost) break;
+      await runOp({ op: "buff", atk: 10 * ctx.lastCost, hp: 0, target: "ownChoice", perm: true }, pi, ctx);
+      break;
+    }
+    case "marrowfane": {   // every enemy drained; source grows per enemy affected
+      let nAff = 0;
+      for (const t of heroesOf(1 - pi).slice()) {
+        const eh = heroAt(t); if (!eh) continue;
+        eh.redHp += op.red; nAff++;
+        postStatReduce(pi, t);
+        if (curHp(t.pi, t.li) <= 0) destroyHero(t.pi, t.li, null, { noOverkill: true });
+      }
+      if (nAff) log(`Every enemy Hero loses ${op.red} Health (stat reduction).`);
+      const srcM = ctx.laneIdx != null ? heroAt({ pi, li: ctx.laneIdx }) : null;
+      if (srcM && nAff) {
+        srcM.permAtk += op.atk * nAff;
+        const healed = Math.min(srcM.dmg, op.heal * nAff);
+        srcM.dmg -= healed;
+        log(`${ctx.sourceName || "Hero"} gains +${op.atk * nAff} Attack permanently and heals ${healed}.`);
+      }
       break;
     }
     case "buffHalfSacBoth": {   // Huitzilat: source Hero grows by half the sacrifice's printed stats
@@ -2141,7 +2183,7 @@ function emit(event, pi, data) {
     const seenSac = new Set();
     for (const L of G.players[pi].lanes) for (const a of L.aux) if (a && !seenSac.has(a.uid)) {
       seenSac.add(a.uid);
-      const am = norm(cardById(a.cardId).auxText || "").match(/whenever you sacrifice a Hero, all Heroes you control gain \+(\d+) Attack and \+(\d+) Health permanently(?: \(maximum once per turn\))?(?:, and you gain (\d+) Pulse)?/i);
+      const am = norm(cardById(a.cardId).auxText || "").match(/whenever you sacrifice a Hero, all (?:other )?Heroes you control gain \+(\d+) Attack and \+(\d+) Health permanently(?: \(maximum once per turn\))?(?:, and you gain (\d+) Pulse)?/i);
       if (!am) continue;
       const once = /maximum once per turn/i.test(cardById(a.cardId).auxText || "");
       if (once && a.sacGt === G.gt) continue;
@@ -2266,6 +2308,18 @@ function dealDamage(t, amount, opts) {
   const before = curHp(t.pi, t.li);
   h.dmg += amount;
   log(`${c.name} takes ${amount} damage${opts.sourceName ? " (" + opts.sourceName + ")" : ""}.`);
+  // Marrowfane aux: "whenever an enemy Hero takes combat damage from your Heroes, ..."
+  if (opts.combat) {
+    const mp = 1 - t.pi;
+    G.players[mp].lanes.forEach(L2 => {
+      const seenM = new Set();
+      for (const a of L2.aux) if (a && !seenM.has(a.uid)) {
+        seenM.add(a.uid);
+        const mm2 = norm(cardById(a.cardId).auxText || "").match(/whenever an enemy Hero takes combat damage from your Heroes, the Hero in this lane gains \+(\d+) Attack permanently(?: \(maximum once per turn\))?/i);
+        if (mm2 && a.mfGt !== G.gt && L2.hero) { a.mfGt = G.gt; L2.hero.permAtk += +mm2[1]; log(`${cardById(a.cardId).name}: ${cardById(L2.hero.cardId).name} gains +${mm2[1]} Attack permanently.`); }
+      }
+    });
+  }
   // "whenever this hero takes damage" growth triggers
   const od = isSilenced(h) ? null : fx(h.cardId).onDamaged;
   if (od && before > 0) {
@@ -2514,6 +2568,16 @@ async function playHero(pi, handIdx, laneIdx) {
       };
       for (const t of heroesOf(1 - pi)) { const eh = heroAt(t); if (!isSilenced(eh)) applyRed(cardById(eh.cardId).text); }
       G.players[1 - pi].lanes.forEach(L => { const seen5 = new Set(); for (const a of L.aux) if (a && !seen5.has(a.uid)) { seen5.add(a.uid); applyRed(cardById(a.cardId).auxText); } });
+    }
+  }
+  // Nharessa: opponent's Heroes all wither briefly when you deploy
+  for (const t of heroesOf(1 - pi)) {
+    const eh = heroAt(t);
+    if (isSilenced(eh)) continue;
+    const nm2 = norm(cardById(eh.cardId).text || "").match(/whenever your opponent plays a Hero, all enemy Heroes get -(\d+) Attack until the end of your next turn/i);
+    if (nm2) {
+      for (const t2 of heroesOf(pi)) heroAt(t2).temp.push({ atk: -+nm2[1], hp: 0, until: G.gt + 1 });
+      log(`${cardById(eh.cardId).name}: ${P.name}'s Heroes get -${nm2[1]} Attack until the end of ${G.players[1 - pi].name}'s next turn.`, "ai");
     }
   }
   // own "whenever you play a Hero from Realm other than X" listeners
@@ -2887,6 +2951,46 @@ function applyCombatAuxMods(pi, attackerLis, dLi, combat, defenderPos) {
       if ((mm = at.match(/when Heroes you control in neighboring lanes fight, the enemy Hero's Relics and Auxiliary cards grant it no Attack or Health/i))) { if (attackerLis.some(ali => Math.abs(ali - li) === 1)) combat.defBare = true; }
     }
   });
+  // declare-attack stat exchanges (Senb / Rahotep / Khopesh / Borja) — attacker side
+  combat.laneMod = combat.laneMod || {};
+  for (const ali of attackerLis) {
+    const ah = heroAt({ pi, li: ali });
+    if (!ah) continue;
+    const texts = [];
+    if (!isSilenced(ah)) texts.push(norm(cardById(ah.cardId).text || ""));
+    for (const r of ah.relics) texts.push(norm(cardById(r.cardId).text || ""));
+    for (const tx of texts) {
+      let dm;
+      if ((dm = tx.match(/[Ww]hen (?:\w+|this Hero) declares an attack, the defending Hero gets -(\d+) Attack and (?:\w+|this Hero) gains \+(\d+) Attack, for that combat only/))) {
+        combat.defAtkMod = (combat.defAtkMod || 0) - +dm[1];
+        combat.laneMod[ali] = (combat.laneMod[ali] || 0) + +dm[2];
+        log(`${cardById(ah.cardId).name} drains the defender (-${dm[1]} / +${dm[2]} Attack this combat).`);
+      }
+      if ((dm = tx.match(/[Ww]henever (?:\w+|this Hero) declares an attack, (?:he|she|it) gains \+(\d+) Attack permanently/))) {
+        ah.permAtk += +dm[1];
+        log(`${cardById(ah.cardId).name} gains +${dm[1]} Attack permanently.`);
+      }
+    }
+    const seenB = new Set();
+    for (const a of G.players[pi].lanes[ali].aux) if (a && !seenB.has(a.uid)) {
+      seenB.add(a.uid);
+      const at4 = norm(cardById(a.cardId).auxText || "");
+      let bm;
+      if ((bm = at4.match(/whenever the Hero in this lane declares an attack, it gains \+(\d+) Attack until the end of your next turn/i))) ah.temp.push({ atk: +bm[1], hp: 0, until: G.gt + 2 });
+      if ((bm = at4.match(/when the Hero in this lane declares an attack, the defending Hero gets -(\d+) Attack and the Hero in this lane gains \+(\d+) Attack, for that combat only/i))) { combat.defAtkMod = (combat.defAtkMod || 0) - +bm[1]; combat.laneMod[ali] = (combat.laneMod[ali] || 0) + +bm[2]; }
+    }
+  }
+  // defender-lane auxes: Senb aux drain-back, Drusus aux formation intimidation
+  {
+    const seenD2 = new Set();
+    for (const a of G.players[dpi].lanes[dLi].aux) if (a && !seenD2.has(a.uid)) {
+      seenD2.add(a.uid);
+      const at5 = norm(cardById(a.cardId).auxText || "");
+      let dm;
+      if ((dm = at5.match(/when the Hero in this lane is attacked, the attacker gets -(\d+) Attack and the Hero in this lane gains \+(\d+) Attack, for that combat only/i))) { combat.atkMod -= +dm[1]; combat.defAtkMod = (combat.defAtkMod || 0) + +dm[2]; }
+      if ((dm = at5.match(/when the Hero in this lane is attacked and a Hero you control occupies a neighboring lane, the attacker has -(\d+) Attack for that combat/i))) { if (heroesOf(dpi).some(o => o.li !== dLi && Math.abs(o.li - dLi) === 1)) combat.atkMod -= +dm[1]; }
+    }
+  }
 }
 
 // A one-off 1v1 exchange outside the normal attack flow (counterattacks, duels,
@@ -3112,14 +3216,16 @@ async function resolveAttack(pi, attackerLis, target) {
     for (const ali of attackerLis) {
       const ah3 = heroAt({ pi, li: ali });
       if (!ah3 || !heroAt(ctx.defender)) break;
-      const hp3 = isSilenced(ah3) ? null : fx(ah3.cardId).preFight;
+      let hp3 = isSilenced(ah3) ? null : fx(ah3.cardId).preFight;
+      for (const r3 of ah3.relics) { const rp3 = fx(r3.cardId).preFight; if (rp3) { hp3 = hp3 ? { red: hp3.red + rp3.red, atk: hp3.atk + rp3.atk, heal: (hp3.heal || 0) + (rp3.heal || 0) } : rp3; } }
       if (hp3) combat.laneMod[ali] = (combat.laneMod[ali] || 0) + drain({ pi, li: ali }, ctx.defender, hp3, cardById(ah3.cardId).name);
       const ap3 = auxPreFightOf(pi, ali);
       if (ap3 && heroAt(ctx.defender)) combat.laneMod[ali] = (combat.laneMod[ali] || 0) + drain({ pi, li: ali }, ctx.defender, ap3, "Auxiliary");
     }
     const dh3 = heroAt(ctx.defender);
     if (dh3) {
-      const dpf = (isSilenced(dh3) ? null : fx(dh3.cardId).preFight);
+      let dpf = (isSilenced(dh3) ? null : fx(dh3.cardId).preFight);
+      for (const r4 of dh3.relics) { const rp4 = fx(r4.cardId).preFight; if (rp4) { dpf = dpf ? { red: dpf.red + rp4.red, atk: dpf.atk + rp4.atk, heal: (dpf.heal || 0) + (rp4.heal || 0) } : rp4; } }
       const dap = auxPreFightOf(ctx.defender.pi, ctx.defender.li);
       const firstAtk = attackerLis.find(li => heroAt({ pi, li }));
       if (dpf && firstAtk != null) combat.defAtkMod = (combat.defAtkMod || 0) + drain(ctx.defender, { pi, li: firstAtk }, dpf, cardById(dh3.cardId).name);
