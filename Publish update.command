@@ -72,12 +72,15 @@ fi
 # 3. Keep the send-to-a-friend single file in sync
 python3 build_single_file.py
 
-# 4. Push to GitHub
+# 4. Push to GitHub (new local edits AND any already-committed but unpushed work,
+#    e.g. commits made by Claude in Cowork sessions)
 git add -A
-if git diff --cached --quiet; then
+if ! git diff --cached --quiet; then
+  git commit -m "Playtest update $(date '+%Y-%m-%d %H:%M')" >/dev/null
+fi
+if [ -z "$(git log @{u}.. --oneline 2>/dev/null)" ]; then
   echo "Nothing changed since the last publish."
 else
-  git commit -m "Playtest update $(date '+%Y-%m-%d %H:%M')" >/dev/null
   if git push; then
     echo ""
     echo "✅ Published! The shared link updates in a minute or two:"
