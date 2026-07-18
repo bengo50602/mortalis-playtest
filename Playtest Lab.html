@@ -213,7 +213,12 @@ function renderReport() {
   }
   suspects.sort((a, b) => b.played - a.played);
   const staged = stats.staged || [];
-  const brokenCount = suspects.length + staged.length + (stats.crashes.length ? 1 : 0);
+  // cross-reference: a "suspect" whose staged check passed is almost certainly situational,
+  // not broken — its scripted effect fired correctly in the controlled test.
+  const stagedFailNames = new Set(staged.map(i => i[0]));
+  const confirmed = suspects.filter(s => stagedFailNames.has(s.name));
+  const watchlist = suspects.filter(s => !stagedFailNames.has(s.name));
+  const brokenCount = confirmed.length + staged.length + (stats.crashes.length ? 1 : 0);
 
   // viability: winrate when played, minimum sample
   const MIN_G = 8;
@@ -237,10 +242,14 @@ function renderReport() {
   if (staged.length) html += `<h3 style="font-size:13px;margin:10px 0 4px;">Staged check findings (effect fired but did nothing / wrong numbers)</h3>
     <table><tr><th>Card</th><th>Part</th><th>Finding</th></tr>` +
     staged.map(i => `<tr><td>${esc(i[0])}</td><td>${esc(i[1])}</td><td>${esc(i[2])}</td></tr>`).join("") + "</table>";
-  if (suspects.length) html += `<h3 style="font-size:13px;margin:10px 0 4px;">Played in real games but effect never visibly acted</h3>
-    <p class="sub">Situational triggers may simply never have fired — more games sharpens this list.</p>
+  if (confirmed.length) html += `<h3 style="font-size:13px;margin:10px 0 4px;" class="bad">Confirmed broken (failed the staged check AND silent in games)</h3>
     <table><tr><th>Card</th><th>Realm</th><th>Type</th><th>Times played</th></tr>` +
-    suspects.map(s => `<tr><td>${esc(s.name)}</td><td>${esc(s.realm)}</td><td>${esc(s.type)}</td><td>${s.played}</td></tr>`).join("") + "</table>";
+    confirmed.map(s => `<tr><td>${esc(s.name)}</td><td>${esc(s.realm)}</td><td>${esc(s.type)}</td><td>${s.played}</td></tr>`).join("") + "</table>";
+  html += "</section>";
+  html += `<section><h2 class="${watchlist.length ? "warn" : "ok"}">Watch list — no verdict yet</h2>
+    <p class="sub">These were played but their trigger condition never came up in these games (e.g. a "when attacked" Hero that was never attacked). Their staged check PASSED, so the effect itself works — they are listed only so you can eyeball them during your own play. This list shrinks as you run more games.</p>`;
+  if (watchlist.length) html += `<table><tr><th>Card</th><th>Realm</th><th>Type</th><th>Times played</th></tr>` +
+    watchlist.map(s => `<tr><td>${esc(s.name)}</td><td>${esc(s.realm)}</td><td>${esc(s.type)}</td><td>${s.played}</td></tr>`).join("") + "</table>";
   if (stats.crashes.length) {
     const grouped = {};
     for (const cr of stats.crashes) { const k = cr.err; grouped[k] = grouped[k] || { n: 0, after: cr.after, stack: cr.stack }; grouped[k].n++; }
