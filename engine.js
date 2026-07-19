@@ -1098,6 +1098,7 @@ function newGame(opts) {
     turn: 0, gt: 0, over: false, winner: null, log: [],
   };
   for (const p of G.players) for (let i = 0; i < C().startingHand; i++) drawCard(G.players.indexOf(p), true);
+  if (C().secondPlayerPulse) { G.players[1 - opts.first].pulse += C().secondPlayerPulse; }   // going-second compensation
   log(`New game — you: ${opts.playerRealms.join(", ")} vs AI: ${opts.aiRealms.join(", ")}. ${G.players[opts.first].name} goes first.`);
   startTurn();
 }
@@ -1289,7 +1290,10 @@ function startTurn() {
   // per-turn resets + this-turn cost modifiers
   P.heroesPlayedTurn = 0;
   if (P.mods) P.mods = P.mods.filter(m => m.life !== "turn");   // "this turn" next-Hero mods expire
-  let basePulse = (P.pulseOverrideGt === G.gt) ? P.pulseOverrideAmt : C().pulsePerTurn;
+  let basePulse;
+  if (P.pulseOverrideGt === G.gt) basePulse = P.pulseOverrideAmt;
+  else if (C().pulseBase != null) basePulse = Math.min(C().pulseBase + P.turnCount - 1, C().pulseCap || 99);   // escalating economy
+  else basePulse = C().pulsePerTurn;
   // first-player fairness: reduced Pulse on the very first turn of the game
   if (G.gt === 1 && pi === G.firstPlayer && C().firstTurnPulse != null && C().firstTurnPulse < basePulse) {
     basePulse = C().firstTurnPulse;
@@ -1438,8 +1442,7 @@ async function runOp(op, pi, ctx) {
       for (const t of targets) if (heroAt(t)) {
         if (cannotBeHealed(t)) { log(`${nameOf(t)} cannot be healed!`); continue; }
         const h = heroAt(t);
-        const healed = Math.min(h.dmg, op.n);
-        h.dmg -= healed;
+        const healed = applyHeal(h, op.n);
         if (op.permHp) h.permHp += op.permHp;
         log(`${nameOf(t)} heals ${healed}${op.permHp ? ` and gains +${op.permHp} Health` : ""}.`);
         any = true;
@@ -1574,7 +1577,7 @@ async function runOp(op, pi, ctx) {
       }
       const srcV = ctx.laneIdx != null ? heroAt({ pi, li: ctx.laneIdx }) : null;
       if (nAff2) log(`Every wounded enemy Hero loses ${op.red} Health (stat reduction).`);
-      if (srcV && nAff2) { srcV.permAtk += op.atk * nAff2; const hd2 = Math.min(srcV.dmg, op.heal); srcV.dmg -= hd2; log(`${ctx.sourceName || "Hero"} gains +${op.atk * nAff2} Attack permanently and heals ${hd2}.`); }
+      if (srcV && nAff2) { srcV.permAtk += op.atk * nAff2; const hd2 = applyHeal(srcV, op.heal); log(`${ctx.sourceName || "Hero"} gains +${op.atk * nAff2} Attack permanently and heals ${hd2}.`); }
       break;
     }
     case "destroyHexOpposing": {   // Halo of the Everwatch: pop an enemy face-down Hex on the mirror lane
@@ -1603,8 +1606,7 @@ async function runOp(op, pi, ctx) {
       const srcM = ctx.laneIdx != null ? heroAt({ pi, li: ctx.laneIdx }) : null;
       if (srcM && nAff) {
         srcM.permAtk += op.atk * nAff;
-        const healed = Math.min(srcM.dmg, op.heal * nAff);
-        srcM.dmg -= healed;
+        const healed = applyHeal(srcM, op.heal * nAff);
         log(`${ctx.sourceName || "Hero"} gains +${op.atk * nAff} Attack permanently and heals ${healed}.`);
       }
       break;
@@ -1832,7 +1834,7 @@ async function runOp(op, pi, ctx) {
       postStatReduce(pi, foe);
       if (effMaxHp(foe.pi, foe.li) <= fh.dmg || effMaxHp(foe.pi, foe.li) <= 0) destroyHero(foe.pi, foe.li, null, { noOverkill: true });
       const mine = heroAt({ pi, li: ctx.laneIdx });
-      if (mine && (op.atk || op.heal)) { mine.permAtk += op.atk; const hd = Math.min(mine.dmg, op.heal); mine.dmg -= hd; log(`${cardById(mine.cardId).name} gains +${op.atk} Attack and heals ${hd}.`); }
+      if (mine && (op.atk || op.heal)) { mine.permAtk += op.atk; const hd = applyHeal(mine, op.heal); log(`${cardById(mine.cardId).name} gains +${op.atk} Attack and heals ${hd}.`); }
       break;
     }
     case "condRealmBonus": {
@@ -2112,7 +2114,7 @@ async function runOp(op, pi, ctx) {
         const h = heroAt(t);
         h.redAtk = 0; h.redHp = 0; h.temp = h.temp.filter(x => (x.atk || 0) >= 0 && (x.hp || 0) >= 0);
         h.noAttackOnTurn = 0; h.noAttackUntil = 0; h.silenced = 0;
-        if (op.healN) { const hd3 = Math.min(h.dmg, op.healN); h.dmg -= hd3; }
+        if (op.healN) applyHeal(h, op.healN);
         log(`${nameOf(t)} is cleansed of enemy stat reductions and negative effects${op.healN ? ` and heals ${op.healN}` : ""}.`);
       }
       break;
@@ -2195,6 +2197,16 @@ function promptPick(title, options) {
   if (raw == null) return null;
   const n = parseInt(raw, 10);
   return n >= 1 && n <= options.length ? n - 1 : null;
+}
+
+
+// No maximum Health: healing repairs damage first; any excess becomes permanent Health.
+function applyHeal(h, n) {
+  if (!h || n <= 0) return 0;
+  const rep = Math.min(h.dmg, n);
+  h.dmg -= rep;
+  if (n > rep) h.permHp += n - rep;
+  return n;
 }
 
 function heroAt(t) { return t && G.players[t.pi] && G.players[t.pi].lanes[t.li] ? G.players[t.pi].lanes[t.li].hero : null; }
@@ -2391,8 +2403,8 @@ function applyListen(dd, pi, pos, h, data) {
     if (dd.perm) { h.permAtk += dd.atk || 0; h.permHp += dd.hp || 0; }
     else h.temp.push({ atk: dd.atk || 0, hp: dd.hp || 0, until: G.gt + (dd.dur || 0) });
     log(`${nm} gains +${dd.atk || 0}/+${dd.hp || 0}${dd.perm ? " permanently" : ""}.`);
-  } else if (dd.k === "healEvent") { const tg = heroAt(data.at); if (tg) { const hd = Math.min(tg.dmg, dd.n); tg.dmg -= hd; if (hd) log(`${cardById(tg.cardId).name} heals ${hd} (${nm}).`); } }
-  else if (dd.k === "healSelfN") { const hd = Math.min(h.dmg, dd.n); if (hd) { h.dmg -= hd; log(`${nm} heals ${hd}.`); } }
+  } else if (dd.k === "healEvent") { const tg = heroAt(data.at); if (tg) { const hd = applyHeal(tg, dd.n); if (hd) log(`${cardById(tg.cardId).name} heals ${hd} (${nm}).`); } }
+  else if (dd.k === "healSelfN") { const hd = applyHeal(h, dd.n); if (hd) log(`${nm} heals ${hd}.`); }
   else if (dd.k === "wardAt") { const tg = heroAt(data.at); if (tg) { tg.ward = (tg.ward || 0) + dd.n; log(`${cardById(tg.cardId).name} gains a ward (${dd.n}) — ${nm}.`); } }
   else if (dd.k === "ops") {
     (async () => {
@@ -2408,7 +2420,7 @@ function applyListen(dd, pi, pos, h, data) {
       hh.permAtk += dd.atk || 0; hh.permHp += dd.hp || 0;
     }
     log(`${nm}: your${dd.realmFilter ? " " + dd.realmFilter : ""} Heroes gain +${dd.atk || 0}/+${dd.hp || 0}.`);
-  } else if (dd.k === "healAll") { for (const t of heroesOf(pi)) { if (dd.other && t.li === pos.li) continue; const hh = heroAt(t); const hd = Math.min(hh.dmg, dd.n); hh.dmg -= hd; } log(`${nm}: your Heroes heal ${dd.n}.`); }
+  } else if (dd.k === "healAll") { for (const t of heroesOf(pi)) { if (dd.other && t.li === pos.li) continue; const hh = heroAt(t); applyHeal(hh, dd.n); } log(`${nm}: your Heroes heal ${dd.n}.`); }
   else if (dd.k === "reduceAll") { for (const t of heroesOf(1 - pi)) { const hh = heroAt(t); hh.redAtk += dd.atk || 0; hh.redHp += dd.hp || 0; if (effMaxHp(t.pi, t.li) <= 0) destroyHero(t.pi, t.li, null, { noOverkill: true }); } log(`${nm}: enemy Heroes lose ${dd.atk || 0} Attack / ${dd.hp || 0} Health.`); }
 }
 
@@ -2561,7 +2573,7 @@ function dealDamage(t, amount, opts) {
     applyPendingGain(h, c);
     fireHexes(t.pi, "tookDamage", { laneIdx: t.li, defender: t });
     // Vesk aux: first enemy damage each turn heals the lane Hero
-    G.players[1 - t.pi].lanes.forEach((L, li) => { const seen4 = new Set(); for (const a of L.aux) if (a && !seen4.has(a.uid)) { seen4.add(a.uid); const mm = (cardById(a.cardId).auxText || "").match(/the first time each turn an enemy Hero takes damage, the Hero in this lane heals (\d+) Health/i); if (mm && L.hero && a.vGt !== G.gt) { a.vGt = G.gt; const hd = Math.min(L.hero.dmg, +mm[1]); L.hero.dmg -= hd; if (hd) log(`${cardById(L.hero.cardId).name} heals ${hd} (${cardById(a.cardId).name}).`); } } });
+    G.players[1 - t.pi].lanes.forEach((L, li) => { const seen4 = new Set(); for (const a of L.aux) if (a && !seen4.has(a.uid)) { seen4.add(a.uid); const mm = (cardById(a.cardId).auxText || "").match(/the first time each turn an enemy Hero takes damage, the Hero in this lane heals (\d+) Health/i); if (mm && L.hero && a.vGt !== G.gt) { a.vGt = G.gt; const hd = applyHeal(L.hero, +mm[1]); if (hd) log(`${cardById(L.hero.cardId).name} heals ${hd} (${cardById(a.cardId).name}).`); } } });
   }
   return amount;
 }
@@ -3116,7 +3128,7 @@ async function fireCombat(event, actorPi, actorLi, targetPi, targetLi) {
     const op = tr.op, PA = G.players[actorPi];
     if (op.kind === "pulse") { gainPulse(actorPi, op.n, src); }
     else if (op.kind === "draw") { for (let i = 0; i < op.n; i++) drawCard(actorPi); }
-    else if (op.kind === "healSelf" && actor) { const healed = Math.min(actor.dmg, op.n); actor.dmg -= healed; if (healed) { log(`${src} heals ${healed}.`); emit("heal", actorPi, {}); } }
+    else if (op.kind === "healSelf" && actor) { const healed = applyHeal(actor, op.n); if (healed) { log(`${src} heals ${healed}.`); emit("heal", actorPi, {}); } }
     else if (op.kind === "buffSelf" && actor) { actor.permAtk += op.atk || 0; actor.permHp += op.hp || 0; log(`${src} permanently gains +${op.atk || 0}/+${op.hp || 0}.`); }
     else if (op.kind === "reduceTarget") { const tg = heroAt({ pi: targetPi, li: targetLi }); if (tg) { tg.redAtk += op.atk || 0; log(`${cardById(tg.cardId).name} gets -${op.atk} Attack permanently (${src}).`); } }
     else if (op.kind === "pulseDraw") { gainPulse(actorPi, op.p, src); for (let i = 0; i < op.d; i++) drawCard(actorPi); }
@@ -3276,7 +3288,7 @@ function postStatReduce(sourcePi, targetPos) {
       seen.add(a.uid);
       const at = cardById(a.cardId).auxText || "";
       const mm = at.match(/whenever an enemy Hero's Health is reduced by one of your card effects, the Hero in this lane heals (\d+) Health/i);
-      if (mm && L.hero && a.lasGt !== G.gt) { a.lasGt = G.gt; const hd = Math.min(L.hero.dmg, +mm[1]); L.hero.dmg -= hd; if (hd) log(`${cardById(L.hero.cardId).name} heals ${hd} (${cardById(a.cardId).name}).`); }
+      if (mm && L.hero && a.lasGt !== G.gt) { a.lasGt = G.gt; const hd = applyHeal(L.hero, +mm[1]); if (hd) log(`${cardById(L.hero.cardId).name} heals ${hd} (${cardById(a.cardId).name}).`); }
     }
   });
 }
@@ -3472,7 +3484,7 @@ async function resolveAttack(pi, attackerLis, target) {
         if (curHp(tgtPos.pi, tgtPos.li) <= 0) destroyHero(tgtPos.pi, tgtPos.li, null, { noOverkill: true });
       }
       const sh2 = heroAt(srcPos);
-      if (sh2 && pf3.heal) { const healed = Math.min(sh2.dmg, pf3.heal); if (healed) { sh2.dmg -= healed; log(`${srcName2} heals ${healed}.`); emit("heal", srcPos.pi, {}); } }
+      if (sh2 && pf3.heal) { const healed = applyHeal(sh2, pf3.heal); if (healed) { log(`${srcName2} heals ${healed}.`); emit("heal", srcPos.pi, {}); } }
       return pf3.atk || 0;
     };
     for (const ali of attackerLis) {

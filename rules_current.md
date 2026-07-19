@@ -14,7 +14,7 @@ Players build 40-card decks with total creative freedom — any card can go in a
 ### Pulse
 The universal resource used to pay for all cards. Pulse is **not colored or Realm-locked** — every card simply costs a number of Pulse, regardless of archetype.
 
-- At the start of each of your turns, gain a flat **5 Pulse** (this amount does not increase as the game goes on — always 5)
+- At the start of each of your turns, gain Pulse equal to **2** on your first turn, rising by 1 each turn to a maximum of **8 Pulse** per turn (turn 1: 2, turn 2: 3, … turn 7 onward: 8). The early game belongs to cheap Heroes; the giants arrive late.
 - Unused Pulse **carries over indefinitely** between turns as a running tally — there is no "use it or lose it," and **no hard cap**
 - Card-based Pulse ramp effects (e.g., Kessa Windrend's Auxiliary Mode) still function and stack on top of the flat 5/turn
 
@@ -60,7 +60,8 @@ Each turn follows a simple sequence:
 **Game start:**
 - Starting hand size: **7 cards**
 - **Maximum hand size:** 8 — if you would draw a card while already holding 8, the drawn card is discarded instead (it is not added to your hand)
-- The player going first **skips their first draw**, **cannot attack on their first turn**, and gains only **3 Pulse** on their first turn instead of the normal 5 (fairness corrections)
+- **No maximum Health:** healing first repairs a Hero's damage; any healing beyond full permanently increases that Hero's Health stat by the excess. ("Below its maximum Health" effects check for unrepaired damage.)
+- The player going first **skips their first draw** and **cannot attack on their first turn**; the player going second starts the game with **3 bonus Pulse** already banked (fairness corrections)
 
 ---
 
