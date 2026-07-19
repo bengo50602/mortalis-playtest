@@ -7499,6 +7499,19 @@ function promptPick(title, options) {
 
 function heroAt(t) { return t && G.players[t.pi] && G.players[t.pi].lanes[t.li] ? G.players[t.pi].lanes[t.li].hero : null; }
 
+// PvP hook: async confirmations routed to whichever player owns the decision.
+// Solo play: identical to window.confirm.
+function pvpConfirm(deciderPi, msg) {
+  if (window.PVP_CONFIRM) return PVP_CONFIRM(deciderPi, msg);
+  return Promise.resolve(confirm(msg));
+}
+// PvP hook for decisions inside synchronous code (bodyguard soaks, death saves):
+// a remote player's optional defensive choice defaults to yes.
+function pvpSyncDecide(deciderPi, msg) {
+  if (window.PVP_SYNC_DECIDE) return PVP_SYNC_DECIDE(deciderPi, msg);
+  return confirm(msg);
+}
+
 function heroesOf(pi) {
   const out = [];
   G.players[pi].lanes.forEach((L, li) => { if (L.hero) out.push({ pi, li }); });
@@ -7759,7 +7772,7 @@ function dealDamage(t, amount, opts) {
     if (bg) {
       const half = Math.round(amount / 2 / 10) * 10;
       const P = G.players[t.pi];
-      let doIt = half > 0 && (!bg.src.optional || (P.isAI ? curHp(bg.pos.pi, bg.pos.li) > half : confirm(`Have ${cardById(heroAt(bg.pos).cardId).name} take ${half} of the ${amount} combat damage? (${bg.name})`)));
+      let doIt = half > 0 && (!bg.src.optional || (P.isAI ? curHp(bg.pos.pi, bg.pos.li) > half : pvpSyncDecide(t.pi, `Have ${cardById(heroAt(bg.pos).cardId).name} take ${half} of the ${amount} combat damage? (${bg.name})`)));
       if (doIt) {
         if (bg.src.oncePerTurn) bg.holder.bgTurn = G.gt;
         log(`${bg.name}: ${cardById(heroAt(bg.pos).cardId).name} soaks ${half} of the damage.`);
@@ -7872,7 +7885,7 @@ function destroyHero(pi, li, killer, opts) {
     const sl = P.slots[si];
     if (sl && sl.kind === "hex" && sl.faceDown && sl.laneIdx === li && fx(sl.cardId).deathReplace) {
       const hexCard = cardById(sl.cardId);
-      if (P.pulse >= hexCard.cost && (P.isAI || confirm(`${hexCard.name}: pay ${hexCard.cost} Pulse to return ${c.name} to your hand instead of it dying?`))) {
+      if (P.pulse >= hexCard.cost && (P.isAI || pvpSyncDecide(pi, `${hexCard.name}: pay ${hexCard.cost} Pulse to return ${c.name} to your hand instead of it dying?`))) {
         P.pulse -= hexCard.cost;
         P.slots[si] = null;
         P.lanes[li].hero = null;
@@ -7968,7 +7981,7 @@ async function fireHexes(ownerPi, event, ctx) {
     G.players[1 - ownerPi].lanes.forEach(L => { const seen = new Set(); for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); const m = (cardById(a.cardId).auxText || "").match(/your opponent's Hexes cost (\d+) additional Pulse/i); if (m) hexCost += +m[1]; } });
     if (P.pulse < hexCost) { log(`${P.name}'s Hex "${card.name}" cannot be paid for — it fizzles.`); P.slots[si] = null; emit("supportSpent", 1 - ownerPi, {}); continue; }
     let pay = true;
-    if (!P.isAI) pay = confirm(`Your Hex "${card.name}" triggered!\n\n${card.text}\n\nPay ${hexCost} Pulse to resolve it? (Cancel = fizzle)`);
+    if (!P.isAI) pay = await pvpConfirm(ownerPi, `Your Hex "${card.name}" triggered!\n\n${card.text}\n\nPay ${hexCost} Pulse to resolve it? (Cancel = fizzle)`);
     if (!pay) { log(`Your Hex "${card.name}" fizzles (declined).`); P.slots[si] = null; emit("supportSpent", 1 - ownerPi, {}); continue; }
     P.pulse -= hexCost;
     log(`${P.name}'s Hex triggers: ${card.name}!`, P.isAI ? "ai" : "");
@@ -8233,7 +8246,7 @@ async function playSpell(pi, handIdx) { // pact or incantation
       const ost = heroesOf(pi).find(t => !isSilenced(heroAt(t)) && /whenever you cast an Incantation, you may pay (\d+) Pulse to resolve that Incantation's effect a second time/i.test(cardById(heroAt(t).cardId).text || ""));
       if (ost) {
         const rc = +(cardById(heroAt(ost).cardId).text.match(/pay (\d+) Pulse/i)[1]);
-        if (P.pulse >= rc && (P.isAI ? P.pulse >= rc + 2 : confirm(`${cardById(heroAt(ost).cardId).name}: pay ${rc} Pulse to resolve ${card.name} a second time?`))) {
+        if (P.pulse >= rc && (P.isAI ? P.pulse >= rc + 2 : await pvpConfirm(pi, `${cardById(heroAt(ost).cardId).name}: pay ${rc} Pulse to resolve ${card.name} a second time?`))) {
           P.pulse -= rc; P.recastGt = G.gt;
           log(`${cardById(heroAt(ost).cardId).name} echoes ${card.name}!`, P.isAI ? "ai" : "");
           const ctx2 = { sourceName: card.name + " (echo)" };
@@ -8603,7 +8616,7 @@ async function defensiveRedirect(attackerPi, ctx) {
     let doIt;
     if (!s.src.optional) doIt = true;
     else if (P.isAI) doIt = curHp(s.pos.pi, s.pos.li) > curHp(dpi, dLi) && (s.src.cost <= 2 || P.pulse >= s.src.cost + 2);
-    else doIt = confirm(`Redirect the attack onto ${cardById(heroAt(s.pos).cardId).name}? (${s.name}${s.src.cost ? `, pay ${s.src.cost} Pulse` : ""})`);
+    else doIt = await pvpConfirm(dpi, `Redirect the attack onto ${cardById(heroAt(s.pos).cardId).name}? (${s.name}${s.src.cost ? `, pay ${s.src.cost} Pulse` : ""})`);
     if (!doIt) continue;
     if (s.src.cost) P.pulse -= s.src.cost;
     if (s.src.oncePerTurn) s.holder.redirTurn = G.gt;
@@ -8894,7 +8907,7 @@ async function resolveAttack(pi, attackerLis, target) {
         const am4 = norm(cardById(dh4.cardId).text || "").match(/Once per turn, when [\w ]+ is attacked and survives the combat, (?:he|she|it) may immediately attack the Hero that attacked (?:him|her|it)/i);
         if (am4 && dh4.counterGt !== G.gt) {
           const DP = G.players[ctx.defender.pi];
-          if (DP.isAI || confirm(`${cardById(dh4.cardId).name}: counterattack ${cardById(heroAt({ pi, li: alive[0] }).cardId).name}?`)) {
+          if (DP.isAI || await pvpConfirm(ctx.defender.pi, `${cardById(dh4.cardId).name}: counterattack ${cardById(heroAt({ pi, li: alive[0] }).cardId).name}?`)) {
             dh4.counterGt = G.gt;
             log(`${cardById(dh4.cardId).name} counterattacks!`, DP.isAI ? "ai" : "");
             await miniCombat(ctx.defender, { pi, li: alive[0] });

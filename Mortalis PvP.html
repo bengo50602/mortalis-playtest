@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mortalis: Realms — PvP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#ece9e2; --panel:#f7f5f0; --card:#ffffff; --ink:#22211f; --muted:#6b6a64;
+  --line:#c9c6bc; --line2:#a5a29a; --accent:#1d5fa5; --accent-bg:#e2edf8;
+  --good:#2c6e2f; --bad:#a32d2d; --warn:#a05a00; --warn-bg:#f7ead2;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+button{font-family:inherit;font-size:13px;padding:5px 12px;border:1px solid var(--line2);border-radius:6px;background:#fff;color:var(--ink);cursor:pointer}
+button:hover{background:#f0eee8}
+button.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+button.primary:hover{background:#3a3936}
+button.active-tab{border:2px solid var(--accent);color:var(--accent);font-weight:600}
+button:disabled{opacity:.45;cursor:default}
+select,input,textarea{font-family:inherit;font-size:13px;padding:5px 8px;border:1px solid var(--line2);border-radius:6px;background:#fff;color:var(--ink)}
+h1{font-size:20px;margin:0}
+h2{font-size:16px;margin:0 0 10px}
+.topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);flex-wrap:wrap;position:sticky;top:0;z-index:50}
+.topbar .spacer{flex:1}
+.screen{display:none;padding:16px;max-width:1280px;margin:0 auto}
+.screen.visible{display:block}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+.lane-picks{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:6px 0 14px}
+.lane-picks select{width:100%}
+.setup-label{font-size:13px;color:var(--muted);margin:12px 0 4px}
+.board{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:12px}
+.statline{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:4px 6px}
+.statline .who{font-weight:600}
+.statline .nums span{margin-left:14px}
+.mortality{font-weight:600}
+.clickable-face{cursor:pointer;border:1px dashed transparent;border-radius:6px;padding:2px 6px}
+.clickable-face.targetable{border-color:var(--bad);background:#f7dede}
+.lanes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:4px 0}
+.lane{text-align:center;min-width:0}
+.lane .realm-tag{font-size:11px;font-weight:600;letter-spacing:.02em;padding:2px 0;border-radius:4px;background:#e5e2d9;margin-bottom:4px}
+.slotrow{display:flex;gap:4px;margin:4px 0}
+.minislot{flex:1;min-height:24px;border:1px dashed var(--line2);border-radius:5px;font-size:10px;color:var(--muted);display:flex;align-items:center;justify-content:center;padding:2px 3px;background:transparent;cursor:default;min-width:0;overflow:hidden}
+.minislot.filled{border-style:solid;background:var(--card);cursor:pointer;color:var(--ink)}
+.minislot.eligible{border-color:var(--accent);background:var(--accent-bg);cursor:pointer;color:var(--accent);font-weight:600}
+.heroslot{min-height:96px;border:1px dashed var(--line2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);background:transparent}
+.heroslot.eligible{border-color:var(--accent);background:var(--accent-bg);cursor:pointer;color:var(--accent);font-weight:600}
+.herocard{width:100%;min-height:96px;background:var(--card);border:1px solid var(--line2);border-radius:8px;padding:6px;text-align:left;cursor:pointer;font-size:11px;position:relative}
+.herocard .nm{font-weight:600;line-height:1.25}
+.herocard .stats{margin:3px 0;font-size:12px}
+.herocard .txt{color:var(--muted);line-height:1.3;max-height:42px;overflow:hidden}
+.herocard.selected{outline:3px solid var(--accent)}
+.herocard.targetable{outline:3px solid var(--bad)}
+.herocard.exhausted{opacity:.62}
+.buffed{color:var(--good);font-weight:600}
+.nerfed{color:var(--bad);font-weight:600}
+.badge-manual{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--warn)}
+.sharedrow{display:flex;gap:6px;align-items:center;padding:3px 6px;font-size:11px;color:var(--muted)}
+.sharedslot{width:76px;min-height:30px;border:1px dashed var(--line2);border-radius:5px;font-size:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:2px;background:transparent;color:var(--muted)}
+.sharedslot.filled{border-style:solid;background:var(--card);cursor:pointer;color:var(--ink)}
+.midbar{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:6px 0;padding:6px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;min-height:34px}
+#prompt{font-weight:600;color:var(--accent)}
+.hand{display:flex;gap:6px;padding:6px;flex-wrap:wrap}
+.handcard{width:118px;background:var(--card);border:1px solid var(--line2);border-radius:7px;padding:6px;font-size:11px;cursor:pointer;position:relative}
+.handcard:hover{border-color:var(--ink)}
+.handcard .nm{font-weight:600;line-height:1.25}
+.handcard .meta{color:var(--muted);margin-top:2px}
+.handcard.unaffordable{opacity:.55}
+.logpanel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:12px;display:flex;flex-direction:column;min-height:400px}
+.logpanel h3{margin:0 0 6px;font-size:13px}
+#log{flex:1;overflow-y:auto;max-height:560px;line-height:1.45}
+#log .turnhdr{font-weight:600;margin-top:6px;border-top:1px solid var(--line);padding-top:4px}
+#log .ai{color:#7a3aa0}
+.sidebtns{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.sandbox{display:none}
+#overlay{position:fixed;inset:0;background:rgba(20,20,18,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+#overlay.visible{display:flex}
+.bigcard{width:400px;max-width:94vw;max-height:88vh;overflow-y:auto;background:#ffffff;color:#22211f;border:1px solid #8d8a82;border-radius:12px;padding:20px}
+.bigcard .hdr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.bigcard .nm{font-size:17px;font-weight:600}
+.bigcard .realm{font-size:12px;color:var(--muted);white-space:nowrap}
+.bigcard .sub{font-size:12px;color:var(--muted);margin:2px 0 12px}
+.bigcard .mode{font-size:13px;font-weight:600;margin:10px 0 2px}
+.bigcard .body{font-size:13px;line-height:1.55;margin:0}
+.bigcard .live{background:#f2f0ea;border-radius:6px;padding:8px;margin-top:10px;font-size:12px}
+.bigcard .actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.manual-note{font-size:11px;color:var(--warn);margin-top:8px}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;display:none;z-index:200}
+#roomcode{font-size:28px;font-weight:700;letter-spacing:6px;font-family:ui-monospace,Menlo,monospace}
+.netstate{font-size:12px;color:var(--muted)}
+#btn-newgame,#btn-export,#btn-import,#btn-reset,#tab-cards,#tab-rules,#btn-undo,#btn-sandbox-toggle{display:none !important}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>Mortalis: Realms — PvP</h1>
+  <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
+  <span class="netstate" id="netstate"></span>
+  <div class="spacer"></div>
+  <button id="tab-play" class="active-tab" style="display:none">Play</button>
+  <button id="tab-cards">Edit cards</button>
+  <button id="tab-rules">Edit rules</button>
+  <button id="btn-newgame">New game</button>
+  <button id="btn-export">Export</button>
+  <button id="btn-import">Import</button>
+  <input type="file" id="import-file" accept=".json" style="display:none">
+  <button id="btn-reset">Reset</button>
+</div>
+
+<div id="screen-lobby" class="screen visible">
+  <div class="panel" style="max-width:640px;margin:0 auto">
+    <h2>Play a friend</h2>
+    <p class="setup-label">Your name</p>
+    <input id="pvp-name" placeholder="Your name" style="width:100%" maxlength="20">
+    <div id="lobby-choose" style="margin-top:14px;display:flex;gap:10px">
+      <button class="primary" id="btn-host" style="flex:1;padding:12px">Create a game</button>
+      <div style="flex:1;display:flex;gap:6px">
+        <input id="join-code" placeholder="CODE" maxlength="5" style="flex:1;text-transform:uppercase;font-family:ui-monospace,Menlo,monospace;letter-spacing:3px">
+        <button id="btn-join">Join</button>
+      </div>
+    </div>
+    <div id="lobby-wait" style="display:none;margin-top:14px;text-align:center">
+      <p class="setup-label">Share this code with your opponent:</p>
+      <div id="roomcode">·····</div>
+      <p class="netstate" id="waitmsg">Waiting for an opponent to join…</p>
+    </div>
+    <div id="lobby-realms" style="display:none;margin-top:14px">
+      <p class="netstate" id="oppinfo"></p>
+      <p class="setup-label">Pick your 4 realms (repeats are fine). Lanes open center-first: 2 &amp; 3 at the start, lane 1 on turn 3, lane 4 on turn 5. Decks auto-build to 40 cards.</p>
+      <div class="lane-picks" id="pvp-realms"></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="btn-pvp-rand">Randomize</button>
+        <div class="spacer" style="flex:1"></div>
+        <button class="primary" id="btn-ready" style="padding:8px 22px">Ready</button>
+        <span class="netstate" id="readymsg"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-setup" class="screen">
+  <div class="panel">
+    <div id="diff-btns" style="display:none"><button data-d="easy"></button><button data-d="medium" class="active-tab"></button><button data-d="hard"></button></div>
+    <div class="lane-picks" id="player-realms" style="display:none"></div>
+    <button id="btn-rand-mine" style="display:none"></button>
+    <div id="ai-mode-btns" style="display:none"><button data-m="random" class="active-tab"></button><button data-m="pick"></button></div>
+    <div class="lane-picks" id="ai-realms" style="display:none"></div>
+    <div id="first-btns" style="display:none"><button data-f="random" class="active-tab"></button><button data-f="you"></button><button data-f="ai"></button></div>
+    <button id="btn-start" style="display:none"></button>
+  </div>
+</div>
+
+<div id="screen-game" class="screen">
+  <div class="board">
+    <div>
+      <div class="statline">
+        <span class="who" id="ai-name">Opponent</span>
+        <span class="nums">
+          <span class="clickable-face" id="ai-face">Mortality <span class="mortality" id="ai-mort">250</span></span>
+          <span>Pulse <b id="ai-pulse">0</b></span>
+          <span>Hand <b id="ai-hand">0</b></span>
+          <span>Deck <b id="ai-deck">0</b></span>
+        </span>
+      </div>
+      <div class="sharedrow"><span>Their slots</span><span id="ai-slots" style="display:flex;gap:6px"></span></div>
+      <div class="lanes" id="ai-lanes"></div>
+      <div class="midbar">
+        <span id="turn-ind"></span>
+        <span id="prompt"></span>
+        <span><button id="btn-cancel" style="display:none">Cancel</button></span>
+      </div>
+      <div class="lanes" id="my-lanes"></div>
+      <div class="sharedrow"><span>Your slots</span><span id="my-slots" style="display:flex;gap:6px"></span></div>
+      <div class="statline">
+        <span class="who">You</span>
+        <span class="nums">
+          <span class="clickable-face" id="my-face">Mortality <span class="mortality" id="my-mort">250</span></span>
+          <span>Pulse <b id="my-pulse">0</b></span>
+          <span>Deck <b id="my-deck">0</b></span>
+        </span>
+      </div>
+      <div class="hand" id="hand"></div>
+      <p style="font-size:11px;color:var(--muted);margin:2px 6px">Click a hand card to zoom and play it. Single-click your Hero to select it for an attack (click more Heroes for an Onslaught), then click the target — or your opponent's Mortality when their board is empty. <b>Double-click any Hero to zoom it and use its abilities.</b></p>
+    </div>
+    <div>
+      <div class="logpanel">
+        <h3>Game log</h3>
+        <div id="log"></div>
+        <div class="sidebtns">
+          <button id="btn-undo">Undo</button>
+          <button class="primary" id="btn-endturn">End turn</button>
+          <button id="btn-sandbox-toggle">Sandbox tools</button>
+        </div>
+        <div class="sandbox" id="sandbox">
+          <div id="diff-x" style="display:none"></div>
+          <label style="display:none"><input type="checkbox" id="free-target"></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-cards" class="screen"><div id="ed-form"></div><select id="ed-realm" style="display:none"></select><select id="ed-type" style="display:none"></select><input id="ed-search" style="display:none"><div id="ed-list" style="display:none"></div><button id="ed-new" style="display:none"></button></div>
+<div id="screen-rules" class="screen"><div id="const-grid" style="display:none"></div><button id="btn-save-consts" style="display:none"></button><textarea id="rules-text" style="display:none"></textarea><button id="btn-save-rules" style="display:none"></button></div>
+
+<div id="overlay"><div class="bigcard" id="bigcard"></div></div>
+<div id="toast"></div>
+
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="cards.js"></script>
+<script src="rules.js"></script>
+<script src="engine.js"></script>
+<script src="ui.js"></script>
+<script>
+/* ================= Mortalis PvP layer (host-authoritative, PeerJS) ================= */
+(function () {
+  const $$ = id => document.getElementById(id);
+  DB = baseData(); recompileAll();          // both sides play the published data — no local edits
+  window.PVP_MODE = true;
+
+  const NET = { role: null, conn: null, peer: null, myName: "Player", oppName: "Opponent", started: false, reqId: 1, pending: {} };
+  const show = (id) => { document.querySelectorAll(".screen").forEach(s => s.classList.remove("visible")); $$(id).classList.add("visible"); };
+  const setNet = (msg) => { $$("netstate").textContent = msg; };
+
+  /* ---------- lobby ---------- */
+  const CODE_CHARS = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+  const mkCode = () => Array.from({ length: 4 }, () => CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]).join("");
+  const peerId = code => "mortalis-realms-pvp-" + code.toLowerCase();
+
+  function buildRealmPicks() {
+    const wrap = $$("pvp-realms");
+    wrap.innerHTML = "";
+    for (let i = 0; i < 4; i++) {
+      const sel = document.createElement("select");
+      realmNames().forEach(r => { const o = document.createElement("option"); o.value = o.textContent = r; sel.appendChild(o); });
+      sel.selectedIndex = Math.floor(Math.random() * realmNames().length);
+      wrap.appendChild(sel);
+    }
+  }
+  const myRealms = () => Array.from($$("pvp-realms").querySelectorAll("select")).map(s => s.value);
+  $$("btn-pvp-rand").onclick = () => $$("pvp-realms").querySelectorAll("select").forEach(s => { s.selectedIndex = Math.floor(Math.random() * realmNames().length); });
+
+  $$("btn-host").onclick = () => {
+    NET.myName = $$("pvp-name").value.trim() || "Host";
+    NET.role = "host";
+    const code = mkCode();
+    NET.peer = new Peer(peerId(code));
+    NET.peer.on("open", () => {
+      $$("lobby-choose").style.display = "none";
+      $$("lobby-wait").style.display = "";
+      $$("roomcode").textContent = code;
+      setNet("Hosting · code " + code);
+    });
+    NET.peer.on("error", e => { setNet("Connection error: " + e.type); UI.toast("Connection error: " + e.type); });
+    NET.peer.on("connection", conn => {
+      if (NET.conn) { conn.close(); return; }
+      wireConn(conn);
+    });
+  };
+
+  $$("btn-join").onclick = () => {
+    NET.myName = $$("pvp-name").value.trim() || "Guest";
+    NET.role = "guest";
+    const code = ($$("join-code").value || "").trim().toUpperCase();
+    if (code.length < 4) { UI.toast("Enter the 4-letter code."); return; }
+    NET.peer = new Peer();
+    NET.peer.on("error", e => { setNet("Connection error: " + e.type); UI.toast("Could not join: " + e.type); });
+    NET.peer.on("open", () => {
+      const conn = NET.peer.connect(peerId(code), { reliable: true });
+      wireConn(conn);
+      setNet("Joining " + code + "…");
+    });
+  };
+
+  function wireConn(conn) {
+    NET.conn = conn;
+    conn.on("open", () => {
+      send({ t: "hello", name: NET.myName });
+      $$("lobby-choose").style.display = "none";
+      $$("lobby-wait").style.display = "none";
+      $$("lobby-realms").style.display = "";
+      buildRealmPicks();
+      setNet((NET.role === "host" ? "Hosting — " : "Joined — ") + "connected");
+    });
+    conn.on("data", onMsg);
+    conn.on("close", () => { setNet("Opponent disconnected."); UI.toast("Opponent disconnected."); });
+    conn.on("error", e => setNet("Net error: " + e.type));
+  }
+  const send = (m) => { try { NET.conn && NET.conn.open && NET.conn.send(m); } catch (e) {} };
+
+  const ready = { me: false, opp: false, oppRealms: null };
+  $$("btn-ready").onclick = () => {
+    ready.me = true;
+    $$("btn-ready").disabled = true;
+    $$("readymsg").textContent = "Waiting for opponent…";
+    send({ t: "ready", name: NET.myName, realms: myRealms() });
+    maybeStart();
+  };
+  function maybeStart() {
+    if (NET.role !== "host" || !ready.me || !ready.opp) return;
+    hostStartGame();
+  }
+
+  /* ---------- host: authoritative game ---------- */
+  function hostStartGame() {
+    NET.started = true;
+    newGame({ playerRealms: myRealms(), aiRealms: ready.oppRealms, difficulty: "pvp", first: Math.random() < 0.5 ? 0 : 1 });
+    G.players[0].name = NET.myName; G.players[0].isAI = false;
+    G.players[1].name = NET.oppName; G.players[1].isAI = false;
+    log(`PvP: ${NET.myName} vs ${NET.oppName}. ${G.players[G.firstPlayer].name} goes first.`);
+    show("screen-game");
+    UI.render();
+  }
+
+  // broadcast state after every render (throttled)
+  let sendTimer = null;
+  const origRender = UI.render.bind(UI);
+  UI.render = function () {
+    origRender();
+    if (NET.role === "host" && NET.started) {
+      clearTimeout(sendTimer);
+      sendTimer = setTimeout(sendState, 80);
+    }
+  };
+  function sendState() {
+    if (!G) return;
+    const g = JSON.parse(JSON.stringify(G));
+    g.log = g.log.slice(-250);
+    g.players[0].hand = g.players[0].hand.map(() => "hidden");   // host's hand hidden from guest
+    g.players[0].deck = g.players[0].deck.map(() => "hidden");
+    g.players[1].deck = g.players[1].deck.map(() => "hidden");
+    send({ t: "state", g });
+  }
+
+  // remote decisions: route picks/confirms to the guest when the decision is theirs
+  function decider() { return (G && G.deciderPi != null) ? G.deciderPi : (G ? G.active : 0); }
+  function remoteAsk(kind, payload) {
+    return new Promise(res => {
+      const id = NET.reqId++;
+      NET.pending[id] = res;
+      send(Object.assign({ t: "ask", id, kind }, payload));
+      setTimeout(() => { if (NET.pending[id]) { delete NET.pending[id]; res(null); } }, 90000);
+    });
+  }
+  if (true) {
+    const origPickHero = UI.pickHero.bind(UI);
+    const origPickHand = UI.pickHandCard.bind(UI);
+    const origPickLane = UI.pickLane.bind(UI);
+    UI.pickHero = function (msg, cands, allowCancel) {
+      if (NET.role === "host" && NET.started && decider() === 1)
+        return remoteAsk("hero", { msg, cands: cands.map(c => ({ pi: 1 - c.pi, li: c.li })) }).then(v => v && { pi: 1 - v.pi, li: v.li });
+      return origPickHero(msg, cands, allowCancel);
+    };
+    UI.pickHandCard = function (msg) {
+      if (NET.role === "host" && NET.started && decider() === 1) return remoteAsk("hand", { msg });
+      return origPickHand(msg);
+    };
+    UI.pickLane = function (msg, side, lanes) {
+      if (NET.role === "host" && NET.started && decider() === 1) return remoteAsk("lane", { msg, lanes });
+      return origPickLane(msg, side, lanes);
+    };
+  }
+  window.PVP_CONFIRM = function (pi, msg) {
+    if (NET.role === "host" && NET.started && pi === 1) return remoteAsk("confirm", { msg }).then(v => !!v);
+    if (NET.role === "guest") return Promise.resolve(confirm(msg));   // guest-local (shouldn't occur)
+    return Promise.resolve(confirm(msg));
+  };
+  window.PVP_SYNC_DECIDE = function (pi, msg) {
+    if (NET.role === "host" && NET.started && pi === 1) return true;   // remote defensive choices default to yes
+    return confirm(msg);
+  };
+
+  async function hostHandleAction(a) {
+    if (!G || G.over || UI.busy) return;
+    try {
+      UI.busy = true;
+      if (a.kind === "endTurn") { if (G.active === 1 && !UI.pending) endTurn(); }
+      else if (a.kind === "attack") { if (G.active === 1) await resolveAttack(1, a.attackers, a.face ? { face: true } : { pi: 0, li: a.targetLi }); }
+      else if (a.kind === "ability") {
+        if (G.active !== 1) return;
+        const L = G.players[1].lanes[a.li];
+        let holder = null, ab = null, name = "", relicInst = null;
+        if (a.holder === "hero" && L.hero) { holder = L.hero; ab = (fx(L.hero.cardId).activated || [])[a.idx]; name = cardById(L.hero.cardId).name; }
+        else if (a.holder === "relic" && L.hero) { relicInst = L.hero.relics.find(r => r.uid === a.uid); holder = relicInst; if (relicInst) { ab = (fx(relicInst.cardId).activated || [])[a.idx]; name = cardById(relicInst.cardId).name; } }
+        else if (a.holder === "aux") { const inst = L.aux.find(x => x && x.uid === a.uid); holder = inst; if (inst) { ab = (fx(inst.cardId).auxActivated || [])[a.idx]; name = cardById(inst.cardId).name; } }
+        if (holder && ab) await activateAbility(1, a.li, holder, name, ab, "pvp" + a.holder + a.idx, relicInst);
+      } else {
+        if (G.active !== 1) return;
+        const o = playOptions(1, a.hi);
+        if (a.kind === "hero" && o.heroLanes.includes(a.li)) await playHero(1, a.hi, a.li);
+        else if (a.kind === "aux" && o.auxLanes.includes(a.li)) await playAux(1, a.hi, a.li);
+        else if (a.kind === "relic" && o.relicLanes.includes(a.li)) playRelic(1, a.hi, a.li);
+        else if (a.kind === "hex" && o.hexLanes.includes(a.li)) setHex(1, a.hi, a.li);
+        else if (a.kind === "rite" && o.riteLanes.includes(a.li)) playRite(1, a.hi, a.li);
+        else if (a.kind === "spell" && o.spell) await playSpell(1, a.hi);
+      }
+    } finally {
+      UI.busy = false;
+      UI.render();
+    }
+  }
+
+  /* ---------- guest: thin client ---------- */
+  function applyState(g) {
+    const swap = x => (x == null ? x : 1 - x);
+    G = Object.assign({}, g, {
+      players: [g.players[1], g.players[0]],
+      active: swap(g.active), firstPlayer: swap(g.firstPlayer),
+      winner: g.winner == null ? null : swap(g.winner),
+    });
+    if (!NET.started) { NET.started = true; show("screen-game"); }
+    origRender();
+  }
+  if (window.location) { /* guest overrides engine entry points with network senders */ }
+  function guestArm() {
+    window.pushUndo = () => {};
+    window.playHero = async (pi, hi, li) => send({ t: "action", a: { kind: "hero", hi, li } });
+    window.playAux = async (pi, hi, li) => send({ t: "action", a: { kind: "aux", hi, li } });
+    window.playRelic = (pi, hi, li) => send({ t: "action", a: { kind: "relic", hi, li } });
+    window.setHex = (pi, hi, li) => send({ t: "action", a: { kind: "hex", hi, li } });
+    window.playRite = (pi, hi, li) => send({ t: "action", a: { kind: "rite", hi, li } });
+    window.playSpell = async (pi, hi) => send({ t: "action", a: { kind: "spell", hi } });
+    window.endTurn = () => send({ t: "action", a: { kind: "endTurn" } });
+    window.resolveAttack = async (pi, attackers, target) => send({ t: "action", a: { kind: "attack", attackers, targetLi: target.li, face: !!target.face } });
+    window.activateAbility = async (pi, li, holder, name, ab, idx, relicInst) => {
+      const L = G.players[0].lanes[li];
+      const holderKind = relicInst ? "relic" : (L.hero === holder ? "hero" : "aux");
+      const i = typeof idx === "number" ? idx : parseInt(String(idx).replace(/\D/g, ""), 10) || 0;
+      send({ t: "action", a: { kind: "ability", li, holder: holderKind, uid: holder.uid, idx: i } });
+    };
+  }
+
+  /* ---------- messages ---------- */
+  async function onMsg(m) {
+    if (m.t === "hello") { NET.oppName = m.name || "Opponent"; $$("oppinfo").textContent = "Connected with " + NET.oppName + "."; }
+    else if (m.t === "ready") { NET.oppName = m.name || NET.oppName; ready.opp = true; ready.oppRealms = m.realms; $$("oppinfo").textContent = NET.oppName + " is ready."; maybeStart(); }
+    else if (m.t === "state" && NET.role === "guest") { if (!window.__armed) { guestArm(); window.__armed = true; } applyState(m.g); }
+    else if (m.t === "action" && NET.role === "host") await hostHandleAction(m.a);
+    else if (m.t === "ask" && NET.role === "guest") {
+      let v = null;
+      if (m.kind === "hero") v = await UI.pickHero(m.msg, m.cands);
+      else if (m.kind === "hand") v = await UI.pickHandCard(m.msg);
+      else if (m.kind === "lane") v = await UI.pickLane(m.msg, 0, m.lanes);
+      else if (m.kind === "confirm") v = confirm(m.msg);
+      send({ t: "pick", id: m.id, v });
+    }
+    else if (m.t === "pick" && NET.role === "host") { const res = NET.pending[m.id]; if (res) { delete NET.pending[m.id]; res(m.v); } }
+  }
+
+  /* runs after ui.js's own DOMContentLoaded init: force published data + take over the screen */
+  window.addEventListener("DOMContentLoaded", () => {
+    DB = baseData(); recompileAll();          // undo any localStorage edits loadDB pulled in
+    show("screen-lobby");
+    $$("verinfo").textContent = DB.cards.length + " cards · PvP room-code play";
+  });
+})();
+</script>
+</body>
+</html>
