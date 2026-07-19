@@ -9458,12 +9458,13 @@ const UI = {
   },
 
   async clickBoardHero(pi, li) {
-    if (UI.busy) return;
-    // pending hero pick?
+    // pending hero pick? (must come before the busy gate — mid-combat prompts
+    // like Marquessa's kill reward appear while an attack is still resolving)
     if (UI.pending && UI.pending.type === "hero") {
       if (UI.pending.cands.some(t => t.pi === pi && t.li === li)) UI.settlePending({ pi, li });
       return;
     }
+    if (UI.busy) return;
     if (UI.pending) return;
     if (pi === 0) {
       // toggle attacker selection, or zoom if it can't attack
