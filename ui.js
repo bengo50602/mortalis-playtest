@@ -479,6 +479,7 @@ const UI = {
   },
 
   async runAI() {
+    if (window.PVP_MODE) return;   // PvP: the other side is a human, never the AI
     UI.busy = true;
     UI.render();
     try { await aiTakeTurn(); } catch (e) { console.error(e); log("AI error: " + e.message); }

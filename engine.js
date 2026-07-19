@@ -1092,7 +1092,10 @@ function newGame(opts) {
     deck: buildDeck(realms), hand: [],
   });
   G = {
-    players: [mkPlayer("You", false, opts.playerRealms), mkPlayer("AI (" + opts.difficulty + ")", true, opts.aiRealms)],
+    players: [
+      mkPlayer(opts.names ? opts.names[0] : "You", false, opts.playerRealms),
+      mkPlayer(opts.names ? opts.names[1] : "AI (" + opts.difficulty + ")", !opts.humanOpponent, opts.aiRealms),
+    ],
     difficulty: opts.difficulty,
     active: opts.first, firstPlayer: opts.first,
     turn: 0, gt: 0, over: false, winner: null, log: [],

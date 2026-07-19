@@ -304,9 +304,8 @@ h2{font-size:16px;margin:0 0 10px}
   /* ---------- host: authoritative game ---------- */
   function hostStartGame() {
     NET.started = true;
-    newGame({ playerRealms: myRealms(), aiRealms: ready.oppRealms, difficulty: "pvp", first: Math.random() < 0.5 ? 0 : 1 });
-    G.players[0].name = NET.myName; G.players[0].isAI = false;
-    G.players[1].name = NET.oppName; G.players[1].isAI = false;
+    newGame({ playerRealms: myRealms(), aiRealms: ready.oppRealms, difficulty: "pvp",
+      first: Math.random() < 0.5 ? 0 : 1, humanOpponent: true, names: [NET.myName, NET.oppName] });
     log(`PvP: ${NET.myName} vs ${NET.oppName}. ${G.players[G.firstPlayer].name} goes first.`);
     show("screen-game");
     UI.render();
