@@ -6,25 +6,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 :root{
-  --bg:#ece9e2; --panel:#f7f5f0; --card:#ffffff; --ink:#22211f; --muted:#6b6a64;
-  --line:#c9c6bc; --line2:#a5a29a; --accent:#1d5fa5; --accent-bg:#e2edf8;
-  --good:#2c6e2f; --bad:#a32d2d; --warn:#a05a00; --warn-bg:#f7ead2;
+  --bg:#0d1014; --panel:#161a21; --card:#1d222c; --ink:#e9e7e1; --muted:#8a93a4;
+  --line:#252b36; --line2:#39414f; --accent:#7aa7e8; --accent-bg:#1a2634;
+  --good:#8fbc8f; --bad:#e0736b; --warn:#e0a45c; --warn-bg:#2c2318;
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
-button{font-family:inherit;font-size:13px;padding:5px 12px;border:1px solid var(--line2);border-radius:6px;background:#fff;color:var(--ink);cursor:pointer}
-button:hover{background:#f0eee8}
-button.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
-button.primary:hover{background:#3a3936}
-button.active-tab{border:2px solid var(--accent);color:var(--accent);font-weight:600}
-button:disabled{opacity:.45;cursor:default}
-select,input,textarea{font-family:inherit;font-size:13px;padding:5px 8px;border:1px solid var(--line2);border-radius:6px;background:#fff;color:var(--ink)}
+button{font-family:inherit;font-size:13px;padding:5px 12px;border:1px solid var(--line2);border-radius:6px;background:#1c212b;color:var(--ink);cursor:pointer}
+button:hover{background:#252b37;border-color:#4b556a}
+button.primary{background:var(--accent);color:#0d1014;border-color:var(--accent);font-weight:600}
+button.primary:hover{background:#93b8ee}
+button.active-tab{border:1px solid var(--accent);color:var(--accent);font-weight:600;background:var(--accent-bg)}
+button:disabled{opacity:.4;cursor:default}
+select,input,textarea{font-family:inherit;font-size:13px;padding:5px 8px;border:1px solid var(--line2);border-radius:6px;background:#12161d;color:var(--ink)}
 textarea{width:100%;line-height:1.5}
-h1{font-size:20px;margin:0}
+h1{font-size:19px;margin:0;letter-spacing:.3px}
 h2{font-size:16px;margin:0 0 10px}
-.topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);flex-wrap:wrap;position:sticky;top:0;z-index:50}
+a{color:var(--accent)}
+.topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:linear-gradient(180deg,#191e27 0%,#12161d 100%);border-bottom:1px solid var(--line);flex-wrap:wrap;position:sticky;top:0;z-index:50}
 .topbar .spacer{flex:1}
-.screen{display:none;padding:16px;max-width:1280px;margin:0 auto}
+.screen{display:none;padding:16px;max-width:1320px;margin:0 auto}
 .screen.visible{display:block}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
 
@@ -33,66 +34,92 @@ h2{font-size:16px;margin:0 0 10px}
 .lane-picks select{width:100%}
 .setup-label{font-size:13px;color:var(--muted);margin:12px 0 4px}
 
-/* ---- board ---- */
-.board{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:12px}
-.statline{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:4px 6px}
-.statline .who{font-weight:600}
-.statline .nums span{margin-left:14px}
-.mortality{font-weight:600}
-.clickable-face{cursor:pointer;border:1px dashed transparent;border-radius:6px;padding:2px 6px}
-.clickable-face.targetable{border-color:var(--bad);background:#f7dede}
-.lanes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:4px 0}
-.lane{text-align:center;min-width:0}
-.lane .realm-tag{font-size:11px;font-weight:600;letter-spacing:.02em;padding:2px 0;border-radius:4px;background:#e5e2d9;margin-bottom:4px}
-.slotrow{display:flex;gap:4px;margin:4px 0}
-.minislot{flex:1;min-height:24px;border:1px dashed var(--line2);border-radius:5px;font-size:10px;color:var(--muted);display:flex;align-items:center;justify-content:center;padding:2px 3px;background:transparent;cursor:default;min-width:0;overflow:hidden}
-.minislot.filled{border-style:solid;background:var(--card);cursor:pointer;color:var(--ink)}
-.minislot.eligible{border-color:var(--accent);background:var(--accent-bg);cursor:pointer;color:var(--accent);font-weight:600}
-.heroslot{min-height:96px;border:1px dashed var(--line2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);background:transparent}
+/* ---- board: Arcane Table ---- */
+.board{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:14px}
+.statline{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:6px 10px;background:#141922;border:1px solid var(--line);border-radius:8px}
+.statline .who{font-weight:600;letter-spacing:.3px}
+.statline .nums span{margin-left:16px}
+.mortality{font-weight:700;color:#f0d9a0}
+.clickable-face{cursor:pointer;border:1px solid transparent;border-radius:6px;padding:3px 8px}
+.clickable-face.targetable{border-color:var(--bad);background:#3a1e1c;box-shadow:0 0 10px rgba(224,115,107,.35)}
+.lanes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:8px 0}
+.lane{min-width:0;border-radius:10px;overflow:hidden;background:linear-gradient(180deg,#1b202a 0%,#141821 100%);
+  box-shadow:0 0 0 1px #252b36, 0 0 16px -6px var(--lc)}
+.lane.locked{opacity:.45;box-shadow:0 0 0 1px #222732}
+.lane-cap{display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 6px;
+  background:linear-gradient(180deg,var(--lc) 0%,color-mix(in srgb,var(--lc) 55%,#0d1014) 100%);color:#12151c}
+.lane-cap span{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lane-body{padding:8px;display:flex;flex-direction:column;gap:6px}
+.heroslot{min-height:92px;border:1px dashed var(--line2);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted)}
 .heroslot.eligible{border-color:var(--accent);background:var(--accent-bg);cursor:pointer;color:var(--accent);font-weight:600}
-.herocard{width:100%;min-height:96px;background:var(--card);border:1px solid var(--line2);border-radius:8px;padding:6px;text-align:left;cursor:pointer;font-size:11px;position:relative}
-.herocard .nm{font-weight:600;line-height:1.25}
-.herocard .stats{margin:3px 0;font-size:12px}
-.herocard .txt{color:var(--muted);line-height:1.3;max-height:42px;overflow:hidden}
-.herocard.selected{outline:3px solid var(--accent)}
-.herocard.targetable{outline:3px solid var(--bad)}
-.herocard.exhausted{opacity:.62}
-.buffed{color:var(--good);font-weight:600}
-.nerfed{color:var(--bad);font-weight:600}
-.badge-manual{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--warn)}
-.sharedrow{display:flex;gap:6px;align-items:center;padding:3px 6px;font-size:11px;color:var(--muted)}
-.sharedslot{width:76px;min-height:30px;border:1px dashed var(--line2);border-radius:5px;font-size:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:2px;background:transparent;color:var(--muted)}
-.sharedslot.filled{border-style:solid;background:var(--card);cursor:pointer;color:var(--ink)}
-.midbar{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:6px 0;padding:6px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;min-height:34px}
+.herocard{position:relative;background:linear-gradient(180deg,#2a3040 0%,#20252f 100%);border:1px solid #4a5266;border-radius:8px;
+  padding:8px 8px 7px;cursor:pointer;font-size:11px;min-height:92px;box-shadow:0 2px 10px rgba(0,0,0,.45)}
+.herocard:hover{border-color:#66718a}
+.herocard .cost-orb{position:absolute;top:-9px;left:7px;width:25px;height:25px;border-radius:50%;
+  background:var(--lc);border:2px solid #12161d;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#12151c}
+.herocard .nm{font-weight:600;font-size:12px;line-height:1.25;text-align:right;color:#f1efe9;min-height:15px}
+.herocard .txt{color:#9aa4b6;line-height:1.35;max-height:44px;overflow:hidden;margin-top:5px}
+.herocard .statbar{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;padding-top:5px;border-top:1px solid #39414f}
+.herocard .statbar .atk{font-size:14px;font-weight:700;color:#e0a45c}
+.herocard .statbar .hp{font-size:14px;font-weight:700;color:#8fbc8f}
+.herocard .statbar .hp .mx{font-size:11px;font-weight:400;color:#6d7686}
+.herocard .statbar .rar{font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:#6d7686}
+.herocard .relicrow{margin-top:5px;display:flex;flex-wrap:wrap;gap:3px}
+.herocard.selected{outline:2px solid var(--accent);outline-offset:1px}
+.herocard.targetable{outline:2px solid var(--bad);outline-offset:1px;box-shadow:0 0 14px -2px rgba(224,115,107,.6)}
+.herocard.exhausted{opacity:.55}
+.buffed{color:#a8e08a}
+.nerfed{color:#e0736b}
+.badge-manual{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--warn)}
+.auxwrap{display:flex;flex-direction:column;gap:4px}
+.auxslot{border-radius:5px;padding:4px 6px;font-size:11px;color:var(--muted);border:1px dashed var(--line2);min-height:22px;display:flex;align-items:center}
+.auxslot.filled{border:none;background:#1a212c;border-left:3px solid var(--lc);cursor:pointer;color:#c8d1e0;display:block;line-height:1.3}
+.auxslot.filled:hover{background:#212a37}
+.auxslot .auxtag{font-size:9px;letter-spacing:1px;color:var(--lc);margin-right:5px;text-transform:uppercase}
+.auxslot .auxnm{font-weight:600;color:#dfe5ef}
+.auxslot .auxfx{display:block;color:#8a93a4;font-size:10px;line-height:1.3;margin-top:1px}
+.supwrap{display:flex;flex-direction:column;gap:4px}
+.supslot{border:1px dashed var(--line2);border-radius:5px;padding:5px 6px;font-size:11px;color:var(--muted);text-align:center;min-height:24px}
+.supslot.filled{border:none;background:var(--sbg);color:var(--sc);display:flex;align-items:center;gap:6px;text-align:left;cursor:pointer}
+.supslot.filled:hover{filter:brightness(1.25)}
+.supslot.filled span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.supslot .fd{margin-left:auto;font-size:9px;opacity:.7;letter-spacing:.5px}
+.sharedrow{display:flex;gap:6px;align-items:center;padding:4px 8px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+.sharedslot{border-radius:5px;padding:3px 8px;font-size:11px;display:flex;align-items:center;gap:5px;background:var(--sbg);color:var(--sc);cursor:pointer}
+.sharedslot:hover{filter:brightness(1.25)}
+.slotfree{font-size:10px;color:#5e6673;letter-spacing:.3px}
+.midbar{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:8px 0;padding:7px 10px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;min-height:36px;background:#12161d}
+#turn-ind{color:#c3ccdb;font-weight:600}
 #prompt{font-weight:600;color:var(--accent)}
-.hand{display:flex;gap:6px;padding:6px;flex-wrap:wrap}
-.handcard{width:118px;background:var(--card);border:1px solid var(--line2);border-radius:7px;padding:6px;font-size:11px;cursor:pointer;position:relative}
-.handcard:hover{border-color:var(--ink)}
-.handcard .nm{font-weight:600;line-height:1.25}
-.handcard .meta{color:var(--muted);margin-top:2px}
-.handcard.unaffordable{opacity:.55}
-.logpanel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:12px;display:flex;flex-direction:column;min-height:400px}
-.logpanel h3{margin:0 0 6px;font-size:13px}
-#log{flex:1;overflow-y:auto;max-height:560px;line-height:1.45}
-#log .turnhdr{font-weight:600;margin-top:6px;border-top:1px solid var(--line);padding-top:4px}
-#log .ai{color:#7a3aa0}
-.sidebtns{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-.sandbox{background:var(--warn-bg);border:1px solid #dcc08a;border-radius:8px;padding:8px;margin-top:10px;font-size:12px}
+.hand{display:flex;gap:7px;padding:8px 2px;flex-wrap:wrap}
+.handcard{width:124px;background:linear-gradient(180deg,#232936 0%,#1a1f28 100%);border:1px solid var(--line2);border-radius:8px;padding:7px;font-size:11px;cursor:pointer;position:relative;transition:transform .08s}
+.handcard:hover{border-color:var(--accent);transform:translateY(-2px)}
+.handcard .nm{font-weight:600;line-height:1.25;color:#eceae4}
+.handcard .meta{color:var(--muted);margin-top:3px}
+.handcard.unaffordable{opacity:.45}
+.logpanel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:12px;display:flex;flex-direction:column;min-height:400px}
+.logpanel h3{margin:0 0 7px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+#log{flex:1;overflow-y:auto;max-height:560px;line-height:1.5;color:#b9c1cf}
+#log .turnhdr{font-weight:600;margin-top:7px;border-top:1px solid var(--line);padding-top:5px;color:#e2ddd2}
+#log .ai{color:#c39ae0}
+.sidebtns{display:flex;flex-direction:column;gap:6px;margin-top:9px}
+.sandbox{background:var(--warn-bg);border:1px solid #4a3a20;border-radius:8px;padding:8px;margin-top:10px;font-size:12px}
 .sandbox h4{margin:0 0 6px;font-size:12px}
 .sandbox .row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
 .sandbox button{font-size:11px;padding:3px 7px}
 
 /* ---- zoom overlay ---- */
-#overlay{position:fixed;inset:0;background:rgba(20,20,18,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+#overlay{position:fixed;inset:0;background:rgba(6,8,11,.72);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 #overlay.visible{display:flex}
-.bigcard{width:400px;max-width:94vw;max-height:88vh;overflow-y:auto;background:#ffffff;color:#22211f;border:1px solid #8d8a82;border-radius:12px;padding:20px}
+.bigcard{width:410px;max-width:94vw;max-height:88vh;overflow-y:auto;background:linear-gradient(180deg,#222835 0%,#191d26 100%);color:#e9e7e1;border:1px solid #4a5266;border-radius:12px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 .bigcard .hdr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .bigcard .nm{font-size:17px;font-weight:600}
 .bigcard .realm{font-size:12px;color:var(--muted);white-space:nowrap}
 .bigcard .sub{font-size:12px;color:var(--muted);margin:2px 0 12px}
-.bigcard .mode{font-size:13px;font-weight:600;margin:10px 0 2px}
-.bigcard .body{font-size:13px;line-height:1.55;margin:0}
-.bigcard .live{background:#f2f0ea;border-radius:6px;padding:8px;margin-top:10px;font-size:12px}
+.bigcard .mode{font-size:13px;font-weight:600;margin:10px 0 2px;color:#cfd6e2}
+.bigcard .body{font-size:13px;line-height:1.55;margin:0;color:#b9c1cf}
+.bigcard .live{background:#141922;border-radius:6px;padding:9px;margin-top:10px;font-size:12px}
 .bigcard .actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
 .manual-note{font-size:11px;color:var(--warn);margin-top:8px}
 
@@ -100,7 +127,7 @@ h2{font-size:16px;margin:0 0 10px}
 .editgrid{display:grid;grid-template-columns:250px minmax(0,1fr);gap:12px}
 .cardlist{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px;max-height:640px;overflow-y:auto;font-size:12px}
 .cardlist .item{padding:3px 6px;border-radius:4px;cursor:pointer;display:flex;justify-content:space-between;gap:6px}
-.cardlist .item:hover{background:#f0eee8}
+.cardlist .item:hover{background:#252b37}
 .cardlist .item.sel{background:var(--accent-bg);color:var(--accent);font-weight:600}
 .cardlist .ct{color:var(--muted);font-size:10px;white-space:nowrap}
 .editform{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px}
@@ -110,10 +137,11 @@ h2{font-size:16px;margin:0 0 10px}
 .constgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:14px}
 .constgrid label{display:block;font-size:11px;color:var(--muted);margin-bottom:3px}
 .constgrid input{width:100%}
-.pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;background:#e5e2d9;color:var(--muted)}
-.pill.auto{background:#ddebdd;color:var(--good)}
+.pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;background:#2b3241;color:#aab3c2}
+.pill.dim{opacity:.55}
+.pill.auto{background:#1f3324;color:#8fbc8f}
 .pill.manual{background:var(--warn-bg);color:var(--warn)}
-#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;display:none;z-index:200}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#2a3040;color:#fff;padding:9px 17px;border-radius:8px;font-size:13px;display:none;z-index:200;border:1px solid #4a5266}
 </style>
 </head>
 <body>
@@ -9328,46 +9356,50 @@ const UI = {
     const el = $(elId);
     el.innerHTML = "";
     const P = G.players[pi];
+    const sched = C().laneUnlockTurns || [];
     P.lanes.forEach((L, li) => {
-      const lane = document.createElement("div");
-      lane.className = "lane";
+      const col = realmColor(L.realm);
       const unlocked = laneUnlocked(pi, li);
-      if (!unlocked) lane.style.opacity = "0.45";
-      const tag = document.createElement("div");
-      tag.className = "realm-tag";
-      const sched = C().laneUnlockTurns || [];
-      tag.textContent = unlocked ? `Lane ${li + 1} · ${L.realm}` : `Lane ${li + 1} · ${L.realm} 🔒`;
-      lane.appendChild(tag);
+      const lane = document.createElement("div");
+      lane.className = "lane" + (unlocked ? "" : " locked");
+      lane.style.setProperty("--lc", col);
+
+      // ---- realm cap ----
+      const cap = document.createElement("div");
+      cap.className = "lane-cap";
+      cap.innerHTML = `${realmCrest(L.realm, 15, "#12151c", "rgba(18,21,28,.55)")}<span>${L.realm}</span>`;
+      lane.appendChild(cap);
+
+      const body = document.createElement("div");
+      body.className = "lane-body";
+
       if (!unlocked) {
-        const slot = document.createElement("div");
-        slot.className = "heroslot";
-        slot.textContent = `Locked — unlocks on turn ${sched[li] || "?"}`;
-        lane.appendChild(slot);
+        const s = document.createElement("div");
+        s.className = "heroslot";
+        s.textContent = `unlocks turn ${sched[li] || "?"}`;
+        body.appendChild(s);
+        lane.appendChild(body);
         el.appendChild(lane);
         return;
       }
 
-      const auxRow = document.createElement("div");
-      auxRow.className = "slotrow";
+      // ---- hero ----
       const heroBox = document.createElement("div");
-
-      // hero slot / card
       if (L.hero) {
         const c = cardById(L.hero.cardId);
         const div = document.createElement("div");
         div.className = "herocard";
         const atk = effAtk(pi, li), hp = curHp(pi, li), mhp = effMaxHp(pi, li);
-        const exhausted = pi === G.active && L.hero.attacksUsed >= maxAttacksOf(pi, li);
-        if (exhausted) div.classList.add("exhausted");
+        if (pi === G.active && L.hero.attacksUsed >= maxAttacksOf(pi, li)) div.classList.add("exhausted");
         if (pi === 0 && UI.sel.includes(li)) div.classList.add("selected");
-        const isTarget = UI.targetableHeroes().some(t => t.pi === pi && t.li === li);
-        if (isTarget) div.classList.add("targetable");
+        if (UI.targetableHeroes().some(t => t.pi === pi && t.li === li)) div.classList.add("targetable");
         const relicPills = L.hero.relics.map(r => `<span class="pill">${cardById(r.cardId).name}${r.counters ? " ⚒" + r.counters : ""}</span>`).join(" ");
         const freeRelic = C().relicSlotsPerHero - L.hero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0);
-        div.innerHTML = `<div class="nm">${c.name} <span style="color:var(--muted)">(${c.cost})</span></div>
-          <div class="stats">${UI.statSpan(c.atk, atk)} ATK · ${UI.statSpan(c.hp, hp)}/${mhp} HP</div>
+        div.innerHTML = `<div class="cost-orb">${c.cost}</div>
+          <div class="nm">${c.name}</div>
           <div class="txt">${c.text}</div>
-          <div style="margin-top:3px">${relicPills}${freeRelic > 0 ? ` <span class="pill" style="opacity:.6">${freeRelic} relic slot${freeRelic > 1 ? "s" : ""}</span>` : ""}</div>
+          <div class="statbar"><span class="atk">${UI.statSpan(c.atk, atk)}</span><span class="rar">${c.rarity || ""}</span><span class="hp">${UI.statSpan(c.hp, hp)}${hp !== mhp ? `<span class="mx">/${mhp}</span>` : ""}</span></div>
+          ${relicPills || freeRelic > 0 ? `<div class="relicrow">${relicPills}${freeRelic > 0 ? `<span class="pill dim">${freeRelic} relic slot${freeRelic > 1 ? "s" : ""}</span>` : ""}</div>` : ""}
           ${autoLevel(c) === "manual" ? '<span class="badge-manual" title="Ability not scripted — adjudicate manually"></span>' : ""}`;
         div.onclick = (e) => { e.stopPropagation(); UI.clickBoardHero(pi, li); };
         div.ondblclick = (e) => { e.stopPropagation(); UI.sel = UI.sel.filter(x => x !== li || pi !== 0); UI.zoomCard(c, { kind: "boardHero", pi, li }); };
@@ -9375,63 +9407,108 @@ const UI = {
       } else {
         const slot = document.createElement("div");
         slot.className = "heroslot";
-        slot.textContent = "Empty lane";
+        slot.textContent = "empty lane";
         if (UI.pending && UI.pending.type === "lane" && UI.pending.side === pi && UI.pending.lanes.includes(li)) {
           slot.classList.add("eligible");
-          slot.textContent = "Play here";
+          slot.textContent = "play here";
           slot.onclick = (e) => { e.stopPropagation(); UI.settlePending(li); };
         }
         heroBox.appendChild(slot);
       }
-      // lane-pick highlight when hero present (relic/aux/hex/rite targets)
       if (L.hero && UI.pending && UI.pending.type === "lane" && UI.pending.side === pi && UI.pending.lanes.includes(li)) {
         heroBox.firstChild.classList.add("targetable");
         heroBox.firstChild.onclick = (e) => { e.stopPropagation(); UI.settlePending(li); };
       }
 
-      // aux slots
+      // ---- aux slots (show what's in them) ----
+      const auxWrap = document.createElement("div");
+      auxWrap.className = "auxwrap";
       const seen = new Set();
-      L.aux.forEach((a, ai2) => {
+      L.aux.forEach((a) => {
+        if (a && seen.has(a.uid)) return;          // 2-slot aux renders once, spanning
         const s = document.createElement("div");
-        s.className = "minislot";
         if (a) {
-          const c = cardById(a.cardId);
-          if (seen.has(a.uid)) { s.classList.add("filled"); s.textContent = "(2-slot)"; s.style.opacity = ".55"; }
-          else { s.classList.add("filled"); s.textContent = c.name; }
           seen.add(a.uid);
+          const c = cardById(a.cardId);
+          const span = (c.auxSlots || 1) > 1;
+          s.className = "auxslot filled" + (span ? " span2" : "");
+          s.innerHTML = `<span class="auxtag">AUX${span ? " ×2" : ""}</span><span class="auxnm">${c.name}</span><span class="auxfx">${UI.auxSummary(c)}</span>`;
+          s.title = c.auxText || "";
           s.onclick = (e) => { e.stopPropagation(); UI.zoomCard(c, { kind: "aux", pi, li, auxUid: a.uid }); };
-        } else s.textContent = "Aux";
-        auxRow.appendChild(s);
+        } else {
+          s.className = "auxslot";
+          s.textContent = "open aux";
+        }
+        auxWrap.appendChild(s);
       });
 
-      if (pi === 1) { lane.appendChild(heroBox); lane.appendChild(auxRow); }
-      else { lane.appendChild(auxRow); lane.appendChild(heroBox); }
+      // ---- support cards belonging to THIS lane ----
+      const supWrap = document.createElement("div");
+      supWrap.className = "supwrap";
+      const mine = P.slots.map((s, si) => ({ s, si })).filter(x => x.s && x.s.laneIdx === li);
+      if (!mine.length) {
+        const empty = document.createElement("div");
+        empty.className = "supslot";
+        empty.textContent = "support slot";
+        supWrap.appendChild(empty);
+      } else mine.forEach(({ s, si }) => {
+        const c = cardById(s.cardId);
+        const st = SUPPORT_STYLE[s.kind] || SUPPORT_STYLE.hex;
+        const d = document.createElement("div");
+        d.className = "supslot filled";
+        d.style.setProperty("--sc", st.col);
+        d.style.setProperty("--sbg", st.bg);
+        const hidden = s.kind === "hex" && s.faceDown && pi === 1;
+        let label;
+        if (hidden) label = "face-down Hex";
+        else if (s.kind === "rite") {
+          const r = fx(s.cardId).rite;
+          label = `${c.name} · ${s.counters}/${(r && (r.timer || r.counterMax)) || "?"}`;
+        } else label = c.name;
+        d.innerHTML = `<svg viewBox="0 0 12 12" width="11" height="11" style="color:${st.col}">${st.glyph}</svg><span>${label}</span>${s.kind === "hex" && s.faceDown && pi === 0 ? '<span class="fd">set</span>' : ""}`;
+        if (!hidden) d.onclick = (e) => { e.stopPropagation(); UI.zoomCard(c, { kind: "slot", pi, si }); };
+        supWrap.appendChild(d);
+      });
+
+      // opponent half mirrors: support outermost, hero nearest the midline
+      if (pi === 1) { body.appendChild(supWrap); body.appendChild(auxWrap); body.appendChild(heroBox); }
+      else { body.appendChild(heroBox); body.appendChild(auxWrap); body.appendChild(supWrap); }
+      lane.appendChild(body);
       el.appendChild(lane);
     });
   },
 
+  // one-line gist of an Auxiliary card's effect for the slot label
+  auxSummary(c) {
+    const t = (c.auxText || "").replace(/^While in this slot,?\s*/i, "").replace(/^When this card enters play,?\s*/i, "");
+    return t.length > 46 ? t.slice(0, 44).trim() + "…" : t;
+  },
+
   renderSlots(elId, pi) {
+    // Lane-bound support cards render inside their lane; this strip shows
+    // lane-less cards (Pacts) plus how many shared slots remain.
     const el = $(elId);
     el.innerHTML = "";
     const P = G.players[pi];
+    let shown = 0;
     P.slots.forEach((s, si) => {
+      if (!s || s.laneIdx != null) return;
+      shown++;
+      const c = cardById(s.cardId);
+      const st = SUPPORT_STYLE[s.kind] || SUPPORT_STYLE.pact;
       const d = document.createElement("div");
-      d.className = "sharedslot";
-      if (!s) { d.textContent = "open"; }
-      else {
-        d.classList.add("filled");
-        const c = cardById(s.cardId);
-        if (s.kind === "hex" && s.faceDown && pi === 1) d.textContent = "face-down Hex";
-        else if (s.kind === "hex") d.textContent = `Hex: ${c.name} (L${s.laneIdx + 1})`;
-        else if (s.kind === "rite") {
-          const r = fx(s.cardId).rite;
-          d.textContent = `Rite: ${c.name} ${s.counters}/${(r && (r.timer || r.counterMax)) || "?"}`;
-        } else d.textContent = `Pact: ${c.name}`;
-        if (!(s.kind === "hex" && s.faceDown && pi === 1))
-          d.onclick = (e) => { e.stopPropagation(); UI.zoomCard(c, { kind: "slot", pi, si }); };
-      }
+      d.className = "sharedslot filled";
+      d.style.setProperty("--sc", st.col);
+      d.style.setProperty("--sbg", st.bg);
+      d.innerHTML = `<svg viewBox="0 0 12 12" width="10" height="10" style="color:${st.col}">${st.glyph}</svg><span>${c.name}</span>`;
+      d.onclick = (e) => { e.stopPropagation(); UI.zoomCard(c, { kind: "slot", pi, si }); };
       el.appendChild(d);
     });
+    const free = P.slots.filter(s => !s).length;
+    const info = document.createElement("div");
+    info.className = "slotfree";
+    info.textContent = shown ? `${free} of ${P.slots.length} slots open` : `${free} of ${P.slots.length} shared slots open`;
+    el.appendChild(info);
   },
 
   renderHand() {
@@ -9714,6 +9791,44 @@ const UI = {
     UI.render();
     if (!G.over && G.active === 1) await UI.runAI();
   },
+};
+
+
+/* ===================== REALM IDENTITY (Arcane Table board) ===================== */
+const REALM_COLORS = {
+  Fangrend:"#8fa0c0", Luminar:"#e0c478", Runespire:"#a98cd8", Balemaw:"#c07a5a",
+  Gildharbor:"#6fb3c4", Ankhara:"#d9a441", Karakhorde:"#b5915e", Deepforge:"#9aa6b5",
+  Aurelium:"#c05a4a", Oathenhall:"#6f8fd0", Zolthec:"#4fae86", Almsgard:"#cfc6b0",
+  Thornveil:"#7ba396", Noctavein:"#a3556b", Brightmantle:"#f0e2a8",
+};
+const REALM_LOGOS = {
+  Fangrend:(L,D)=>`<polygon points="6,6 18,6 12,36" fill="${L}"/><polygon points="20,6 32,6 26,28" fill="${D}"/>`,
+  Luminar:(L,D)=>`<circle cx="17" cy="21" r="7" fill="${L}"/><g fill="${D}"><polygon points="17,2 19.5,12 14.5,12"/><polygon points="17,40 19.5,30 14.5,30"/><polygon points="0,21 10,18.5 10,23.5"/><polygon points="34,21 24,18.5 24,23.5"/><polygon points="5,7 13,13 9.5,16.5"/><polygon points="29,7 21,13 24.5,16.5"/><polygon points="5,35 13,29 9.5,25.5"/><polygon points="29,35 21,29 24.5,25.5"/></g>`,
+  Runespire:(L,D)=>`<rect x="15.3" y="14" width="3.4" height="30" rx="1.5" fill="${D}"/><path d="M17 14 q-7 -2 -6 -8 l4 2 q-1 -4 2 -6 q3 2 2 6 l4 -2 q1 6 -6 8 z" fill="${D}"/><circle cx="17" cy="8" r="3.6" fill="${L}"/><polygon points="27,4 28.2,7 31,8 28.2,9 27,12 25.8,9 23,8 25.8,7" fill="${L}"/><rect x="14.6" y="18" width="4.8" height="2.4" fill="${L}"/>`,
+  Balemaw:(L,D)=>`<path d="M9 33 q-4 -6 -3.5 -13 q0.5 -6 4.5 -9 q-1.5 5 -0.5 9.5 q1 5.5 3 9 q-1 2.5 -3.5 3.5 z" fill="${L}"/><path d="M25 33 q4 -6 3.5 -13 q-0.5 -6 -4.5 -9 q1.5 5 0.5 9.5 q-1 5.5 -3 9 q1 2.5 3.5 3.5 z" fill="${D}"/>`,
+  Gildharbor:(L,D)=>`<circle cx="17" cy="23" r="14" fill="${L}"/><circle cx="17" cy="23" r="10.5" fill="none" stroke="${D}" stroke-width="2"/><path d="M17 15 q6 8 0 16 q-6 -8 0 -16 z" fill="${D}"/><rect x="3" y="21.5" width="4" height="3" fill="${D}"/><rect x="27" y="21.5" width="4" height="3" fill="${D}"/><rect x="15.5" y="7" width="3" height="4" fill="${D}"/><rect x="15.5" y="35" width="3" height="4" fill="${D}"/>`,
+  Ankhara:(L,D,BG)=>`<circle cx="17" cy="10" r="6" fill="${L}"/><polygon points="17,20 30,42 4,42" fill="${D}"/><polygon points="17,28 24,40 10,40" fill="${BG}"/>`,
+  Karakhorde:(L,D)=>`<path d="M6.2 19 Q8 17.4 11 17.8 Q14.5 18.4 17 17.6 C19 16 20.5 13.5 22.6 11.8 L23 10.4 L23.9 11.6 L24.8 10.2 L25.6 11.9 C27.5 13 29.5 14.8 31.3 16.6 L31.8 17.8 Q31.4 18.6 30.4 18.4 Q28.8 18.2 28.2 17.6 C27.2 18.4 26.6 19.4 26.4 20.6 C25.8 22.5 25.2 24 24.8 25.2 L24.6 26 L25.1 32 L24.9 36 L25.3 39.3 L23.7 39.3 L23.5 33 L23 28.2 L22.2 27.6 L21.6 28.4 L21.9 39.3 L20.3 39.3 L20 31.5 L19.4 27.6 Q16 28.4 13 27.8 L12.2 28.6 L12.6 39.3 L11 39.3 L10.8 33 Q10.2 30 9.8 28 L9.2 29 L9.6 34 L9.3 39.3 L7.7 39.3 L7.9 32 Q7 28 6.8 25.5 Q6.3 22.5 6.2 20.5 C4.2 21.5 3.2 25 3 29 C2.8 33 3 36 3.6 38.3 L4.8 38 C4.6 34 4.8 30 5.4 26.5 C5.7 24 5.9 21.5 6.2 19 Z" fill="${D}"/><path d="M17.2 17.4 C19.2 15.7 20.6 13.4 22.4 11.7 L23.2 12.6 C21.4 14.4 20 16.5 18.4 18.2 Q17.6 17.9 17.2 17.4 Z" fill="${L}"/><circle cx="28.2" cy="15.6" r="0.9" fill="${L}"/>`,
+  Deepforge:(L,D)=>`<path d="M4 16 h26 v5 q-8 1 -8 7 h5 v6 h-20 v-6 h5 q0-6 -8-7 z" fill="${L}"/><rect x="8" y="38" width="18" height="4" fill="${D}"/><rect x="24" y="2" width="6" height="10" fill="${D}"/>`,
+  Aurelium:(L,D)=>`<rect x="15" y="4" width="4" height="38" fill="${D}"/><rect x="6" y="8" width="22" height="4" fill="${L}"/><circle cx="17" cy="22" r="7" fill="none" stroke="${L}" stroke-width="2.5"/><rect x="6" y="4" width="4" height="6" fill="${L}"/><rect x="24" y="4" width="4" height="6" fill="${L}"/>`,
+  Oathenhall:(L,D)=>`<path d="M5 34 v-18 l7 7 5-12 5 12 7-7 v18 z" fill="${L}"/><rect x="5" y="36" width="24" height="5" fill="${D}"/>`,
+  Zolthec:(L,D,BG)=>`<rect x="13" y="6" width="8" height="6" fill="${L}"/><rect x="9" y="14" width="16" height="7" fill="${D}"/><rect x="5" y="23" width="24" height="8" fill="${L}"/><rect x="2" y="33" width="30" height="9" fill="${D}"/><rect x="15" y="14" width="4" height="28" fill="${BG}"/>`,
+  Almsgard:(L,D)=>`<circle cx="17" cy="12" r="4.5" fill="${L}"/><path d="M17 18 l1.2 3 -1.2 3 -1.2 -3 z" fill="${L}"/><path d="M4 27 h26 q0 9 -8 12 h-10 q-8 -3 -8 -12 z" fill="${D}"/><rect x="12" y="41" width="10" height="2.5" fill="${D}"/>`,
+  Thornveil:(L,D)=>`<circle cx="17" cy="23" r="12" fill="none" stroke="${D}" stroke-width="3.5"/><g fill="${L}"><polygon points="17,7 21,2 19,9"/><polygon points="29,17 34,15 30,21"/><polygon points="27,33 32,37 25,36"/><polygon points="7,33 2,37 9,36"/><polygon points="5,17 0,15 4,21"/></g><polygon points="17,17 20,23 17,29 14,23" fill="${L}"/>`,
+  Noctavein:(L,D)=>`<path d="M26 6 a15 15 0 1 0 6 22 a12 12 0 1 1 -6 -22 z" fill="${D}"/><path d="M20 16 q6 8 0 14 q-6 -6 0 -14 z" fill="${L}"/>`,
+  Brightmantle:(L,D,BG)=>`<path d="M17 8 q-13 4 -13 22 l6 -3 q-1 -12 7 -15 q8 3 7 15 l6 3 q0 -18 -13 -22 z" fill="${D}"/><circle cx="17" cy="10" r="5" fill="${L}"/><circle cx="17" cy="10" r="2" fill="${BG}"/><rect x="15.5" y="26" width="3" height="14" fill="${L}"/><rect x="11" y="30" width="12" height="3" fill="${L}"/>`,
+};
+function realmColor(r) { return REALM_COLORS[r] || "#8fa0c0"; }
+function realmCrest(realm, w, main, dark, bg) {
+  const fn = REALM_LOGOS[realm];
+  if (!fn) return "";
+  return `<svg viewBox="0 0 34 46" width="${w}" height="${Math.round(w * 46 / 34)}" style="flex-shrink:0;display:block">${fn(main, dark, bg || "#12151c")}</svg>`;
+}
+const SUPPORT_STYLE = {
+  hex:  { col:"#c7aee8", bg:"#2a2140", glyph:'<path d="M6 1 L11 6 L6 11 L1 6 Z" fill="currentColor"/>' },
+  rite: { col:"#9ed6c6", bg:"#17302a", glyph:'<circle cx="6" cy="6" r="4.4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="6" r="1.4" fill="currentColor"/>' },
+  pact: { col:"#e39a86", bg:"#3a221c", glyph:'<path d="M6 11 C2 8 1 5 2.6 3 C4 1.4 6 2.6 6 4.2 C6 2.6 8 1.4 9.4 3 C11 5 10 8 6 11 Z" fill="currentColor"/>' },
+  incantation: { col:"#a2dcf2", bg:"#162836", glyph:'<path d="M6 1 L7.4 4.6 L11 6 L7.4 7.4 L6 11 L4.6 7.4 L1 6 L4.6 4.6 Z" fill="currentColor"/>' },
 };
 
 /* ================================ EDITOR ================================ */

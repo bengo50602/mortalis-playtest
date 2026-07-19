@@ -109,46 +109,50 @@ const UI = {
     const el = $(elId);
     el.innerHTML = "";
     const P = G.players[pi];
+    const sched = C().laneUnlockTurns || [];
     P.lanes.forEach((L, li) => {
-      const lane = document.createElement("div");
-      lane.className = "lane";
+      const col = realmColor(L.realm);
       const unlocked = laneUnlocked(pi, li);
-      if (!unlocked) lane.style.opacity = "0.45";
-      const tag = document.createElement("div");
-      tag.className = "realm-tag";
-      const sched = C().laneUnlockTurns || [];
-      tag.textContent = unlocked ? `Lane ${li + 1} · ${L.realm}` : `Lane ${li + 1} · ${L.realm} 🔒`;
-      lane.appendChild(tag);
+      const lane = document.createElement("div");
+      lane.className = "lane" + (unlocked ? "" : " locked");
+      lane.style.setProperty("--lc", col);
+
+      // ---- realm cap ----
+      const cap = document.createElement("div");
+      cap.className = "lane-cap";
+      cap.innerHTML = `${realmCrest(L.realm, 15, "#12151c", "rgba(18,21,28,.55)")}<span>${L.realm}</span>`;
+      lane.appendChild(cap);
+
+      const body = document.createElement("div");
+      body.className = "lane-body";
+
       if (!unlocked) {
-        const slot = document.createElement("div");
-        slot.className = "heroslot";
-        slot.textContent = `Locked — unlocks on turn ${sched[li] || "?"}`;
-        lane.appendChild(slot);
+        const s = document.createElement("div");
+        s.className = "heroslot";
+        s.textContent = `unlocks turn ${sched[li] || "?"}`;
+        body.appendChild(s);
+        lane.appendChild(body);
         el.appendChild(lane);
         return;
       }
 
-      const auxRow = document.createElement("div");
-      auxRow.className = "slotrow";
+      // ---- hero ----
       const heroBox = document.createElement("div");
-
-      // hero slot / card
       if (L.hero) {
         const c = cardById(L.hero.cardId);
         const div = document.createElement("div");
         div.className = "herocard";
         const atk = effAtk(pi, li), hp = curHp(pi, li), mhp = effMaxHp(pi, li);
-        const exhausted = pi === G.active && L.hero.attacksUsed >= maxAttacksOf(pi, li);
-        if (exhausted) div.classList.add("exhausted");
+        if (pi === G.active && L.hero.attacksUsed >= maxAttacksOf(pi, li)) div.classList.add("exhausted");
         if (pi === 0 && UI.sel.includes(li)) div.classList.add("selected");
-        const isTarget = UI.targetableHeroes().some(t => t.pi === pi && t.li === li);
-        if (isTarget) div.classList.add("targetable");
+        if (UI.targetableHeroes().some(t => t.pi === pi && t.li === li)) div.classList.add("targetable");
         const relicPills = L.hero.relics.map(r => `<span class="pill">${cardById(r.cardId).name}${r.counters ? " ⚒" + r.counters : ""}</span>`).join(" ");
         const freeRelic = C().relicSlotsPerHero - L.hero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0);
-        div.innerHTML = `<div class="nm">${c.name} <span style="color:var(--muted)">(${c.cost})</span></div>
-          <div class="stats">${UI.statSpan(c.atk, atk)} ATK · ${UI.statSpan(c.hp, hp)}/${mhp} HP</div>
+        div.innerHTML = `<div class="cost-orb">${c.cost}</div>
+          <div class="nm">${c.name}</div>
           <div class="txt">${c.text}</div>
-          <div style="margin-top:3px">${relicPills}${freeRelic > 0 ? ` <span class="pill" style="opacity:.6">${freeRelic} relic slot${freeRelic > 1 ? "s" : ""}</span>` : ""}</div>
+          <div class="statbar"><span class="atk">${UI.statSpan(c.atk, atk)}</span><span class="rar">${c.rarity || ""}</span><span class="hp">${UI.statSpan(c.hp, hp)}${hp !== mhp ? `<span class="mx">/${mhp}</span>` : ""}</span></div>
+          ${relicPills || freeRelic > 0 ? `<div class="relicrow">${relicPills}${freeRelic > 0 ? `<span class="pill dim">${freeRelic} relic slot${freeRelic > 1 ? "s" : ""}</span>` : ""}</div>` : ""}
           ${autoLevel(c) === "manual" ? '<span class="badge-manual" title="Ability not scripted — adjudicate manually"></span>' : ""}`;
         div.onclick = (e) => { e.stopPropagation(); UI.clickBoardHero(pi, li); };
         div.ondblclick = (e) => { e.stopPropagation(); UI.sel = UI.sel.filter(x => x !== li || pi !== 0); UI.zoomCard(c, { kind: "boardHero", pi, li }); };
@@ -156,63 +160,108 @@ const UI = {
       } else {
         const slot = document.createElement("div");
         slot.className = "heroslot";
-        slot.textContent = "Empty lane";
+        slot.textContent = "empty lane";
         if (UI.pending && UI.pending.type === "lane" && UI.pending.side === pi && UI.pending.lanes.includes(li)) {
           slot.classList.add("eligible");
-          slot.textContent = "Play here";
+          slot.textContent = "play here";
           slot.onclick = (e) => { e.stopPropagation(); UI.settlePending(li); };
         }
         heroBox.appendChild(slot);
       }
-      // lane-pick highlight when hero present (relic/aux/hex/rite targets)
       if (L.hero && UI.pending && UI.pending.type === "lane" && UI.pending.side === pi && UI.pending.lanes.includes(li)) {
         heroBox.firstChild.classList.add("targetable");
         heroBox.firstChild.onclick = (e) => { e.stopPropagation(); UI.settlePending(li); };
       }
 
-      // aux slots
+      // ---- aux slots (show what's in them) ----
+      const auxWrap = document.createElement("div");
+      auxWrap.className = "auxwrap";
       const seen = new Set();
-      L.aux.forEach((a, ai2) => {
+      L.aux.forEach((a) => {
+        if (a && seen.has(a.uid)) return;          // 2-slot aux renders once, spanning
         const s = document.createElement("div");
-        s.className = "minislot";
         if (a) {
-          const c = cardById(a.cardId);
-          if (seen.has(a.uid)) { s.classList.add("filled"); s.textContent = "(2-slot)"; s.style.opacity = ".55"; }
-          else { s.classList.add("filled"); s.textContent = c.name; }
           seen.add(a.uid);
+          const c = cardById(a.cardId);
+          const span = (c.auxSlots || 1) > 1;
+          s.className = "auxslot filled" + (span ? " span2" : "");
+          s.innerHTML = `<span class="auxtag">AUX${span ? " ×2" : ""}</span><span class="auxnm">${c.name}</span><span class="auxfx">${UI.auxSummary(c)}</span>`;
+          s.title = c.auxText || "";
           s.onclick = (e) => { e.stopPropagation(); UI.zoomCard(c, { kind: "aux", pi, li, auxUid: a.uid }); };
-        } else s.textContent = "Aux";
-        auxRow.appendChild(s);
+        } else {
+          s.className = "auxslot";
+          s.textContent = "open aux";
+        }
+        auxWrap.appendChild(s);
       });
 
-      if (pi === 1) { lane.appendChild(heroBox); lane.appendChild(auxRow); }
-      else { lane.appendChild(auxRow); lane.appendChild(heroBox); }
+      // ---- support cards belonging to THIS lane ----
+      const supWrap = document.createElement("div");
+      supWrap.className = "supwrap";
+      const mine = P.slots.map((s, si) => ({ s, si })).filter(x => x.s && x.s.laneIdx === li);
+      if (!mine.length) {
+        const empty = document.createElement("div");
+        empty.className = "supslot";
+        empty.textContent = "support slot";
+        supWrap.appendChild(empty);
+      } else mine.forEach(({ s, si }) => {
+        const c = cardById(s.cardId);
+        const st = SUPPORT_STYLE[s.kind] || SUPPORT_STYLE.hex;
+        const d = document.createElement("div");
+        d.className = "supslot filled";
+        d.style.setProperty("--sc", st.col);
+        d.style.setProperty("--sbg", st.bg);
+        const hidden = s.kind === "hex" && s.faceDown && pi === 1;
+        let label;
+        if (hidden) label = "face-down Hex";
+        else if (s.kind === "rite") {
+          const r = fx(s.cardId).rite;
+          label = `${c.name} · ${s.counters}/${(r && (r.timer || r.counterMax)) || "?"}`;
+        } else label = c.name;
+        d.innerHTML = `<svg viewBox="0 0 12 12" width="11" height="11" style="color:${st.col}">${st.glyph}</svg><span>${label}</span>${s.kind === "hex" && s.faceDown && pi === 0 ? '<span class="fd">set</span>' : ""}`;
+        if (!hidden) d.onclick = (e) => { e.stopPropagation(); UI.zoomCard(c, { kind: "slot", pi, si }); };
+        supWrap.appendChild(d);
+      });
+
+      // opponent half mirrors: support outermost, hero nearest the midline
+      if (pi === 1) { body.appendChild(supWrap); body.appendChild(auxWrap); body.appendChild(heroBox); }
+      else { body.appendChild(heroBox); body.appendChild(auxWrap); body.appendChild(supWrap); }
+      lane.appendChild(body);
       el.appendChild(lane);
     });
   },
 
+  // one-line gist of an Auxiliary card's effect for the slot label
+  auxSummary(c) {
+    const t = (c.auxText || "").replace(/^While in this slot,?\s*/i, "").replace(/^When this card enters play,?\s*/i, "");
+    return t.length > 46 ? t.slice(0, 44).trim() + "…" : t;
+  },
+
   renderSlots(elId, pi) {
+    // Lane-bound support cards render inside their lane; this strip shows
+    // lane-less cards (Pacts) plus how many shared slots remain.
     const el = $(elId);
     el.innerHTML = "";
     const P = G.players[pi];
+    let shown = 0;
     P.slots.forEach((s, si) => {
+      if (!s || s.laneIdx != null) return;
+      shown++;
+      const c = cardById(s.cardId);
+      const st = SUPPORT_STYLE[s.kind] || SUPPORT_STYLE.pact;
       const d = document.createElement("div");
-      d.className = "sharedslot";
-      if (!s) { d.textContent = "open"; }
-      else {
-        d.classList.add("filled");
-        const c = cardById(s.cardId);
-        if (s.kind === "hex" && s.faceDown && pi === 1) d.textContent = "face-down Hex";
-        else if (s.kind === "hex") d.textContent = `Hex: ${c.name} (L${s.laneIdx + 1})`;
-        else if (s.kind === "rite") {
-          const r = fx(s.cardId).rite;
-          d.textContent = `Rite: ${c.name} ${s.counters}/${(r && (r.timer || r.counterMax)) || "?"}`;
-        } else d.textContent = `Pact: ${c.name}`;
-        if (!(s.kind === "hex" && s.faceDown && pi === 1))
-          d.onclick = (e) => { e.stopPropagation(); UI.zoomCard(c, { kind: "slot", pi, si }); };
-      }
+      d.className = "sharedslot filled";
+      d.style.setProperty("--sc", st.col);
+      d.style.setProperty("--sbg", st.bg);
+      d.innerHTML = `<svg viewBox="0 0 12 12" width="10" height="10" style="color:${st.col}">${st.glyph}</svg><span>${c.name}</span>`;
+      d.onclick = (e) => { e.stopPropagation(); UI.zoomCard(c, { kind: "slot", pi, si }); };
       el.appendChild(d);
     });
+    const free = P.slots.filter(s => !s).length;
+    const info = document.createElement("div");
+    info.className = "slotfree";
+    info.textContent = shown ? `${free} of ${P.slots.length} slots open` : `${free} of ${P.slots.length} shared slots open`;
+    el.appendChild(info);
   },
 
   renderHand() {
@@ -495,6 +544,44 @@ const UI = {
     UI.render();
     if (!G.over && G.active === 1) await UI.runAI();
   },
+};
+
+
+/* ===================== REALM IDENTITY (Arcane Table board) ===================== */
+const REALM_COLORS = {
+  Fangrend:"#8fa0c0", Luminar:"#e0c478", Runespire:"#a98cd8", Balemaw:"#c07a5a",
+  Gildharbor:"#6fb3c4", Ankhara:"#d9a441", Karakhorde:"#b5915e", Deepforge:"#9aa6b5",
+  Aurelium:"#c05a4a", Oathenhall:"#6f8fd0", Zolthec:"#4fae86", Almsgard:"#cfc6b0",
+  Thornveil:"#7ba396", Noctavein:"#a3556b", Brightmantle:"#f0e2a8",
+};
+const REALM_LOGOS = {
+  Fangrend:(L,D)=>`<polygon points="6,6 18,6 12,36" fill="${L}"/><polygon points="20,6 32,6 26,28" fill="${D}"/>`,
+  Luminar:(L,D)=>`<circle cx="17" cy="21" r="7" fill="${L}"/><g fill="${D}"><polygon points="17,2 19.5,12 14.5,12"/><polygon points="17,40 19.5,30 14.5,30"/><polygon points="0,21 10,18.5 10,23.5"/><polygon points="34,21 24,18.5 24,23.5"/><polygon points="5,7 13,13 9.5,16.5"/><polygon points="29,7 21,13 24.5,16.5"/><polygon points="5,35 13,29 9.5,25.5"/><polygon points="29,35 21,29 24.5,25.5"/></g>`,
+  Runespire:(L,D)=>`<rect x="15.3" y="14" width="3.4" height="30" rx="1.5" fill="${D}"/><path d="M17 14 q-7 -2 -6 -8 l4 2 q-1 -4 2 -6 q3 2 2 6 l4 -2 q1 6 -6 8 z" fill="${D}"/><circle cx="17" cy="8" r="3.6" fill="${L}"/><polygon points="27,4 28.2,7 31,8 28.2,9 27,12 25.8,9 23,8 25.8,7" fill="${L}"/><rect x="14.6" y="18" width="4.8" height="2.4" fill="${L}"/>`,
+  Balemaw:(L,D)=>`<path d="M9 33 q-4 -6 -3.5 -13 q0.5 -6 4.5 -9 q-1.5 5 -0.5 9.5 q1 5.5 3 9 q-1 2.5 -3.5 3.5 z" fill="${L}"/><path d="M25 33 q4 -6 3.5 -13 q-0.5 -6 -4.5 -9 q1.5 5 0.5 9.5 q-1 5.5 -3 9 q1 2.5 3.5 3.5 z" fill="${D}"/>`,
+  Gildharbor:(L,D)=>`<circle cx="17" cy="23" r="14" fill="${L}"/><circle cx="17" cy="23" r="10.5" fill="none" stroke="${D}" stroke-width="2"/><path d="M17 15 q6 8 0 16 q-6 -8 0 -16 z" fill="${D}"/><rect x="3" y="21.5" width="4" height="3" fill="${D}"/><rect x="27" y="21.5" width="4" height="3" fill="${D}"/><rect x="15.5" y="7" width="3" height="4" fill="${D}"/><rect x="15.5" y="35" width="3" height="4" fill="${D}"/>`,
+  Ankhara:(L,D,BG)=>`<circle cx="17" cy="10" r="6" fill="${L}"/><polygon points="17,20 30,42 4,42" fill="${D}"/><polygon points="17,28 24,40 10,40" fill="${BG}"/>`,
+  Karakhorde:(L,D)=>`<path d="M6.2 19 Q8 17.4 11 17.8 Q14.5 18.4 17 17.6 C19 16 20.5 13.5 22.6 11.8 L23 10.4 L23.9 11.6 L24.8 10.2 L25.6 11.9 C27.5 13 29.5 14.8 31.3 16.6 L31.8 17.8 Q31.4 18.6 30.4 18.4 Q28.8 18.2 28.2 17.6 C27.2 18.4 26.6 19.4 26.4 20.6 C25.8 22.5 25.2 24 24.8 25.2 L24.6 26 L25.1 32 L24.9 36 L25.3 39.3 L23.7 39.3 L23.5 33 L23 28.2 L22.2 27.6 L21.6 28.4 L21.9 39.3 L20.3 39.3 L20 31.5 L19.4 27.6 Q16 28.4 13 27.8 L12.2 28.6 L12.6 39.3 L11 39.3 L10.8 33 Q10.2 30 9.8 28 L9.2 29 L9.6 34 L9.3 39.3 L7.7 39.3 L7.9 32 Q7 28 6.8 25.5 Q6.3 22.5 6.2 20.5 C4.2 21.5 3.2 25 3 29 C2.8 33 3 36 3.6 38.3 L4.8 38 C4.6 34 4.8 30 5.4 26.5 C5.7 24 5.9 21.5 6.2 19 Z" fill="${D}"/><path d="M17.2 17.4 C19.2 15.7 20.6 13.4 22.4 11.7 L23.2 12.6 C21.4 14.4 20 16.5 18.4 18.2 Q17.6 17.9 17.2 17.4 Z" fill="${L}"/><circle cx="28.2" cy="15.6" r="0.9" fill="${L}"/>`,
+  Deepforge:(L,D)=>`<path d="M4 16 h26 v5 q-8 1 -8 7 h5 v6 h-20 v-6 h5 q0-6 -8-7 z" fill="${L}"/><rect x="8" y="38" width="18" height="4" fill="${D}"/><rect x="24" y="2" width="6" height="10" fill="${D}"/>`,
+  Aurelium:(L,D)=>`<rect x="15" y="4" width="4" height="38" fill="${D}"/><rect x="6" y="8" width="22" height="4" fill="${L}"/><circle cx="17" cy="22" r="7" fill="none" stroke="${L}" stroke-width="2.5"/><rect x="6" y="4" width="4" height="6" fill="${L}"/><rect x="24" y="4" width="4" height="6" fill="${L}"/>`,
+  Oathenhall:(L,D)=>`<path d="M5 34 v-18 l7 7 5-12 5 12 7-7 v18 z" fill="${L}"/><rect x="5" y="36" width="24" height="5" fill="${D}"/>`,
+  Zolthec:(L,D,BG)=>`<rect x="13" y="6" width="8" height="6" fill="${L}"/><rect x="9" y="14" width="16" height="7" fill="${D}"/><rect x="5" y="23" width="24" height="8" fill="${L}"/><rect x="2" y="33" width="30" height="9" fill="${D}"/><rect x="15" y="14" width="4" height="28" fill="${BG}"/>`,
+  Almsgard:(L,D)=>`<circle cx="17" cy="12" r="4.5" fill="${L}"/><path d="M17 18 l1.2 3 -1.2 3 -1.2 -3 z" fill="${L}"/><path d="M4 27 h26 q0 9 -8 12 h-10 q-8 -3 -8 -12 z" fill="${D}"/><rect x="12" y="41" width="10" height="2.5" fill="${D}"/>`,
+  Thornveil:(L,D)=>`<circle cx="17" cy="23" r="12" fill="none" stroke="${D}" stroke-width="3.5"/><g fill="${L}"><polygon points="17,7 21,2 19,9"/><polygon points="29,17 34,15 30,21"/><polygon points="27,33 32,37 25,36"/><polygon points="7,33 2,37 9,36"/><polygon points="5,17 0,15 4,21"/></g><polygon points="17,17 20,23 17,29 14,23" fill="${L}"/>`,
+  Noctavein:(L,D)=>`<path d="M26 6 a15 15 0 1 0 6 22 a12 12 0 1 1 -6 -22 z" fill="${D}"/><path d="M20 16 q6 8 0 14 q-6 -6 0 -14 z" fill="${L}"/>`,
+  Brightmantle:(L,D,BG)=>`<path d="M17 8 q-13 4 -13 22 l6 -3 q-1 -12 7 -15 q8 3 7 15 l6 3 q0 -18 -13 -22 z" fill="${D}"/><circle cx="17" cy="10" r="5" fill="${L}"/><circle cx="17" cy="10" r="2" fill="${BG}"/><rect x="15.5" y="26" width="3" height="14" fill="${L}"/><rect x="11" y="30" width="12" height="3" fill="${L}"/>`,
+};
+function realmColor(r) { return REALM_COLORS[r] || "#8fa0c0"; }
+function realmCrest(realm, w, main, dark, bg) {
+  const fn = REALM_LOGOS[realm];
+  if (!fn) return "";
+  return `<svg viewBox="0 0 34 46" width="${w}" height="${Math.round(w * 46 / 34)}" style="flex-shrink:0;display:block">${fn(main, dark, bg || "#12151c")}</svg>`;
+}
+const SUPPORT_STYLE = {
+  hex:  { col:"#c7aee8", bg:"#2a2140", glyph:'<path d="M6 1 L11 6 L6 11 L1 6 Z" fill="currentColor"/>' },
+  rite: { col:"#9ed6c6", bg:"#17302a", glyph:'<circle cx="6" cy="6" r="4.4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="6" r="1.4" fill="currentColor"/>' },
+  pact: { col:"#e39a86", bg:"#3a221c", glyph:'<path d="M6 11 C2 8 1 5 2.6 3 C4 1.4 6 2.6 6 4.2 C6 2.6 8 1.4 9.4 3 C11 5 10 8 6 11 Z" fill="currentColor"/>' },
+  incantation: { col:"#a2dcf2", bg:"#162836", glyph:'<path d="M6 1 L7.4 4.6 L11 6 L7.4 7.4 L6 11 L4.6 7.4 L1 6 L4.6 4.6 Z" fill="currentColor"/>' },
 };
 
 /* ================================ EDITOR ================================ */
