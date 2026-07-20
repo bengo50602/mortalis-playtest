@@ -154,6 +154,8 @@ const UI = {
           <div class="statbar"><span class="atk">${UI.statSpan(c.atk, atk)}</span><span class="rar">${c.rarity || ""}</span><span class="hp">${UI.statSpan(c.hp, hp)}${hp !== mhp ? `<span class="mx">/${mhp}</span>` : ""}</span></div>
           ${relicPills || freeRelic > 0 ? `<div class="relicrow">${relicPills}${freeRelic > 0 ? `<span class="pill dim">${freeRelic} relic slot${freeRelic > 1 ? "s" : ""}</span>` : ""}</div>` : ""}
           ${autoLevel(c) === "manual" ? '<span class="badge-manual" title="Ability not scripted — adjudicate manually"></span>' : ""}`;
+        div.onmouseenter = () => INS.hero(pi, li);
+        div.onmouseleave = () => INS.clear();
         div.onclick = (e) => { e.stopPropagation(); UI.clickBoardHero(pi, li); };
         div.ondblclick = (e) => { e.stopPropagation(); UI.sel = UI.sel.filter(x => x !== li || pi !== 0); UI.zoomCard(c, { kind: "boardHero", pi, li }); };
         heroBox.appendChild(div);
@@ -163,6 +165,11 @@ const UI = {
             e.stopPropagation();
             const r = L.hero.relics.find(x => String(x.uid) === p.dataset.ruid);
             if (r) UI.zoomCard(cardById(r.cardId), { kind: "relic", pi, li, relicUid: r.uid });
+          };
+          p.onmouseenter = (e) => {
+            e.stopPropagation();
+            const r = L.hero.relics.find(x => String(x.uid) === p.dataset.ruid);
+            if (r) INS.card(cardById(r.cardId), INS.row("attached to", cardById(L.hero.cardId).name) + (r.counters ? INS.row("forge counters", "+" + (10 * r.counters) + "/+" + (10 * r.counters), "#a8e08a") : ""));
           };
         });
       } else {
@@ -195,6 +202,8 @@ const UI = {
           s.className = "auxslot filled" + (span ? " span2" : "");
           s.innerHTML = `<span class="auxtag">AUX${span ? " ×2" : ""}</span><span class="auxnm">${c.name}</span><span class="auxfx">${UI.auxSummary(c)}</span>`;
           s.title = c.auxText || "";
+          s.onmouseenter = () => INS.card(c, INS.row("mode", "Auxiliary in lane " + (li + 1)) + `<div style="color:#9aa4b6;margin-top:4px">${c.auxText || ""}</div><div style="color:#6f7b8c;font-size:11px;margin-top:4px">Hero-mode text:</div>`);
+          s.onmouseleave = () => INS.clear();
           s.onclick = (e) => { e.stopPropagation(); UI.zoomCard(c, { kind: "aux", pi, li, auxUid: a.uid }); };
         } else {
           s.className = "auxslot";
@@ -227,7 +236,14 @@ const UI = {
           label = `${c.name} · ${s.counters}/${(r && (r.timer || r.counterMax)) || "?"}`;
         } else label = c.name;
         d.innerHTML = `<svg viewBox="0 0 12 12" width="11" height="11" style="color:${st.col}">${st.glyph}</svg><span>${label}</span>${s.kind === "hex" && s.faceDown && pi === 0 ? '<span class="fd">set</span>' : ""}`;
-        if (!hidden) d.onclick = (e) => { e.stopPropagation(); UI.zoomCard(c, { kind: "slot", pi, si }); };
+        if (!hidden) {
+          d.onclick = (e) => { e.stopPropagation(); UI.zoomCard(c, { kind: "slot", pi, si }); };
+          d.onmouseenter = () => INS.card(c, INS.row("lane", String(li + 1)) + (s.kind === "rite" ? INS.row("progress", s.counters + " counters") : ""));
+          d.onmouseleave = () => INS.clear();
+        } else {
+          d.onmouseenter = () => INS.show(`<div style="color:#c7aee8">A face-down Hex is set in this lane.</div><div style="color:#8a93a4;margin-top:4px">You won't see what it is until it triggers — attacking into this lane is a risk.</div>`);
+          d.onmouseleave = () => INS.clear();
+        }
         supWrap.appendChild(d);
       });
 
@@ -565,6 +581,113 @@ const UI = {
   },
 };
 
+
+
+/* ===================== HOVER CHEAT SHEET (inspector) ===================== */
+// Explains, in plain English, every effect currently touching whatever you hover.
+const INS = {
+  el: null,
+  ensure() {
+    if (INS.el && document.getElementById("inspector")) return INS.el;
+    const log = document.getElementById("log");
+    if (!log) return null;
+    const panel = log.closest ? log.closest(".logpanel") : log.parentElement;
+    if (!panel || !panel.parentElement) return null;
+    const d = document.createElement("div");
+    d.id = "inspector";
+    d.style.cssText = "background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:12px;margin-bottom:12px;min-height:96px";
+    d.innerHTML = `<div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Cheat sheet</div>
+      <div id="ins-body" style="color:#9aa4b6;line-height:1.5">Hover anything on the board to see exactly what's affecting it.</div>`;
+    panel.parentElement.insertBefore(d, panel);
+    INS.el = d;
+    return d;
+  },
+  show(html) {
+    const d = INS.ensure();
+    if (d) document.getElementById("ins-body").innerHTML = html;
+  },
+  clear() { INS.show(`<span style="color:#6f7b8c">Hover anything on the board to see exactly what's affecting it.</span>`); },
+
+  row(label, val, col) {
+    return `<div style="display:flex;justify-content:space-between;gap:8px"><span>${label}</span><span style="color:${col || "#cfd6e2"};white-space:nowrap">${val}</span></div>`;
+  },
+  head(t) { return `<div style="color:#e9eef6;font-weight:600;margin:2px 0 5px">${t}</div>`; },
+  sub(t) { return `<div style="color:#6f7b8c;font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin:8px 0 3px">${t}</div>`; },
+
+  // walk exactly the sources collectAuras walks, naming each contribution
+  auraLines(tpi, tli) {
+    const out = [];
+    for (let pi = 0; pi < 2; pi++) {
+      const P = G.players[pi];
+      for (let li = 0; li < P.lanes.length; li++) {
+        const L = P.lanes[li];
+        const srcs = [];
+        if (L.hero && !isSilenced(L.hero)) srcs.push({ f: fx(L.hero.cardId), cont: "cont", props: "props", nm: cardById(L.hero.cardId).name, self: pi === tpi && li === tli });
+        const seen = new Set();
+        for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); srcs.push({ f: fx(a.cardId), cont: "auxCont", props: "auxProps", nm: cardById(a.cardId).name + " (aux)" }); }
+        if (L.hero) for (const r of L.hero.relics) srcs.push({ f: fx(r.cardId), cont: "cont", props: "props", nm: cardById(r.cardId).name, equippedHere: true, forge: r.counters || 0, ref: r });
+        for (const s of srcs) {
+          for (const e of (s.f[s.cont] || [])) {
+            let hit = false;
+            try { hit = auraHits(e, pi, li, tpi, tli, s); } catch (err) {}
+            if (!hit || (!e.atk && !e.hp)) continue;
+            const who = pi === tpi ? "" : " (enemy)";
+            const sign = (n) => (n >= 0 ? "+" : "") + n;
+            out.push(INS.row(s.nm + who, `${sign(e.atk || 0)}/${sign(e.hp || 0)}`, (e.atk || 0) + (e.hp || 0) >= 0 ? "#a8e08a" : "#e0736b"));
+          }
+          if (s.forge && pi === tpi && li === tli) out.push(INS.row(s.nm + " forge counters", `+${10 * s.forge}/+${10 * s.forge}`, "#a8e08a"));
+        }
+      }
+    }
+    return out;
+  },
+
+  hero(pi, li) {
+    const h = heroAt({ pi, li });
+    if (!h) return INS.clear();
+    const c = cardById(h.cardId);
+    const atk = effAtk(pi, li), hp = curHp(pi, li), mhp = effMaxHp(pi, li);
+    let s = INS.head(`${c.name} — ${c.realm} ${c.type}`);
+    s += INS.row("Printed", `${c.atk} ATK / ${c.hp} HP`, "#9aa4b6");
+    s += INS.row("<b>Right now</b>", `<b>${atk} ATK / ${hp}${hp !== mhp ? " of " + mhp : ""} HP</b>`, "#f0ece2");
+
+    const lines = INS.auraLines(pi, li);
+    if (h.permAtk || h.permHp) lines.push(INS.row("permanent gains", `+${h.permAtk}/+${h.permHp}`, "#a8e08a"));
+    if (h.redAtk || h.redHp) lines.push(INS.row("enemy reductions", `−${h.redAtk}/−${h.redHp}`, "#e0736b"));
+    const temps = (h.temp || []).filter(t => t.until >= G.gt);
+    for (const t of temps) lines.push(INS.row("temporary", `${t.atk >= 0 ? "+" : ""}${t.atk || 0}/${t.hp >= 0 ? "+" : ""}${t.hp || 0}`, t.atk < 0 || t.hp < 0 ? "#e0736b" : "#a8e08a"));
+    if (h.dmg) lines.push(INS.row("damage taken", `−${h.dmg} HP`, "#e0736b"));
+    if (lines.length) s += INS.sub("what's changing it") + lines.join("");
+
+    const notes = [];
+    if (h.ward > 0) notes.push(`ward absorbs the next <b>${h.ward}</b> damage`);
+    if (h.blood) notes.push(`${h.blood} blood counter${h.blood > 1 ? "s" : ""}`);
+    if (heroFlag({ pi, li }, "taunt")) notes.push("enemy attacks are forced onto this Hero");
+    if (heroFlag({ pi, li }, "attackAnyLane")) notes.push("may attack any lane");
+    if (heroFlag({ pi, li }, "anyLaneNotOpp")) notes.push("may attack any lane except the opposing one");
+    if (isProtected({ pi, li })) notes.push("cannot be attacked or targeted right now");
+    const ff = isSilenced(h) ? null : fx(h.cardId).flags;
+    if (ff && ff.thorns) notes.push(`attackers take ${ff.thorns} damage back`);
+    if (ff && ff.combatShield) notes.push(`takes ${ff.combatShield} less combat damage`);
+    if (isSilenced(h)) notes.push("SILENCED — its text does nothing");
+    for (const r of h.relics) notes.push(`Relic: <b>${cardById(r.cardId).name}</b> — ${cardById(r.cardId).text}`);
+    const laneAux = [];
+    const seenA = new Set();
+    for (const a of G.players[pi].lanes[li].aux) if (a && !seenA.has(a.uid)) { seenA.add(a.uid); laneAux.push(`Aux: <b>${cardById(a.cardId).name}</b> — ${cardById(a.cardId).auxText}`); }
+    const maxA = maxAttacksOf(pi, li);
+    notes.push(`attacks used this turn: ${h.attacksUsed} of ${maxA + (h.extraAttacks || 0)}`);
+    s += INS.sub("in play") + [...notes, ...laneAux].map(n => `<div style="margin-bottom:3px">• ${n}</div>`).join("");
+    s += INS.sub("card text") + `<div style="color:#8a93a4">${c.text}</div>`;
+    INS.show(s);
+  },
+
+  card(c, extra) {
+    let s = INS.head(`${c.name} — ${c.realm} ${c.type}`);
+    if (extra) s += extra;
+    s += `<div style="color:#9aa4b6;margin-top:4px">${c.text || ""}</div>`;
+    INS.show(s);
+  },
+};
 
 /* ===================== REALM IDENTITY (Arcane Table board) ===================== */
 const REALM_COLORS = {

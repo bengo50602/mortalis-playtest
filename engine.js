@@ -233,6 +233,7 @@ function parseOp(cl) {
   if ((m = cl.match(/^choose one of your opponent's lanes\.? ?Your opponent cannot play any cards into that lane(?: \(Heroes, Relics, or Auxiliary cards\))? until the start of your next turn$/i))) return { op: "sealLane" };
   if ((m = cl.match(new RegExp(`^choose up to ${NUM} Heroes you control — each heals ${NUM} Health, then each gains \\+${NUM} Health permanently$`, "i")))) return { op: "heal", n: +m[2], permHp: +m[3], target: "upToOwn", count: +m[1] };
   if ((m = cl.match(new RegExp(`^gain ${NUM} Pulse for each (\\w+) Hero you control$`, "i")))) return { op: "pulsePerRealmHero", n: +m[1], realm: m[2] };
+  if ((m = cl.match(new RegExp(`^gain ${NUM} Pulse for each different Realm among the Heroes you control$`, "i")))) return { op: "pulsePerDistinctRealm", n: +m[1] };
   if ((m = cl.match(new RegExp(`^all Heroes you control continuously have \\+${NUM} Health until the start of your next turn$`, "i")))) return { op: "buff", atk: 0, hp: +m[1], target: "allOwn", dur: 2 };
   if ((m = cl.match(new RegExp(`^an enemy Hero of your choice gets [-−–]${NUM} Attack and a Hero you control of your choice gains \\+${NUM} Attack, until the start of your next turn$`, "i")))) return [{ op: "buff", atk: -+m[1], hp: 0, target: "enemyChoice", dur: 2 }, { op: "buff", atk: +m[2], hp: 0, target: "ownChoice", dur: 2 }];
   if ((m = cl.match(new RegExp(`^every enemy Hero (?:gets [-−–]${NUM} Attack|loses ${NUM} Health)(?: permanently)?[;,]? ?(?:and )?a Hero you control(?: of your choice)? gains \\+${NUM} Attack permanently(?: and heals ${NUM} Health)? for each (?:enemy )?Hero affected(?: this way)?$`, "i")))) {
@@ -1694,6 +1695,11 @@ async function runOp(op, pi, ctx) {
       else li = lanes.sort((a, b) => (heroAt({ pi: 1 - pi, li: b }) ? 0 : 1) - (heroAt({ pi: 1 - pi, li: a }) ? 0 : 1))[0];
       G.players[1 - pi].lanes[li].sealedUntil = G.gt + 2;
       log(`${P.name} seals ${O.name}'s Lane ${li + 1} until next turn.`);
+      break;
+    }
+    case "pulsePerDistinctRealm": {
+      const realms = new Set(heroesOf(pi).map(t => cardById(heroAt(t).cardId).realm));
+      if (realms.size) gainPulse(pi, op.n * realms.size, ctx.sourceName);
       break;
     }
     case "pulsePerRealmHero": {

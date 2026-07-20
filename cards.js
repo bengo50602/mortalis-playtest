@@ -1719,7 +1719,7 @@ window.DEFAULT_DATA = {
    "name": "Flood the Market",
    "type": "incantation",
    "cost": 4,
-   "text": "When this Incantation resolves, draw 2 cards, then gain 1 Pulse for each Gildharbor Hero you control."
+   "text": "When this Incantation resolves, draw 2 cards, then gain 1 Pulse for each different Realm among the Heroes you control."
   },
   {
    "id": "gildharbor--hold-the-line",

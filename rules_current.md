@@ -945,7 +945,7 @@ When this Pact resolves, destroy a Relic you control. Gain Pulse equal to double
 When this Incantation resolves, choose up to 2 Heroes you control — each heals 30 Health, then each gains +10 Health permanently.
 
 **Flood the Market** — Cost: 4 Pulse
-When this Incantation resolves, draw 2 cards, then gain 1 Pulse for each Gildharbor Hero you control.
+When this Incantation resolves, draw 2 cards, then gain 1 Pulse for each different Realm among the Heroes you control.
 
 **Hold the Line** — Cost: 5 Pulse
 When this Incantation resolves, all Heroes you control continuously have +40 Health until the start of your next turn.
