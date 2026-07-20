@@ -141,7 +141,7 @@ a{color:var(--accent)}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span style="font-size:12px;color:var(--muted);margin-left:6px">Interactive tutorial</span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260719210525</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260719212110</span>
   <div class="spacer"></div>
   <button id="btn-restart">Restart tutorial</button>
   <a href="index.html"><button>Exit to game</button></a>
@@ -227,10 +227,10 @@ a{color:var(--accent)}
   </div>
 </div>
 
-<script src="cards.js?v=20260719210525"></script>
-<script src="rules.js?v=20260719210525"></script>
-<script src="engine.js?v=20260719210525"></script>
-<script src="ui.js?v=20260719210525"></script>
+<script src="cards.js?v=20260719212110"></script>
+<script src="rules.js?v=20260719212110"></script>
+<script src="engine.js?v=20260719212110"></script>
+<script src="ui.js?v=20260719212110"></script>
 <script>
 /* ===================== Mortalis interactive tutorial ===================== */
 (function () {
@@ -294,6 +294,32 @@ a{color:var(--accent)}
     if (!G.over) { endTurn(); UI.render(); }
   }
 
+  /* ---------- stage a guaranteed Onslaught lesson ---------- */
+  function setupOnslaught() {
+    const P = G.players[0], O = G.players[1];
+    G.__onslaughtDone = false;
+    G.active = 0;
+    // two ready Heroes of ours in the open middle lanes
+    [1, 2].forEach(li => {
+      if (!P.lanes[li].hero) P.lanes[li].hero = heroInst(C_CHEAP.id);
+      P.lanes[li].hero.attacksUsed = 0;
+      P.lanes[li].hero.noAttackOnTurn = 0;
+    });
+    // one beefy defender they cannot beat alone
+    O.lanes.forEach(L => { L.hero = null; });
+    O.lanes[1].hero = heroInst(C_FOE.id);
+    O.lanes[1].hero.permHp = 200;
+    UI.render();
+  }
+
+  // watch for a completed Onslaught (2+ attackers in one strike)
+  const origResolveAttack = window.resolveAttack;
+  window.resolveAttack = async function (pi, attackers, target) {
+    const r = await origResolveAttack(pi, attackers, target);
+    if (pi === 0 && attackers && attackers.length >= 2) { G.__onslaughtDone = true; try { paint(); } catch (e) {} }
+    return r;
+  };
+
   /* ---------- steps ---------- */
   const S = [
     {
@@ -328,8 +354,8 @@ a{color:var(--accent)}
       x: "You've spent what you want, so pass. The Training Dummy will answer with a Hero of its own.",
       task: "Click End turn",
       hi: () => ["#btn-endturn"],
-      done: () => G.active === 1 || heroesOf(1).length >= 1,
-      after: async () => { if (G.active === 1) await dummyTurn(); },
+      done: () => heroesOf(1).length >= 1 && G.active === 0,
+      auto: true,
     },
     {
       t: "Attacking",
@@ -369,8 +395,11 @@ a{color:var(--accent)}
     },
     {
       t: "Onslaught — ganging up",
-      x: "Select <b>two or more</b> of your Heroes before choosing a target and they attack as one: their Attack is summed against the single defender. But if the defender's Attack is higher, <b>every</b> attacker takes the full difference — a failed Onslaught can wipe your board.",
+      x: "Select <b>two or more</b> of your Heroes, then click one enemy: they attack as one and their Attack is <b>summed</b> against that single defender. The risk: if the defender's Attack is higher, <b>every</b> attacker takes the full difference.<br><br>You've been given a second Hero and a fresh target. Click both of your Heroes, then the enemy.",
+      task: "Attack with two Heroes at once",
       hi: () => ["#my-lanes"],
+      done: () => G.__onslaughtDone === true,
+      prep: () => setupOnslaught(),
     },
     {
       t: "Realms and deckbuilding",
@@ -438,7 +467,16 @@ a{color:var(--accent)}
 
   // re-check the current step after every board update
   const origRender = UI.render.bind(UI);
-  UI.render = function () { origRender(); try { paint(); } catch (e) {} };
+  let dummyBusy = false;
+  UI.render = function () {
+    origRender();
+    try { paint(); } catch (e) {}
+    // the Training Dummy answers on its own, right after you end your turn
+    if (!dummyBusy && G && !G.over && G.active === 1) {
+      dummyBusy = true;
+      setTimeout(async () => { try { await dummyTurn(); } finally { dummyBusy = false; UI.render(); } }, 400);
+    }
+  };
 
   window.addEventListener("DOMContentLoaded", () => {
     DB = baseData(); recompileAll();

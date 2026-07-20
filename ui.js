@@ -146,7 +146,7 @@ const UI = {
         if (pi === G.active && L.hero.attacksUsed >= maxAttacksOf(pi, li)) div.classList.add("exhausted");
         if (pi === 0 && UI.sel.includes(li)) div.classList.add("selected");
         if (UI.targetableHeroes().some(t => t.pi === pi && t.li === li)) div.classList.add("targetable");
-        const relicPills = L.hero.relics.map(r => `<span class="pill">${cardById(r.cardId).name}${r.counters ? " ⚒" + r.counters : ""}</span>`).join(" ");
+        const relicPills = L.hero.relics.map(r => `<span class="pill relic" data-ruid="${r.uid}" title="${(cardById(r.cardId).text || "").replace(/"/g, "&quot;")}">${cardById(r.cardId).name}${r.counters ? " ⚒" + r.counters : ""}</span>`).join(" ");
         const freeRelic = C().relicSlotsPerHero - L.hero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0);
         div.innerHTML = `<div class="cost-orb">${c.cost}</div>
           <div class="nm">${c.name}</div>
@@ -157,6 +157,14 @@ const UI = {
         div.onclick = (e) => { e.stopPropagation(); UI.clickBoardHero(pi, li); };
         div.ondblclick = (e) => { e.stopPropagation(); UI.sel = UI.sel.filter(x => x !== li || pi !== 0); UI.zoomCard(c, { kind: "boardHero", pi, li }); };
         heroBox.appendChild(div);
+        // Relic pills open the Relic itself — its text, and its activated abilities
+        div.querySelectorAll(".pill.relic").forEach(p => {
+          p.onclick = (e) => {
+            e.stopPropagation();
+            const r = L.hero.relics.find(x => String(x.uid) === p.dataset.ruid);
+            if (r) UI.zoomCard(cardById(r.cardId), { kind: "relic", pi, li, relicUid: r.uid });
+          };
+        });
       } else {
         const slot = document.createElement("div");
         slot.className = "heroslot";
@@ -364,6 +372,17 @@ const UI = {
       modes = `<div class="mode">Cost: ${c.cost} Pulse</div><p class="body">${c.text}</p>`;
     }
     let live = "";
+    if (ctx.kind === "relic") {
+      const h2 = heroAt({ pi: ctx.pi, li: ctx.li });
+      const r2 = h2 && h2.relics.find(x => x.uid === ctx.relicUid);
+      if (r2 && ctx.pi === 0 && G.active === 0 && !G.over) {
+        fx(r2.cardId).activated.forEach((ab, i) => {
+          const used = r2.usedAb && r2.usedAb[i];
+          UI.addAction((used ? "Used this turn — " : "Activate: ") + ab.raw.slice(0, 60) + (ab.ops ? "" : " (manual)"),
+            async () => { pushUndo(); await activateAbility(0, ctx.li, r2, cardById(r2.cardId).name, ab, i, r2); }, !used && !!ab.ops);
+        });
+      }
+    }
     if (ctx.kind === "boardHero" && heroAt({ pi: ctx.pi, li: ctx.li })) {
       const h = heroAt({ pi: ctx.pi, li: ctx.li });
       live = `<div class="live">In play: <b>${effAtk(ctx.pi, ctx.li)} ATK · ${curHp(ctx.pi, ctx.li)}/${effMaxHp(ctx.pi, ctx.li)} HP</b>

@@ -334,6 +334,7 @@ function parseOp(cl) {
   if ((m = cl.match(new RegExp(`^a Hero you control heals ${NUM} Health$`, "i")))) return { op: "heal", n: +m[1], target: "ownChoice" };
   if ((m = cl.match(new RegExp(`^(?:\\w+|this Hero) gains \\+${NUM} Attack(?: and \\+${NUM} Health)? permanently$`, "i")))) return { op: "buff", atk: +m[1], hp: +(m[2] || 0), target: "laneHero", perm: true };
   if ((m = cl.match(/^destroy an enemy Relic or enemy Auxiliary card$/i))) return { op: "destroySupport", n: 1 };
+  if ((m = cl.match(/^your opponent discards (\d+) cards?(?: of their choice)?$/i))) return { op: "oppDiscard", n: +m[1] };
   if ((m = cl.match(/^destroy a Relic or Auxiliary card affecting an enemy Hero$/i))) return { op: "destroySupport", n: 1 };
   if ((m = cl.match(/^destroy a Hex targeting this lane$/i))) return { op: "destroyHexOpposing" };
   if ((m = cl.match(/^remove all enemy-imposed stat reductions and negative effects from all Heroes you control(?:, restoring the stats they would have without them)?$/i))) return { op: "removeReductions", target: "allOwn" };
@@ -923,7 +924,12 @@ function compileActivated(text, list, bits) {
   // Miriel: pay any amount of Pulse (max N): 10 damage per Pulse to a nearby enemy
   {
     const mm = norm(text || "").match(/Once per turn, you may pay any amount of Pulse \(maximum (\d+)\): deal (\d+) damage to an enemy Hero in this lane or a neighboring lane for each 1 Pulse paid/i);
-    if (mm) { list.push({ cost: 0, ops: [{ op: "payXDamage", max: +mm[1], per: +mm[2] }], raw: `pay up to ${mm[1]} Pulse — ${mm[2]} damage per Pulse to a nearby enemy` }); bits.push("activated ability"); }
+    if (mm) {
+      // drop the generic unscripted entry the loop above produced for this same clause
+      for (let k = list.length - 1; k >= 0; k--) if (!list[k].ops && /pay any amount of Pulse/i.test(list[k].raw)) list.splice(k, 1);
+      list.push({ cost: 0, ops: [{ op: "payXDamage", max: +mm[1], per: +mm[2] }], raw: `pay up to ${mm[1]} Pulse — ${mm[2]} damage per Pulse to a nearby enemy` });
+      bits.push("activated ability");
+    }
   }
   // Thalorin/Corvyn: attack an enemy Relic/Aux in the opposing lane instead of the Hero
   {
@@ -1024,7 +1030,14 @@ function compileCard(card) {
       compileContinuous(card.auxText, "aux", aout);
       compileRecurring(card.auxText, aout);
       const am = norm(card.auxText).match(/^When this card enters play, (.*)$/i);
-      if (am) { out.auxOnEnter = parseOps(am[1].replace(/[,.]?\s*[Tt]hen destroy this card\.?$/, "")); if (out.auxOnEnter) out.auxAutoBits.push("on-enter"); out.auxSelfDestruct = /then destroy this card/i.test(card.auxText); }
+      if (am) {
+        let body = am[1].replace(/[,.]?\s*[Tt]hen destroy this card\.?$/, "");
+        out.auxOnEnter = parseOps(body);
+        // multi-sentence aux text: the on-enter clause is only the first sentence
+        if (!out.auxOnEnter) { const first = sentences(body)[0]; if (first) out.auxOnEnter = parseOps(first); }
+        if (out.auxOnEnter) out.auxAutoBits.push("on-enter");
+        out.auxSelfDestruct = /then destroy this card/i.test(card.auxText);
+      }
     } else if (card.type === "relic") {
       compileContinuous(card.text, "relic", out);
       compileRecurring(card.text, out);
@@ -1341,7 +1354,7 @@ function startTurn() {
         s.counters++;
         log(`${P.name}'s Rite "${cardById(s.cardId).name}" ticks (${s.counters}/${r.timer || r.counterMax}).`);
         const target = r.timer || r.counterMax;
-        if (s.counters >= target) resolveRite(pi, si, "payoff");
+        if (s.counters >= target) { const _si = si; Promise.resolve().then(() => resolveRite(pi, _si, "payoff")); }
       }
     }
   }
@@ -1581,6 +1594,19 @@ async function runOp(op, pi, ctx) {
       const srcV = ctx.laneIdx != null ? heroAt({ pi, li: ctx.laneIdx }) : null;
       if (nAff2) log(`Every wounded enemy Hero loses ${op.red} Health (stat reduction).`);
       if (srcV && nAff2) { srcV.permAtk += op.atk * nAff2; const hd2 = applyHeal(srcV, op.heal); log(`${ctx.sourceName || "Hero"} gains +${op.atk * nAff2} Attack permanently and heals ${hd2}.`); }
+      break;
+    }
+    case "oppDiscard": {
+      const OP = G.players[1 - pi];
+      for (let k = 0; k < op.n && OP.hand.length; k++) {
+        let idx;
+        if (OP.isAI || window.PVP_MODE) idx = Math.floor(Math.random() * OP.hand.length);
+        else idx = await UI.pickHandCard("Your opponent's effect: choose a card to discard");
+        if (idx == null) idx = 0;
+        if (!OP.discard) OP.discard = [];
+        const gone = OP.hand.splice(idx, 1)[0];
+        if (gone) { OP.discard.push(gone); log(`${OP.name} discards a card.`, OP.isAI ? "ai" : ""); }
+      }
       break;
     }
     case "destroyHexOpposing": {   // Halo of the Everwatch: pop an enemy face-down Hex on the mirror lane
@@ -2195,8 +2221,12 @@ async function activateAbility(pi, li, holder, sourceName, ab, idx, relicInst) {
 }
 
 function promptPick(title, options) {
+  // browsers can block window.prompt (and it doesn't exist in test harnesses):
+  // fall back to the largest option so the ability never silently does nothing.
+  if (typeof prompt !== "function") return options.length - 1;
   const msg = title + "\n" + options.map((o, i) => `${i + 1}. ${o}`).join("\n") + "\n\nEnter a number (or cancel):";
-  const raw = prompt(msg);
+  let raw;
+  try { raw = prompt(msg); } catch (e) { return options.length - 1; }
   if (raw == null) return null;
   const n = parseInt(raw, 10);
   return n >= 1 && n <= options.length ? n - 1 : null;
@@ -2440,7 +2470,7 @@ function tickRites(pi, event) {
     s.tickedTurn[G.gt] = true;
     s.counters++;
     log(`${P.name}'s Rite "${cardById(s.cardId).name}" gains a counter (${s.counters}/${r.counterMax}).`, P.isAI ? "ai" : "");
-    if (s.counters >= r.counterMax) resolveRite(pi, si, "payoff");
+    if (s.counters >= r.counterMax) { const _si = si; Promise.resolve().then(() => resolveRite(pi, _si, "payoff")); }
   }
 }
 
