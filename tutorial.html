@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mortalis: Realms — Tutorial</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1014; --panel:#161a21; --card:#1d222c; --ink:#e9e7e1; --muted:#8a93a4;
+  --line:#252b36; --line2:#39414f; --accent:#7aa7e8; --accent-bg:#1a2634;
+  --good:#8fbc8f; --bad:#e0736b; --warn:#e0a45c; --warn-bg:#2c2318;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);font-size:14px;padding-bottom:150px}
+button{font-family:inherit;font-size:13px;padding:5px 12px;border:1px solid var(--line2);border-radius:6px;background:#1c212b;color:var(--ink);cursor:pointer}
+button:hover{background:#252b37;border-color:#4b556a}
+button.primary{background:var(--accent);color:#0d1014;border-color:var(--accent);font-weight:600}
+button.primary:hover{background:#93b8ee}
+button:disabled{opacity:.4;cursor:default}
+select,input,textarea{font-family:inherit;font-size:13px;padding:5px 8px;border:1px solid var(--line2);border-radius:6px;background:#12161d;color:var(--ink)}
+h1{font-size:19px;margin:0}
+h2{font-size:16px;margin:0 0 10px}
+a{color:var(--accent)}
+.topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:linear-gradient(180deg,#191e27 0%,#12161d 100%);border-bottom:1px solid var(--line);flex-wrap:wrap;position:sticky;top:0;z-index:50}
+.topbar .spacer{flex:1}
+.screen{display:none;padding:16px;max-width:1320px;margin:0 auto}
+.screen.visible{display:block}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+.brand{display:inline-flex;align-items:center;gap:9px}
+.brand .mk{width:26px;height:29px;flex-shrink:0}
+.brand .wm1{font-family:'Cinzel',Georgia,serif;font-weight:800;font-size:17px;color:#e6ecf4;letter-spacing:1.6px;display:block;line-height:1}
+.brand .wm2{font-family:'Cinzel',Georgia,serif;font-size:9px;color:#aab6c6;letter-spacing:3.6px;display:flex;align-items:center;gap:6px;margin-top:3px;line-height:1}
+.brand .wm2 i{height:1px;width:16px;background:#4d76c4;display:inline-block}
+.board{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:14px}
+.statline{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:6px 10px;background:#141922;border:1px solid var(--line);border-radius:8px}
+.statline .who{font-weight:600}
+.statline .nums span{margin-left:16px}
+.mortality{font-weight:700;color:#f0d9a0}
+.clickable-face{cursor:pointer;border:1px solid transparent;border-radius:6px;padding:3px 8px}
+.clickable-face.targetable{border-color:var(--bad);background:#3a1e1c;box-shadow:0 0 10px rgba(224,115,107,.35)}
+.lanes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:8px 0}
+.lane{min-width:0;border-radius:10px;overflow:hidden;background:linear-gradient(180deg,#1b202a 0%,#141821 100%);box-shadow:0 0 0 1px #252b36, 0 0 16px -6px var(--lc)}
+.lane.locked{opacity:.45;box-shadow:0 0 0 1px #222732}
+.lane-cap{display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 6px;background:linear-gradient(180deg,var(--lc) 0%,color-mix(in srgb,var(--lc) 55%,#0d1014) 100%);color:#12151c}
+.lane-cap span{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lane-body{padding:8px;display:flex;flex-direction:column;gap:6px}
+.heroslot{min-height:92px;border:1px dashed var(--line2);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted)}
+.heroslot.eligible{border-color:var(--accent);background:var(--accent-bg);cursor:pointer;color:var(--accent);font-weight:600}
+.herocard{position:relative;background:linear-gradient(180deg,#2a3040 0%,#20252f 100%);border:1px solid #4a5266;border-radius:8px;padding:8px 8px 7px;cursor:pointer;font-size:11px;min-height:92px;box-shadow:0 2px 10px rgba(0,0,0,.45)}
+.herocard:hover{border-color:#66718a}
+.herocard .cost-orb{position:absolute;top:-9px;left:7px;width:25px;height:25px;border-radius:50%;background:var(--lc);border:2px solid #12161d;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#12151c}
+.herocard .nm{font-weight:600;font-size:12px;line-height:1.25;text-align:right;color:#f1efe9;min-height:15px}
+.herocard .txt{color:#9aa4b6;line-height:1.35;max-height:44px;overflow:hidden;margin-top:5px}
+.herocard .statbar{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;padding-top:5px;border-top:1px solid #39414f}
+.herocard .statbar .atk{font-size:14px;font-weight:700;color:#e0a45c}
+.herocard .statbar .hp{font-size:14px;font-weight:700;color:#8fbc8f}
+.herocard .statbar .hp .mx{font-size:11px;font-weight:400;color:#6d7686}
+.herocard .statbar .rar{font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:#6d7686}
+.herocard .relicrow{margin-top:5px;display:flex;flex-wrap:wrap;gap:3px}
+.herocard.selected{outline:2px solid var(--accent);outline-offset:1px}
+.herocard.targetable{outline:2px solid var(--bad);outline-offset:1px;box-shadow:0 0 14px -2px rgba(224,115,107,.6)}
+.herocard.exhausted{opacity:.55}
+.buffed{color:#a8e08a}.nerfed{color:#e0736b}
+.badge-manual{display:none}
+.auxwrap,.supwrap{display:flex;flex-direction:column;gap:4px}
+.auxslot{border-radius:5px;padding:4px 6px;font-size:11px;color:var(--muted);border:1px dashed var(--line2);min-height:22px;display:flex;align-items:center}
+.auxslot.filled{border:none;background:#1a212c;border-left:3px solid var(--lc);cursor:pointer;color:#c8d1e0;display:block;line-height:1.3}
+.auxslot .auxtag{font-size:9px;letter-spacing:1px;color:var(--lc);margin-right:5px;text-transform:uppercase}
+.auxslot .auxnm{font-weight:600;color:#dfe5ef}
+.auxslot .auxfx{display:block;color:#8a93a4;font-size:10px;line-height:1.3;margin-top:1px}
+.supslot{border:1px dashed var(--line2);border-radius:5px;padding:5px 6px;font-size:11px;color:var(--muted);text-align:center;min-height:24px}
+.supslot.filled{border:none;background:var(--sbg);color:var(--sc);display:flex;align-items:center;gap:6px;text-align:left;cursor:pointer}
+.supslot.filled span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.supslot .fd{margin-left:auto;font-size:9px;opacity:.7}
+.sharedrow{display:flex;gap:6px;align-items:center;padding:4px 8px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+.sharedslot{border-radius:5px;padding:3px 8px;font-size:11px;display:flex;align-items:center;gap:5px;background:var(--sbg);color:var(--sc);cursor:pointer}
+.slotfree{font-size:10px;color:#5e6673}
+.midbar{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:8px 0;padding:7px 10px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;min-height:36px;background:#12161d}
+#turn-ind{color:#c3ccdb;font-weight:600}
+#prompt{font-weight:600;color:var(--accent)}
+.hand{display:flex;gap:7px;padding:8px 2px;flex-wrap:wrap}
+.handcard{width:124px;background:linear-gradient(180deg,#232936 0%,#1a1f28 100%);border:1px solid var(--line2);border-radius:8px;padding:7px;font-size:11px;cursor:pointer;position:relative;transition:transform .08s}
+.handcard:hover{border-color:var(--accent);transform:translateY(-2px)}
+.handcard .nm{font-weight:600;line-height:1.25;color:#eceae4}
+.handcard .meta{color:var(--muted);margin-top:3px}
+.handcard.unaffordable{opacity:.45}
+.logpanel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:12px;display:flex;flex-direction:column;min-height:360px}
+.logpanel h3{margin:0 0 7px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+#log{flex:1;overflow-y:auto;max-height:460px;line-height:1.5;color:#b9c1cf}
+#log .turnhdr{font-weight:600;margin-top:7px;border-top:1px solid var(--line);padding-top:5px;color:#e2ddd2}
+#log .ai{color:#c39ae0}
+.sidebtns{display:flex;flex-direction:column;gap:6px;margin-top:9px}
+.sandbox{display:none}
+#overlay{position:fixed;inset:0;background:rgba(6,8,11,.72);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+#overlay.visible{display:flex}
+.bigcard{width:410px;max-width:94vw;max-height:88vh;overflow-y:auto;background:linear-gradient(180deg,#222835 0%,#191d26 100%);border:1px solid #4a5266;border-radius:12px;padding:20px}
+.bigcard .hdr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.bigcard .nm{font-size:17px;font-weight:600}
+.bigcard .realm{font-size:12px;color:var(--muted)}
+.bigcard .sub{font-size:12px;color:var(--muted);margin:2px 0 12px}
+.bigcard .mode{font-size:13px;font-weight:600;margin:10px 0 2px;color:#cfd6e2}
+.bigcard .body{font-size:13px;line-height:1.55;margin:0;color:#b9c1cf}
+.bigcard .live{background:#141922;border-radius:6px;padding:9px;margin-top:10px;font-size:12px}
+.bigcard .actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.manual-note{display:none}
+.pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;background:#2b3241;color:#aab3c2}
+.pill.dim{opacity:.55}
+#toast{position:fixed;bottom:170px;left:50%;transform:translateX(-50%);background:#2a3040;color:#fff;padding:9px 17px;border-radius:8px;font-size:13px;display:none;z-index:200;border:1px solid #4a5266}
+
+/* ---- tutorial coach ---- */
+#coach{position:fixed;left:0;right:0;bottom:0;z-index:120;background:linear-gradient(180deg,#1a2130 0%,#141a24 100%);border-top:2px solid var(--accent);box-shadow:0 -8px 30px rgba(0,0,0,.5)}
+#coach .inner{max-width:1100px;margin:0 auto;padding:12px 18px;display:flex;gap:16px;align-items:flex-start}
+#coach .stepno{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#0d1014;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+#coach .body{flex:1;min-width:0}
+#coach .ttl{font-family:'Cinzel',Georgia,serif;font-size:16px;color:#eaf1fa;letter-spacing:.5px}
+#coach .txt{font-size:13.5px;color:#b9c4d4;line-height:1.55;margin-top:4px}
+#coach .task{display:inline-block;margin-top:7px;font-size:12.5px;color:#0d1014;background:var(--warn);border-radius:5px;padding:3px 10px;font-weight:600}
+#coach .task.done{background:var(--good)}
+#coach .btns{flex-shrink:0;display:flex;flex-direction:column;gap:6px;align-items:stretch;min-width:120px}
+#coach .prog{font-size:11px;color:#6f7b8c;text-align:center;margin-top:2px}
+.tut-target{position:relative;animation:tutpulse 1.5s ease-in-out infinite;border-radius:9px}
+@keyframes tutpulse{0%,100%{box-shadow:0 0 0 2px var(--accent),0 0 0 6px rgba(122,167,232,.18)}50%{box-shadow:0 0 0 2px var(--accent),0 0 0 12px rgba(122,167,232,.05)}}
+.tut-dim{opacity:.35;pointer-events:none}
+@media (max-width:760px){#coach .inner{flex-wrap:wrap}#coach .btns{flex-direction:row;width:100%}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="brand"><svg viewBox="0 0 40 44" class="mk" aria-hidden="true">
+<path d="M20 3 L31 14 L20 14 Z" fill="#3a5c9e"/>
+<path d="M9 14 L20 3 L20 14 Z" fill="#4d76c4"/>
+<path d="M31 14 L20 25 L20 14 Z" fill="#1c2f5c"/>
+<path d="M20 25 L9 14 L20 14 Z" fill="#26417a"/>
+<path d="M20 3 L31 14 L20 25 L9 14 Z" fill="none" stroke="#dfe6ef" stroke-width="1.5" stroke-linejoin="round"/>
+<path d="M20 9.5 L24.5 14 L20 18.5 L15.5 14 Z" fill="#0e1116" stroke="#aab6c6" stroke-width="1" stroke-linejoin="round"/>
+<rect x="6" y="28" width="4.4" height="9" rx="1.2" fill="#6d7b8f"/>
+<rect x="14" y="28" width="4.4" height="14" rx="1.2" fill="#dfe6ef"/>
+<rect x="22" y="28" width="4.4" height="14" rx="1.2" fill="#b8c3d1"/>
+<rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
+</svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
+  <span style="font-size:12px;color:var(--muted);margin-left:6px">Interactive tutorial</span>
+  <div class="spacer"></div>
+  <button id="btn-restart">Restart tutorial</button>
+  <a href="index.html"><button>Exit to game</button></a>
+  <button id="tab-play" style="display:none"></button><button id="tab-cards" style="display:none"></button><button id="tab-rules" style="display:none"></button>
+  <button id="btn-newgame" style="display:none"></button><button id="btn-export" style="display:none"></button><button id="btn-import" style="display:none"></button>
+  <input type="file" id="import-file" style="display:none"><button id="btn-reset" style="display:none"></button>
+</div>
+
+<div id="screen-setup" class="screen">
+  <div id="diff-btns" style="display:none"><button data-d="easy"></button><button data-d="medium"></button><button data-d="hard"></button></div>
+  <div class="lane-picks" id="player-realms" style="display:none"></div>
+  <button id="btn-rand-mine" style="display:none"></button>
+  <div id="ai-mode-btns" style="display:none"><button data-m="random"></button><button data-m="pick"></button></div>
+  <div class="lane-picks" id="ai-realms" style="display:none"></div>
+  <div id="first-btns" style="display:none"><button data-f="random"></button><button data-f="you"></button><button data-f="ai"></button></div>
+  <button id="btn-start" style="display:none"></button>
+</div>
+
+<div id="screen-game" class="screen visible">
+  <div class="board">
+    <div>
+      <div class="statline" id="row-opp">
+        <span class="who" id="ai-name">Training Dummy</span>
+        <span class="nums">
+          <span class="clickable-face" id="ai-face">Mortality <span class="mortality" id="ai-mort">250</span></span>
+          <span>Pulse <b id="ai-pulse">0</b></span>
+          <span>Hand <b id="ai-hand">0</b></span>
+          <span>Deck <b id="ai-deck">0</b></span>
+        </span>
+      </div>
+      <div class="sharedrow"><span>Their slots</span><span id="ai-slots" style="display:flex;gap:6px"></span></div>
+      <div class="lanes" id="ai-lanes"></div>
+      <div class="midbar">
+        <span id="turn-ind"></span><span id="prompt"></span>
+        <span><button id="btn-cancel" style="display:none">Cancel</button></span>
+      </div>
+      <div class="lanes" id="my-lanes"></div>
+      <div class="sharedrow" id="row-myslots"><span>Your slots</span><span id="my-slots" style="display:flex;gap:6px"></span></div>
+      <div class="statline" id="row-me">
+        <span class="who">You</span>
+        <span class="nums">
+          <span class="clickable-face" id="my-face">Mortality <span class="mortality" id="my-mort">250</span></span>
+          <span>Pulse <b id="my-pulse">0</b></span>
+          <span>Deck <b id="my-deck">0</b></span>
+        </span>
+      </div>
+      <div class="hand" id="hand"></div>
+    </div>
+    <div>
+      <div class="logpanel">
+        <h3>Game log</h3>
+        <div id="log"></div>
+        <div class="sidebtns">
+          <button class="primary" id="btn-endturn">End turn</button>
+          <button id="btn-undo" style="display:none"></button>
+          <button id="btn-sandbox-toggle" style="display:none"></button>
+        </div>
+        <div class="sandbox" id="sandbox"><label style="display:none"><input type="checkbox" id="free-target"></label></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-cards" class="screen"><div id="ed-form"></div><select id="ed-realm" style="display:none"></select><select id="ed-type" style="display:none"></select><input id="ed-search" style="display:none"><div id="ed-list" style="display:none"></div><button id="ed-new" style="display:none"></button></div>
+<div id="screen-rules" class="screen"><div id="const-grid" style="display:none"></div><button id="btn-save-consts" style="display:none"></button><textarea id="rules-text" style="display:none"></textarea><button id="btn-save-rules" style="display:none"></button></div>
+
+<div id="overlay"><div class="bigcard" id="bigcard"></div></div>
+<div id="toast"></div>
+
+<div id="coach">
+  <div class="inner">
+    <div class="stepno" id="c-no">1</div>
+    <div class="body">
+      <div class="ttl" id="c-title">Welcome</div>
+      <div class="txt" id="c-text"></div>
+      <div id="c-task" class="task" style="display:none"></div>
+    </div>
+    <div class="btns">
+      <button class="primary" id="c-next">Next</button>
+      <button id="c-skip">Skip step</button>
+      <div class="prog" id="c-prog"></div>
+    </div>
+  </div>
+</div>
+
+<script src="cards.js"></script>
+<script src="rules.js"></script>
+<script src="engine.js"></script>
+<script src="ui.js"></script>
+<script>
+/* ===================== Mortalis interactive tutorial ===================== */
+(function () {
+  const $$ = id => document.getElementById(id);
+  window.PVP_MODE = true;                 // stops ui.js from ever running the AI; the script drives the opponent
+
+  /* ---------- deterministic card picking (never crashes if a card is renamed) ---------- */
+  const byName = (n) => DB.cards.find(c => c.name === n);
+  const pick = (name, realm, type, extra) =>
+    byName(name) ||
+    DB.cards.find(c => c.realm === realm && c.type === type && (!extra || extra(c))) ||
+    DB.cards.find(c => c.type === type);
+
+  let C_CHEAP, C_BIG, C_RELIC, C_HEX, C_AUX, C_FOE;
+  function chooseCards() {
+    C_CHEAP = pick("Riko, the Ashwolf Pup", "Fangrend", "hero", c => c.cost <= 2);
+    C_BIG   = pick("Vorka, Stormfang Reaver", "Fangrend", "hero", c => c.cost >= 4 && c.cost <= 5);
+    C_AUX   = pick("Snarl, the Wound-Fed", "Fangrend", "hero", c => c.auxSlots === 1 && c.cost <= 3);
+    C_RELIC = pick("Fangrend Warpaint", "Fangrend", "relic", c => (c.slots || 1) === 1);
+    C_HEX   = pick("Snapping Ambush", "Fangrend", "hex");
+    C_FOE   = DB.cards.find(c => c.realm === "Balemaw" && c.type === "hero" && c.cost <= 3) ||
+              DB.cards.find(c => c.type === "hero" && c.cost <= 3);
+  }
+
+  /* ---------- a fixed, friendly starting position ---------- */
+  function setupGame() {
+    chooseCards();
+    newGame({
+      playerRealms: ["Fangrend", "Fangrend", "Fangrend", "Fangrend"],
+      aiRealms: [C_FOE.realm, C_FOE.realm, C_FOE.realm, C_FOE.realm],
+      difficulty: "medium", first: 0, humanOpponent: true, names: ["You", "Training Dummy"],
+    });
+    const P = G.players[0], O = G.players[1];
+    P.hand = [C_CHEAP.id, C_BIG.id, C_AUX.id, C_RELIC.id, C_HEX.id];
+    P.pulse = 6;                                   // enough to follow along without waiting
+    P.turnCount = 1;
+    O.hand = [C_FOE.id, C_FOE.id];
+    O.pulse = 10;
+    G.log.length = 0;
+    log("Tutorial: a practice duel against a Training Dummy. Follow the coach at the bottom.");
+    UI.render();
+  }
+
+  /* ---------- the opponent's scripted turn ---------- */
+  async function dummyTurn() {
+    const O = G.players[1];
+    await new Promise(r => setTimeout(r, 550));
+    // play one Hero into the lane opposite your first Hero, if it can
+    const mine = heroesOf(0)[0];
+    const target = mine ? mine.li : 1;
+    if (!G.players[1].lanes[target].hero) {
+      const hi = O.hand.findIndex(id => cardById(id).type === "hero");
+      if (hi >= 0) {
+        const opts = playOptions(1, hi);
+        const lane = opts.heroLanes.includes(target) ? target : opts.heroLanes[0];
+        if (lane != null) await playHero(1, hi, lane);
+      }
+    }
+    UI.render();
+    await new Promise(r => setTimeout(r, 550));
+    if (!G.over) { endTurn(); UI.render(); }
+  }
+
+  /* ---------- steps ---------- */
+  const S = [
+    {
+      t: "Welcome to Mortalis: Realms",
+      x: "Two commanders duel across four lanes. Every card you play, every attack you make, works toward one thing: dropping your opponent's <b>Mortality</b> from 250 to zero. This tutorial uses the real game — nothing here is faked.",
+      hi: () => ["#row-opp", "#row-me"],
+    },
+    {
+      t: "Mortality and Pulse",
+      x: "<b>Mortality</b> is your life total — lose it and you lose. <b>Pulse</b> is the resource you spend to play cards. You gain a little on turn one and more every turn after, up to 8, so cheap Heroes rule the early game and giants arrive late.",
+      hi: () => ["#my-mort", "#my-pulse"],
+    },
+    {
+      t: "Your four lanes",
+      x: "Each lane is locked to one <b>Realm</b> and holds one Hero. The two middle lanes open immediately; the outer ones unlock on turns 3 and 5. Heroes fight the enemy standing directly across from them.",
+      hi: () => ["#my-lanes"],
+    },
+    {
+      t: "Play your first Hero",
+      x: () => `Click <b>${C_CHEAP.name}</b> in your hand, then choose <b>Hero Mode</b> and pick an open lane. Cheap Heroes like this one are how you hold the board early.`,
+      task: "Play a Hero into one of your open lanes",
+      hi: () => ["#hand"],
+      done: () => heroesOf(0).length >= 1,
+    },
+    {
+      t: "Attack and Health",
+      x: "Your Hero shows <span style='color:#e0a45c'>Attack</span> on the left and <span style='color:#8fbc8f'>Health</span> on the right, with its Pulse cost in the orb. There is no maximum Health — healing past full permanently raises the stat.",
+      hi: () => ["#my-lanes .herocard"],
+    },
+    {
+      t: "End your turn",
+      x: "You've spent what you want, so pass. The Training Dummy will answer with a Hero of its own.",
+      task: "Click End turn",
+      hi: () => ["#btn-endturn"],
+      done: () => G.active === 1 || heroesOf(1).length >= 1,
+      after: async () => { if (G.active === 1) await dummyTurn(); },
+    },
+    {
+      t: "Attacking",
+      x: "Click your Hero once to select it, then click the enemy Hero across from it. In combat both sides compare Attack: the <b>lower</b> Attack takes the difference as damage, and the higher takes none. Winning a fight cleanly costs you nothing.",
+      task: "Attack the enemy Hero",
+      hi: () => ["#my-lanes .herocard"],
+      done: () => heroesOf(0).some(t => heroAt(t).attacksUsed > 0) || heroesOf(1).length === 0 || G.players[1].mortality < 250,
+    },
+    {
+      t: "Overkill and going face",
+      x: "Damage beyond a Hero's Health spills into its controller's Mortality — that's <b>Overkill</b>, capped at 30 per kill. When your opponent has no Heroes at all, your attacks hit their Mortality directly.",
+      hi: () => ["#ai-face"],
+    },
+    {
+      t: "Auxiliary Mode — every card has two uses",
+      x: () => `Any Hero can instead be played face-up as a support card in <b>Auxiliary Mode</b>, for 2 less Pulse. It doesn't fight; it grants an ongoing effect to that lane. A duplicate Hero is never a dead draw.<br><br>Click <b>${C_AUX.name}</b> and choose <b>Auxiliary Mode</b>.`,
+      task: "Play a card in Auxiliary Mode",
+      hi: () => ["#hand"],
+      done: () => G.players[0].lanes.some(L => L.aux.some(a => a)),
+      prep: () => { G.players[0].pulse = Math.max(G.players[0].pulse, 6); },
+    },
+    {
+      t: "Relics",
+      x: () => `<b>Relics</b> attach to one of your Heroes and stay there — usually stat boosts or granted abilities. Each Hero has 2 Relic slots, and a Relic can only go on a Hero of its own Realm. If its Hero dies, the Relic dies too.<br><br>Equip <b>${C_RELIC.name}</b> to your Hero.`,
+      task: "Attach a Relic to your Hero",
+      hi: () => ["#hand"],
+      done: () => heroesOf(0).some(t => heroAt(t).relics.length > 0),
+      prep: () => { G.players[0].pulse = Math.max(G.players[0].pulse, 4); },
+    },
+    {
+      t: "Support cards and the shared slots",
+      x: "Four more card types share <b>4 slots</b>: <b>Hexes</b> (set face-down, spring on a condition — you pay their cost when they trigger), <b>Rites</b> (charge up over turns, then pay off big), <b>Pacts</b> (a real cost for real power), and <b>Incantations</b> (resolve immediately). Each sits in the lane you assign it.",
+      task: "Set your face-down Hex in a lane",
+      hi: () => ["#row-myslots"],
+      done: () => G.players[0].slots.some(s => s),
+      prep: () => { G.players[0].pulse = Math.max(G.players[0].pulse, 4); },
+    },
+    {
+      t: "Onslaught — ganging up",
+      x: "Select <b>two or more</b> of your Heroes before choosing a target and they attack as one: their Attack is summed against the single defender. But if the defender's Attack is higher, <b>every</b> attacker takes the full difference — a failed Onslaught can wipe your board.",
+      hi: () => ["#my-lanes"],
+    },
+    {
+      t: "Realms and deckbuilding",
+      x: "You pick 4 Realm lanes before a match and build a 40-card deck. Mixing Realms unlocks cross-Realm payoffs; going mono gives you consistency. There are 15 Realms — Fangrend hits hard and fragile, Almsgard endures, Thornveil strikes from cover, and so on.",
+      hi: () => ["#my-lanes"],
+    },
+    {
+      t: "You're ready",
+      x: "That's the whole game: spend Pulse, hold lanes, win fights, and grind Mortality to zero. Everything else is card text. Try a real match against the AI, or play a friend with a room code.",
+      hi: () => [],
+      end: true,
+    },
+  ];
+
+  /* ---------- coach engine ---------- */
+  let i = 0;
+  const textOf = (s) => (typeof s.x === "function" ? s.x() : s.x);
+
+  function clearHi() { document.querySelectorAll(".tut-target").forEach(e => e.classList.remove("tut-target")); }
+  function applyHi() {
+    clearHi();
+    const s = S[i];
+    if (!s.hi) return;
+    for (const sel of s.hi()) { const el = document.querySelector(sel); if (el) el.classList.add("tut-target"); }
+  }
+
+  function paint() {
+    const s = S[i];
+    $$("c-no").textContent = i + 1;
+    $$("c-title").textContent = s.t;
+    $$("c-text").innerHTML = textOf(s);
+    $$("c-prog").textContent = `Step ${i + 1} of ${S.length}`;
+    const hasTask = !!s.task;
+    $$("c-task").style.display = hasTask ? "" : "none";
+    if (hasTask) {
+      const ok = s.done && s.done();
+      $$("c-task").textContent = ok ? "Done — press Next" : "Your turn: " + s.task;
+      $$("c-task").className = "task" + (ok ? " done" : "");
+      $$("c-next").disabled = !ok;
+      $$("c-skip").style.display = ok ? "none" : "";
+    } else {
+      $$("c-next").disabled = false;
+      $$("c-skip").style.display = "none";
+    }
+    $$("c-next").textContent = s.end ? "Play a real game" : "Next";
+    applyHi();
+  }
+
+  async function go(n) {
+    const prev = S[i];
+    if (prev && prev.after) await prev.after();
+    i = n;
+    if (i >= S.length) { finish(); return; }
+    const s = S[i];
+    if (s.prep) { s.prep(); UI.render(); }
+    paint();
+  }
+
+  function finish() { window.location.href = "index.html"; }
+
+  $$("c-next").onclick = () => { if (S[i].end) finish(); else go(i + 1); };
+  $$("c-skip").onclick = () => go(i + 1);
+  $$("btn-restart").onclick = () => { setupGame(); i = 0; paint(); };
+  window.__TUT = { steps: S, go, at: () => i, setup: setupGame, paint };
+
+  // re-check the current step after every board update
+  const origRender = UI.render.bind(UI);
+  UI.render = function () { origRender(); try { paint(); } catch (e) {} };
+
+  window.addEventListener("DOMContentLoaded", () => {
+    DB = baseData(); recompileAll();
+    UI.show("game");
+    setupGame();
+    i = 0; paint();
+  });
+})();
+</script>
+</body>
+</html>
