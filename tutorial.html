@@ -143,7 +143,7 @@ a{color:var(--accent)}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span style="font-size:12px;color:var(--muted);margin-left:6px">Interactive tutorial</span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260719215228</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260719220246</span>
   <div class="spacer"></div>
   <button id="btn-restart">Restart tutorial</button>
   <a href="index.html"><button>Exit to game</button></a>
@@ -230,10 +230,10 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 
-<script src="cards.js?v=20260719215228"></script>
-<script src="rules.js?v=20260719215228"></script>
-<script src="engine.js?v=20260719215228"></script>
-<script src="ui.js?v=20260719215228"></script>
+<script src="cards.js?v=20260719220246"></script>
+<script src="rules.js?v=20260719220246"></script>
+<script src="engine.js?v=20260719220246"></script>
+<script src="ui.js?v=20260719220246"></script>
 <script>
 /* ===================== Mortalis interactive tutorial ===================== */
 (function () {
@@ -361,8 +361,8 @@ a{color:var(--accent)}
       x: "You've spent what you want, so pass. The Training Dummy will answer with a Hero of its own.",
       task: "Click End turn",
       hi: () => ["#btn-endturn"],
-      done: () => heroesOf(1).length >= 1 && G.active === 0,
-      prep: () => { UI.pending = null; UI.busy = false; UI.sel = []; },
+      done: () => G.__endedTurn === true && G.active === 0,
+      prep: () => { UI.pending = null; UI.busy = false; UI.sel = []; G.__endedTurn = false; },
       auto: true,
     },
     {
@@ -468,6 +468,30 @@ a{color:var(--accent)}
 
   function finish() { window.location.href = "index.html"; }
 
+  function fail(where, e) {
+    console.error(where, e);
+    const b = $$("c-text");
+    if (b) b.innerHTML = `<span style="color:#e0736b">Something went wrong in ${where}: ${(e && e.message) || e}</span><br>` + b.innerHTML;
+  }
+
+  // Own the End turn button outright — always live, always explains itself.
+  function wireEndTurn() {
+    const b = $$("btn-endturn");
+    if (!b) return;
+    b.disabled = false;
+    b.onclick = async () => {
+      try {
+        if (G.over) return;
+        if (G.active !== 0) { UI.toast("It's the Training Dummy's turn — one moment."); return; }
+        UI.pending = null; UI.busy = false; UI.sel = [];
+        pushUndo();
+        endTurn();                 // hands control to the Dummy
+        G.__endedTurn = true;
+        UI.render();               // the render hook launches the Dummy's turn
+      } catch (e) { fail("ending the turn", e); }
+    };
+  }
+
   $$("c-next").onclick = () => { if (S[i].end) finish(); else go(i + 1); };
   $$("c-skip").onclick = () => go(i + 1);
   $$("btn-restart").onclick = () => { setupGame(); i = 0; paint(); };
@@ -478,11 +502,16 @@ a{color:var(--accent)}
   let dummyBusy = false;
   UI.render = function () {
     origRender();
+    try { wireEndTurn(); } catch (e) {}
     try { paint(); } catch (e) {}
     // the Training Dummy answers on its own, right after you end your turn
     if (!dummyBusy && G && !G.over && G.active === 1) {
       dummyBusy = true;
-      setTimeout(async () => { try { await dummyTurn(); } finally { dummyBusy = false; UI.render(); } }, 400);
+      setTimeout(async () => {
+        try { await dummyTurn(); }
+        catch (e) { fail("the Training Dummy's turn", e); if (G.active === 1) { G.active = 0; } }
+        finally { dummyBusy = false; UI.render(); }
+      }, 400);
     }
   };
 
@@ -490,6 +519,7 @@ a{color:var(--accent)}
     DB = baseData(); recompileAll();
     UI.show("game");
     setupGame();
+    wireEndTurn();
     i = 0; paint();
   });
 })();
