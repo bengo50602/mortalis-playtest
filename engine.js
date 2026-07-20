@@ -1019,6 +1019,7 @@ function compileCard(card) {
       if (apf) { out.auxPreFight = { red: +apf[1], atk: +apf[2], heal: 0 }; out.auxAutoBits.push("pre-combat drain"); }
       // Subotai: once per turn, no combat damage when raiding a non-opposing lane
       if (/The first time each turn \w+ attacks a lane other than (?:his|her|its) directly opposing lane, (?:he|she|it) takes no combat damage from that combat/i.test(norm(card.text))) { out.noCounterRaid = true; out.autoBits.push("far-strike immunity"); }
+      if (/Whenever \w+ attacks a lane other than (?:his|her|its) directly opposing lane, (?:he|she|it) permanently gains \+(\d+) Attack/i.test(norm(card.text))) { out.raidMomentum = +norm(card.text).match(/permanently gains \+(\d+) Attack/i)[1]; out.autoBits.push("raid momentum"); }
       { const r5 = compileFightMods(card.text); if (r5.mods.length && !out.fightMods) { out.fightMods = r5.mods; out.autoBits.push("situational combat bonus"); } if (r5.shields.length && !out.initShield) { out.initShield = r5.shields; out.autoBits.push("initiator shield"); } }
       { const r6 = compileFightMods(card.auxText); if (r6.shields.length) { out.auxInitShield = r6.shields; out.auxAutoBits.push("initiator shield"); } }
       let dynH;
@@ -3422,6 +3423,13 @@ async function resolveAttack(pi, attackerLis, target) {
   await fireHexes(1 - pi, "attackLane", ctx);
   for (const ali of attackerLis) await fireHexes(pi, "ownAttack", { laneIdx: ali, combat });
   applyCombatAuxMods(pi, attackerLis, ctx.defender.li, combat, ctx.defender);
+  // Subotai: riding down a distant lane makes him permanently stronger
+  for (const ali of attackerLis) {
+    const rh = heroAt({ pi, li: ali });
+    if (!rh || isSilenced(rh)) continue;
+    const rm = fx(rh.cardId).raidMomentum;
+    if (rm && dLi !== ali) { rh.permAtk += rm; log(`${cardById(rh.cardId).name} gains +${rm} Attack permanently (far strike).`, P.isAI ? "ai" : ""); }
+  }
   emit("enemyDeclared", 1 - pi, {});
   // Temurzhin: any friendly attack declaration spurs him on
   for (const t9 of heroesOf(pi)) {

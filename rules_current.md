@@ -1151,7 +1151,7 @@ While in this slot, all Heroes you control may attack any enemy lane.
 
 **Subotai the Far-Striker**
 Hero Mode — Cost: 6 Pulse | Attack/Health: 110/70 | Rarity: Rare
-Subotai may attack any enemy lane. The first time each turn Subotai attacks a lane other than his directly opposing lane, he takes no combat damage from that combat.
+Subotai may attack any enemy lane. Whenever Subotai attacks a lane other than his directly opposing lane, he permanently gains +10 Attack.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While in this slot, when the Hero in this lane attacks a lane other than its directly opposing lane, it gains +20 Attack for that combat.
 

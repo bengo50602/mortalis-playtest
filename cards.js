@@ -2149,7 +2149,7 @@ window.DEFAULT_DATA = {
    "atk": 110,
    "hp": 70,
    "rarity": "Rare",
-   "text": "Subotai may attack any enemy lane. The first time each turn Subotai attacks a lane other than his directly opposing lane, he takes no combat damage from that combat.",
+   "text": "Subotai may attack any enemy lane. Whenever Subotai attacks a lane other than his directly opposing lane, he permanently gains +10 Attack.",
    "auxCost": 4,
    "auxSlots": 2,
    "auxText": "While in this slot, when the Hero in this lane attacks a lane other than its directly opposing lane, it gains +20 Attack for that combat."
