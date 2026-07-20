@@ -27,10 +27,31 @@ def stamp(path: Path) -> int:
     return n
 
 
-for page in ("index.html", "pvp.html"):
+STAMP_RE = re.compile(r'<span id="buildstamp"[^>]*>[^<]*</span>')
+
+
+def build_stamp(path: Path) -> bool:
+    """Show the build id in the top bar so it's obvious which build is live."""
+    if not path.exists():
+        return False
+    text = path.read_text(encoding="utf-8")
+    tag = f'<span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build {VERSION}</span>'
+    if STAMP_RE.search(text):
+        text = STAMP_RE.sub(tag, text)
+    elif '<div class="spacer"></div>' in text:
+        text = text.replace('<div class="spacer"></div>', tag + '\n  <div class="spacer"></div>', 1)
+    else:
+        return False
+    path.write_text(text, encoding="utf-8")
+    return True
+
+
+for page in ("index.html", "pvp.html", "tutorial.html"):
     n = stamp(HERE / page)
     if n:
         print(f"Stamped {n} script tags in {page} (v={VERSION})")
+    if build_stamp(HERE / page):
+        print(f"Build stamp in {page}: {VERSION}")
 
 # --- single-file bundle (query strings stripped when inlining) ---
 html = (HERE / "index.html").read_text(encoding="utf-8")
