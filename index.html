@@ -111,6 +111,31 @@ a{color:var(--accent)}
 .sandbox .row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
 .sandbox button{font-size:11px;padding:3px 7px}
 
+
+/* ---- deck rail, opponent hand, card motion (Rail Deal) ---- */
+.handrail{display:flex;align-items:flex-start;gap:14px;padding:4px 4px 8px;position:relative}
+.handrail .hand{flex:1;min-width:0;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;align-items:flex-start}
+.handrail .handcard{width:112px;flex:0 0 112px}
+.deckpile{position:relative;flex:0 0 60px;width:60px;height:84px;margin:14px 6px 0 2px}
+.deckpile .pl{position:absolute;left:0;top:0;width:60px;height:84px;border-radius:6px;background:#111926;box-shadow:0 0 0 1.5px #8f9db4,0 3px 10px rgba(0,0,0,.55);overflow:hidden}
+.deckpile .pl.p1{transform:translate(5px,5px);opacity:.35}
+.deckpile .pl.p2{transform:translate(2.5px,2.5px);opacity:.7}
+.deckpile.empty .pl{opacity:.15;box-shadow:0 0 0 1.5px var(--line2)}
+.deckpile .dcount{position:absolute;left:0;width:60px;bottom:-16px;text-align:center;font-size:11px;font-weight:600;color:#8f9db4;letter-spacing:.4px}
+.cardback{width:100%;height:100%;display:block}
+.opphand{display:flex;gap:5px;padding:6px 2px;flex-wrap:nowrap;overflow:hidden;align-items:center;min-height:70px}
+.oppcard{flex:0 0 44px;width:44px;height:62px;border-radius:5px;box-shadow:0 0 0 1.3px #8f9db4,0 2px 7px rgba(0,0,0,.5);overflow:hidden}
+.handempty{font-size:11px;color:#5e6673;font-style:italic}
+/* cards in flight */
+.fxlayer{position:fixed;inset:0;pointer-events:none;z-index:95;overflow:hidden}
+.fxghost{position:absolute;border-radius:7px;perspective:900px;will-change:transform,opacity;transition-property:transform,opacity;transition-timing-function:cubic-bezier(.22,.78,.28,1)}
+.fxghost .fin{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition-property:transform;transition-timing-function:cubic-bezier(.22,.78,.28,1)}
+.fxghost .ff{position:absolute;inset:0;border-radius:7px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.fxghost .ft{background:linear-gradient(180deg,#232936 0%,#1a1f28 100%);border:1px solid #4a5266;transform:rotateY(180deg);padding:7px;font-size:11px}
+.fxghost .gnm{font-weight:600;color:#eceae4;line-height:1.2}
+.fxghost .gmeta{color:#8a93a4;margin-top:3px}
+@media (prefers-reduced-motion:reduce){.fxlayer{display:none}}
+
 /* ---- zoom overlay ---- */
 #overlay{position:fixed;inset:0;background:rgba(6,8,11,.72);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 #overlay.visible{display:flex}
@@ -175,7 +200,7 @@ a{color:var(--accent)}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260719220333</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260720173111</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -243,6 +268,10 @@ a{color:var(--accent)}
           <span>Deck <b id="ai-deck">0</b></span>
         </span>
       </div>
+      <div class="handrail opprail">
+        <div class="deckpile" id="ai-deckpile"></div>
+        <div class="hand opphand" id="ai-hand-cards"></div>
+      </div>
       <div class="sharedrow"><span>AI slots</span><span id="ai-slots" style="display:flex;gap:6px"></span></div>
       <div class="lanes" id="ai-lanes"></div>
       <div class="midbar">
@@ -260,7 +289,10 @@ a{color:var(--accent)}
           <span>Deck <b id="my-deck">0</b></span>
         </span>
       </div>
-      <div class="hand" id="hand"></div>
+      <div class="handrail">
+        <div class="deckpile" id="my-deckpile"></div>
+        <div class="hand" id="hand"></div>
+      </div>
       <p style="font-size:11px;color:var(--muted);margin:2px 6px">Click a hand card to zoom and play it. Single-click your Hero to select it for an attack (click more Heroes for an Onslaught), then click the target — or the AI's Mortality when its board is empty. <b>Double-click any Hero to zoom it and use its abilities</b> or adjust it manually.</p>
     </div>
     <div>
@@ -324,10 +356,10 @@ a{color:var(--accent)}
 <div id="overlay"><div class="bigcard" id="bigcard"></div></div>
 <div id="toast"></div>
 
-<script src="cards.js?v=20260719220333"></script>
-<script src="rules.js?v=20260719220333"></script>
-<script src="custom.js?v=20260719220333"></script>
-<script src="engine.js?v=20260719220333"></script>
-<script src="ui.js?v=20260719220333"></script>
+<script src="cards.js?v=20260720173111"></script>
+<script src="rules.js?v=20260720173111"></script>
+<script src="custom.js?v=20260720173111"></script>
+<script src="engine.js?v=20260720173111"></script>
+<script src="ui.js?v=20260720173111"></script>
 </body>
 </html>

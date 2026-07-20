@@ -111,6 +111,31 @@ a{color:var(--accent)}
 .sandbox .row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
 .sandbox button{font-size:11px;padding:3px 7px}
 
+
+/* ---- deck rail, opponent hand, card motion (Rail Deal) ---- */
+.handrail{display:flex;align-items:flex-start;gap:14px;padding:4px 4px 8px;position:relative}
+.handrail .hand{flex:1;min-width:0;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;align-items:flex-start}
+.handrail .handcard{width:112px;flex:0 0 112px}
+.deckpile{position:relative;flex:0 0 60px;width:60px;height:84px;margin:14px 6px 0 2px}
+.deckpile .pl{position:absolute;left:0;top:0;width:60px;height:84px;border-radius:6px;background:#111926;box-shadow:0 0 0 1.5px #8f9db4,0 3px 10px rgba(0,0,0,.55);overflow:hidden}
+.deckpile .pl.p1{transform:translate(5px,5px);opacity:.35}
+.deckpile .pl.p2{transform:translate(2.5px,2.5px);opacity:.7}
+.deckpile.empty .pl{opacity:.15;box-shadow:0 0 0 1.5px var(--line2)}
+.deckpile .dcount{position:absolute;left:0;width:60px;bottom:-16px;text-align:center;font-size:11px;font-weight:600;color:#8f9db4;letter-spacing:.4px}
+.cardback{width:100%;height:100%;display:block}
+.opphand{display:flex;gap:5px;padding:6px 2px;flex-wrap:nowrap;overflow:hidden;align-items:center;min-height:70px}
+.oppcard{flex:0 0 44px;width:44px;height:62px;border-radius:5px;box-shadow:0 0 0 1.3px #8f9db4,0 2px 7px rgba(0,0,0,.5);overflow:hidden}
+.handempty{font-size:11px;color:#5e6673;font-style:italic}
+/* cards in flight */
+.fxlayer{position:fixed;inset:0;pointer-events:none;z-index:95;overflow:hidden}
+.fxghost{position:absolute;border-radius:7px;perspective:900px;will-change:transform,opacity;transition-property:transform,opacity;transition-timing-function:cubic-bezier(.22,.78,.28,1)}
+.fxghost .fin{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition-property:transform;transition-timing-function:cubic-bezier(.22,.78,.28,1)}
+.fxghost .ff{position:absolute;inset:0;border-radius:7px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.fxghost .ft{background:linear-gradient(180deg,#232936 0%,#1a1f28 100%);border:1px solid #4a5266;transform:rotateY(180deg);padding:7px;font-size:11px}
+.fxghost .gnm{font-weight:600;color:#eceae4;line-height:1.2}
+.fxghost .gmeta{color:#8a93a4;margin-top:3px}
+@media (prefers-reduced-motion:reduce){.fxlayer{display:none}}
+
 /* ---- zoom overlay ---- */
 #overlay{position:fixed;inset:0;background:rgba(6,8,11,.72);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 #overlay.visible{display:flex}
@@ -175,7 +200,7 @@ a{color:var(--accent)}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260719220333</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260720173111</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -243,6 +268,10 @@ a{color:var(--accent)}
           <span>Deck <b id="ai-deck">0</b></span>
         </span>
       </div>
+      <div class="handrail opprail">
+        <div class="deckpile" id="ai-deckpile"></div>
+        <div class="hand opphand" id="ai-hand-cards"></div>
+      </div>
       <div class="sharedrow"><span>AI slots</span><span id="ai-slots" style="display:flex;gap:6px"></span></div>
       <div class="lanes" id="ai-lanes"></div>
       <div class="midbar">
@@ -260,7 +289,10 @@ a{color:var(--accent)}
           <span>Deck <b id="my-deck">0</b></span>
         </span>
       </div>
-      <div class="hand" id="hand"></div>
+      <div class="handrail">
+        <div class="deckpile" id="my-deckpile"></div>
+        <div class="hand" id="hand"></div>
+      </div>
       <p style="font-size:11px;color:var(--muted);margin:2px 6px">Click a hand card to zoom and play it. Single-click your Hero to select it for an attack (click more Heroes for an Onslaught), then click the target — or the AI's Mortality when its board is empty. <b>Double-click any Hero to zoom it and use its abilities</b> or adjust it manually.</p>
     </div>
     <div>
@@ -9424,12 +9456,52 @@ const UI = {
     const faceTarget = UI.sel.length && legalTargetsFor(0, UI.sel).face;
     $("ai-face").classList.toggle("targetable", !!faceTarget);
 
+    FX.capture();                 // measure the outgoing hand before we wipe it
+
     UI.renderSlots("ai-slots", 1);
     UI.renderSlots("my-slots", 0);
     UI.renderLanes("ai-lanes", 1);
     UI.renderLanes("my-lanes", 0);
+    UI.renderDeck("ai-deckpile", 1);
+    UI.renderDeck("my-deckpile", 0);
+    UI.renderOppHand();
     UI.renderHand();
     UI.renderLog();
+
+    FX.settle();                  // diff against the previous frame and fly cards
+  },
+
+  /* deck pile — the approved card back, with the count remaining */
+  renderDeck(elId, pi) {
+    const el = $(elId);
+    if (!el) return;
+    const n = G.players[pi].deck.length;
+    el.className = "deckpile" + (n === 0 ? " empty" : "");
+    el.title = `${G.players[pi].name}'s deck — ${n} card${n === 1 ? "" : "s"} remaining`;
+    el.innerHTML =
+      `<div class="pl p1"></div><div class="pl p2"></div>` +
+      `<div class="pl top">${n ? cardBackSVG(true) : ""}</div>` +
+      `<div class="dcount">${n}</div>`;
+  },
+
+  /* the opponent's hand, face down — you see how many cards they hold */
+  renderOppHand() {
+    const el = $("ai-hand-cards");
+    if (!el) return;
+    el.innerHTML = "";
+    const n = G.players[1].hand.length;
+    for (let i = 0; i < n; i++) {
+      const d = document.createElement("div");
+      d.className = "oppcard";
+      d.innerHTML = cardBackSVG();
+      el.appendChild(d);
+    }
+    if (!n) {
+      const e = document.createElement("div");
+      e.className = "handempty";
+      e.textContent = "no cards in hand";
+      el.appendChild(e);
+    }
   },
 
   statSpan(base, eff) {
@@ -10051,11 +10123,213 @@ function realmCrest(realm, w, main, dark, bg) {
   if (!fn) return "";
   return `<svg viewBox="0 0 34 46" width="${w}" height="${Math.round(w * 46 / 34)}" style="flex-shrink:0;display:block">${fn(main, dark, bg || "#12151c")}</svg>`;
 }
+/* ---------------------------- card back art ----------------------------
+   The Mortalis mark is drawn on a 40x44 grid, but its *ink* does not fill that
+   grid: the diamond spans x 9..31 / y 3..25 and the four lane bars span
+   x 6..34.4 / y 28..42. So the ink bounding box is x 6..34.4, y 3..42 and its
+   true centre is (20.2, 22.5) — NOT the (20, 22) grid centre. Centring by the
+   grid leaves the mark visibly low and left. Every card back positions the mark
+   with `translate(cx,cy) scale(s) translate(-20.2,-22.5)` so the ink is dead
+   centre in the medallion and on the card.                                   */
+const MARK_INK_CX = 20.2, MARK_INK_CY = 22.5;
+const MARK_PATHS =
+  '<path d="M20 3 L31 14 L20 14 Z" fill="#3a5c9e"/>' +
+  '<path d="M9 14 L20 3 L20 14 Z" fill="#4d76c4"/>' +
+  '<path d="M31 14 L20 25 L20 14 Z" fill="#1c2f5c"/>' +
+  '<path d="M20 25 L9 14 L20 14 Z" fill="#26417a"/>' +
+  '<path d="M20 3 L31 14 L20 25 L9 14 Z" fill="none" stroke="#dfe6ef" stroke-width="1.5" stroke-linejoin="round"/>' +
+  '<path d="M20 9.5 L24.5 14 L20 18.5 L15.5 14 Z" fill="#0e1116" stroke="#aab6c6" stroke-width="1" stroke-linejoin="round"/>' +
+  '<rect x="6" y="28" width="4.4" height="9" rx="1.2" fill="#6d7b8f"/>' +
+  '<rect x="14" y="28" width="4.4" height="14" rx="1.2" fill="#dfe6ef"/>' +
+  '<rect x="22" y="28" width="4.4" height="14" rx="1.2" fill="#b8c3d1"/>' +
+  '<rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>';
+
+// Miniature of the approved "Sovereign Seal" card back, for deck piles, the
+// opponent's hand and cards in flight. `wordmark` adds MORTALIS under the seal
+// (only legible at pile size).
+function cardBackSVG(wordmark) {
+  const mk = `<g transform="translate(30,${wordmark ? 38 : 42}) scale(0.92) translate(-${MARK_INK_CX},-${MARK_INK_CY})">${MARK_PATHS}</g>`;
+  return `<svg class="cardback" viewBox="0 0 60 84" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    <rect x="0" y="0" width="60" height="84" rx="6" fill="#111926"/>
+    <rect x="3" y="3" width="54" height="78" rx="4" fill="none" stroke="#3a4a68" stroke-width="1"/>
+    <circle cx="30" cy="${wordmark ? 38 : 42}" r="23" fill="#162031"/>
+    <circle cx="30" cy="${wordmark ? 38 : 42}" r="23" fill="none" stroke="#8f9db4" stroke-width="1.1"/>
+    <circle cx="30" cy="${wordmark ? 38 : 42}" r="19.6" fill="none" stroke="#41506d" stroke-width=".7"/>
+    ${mk}
+    ${wordmark ? `<text x="30" y="70" text-anchor="middle" fill="#c3ccdb" font-family="Cinzel,Georgia,serif" font-weight="800" font-size="8.4" letter-spacing="1.1">MORTALIS</text>
+    <line x1="12" y1="74.5" x2="48" y2="74.5" stroke="#3a4a68" stroke-width=".7"/>` : ""}
+  </svg>`;
+}
+
 const SUPPORT_STYLE = {
   hex:  { col:"#c7aee8", bg:"#2a2140", glyph:'<path d="M6 1 L11 6 L6 11 L1 6 Z" fill="currentColor"/>' },
   rite: { col:"#9ed6c6", bg:"#17302a", glyph:'<circle cx="6" cy="6" r="4.4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="6" r="1.4" fill="currentColor"/>' },
   pact: { col:"#e39a86", bg:"#3a221c", glyph:'<path d="M6 11 C2 8 1 5 2.6 3 C4 1.4 6 2.6 6 4.2 C6 2.6 8 1.4 9.4 3 C11 5 10 8 6 11 Z" fill="currentColor"/>' },
   incantation: { col:"#a2dcf2", bg:"#162836", glyph:'<path d="M6 1 L7.4 4.6 L11 6 L7.4 7.4 L6 11 L4.6 7.4 L1 6 L4.6 4.6 Z" fill="currentColor"/>' },
+};
+
+/* =========================== CARD MOTION (FX) ===========================
+   "Rail Deal" style. Nothing here touches game state — FX watches each render,
+   diffs the hands/decks against the previous frame and flies a ghost card along
+   the difference. That means draws, plays, burns, AI turns, PvP syncs and
+   tutorial scripts all animate for free, with no hooks in the rules code.     */
+const FX = {
+  DUR: 340,
+  gref: null,
+  snap: null,
+  pre: [[], []],
+
+  live() {
+    return typeof requestAnimationFrame === "function" &&
+           typeof document !== "undefined" && !!document.body &&
+           UI.screen === "game" && !!G;
+  },
+  rect(el) {
+    if (!el || typeof el.getBoundingClientRect !== "function") return null;
+    const r = el.getBoundingClientRect();
+    return (r && r.width) ? r : null;
+  },
+  handEl(pi) { return pi === 0 ? $("hand") : $("ai-hand-cards"); },
+  pileEl(pi) { return pi === 0 ? $("my-deckpile") : $("ai-deckpile"); },
+  laneEl(pi, li) {
+    const wrap = $(pi === 0 ? "my-lanes" : "ai-lanes");
+    if (!wrap || !wrap.children) return null;
+    return (li >= 0 && wrap.children[li]) ? wrap.children[li] : wrap;
+  },
+  layer() {
+    let l = $("fxlayer");
+    if (!l) { l = document.createElement("div"); l.id = "fxlayer"; l.className = "fxlayer"; document.body.appendChild(l); }
+    return l;
+  },
+
+  // where each card id currently sits on a player's board (for play targets)
+  boardMap(pi) {
+    const P = G.players[pi], m = {};
+    P.lanes.forEach((L, li) => {
+      if (L.hero) { m[L.hero.cardId] = li; (L.hero.relics || []).forEach(r => { m[r.cardId] = li; }); }
+      L.aux.forEach(a => { if (a) m[a.cardId] = li; });
+    });
+    (P.slots || []).forEach(s => { if (s) m[s.cardId] = (s.laneIdx != null ? s.laneIdx : -1); });
+    return m;
+  },
+  take() {
+    return {
+      gt: G.gt,
+      hand: [G.players[0].hand.slice(), G.players[1].hand.slice()],
+      deck: [G.players[0].deck.length, G.players[1].deck.length],
+      disc: [(G.players[0].discard || []).length, (G.players[1].discard || []).length],
+      board: [FX.boardMap(0), FX.boardMap(1)],
+    };
+  },
+
+  /* called just before the DOM is rebuilt — the old hand nodes still exist */
+  capture() {
+    FX.pre = [[], []];
+    if (!FX.live()) return;
+    for (const pi of [0, 1]) {
+      const el = FX.handEl(pi);
+      if (el && el.children) FX.pre[pi] = [...el.children].map(n => FX.rect(n));
+    }
+  },
+
+  /* called after the DOM is rebuilt — diff and animate */
+  settle() {
+    let now;
+    try { now = FX.take(); } catch (e) { return; }
+    const prev = FX.snap, sameGame = FX.gref === G;
+    FX.snap = now; FX.gref = G;
+    if (!prev || !sameGame || !FX.live()) return;
+    if (now.gt < prev.gt) return;                       // undo / rewind: don't animate
+    for (const pi of [0, 1]) {
+      try { FX.animateSide(pi, prev, now); } catch (e) { /* motion must never break the board */ }
+    }
+  },
+
+  diffHand(prev, now) {
+    const used = new Array(prev.length).fill(false), addedIdx = [];
+    for (let i = 0; i < now.length; i++) {
+      let k = -1;
+      for (let j = 0; j < prev.length; j++) if (!used[j] && prev[j] === now[i]) { k = j; break; }
+      if (k >= 0) used[k] = true; else addedIdx.push(i);
+    }
+    const removedIdx = [];
+    for (let j = 0; j < prev.length; j++) if (!used[j]) removedIdx.push(j);
+    return { addedIdx, removedIdx };
+  },
+
+  animateSide(pi, prev, now) {
+    const d = FX.diffHand(prev.hand[pi], now.hand[pi]);
+    const drewCount = prev.deck[pi] - now.deck[pi];
+    const burned = drewCount > 0 && !d.addedIdx.length && (now.disc[pi] > prev.disc[pi]);
+    // a wholesale change (new game, import, mulligan) is a redraw, not a move
+    if (d.addedIdx.length > 5 || d.removedIdx.length > 3) return;
+
+    const pile = FX.rect(FX.pileEl(pi));
+    const nodes = FX.handEl(pi) && FX.handEl(pi).children ? [...FX.handEl(pi).children] : [];
+
+    // ---- draws: deck -> hand ----
+    if (pile) d.addedIdx.forEach((hi, k) => {
+      const node = nodes[hi], to = FX.rect(node);
+      if (!to) return;
+      if (node.style) node.style.visibility = "hidden";
+      FX.fly(pile, to, {
+        mode: pi === 0 ? "flip" : "back",
+        card: pi === 0 ? cardById(now.hand[pi][hi]) : null,
+        delay: k * 80,
+        done: () => { if (node.style) node.style.visibility = ""; },
+      });
+    });
+
+    // ---- plays: hand -> the lane the card landed in ----
+    d.removedIdx.forEach((hi, k) => {
+      const from = FX.pre[pi][hi];
+      if (!from) return;
+      const cid = prev.hand[pi][hi];
+      const card = cardById(cid);
+      const li = (now.board[pi][cid] != null && prev.board[pi][cid] == null) ? now.board[pi][cid] : -1;
+      const to = FX.rect(FX.laneEl(pi, li));
+      if (!to) return;
+      FX.fly(from, to, { mode: pi === 0 ? "face" : "flip", card, delay: k * 70, fade: true });
+    });
+
+    // ---- overdraw burn: deck -> away ----
+    if (burned && pile) FX.fly(pile, { left: pile.left, top: pile.top + (pi === 0 ? 40 : -40), width: pile.width, height: pile.height }, { mode: "back", fade: true, shrink: .7 });
+  },
+
+  fly(a, b, o) {
+    o = o || {};
+    const L = FX.layer();
+    if (!L || typeof L.appendChild !== "function") return;
+    const g = document.createElement("div");
+    g.className = "fxghost";
+    g.style.left = a.left + "px"; g.style.top = a.top + "px";
+    g.style.width = a.width + "px"; g.style.height = a.height + "px";
+    g.style.transitionDuration = FX.DUR + "ms";
+    if (o.delay) g.style.transitionDelay = o.delay + "ms";
+    const c = o.card;
+    const face = c ? `<div class="ff ft"><div class="gnm">${c.name}</div><div class="gmeta">${c.realm}</div>
+        <div class="gmeta">${c.type === "hero" ? c.atk + "/" + c.hp : c.type}</div></div>` : `<div class="ff ft"></div>`;
+    g.innerHTML = `<div class="fin">${face}<div class="ff bk">${cardBackSVG()}</div></div>`;
+    L.appendChild(g);
+    const fin = g.firstChild;
+    if (fin && fin.style) {
+      fin.style.transitionDuration = FX.DUR + "ms";
+      if (o.delay) fin.style.transitionDelay = o.delay + "ms";
+      if (o.mode === "face") { fin.style.transition = "none"; fin.style.transform = "rotateY(180deg)"; }
+    }
+    const s = (o.shrink != null) ? o.shrink : Math.min(b.width / a.width, b.height / a.height);
+    const dx = (b.left + b.width / 2) - (a.left + a.width / 2);
+    const dy = (b.top + b.height / 2) - (a.top + a.height / 2);
+    requestAnimationFrame(() => {
+      g.style.transform = `translate(${dx}px, ${dy}px) scale(${s})`;
+      if (o.fade) g.style.opacity = "0";
+      if (o.mode === "flip" && fin && fin.style) { void g.offsetWidth; fin.style.transform = "rotateY(180deg)"; }
+    });
+    setTimeout(() => {
+      if (g.parentNode) g.parentNode.removeChild(g);
+      if (o.done) o.done();
+    }, FX.DUR + (o.delay || 0) + 60);
+  },
 };
 
 /* ================================ EDITOR ================================ */
