@@ -13,7 +13,7 @@
   --good:#8fbc8f; --bad:#e0736b; --warn:#e0a45c; --warn-bg:#2c2318;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);font-size:14px;padding-bottom:150px}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
 button{font-family:inherit;font-size:13px;padding:5px 12px;border:1px solid var(--line2);border-radius:6px;background:#1c212b;color:var(--ink);cursor:pointer}
 button:hover{background:#252b37;border-color:#4b556a}
 button.primary{background:var(--accent);color:#0d1014;border-color:var(--accent);font-weight:600}
@@ -23,7 +23,7 @@ select,input,textarea{font-family:inherit;font-size:13px;padding:5px 8px;border:
 h1{font-size:19px;margin:0}
 h2{font-size:16px;margin:0 0 10px}
 a{color:var(--accent)}
-.topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:linear-gradient(180deg,#191e27 0%,#12161d 100%);border-bottom:1px solid var(--line);flex-wrap:wrap;position:sticky;top:0;z-index:50}
+.topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:linear-gradient(180deg,#191e27 0%,#12161d 100%);border-bottom:1px solid var(--line);flex-wrap:wrap}
 .topbar .spacer{flex:1}
 .screen{display:none;padding:16px;max-width:1320px;margin:0 auto}
 .screen.visible{display:block}
@@ -107,10 +107,11 @@ a{color:var(--accent)}
 .manual-note{display:none}
 .pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;background:#2b3241;color:#aab3c2}
 .pill.dim{opacity:.55}
-#toast{position:fixed;bottom:170px;left:50%;transform:translateX(-50%);background:#2a3040;color:#fff;padding:9px 17px;border-radius:8px;font-size:13px;display:none;z-index:200;border:1px solid #4a5266}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2a3040;color:#fff;padding:9px 17px;border-radius:8px;font-size:13px;display:none;z-index:200;border:1px solid #4a5266}
 
 /* ---- tutorial coach ---- */
-#coach{position:fixed;left:0;right:0;bottom:0;z-index:120;background:linear-gradient(180deg,#1a2130 0%,#141a24 100%);border-top:2px solid var(--accent);box-shadow:0 -8px 30px rgba(0,0,0,.5)}
+#stickytop{position:sticky;top:0;z-index:120}
+#coach{background:linear-gradient(180deg,#1a2130 0%,#141a24 100%);border-bottom:2px solid var(--accent);box-shadow:0 8px 24px rgba(0,0,0,.45)}
 #coach .inner{max-width:1100px;margin:0 auto;padding:12px 18px;display:flex;gap:16px;align-items:flex-start}
 #coach .stepno{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#0d1014;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
 #coach .body{flex:1;min-width:0}
@@ -127,6 +128,7 @@ a{color:var(--accent)}
 </style>
 </head>
 <body>
+<div id="stickytop">
 <div class="topbar">
   <span class="brand"><svg viewBox="0 0 40 44" class="mk" aria-hidden="true">
 <path d="M20 3 L31 14 L20 14 Z" fill="#3a5c9e"/>
@@ -141,13 +143,29 @@ a{color:var(--accent)}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span style="font-size:12px;color:var(--muted);margin-left:6px">Interactive tutorial</span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260719213042</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260719215103</span>
   <div class="spacer"></div>
   <button id="btn-restart">Restart tutorial</button>
   <a href="index.html"><button>Exit to game</button></a>
   <button id="tab-play" style="display:none"></button><button id="tab-cards" style="display:none"></button><button id="tab-rules" style="display:none"></button>
   <button id="btn-newgame" style="display:none"></button><button id="btn-export" style="display:none"></button><button id="btn-import" style="display:none"></button>
   <input type="file" id="import-file" style="display:none"><button id="btn-reset" style="display:none"></button>
+</div>
+<div id="coach">
+  <div class="inner">
+    <div class="stepno" id="c-no">1</div>
+    <div class="body">
+      <div class="ttl" id="c-title">Welcome</div>
+      <div class="txt" id="c-text"></div>
+      <div id="c-task" class="task" style="display:none"></div>
+    </div>
+    <div class="btns">
+      <button class="primary" id="c-next">Next</button>
+      <button id="c-skip">Skip step</button>
+      <div class="prog" id="c-prog"></div>
+    </div>
+  </div>
+</div>
 </div>
 
 <div id="screen-setup" class="screen">
@@ -211,26 +229,11 @@ a{color:var(--accent)}
 <div id="overlay"><div class="bigcard" id="bigcard"></div></div>
 <div id="toast"></div>
 
-<div id="coach">
-  <div class="inner">
-    <div class="stepno" id="c-no">1</div>
-    <div class="body">
-      <div class="ttl" id="c-title">Welcome</div>
-      <div class="txt" id="c-text"></div>
-      <div id="c-task" class="task" style="display:none"></div>
-    </div>
-    <div class="btns">
-      <button class="primary" id="c-next">Next</button>
-      <button id="c-skip">Skip step</button>
-      <div class="prog" id="c-prog"></div>
-    </div>
-  </div>
-</div>
 
-<script src="cards.js?v=20260719213042"></script>
-<script src="rules.js?v=20260719213042"></script>
-<script src="engine.js?v=20260719213042"></script>
-<script src="ui.js?v=20260719213042"></script>
+<script src="cards.js?v=20260719215103"></script>
+<script src="rules.js?v=20260719215103"></script>
+<script src="engine.js?v=20260719215103"></script>
+<script src="ui.js?v=20260719215103"></script>
 <script>
 /* ===================== Mortalis interactive tutorial ===================== */
 (function () {
@@ -299,11 +302,15 @@ a{color:var(--accent)}
     const P = G.players[0], O = G.players[1];
     G.__onslaughtDone = false;
     G.active = 0;
+    UI.pending = null; UI.busy = false; UI.sel = [];
+    if (G.gt < 3) G.gt = 3;                 // past the "first player can't attack on turn 1" rule
+    P.turnCount = Math.max(P.turnCount || 1, 3);
     // two ready Heroes of ours in the open middle lanes
     [1, 2].forEach(li => {
       if (!P.lanes[li].hero) P.lanes[li].hero = heroInst(C_CHEAP.id);
-      P.lanes[li].hero.attacksUsed = 0;
-      P.lanes[li].hero.noAttackOnTurn = 0;
+      const hh = P.lanes[li].hero;
+      hh.attacksUsed = 0; hh.extraAttacks = 0; hh.hasAttacked = false;
+      hh.noAttackOnTurn = 0; hh.noAttackUntil = 0; hh.silencedUntil = 0;
     });
     // one beefy defender they cannot beat alone
     O.lanes.forEach(L => { L.hero = null; });
@@ -355,6 +362,7 @@ a{color:var(--accent)}
       task: "Click End turn",
       hi: () => ["#btn-endturn"],
       done: () => heroesOf(1).length >= 1 && G.active === 0,
+      prep: () => { UI.pending = null; UI.busy = false; UI.sel = []; },
       auto: true,
     },
     {
