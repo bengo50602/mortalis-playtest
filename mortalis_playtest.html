@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <title>Mortalis: Realms — Playtest</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0d1014; --panel:#161a21; --card:#1d222c; --ink:#e9e7e1; --muted:#8a93a4;
@@ -142,11 +144,36 @@ a{color:var(--accent)}
 .pill.auto{background:#1f3324;color:#8fbc8f}
 .pill.manual{background:var(--warn-bg);color:var(--warn)}
 #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#2a3040;color:#fff;padding:9px 17px;border-radius:8px;font-size:13px;display:none;z-index:200;border:1px solid #4a5266}
+
+/* ---- brand lockup (navy & silver) ---- */
+.brand{display:inline-flex;align-items:center;gap:9px}
+.brand .mk{width:26px;height:29px;flex-shrink:0}
+.brand .wm1{font-family:'Cinzel',Georgia,serif;font-weight:800;font-size:17px;color:#e6ecf4;letter-spacing:1.6px;display:block;line-height:1}
+.brand .wm2{font-family:'Cinzel',Georgia,serif;font-size:9px;color:#aab6c6;letter-spacing:3.6px;display:flex;align-items:center;gap:6px;margin-top:3px;line-height:1}
+.brand .wm2 i{height:1px;width:16px;background:#4d76c4;display:inline-block}
+.brand-hero{display:flex;flex-direction:column;align-items:center;gap:14px;padding:8px 0 22px;text-align:center}
+.brand-hero .mk{width:104px;height:114px;filter:drop-shadow(0 6px 22px rgba(77,118,196,.35))}
+.brand-hero .wm1{font-family:'Cinzel',Georgia,serif;font-weight:800;font-size:44px;color:#e9eff7;letter-spacing:7px;line-height:1}
+.brand-hero .wm2{font-family:'Cinzel',Georgia,serif;font-size:14px;color:#aab6c6;letter-spacing:11px;display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px;line-height:1}
+.brand-hero .wm2 i{height:1px;width:52px;background:linear-gradient(90deg,transparent,#4d76c4);display:inline-block}
+.brand-hero .wm2 i:last-child{background:linear-gradient(90deg,#4d76c4,transparent)}
+@media (max-width:640px){.brand-hero .wm1{font-size:30px;letter-spacing:4px}.brand-hero .mk{width:74px;height:81px}}
 </style>
 </head>
 <body>
 <div class="topbar">
-  <h1>Mortalis: Realms — playtest</h1>
+  <span class="brand"><svg viewBox="0 0 40 44" class="mk" aria-hidden="true">
+<path d="M20 3 L31 14 L20 14 Z" fill="#3a5c9e"/>
+<path d="M9 14 L20 3 L20 14 Z" fill="#4d76c4"/>
+<path d="M31 14 L20 25 L20 14 Z" fill="#1c2f5c"/>
+<path d="M20 25 L9 14 L20 14 Z" fill="#26417a"/>
+<path d="M20 3 L31 14 L20 25 L9 14 Z" fill="none" stroke="#dfe6ef" stroke-width="1.5" stroke-linejoin="round"/>
+<path d="M20 9.5 L24.5 14 L20 18.5 L15.5 14 Z" fill="#0e1116" stroke="#aab6c6" stroke-width="1" stroke-linejoin="round"/>
+<rect x="6" y="28" width="4.4" height="9" rx="1.2" fill="#6d7b8f"/>
+<rect x="14" y="28" width="4.4" height="14" rx="1.2" fill="#dfe6ef"/>
+<rect x="22" y="28" width="4.4" height="14" rx="1.2" fill="#b8c3d1"/>
+<rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
+</svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
   <div class="spacer"></div>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -161,6 +188,18 @@ a{color:var(--accent)}
 </div>
 
 <div id="screen-setup" class="screen visible">
+  <div class="brand-hero"><svg viewBox="0 0 40 44" class="mk" aria-hidden="true">
+<path d="M20 3 L31 14 L20 14 Z" fill="#3a5c9e"/>
+<path d="M9 14 L20 3 L20 14 Z" fill="#4d76c4"/>
+<path d="M31 14 L20 25 L20 14 Z" fill="#1c2f5c"/>
+<path d="M20 25 L9 14 L20 14 Z" fill="#26417a"/>
+<path d="M20 3 L31 14 L20 25 L9 14 Z" fill="none" stroke="#dfe6ef" stroke-width="1.5" stroke-linejoin="round"/>
+<path d="M20 9.5 L24.5 14 L20 18.5 L15.5 14 Z" fill="#0e1116" stroke="#aab6c6" stroke-width="1" stroke-linejoin="round"/>
+<rect x="6" y="28" width="4.4" height="9" rx="1.2" fill="#6d7b8f"/>
+<rect x="14" y="28" width="4.4" height="14" rx="1.2" fill="#dfe6ef"/>
+<rect x="22" y="28" width="4.4" height="14" rx="1.2" fill="#b8c3d1"/>
+<rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
+</svg><div class="wm"><div class="wm1">MORTALIS</div><div class="wm2"><i></i>REALMS<i></i></div></div></div>
   <div class="panel" style="max-width:760px;margin:0 auto">
     <h2>New game</h2>
     <p class="setup-label">AI difficulty</p>
