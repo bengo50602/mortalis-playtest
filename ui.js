@@ -186,7 +186,11 @@ const UI = {
         if (pi === G.active && L.hero.attacksUsed >= maxAttacksOf(pi, li)) div.classList.add("exhausted");
         if (pi === 0 && UI.sel.includes(li)) div.classList.add("selected");
         if (UI.targetableHeroes().some(t => t.pi === pi && t.li === li)) div.classList.add("targetable");
-        const relicPills = L.hero.relics.map(r => `<span class="pill relic" data-ruid="${r.uid}" title="${(cardById(r.cardId).text || "").replace(/"/g, "&quot;")}">${cardById(r.cardId).name}${r.counters ? " ⚒" + r.counters : ""}</span>`).join(" ");
+        // an armed "block the next attack" ward is invisible otherwise, which
+        // makes cards like Benedar look as though they did nothing
+        const wardPill = (P.blockAtkGt >= G.gt && !P.blockAtkUsed && P.blockAtkLane === li)
+          ? `<span class="pill ward" title="The first attack declared against your Heroes on your opponent's next turn is blocked.">ward armed</span>` : "";
+        const relicPills = wardPill + L.hero.relics.map(r => `<span class="pill relic" data-ruid="${r.uid}" title="${(cardById(r.cardId).text || "").replace(/"/g, "&quot;")}">${cardById(r.cardId).name}${r.counters ? " ⚒" + r.counters : ""}</span>`).join(" ");
         const freeRelic = C().relicSlotsPerHero - L.hero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0);
         div.innerHTML = `<div class="cost-orb">${c.cost}</div>
           <div class="nm">${c.name}</div>
@@ -1100,24 +1104,35 @@ const FX = {
       FX.go(wash, ";opacity:0");
     }, 200 + cells.length * COLLAPSE);
 
-    if (!c) return;
-    FX.after(() => {
-      for (let li = 0; li < 4; li++) { const e2 = FX.laneEl(w, li); if (e2 && e2.style) { e2.style.transition = "opacity .5s"; e2.style.opacity = ".28"; } }
-      [0, 150, 300, 450].forEach((d, i) => FX.after(() => {
-        const size = 90;
-        const ring = FX.spawn(`left:${c.x - size / 2}px;top:${c.y - size / 2}px;width:${size}px;height:${size}px;border:2px solid ${i % 2 ? "#8f9db4" : "#4d76c4"};border-radius:50%;opacity:.85`, 1100, "fxring");
-        FX.go(ring, ";transform:scale(5);opacity:0");
-      }, d));
-      const med = FX.spawn(`left:${c.x - 46}px;top:${c.y - 46}px;width:92px;height:92px;border-radius:50%;background:#162031;box-shadow:0 0 0 2px #8f9db4;transform:scale(0)`, 3200, "fxmedal");
-      if (med) {
-        // offset so the mark's ink centre, not its grid centre, sits in the medallion
-        med.innerHTML = `<svg viewBox="0 0 40 44" width="46" height="50" style="margin:20px 0 0 23px" aria-hidden="true">${MARK_PATHS}</svg>`;
-        FX.go(med, ";transform:scale(1)");
-        FX.after(() => { med.style.cssText += ";transform:translateY(-46px) scale(.92)"; }, 800);
-      }
-      const name = (G.players[w] && G.players[w].name) || "You";
-      FX.title("VICTORY", name.toUpperCase() + " PREVAILS", 900, 2000);
-    }, SEAL_AT);
+    FX.after(() => FX.crown(w), SEAL_AT);
+  },
+
+  /* One composed lockup: seal, then VICTORY, then who won. Previously the
+     medallion and the banner were positioned independently and overlapped. */
+  crown(w) {
+    for (let li = 0; li < 4; li++) { const e2 = FX.laneEl(w, li); if (e2 && e2.style) { e2.style.transition = `opacity ${FX.ms(500)}ms`; e2.style.opacity = ".28"; } }
+    const who = (G.players[w] && G.players[w].name) || "You";
+    // "You" is a pronoun, not a name — "YOU PREVAILS" reads as broken English
+    const line = /^you$/i.test(who) ? "YOU PREVAIL" : who.toUpperCase() + " PREVAILS";
+    const d = FX.spawn("left:0;right:0;top:30%", 4200, "fxtitle fxcrown");
+    if (!d) return;
+    d.innerHTML =
+      `<div class="fxseal"><svg viewBox="0 0 40 44" width="46" height="50" aria-hidden="true">${MARK_PATHS}</svg></div>` +
+      `<div class="fxwm">VICTORY</div>` +
+      `<div class="fxsub">${line}</div>`;
+    const kids = d.children || [];
+    const seal = kids[0], wm = kids[1], sub = kids[2];
+
+    FX.after(() => { if (seal && seal.style) seal.style.transform = "scale(1)"; }, 40);
+    [0, 160, 320].forEach((t, i) => FX.after(() => {
+      const r = FX.rect(seal) || FX.rect(d);   // fall back to the lockup if the seal is not measurable
+      if (!r) return;
+      const size = 92;
+      const ring = FX.spawn(`left:${r.left + r.width / 2 - size / 2}px;top:${r.top + r.height / 2 - size / 2}px;width:${size}px;height:${size}px;border:2px solid ${i % 2 ? "#8f9db4" : "#4d76c4"};border-radius:50%;opacity:.8`, 1100, "fxring");
+      FX.go(ring, ";transform:scale(4.4);opacity:0");
+    }, 120 + t));
+    FX.after(() => { if (wm && wm.style) { wm.style.opacity = "1"; wm.style.transform = "none"; } }, 380);
+    FX.after(() => { if (sub && sub.style) sub.style.opacity = "1"; }, 780);
   },
 
   /* ------------------------- arcane event motion -------------------------
@@ -1165,8 +1180,24 @@ const FX = {
     } else if (kind === "reveal") {
       FX.ring(lane, "#c7aee8", 1.7);
       FX.chip(lane, "Hex — " + d.name, "#e6d8fb", "rgba(42,33,64,.94)");
+    } else if (kind === "block") {
+      FX.ring(lane, "#9dc0f0", 2.1);
+      FX.chip(lane, d.name + " — attack blocked", "#cfe0ff", "rgba(26,39,64,.94)");
+    } else if (kind === "faceAttack") {
+      const to = FX.faceEl(d.dpi);
+      if (!to) return;
+      d.lanes.forEach((li, k) => {
+        const from = FX.laneEl(d.pi === 0 ? 0 : 1, li);
+        FX.after(() => FX.streak(from, to, FX.laneColor(d.pi, li)), k * 110);
+      });
+      FX.after(() => {
+        FX.ring(to, "#e0736b", 2.4);
+        FX.float(to, "-" + d.n, "#f0d9a0");
+        FX.chip(to, d.onslaught ? "Direct hit — Onslaught" : "Direct hit", "#f6e6c0", "rgba(74,52,16,.94)");
+      }, d.lanes.length * 110);
     }
   },
+  faceEl(pi) { return $(pi === 0 ? "my-face" : "ai-face"); },
   laneColor(pi, li) {
     try { const L = G.players[pi].lanes[li]; return realmColor(L && L.realm); } catch (e) { return "#8fa0c0"; }
   },

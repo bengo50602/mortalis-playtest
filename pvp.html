@@ -131,6 +131,12 @@ a{color:var(--accent)}
 .fxtitle{transition:opacity calc(.55s * var(--fx-mult)),transform calc(.65s * var(--fx-mult)) cubic-bezier(.2,.9,.3,1);text-align:center}
 .fxwm{font-family:'Cinzel',Georgia,serif;font-weight:800;font-size:38px;color:#e9eff7;letter-spacing:9px;text-shadow:0 3px 22px rgba(0,0,0,.85)}
 .fxsub{font-family:'Cinzel',Georgia,serif;font-size:13px;color:#aab6c6;letter-spacing:5px;margin-top:8px;text-shadow:0 2px 12px rgba(0,0,0,.85)}
+.fxcrown{opacity:1;transform:none}
+.fxcrown .fxseal{width:92px;height:92px;margin:0 auto 14px;border-radius:50%;background:#162031;box-shadow:0 0 0 2px #8f9db4, 0 6px 26px rgba(0,0,0,.6);transform:scale(0);transition:transform calc(.55s * var(--fx-mult)) cubic-bezier(.2,1.45,.4,1)}
+.fxcrown .fxseal svg{display:block;margin:20px 0 0 23px}
+.fxcrown .fxwm{opacity:0;transform:scale(.88);transition:opacity calc(.5s * var(--fx-mult)),transform calc(.6s * var(--fx-mult)) cubic-bezier(.2,.9,.3,1)}
+.fxcrown .fxsub{opacity:0;transition:opacity calc(.5s * var(--fx-mult))}
+.pill.ward{background:#1a2740;color:#9dc0f0;border-color:#3a5c9e}
 .fxstamp{opacity:1;transform:none}
 .fxstamp .fxmark{position:absolute;left:50%;margin-left:-29px;top:-14px;opacity:0;transform:scale(2.8);transition:transform calc(.26s * var(--fx-mult)) cubic-bezier(.5,0,.75,0),opacity calc(.2s * var(--fx-mult))}
 .fxstamp .fxwm{display:flex;justify-content:center;padding-left:9px}
@@ -231,7 +237,7 @@ a{color:var(--accent)}
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
   <span class="netstate" id="netstate"></span>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good)">How to play</button></a>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260721115455</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260721121033</span>
   <div class="spacer"></div>
   <button id="tab-play" class="active-tab" style="display:none">Play</button>
   <button id="tab-cards">Edit cards</button>
@@ -362,10 +368,10 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="cards.js?v=20260721115455"></script>
-<script src="rules.js?v=20260721115455"></script>
-<script src="engine.js?v=20260721115455"></script>
-<script src="ui.js?v=20260721115455"></script>
+<script src="cards.js?v=20260721121033"></script>
+<script src="rules.js?v=20260721121033"></script>
+<script src="engine.js?v=20260721121033"></script>
+<script src="ui.js?v=20260721121033"></script>
 <script>
 /* ================= Mortalis PvP layer (host-authoritative, PeerJS) ================= */
 (function () {

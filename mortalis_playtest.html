@@ -131,6 +131,12 @@ a{color:var(--accent)}
 .fxtitle{transition:opacity calc(.55s * var(--fx-mult)),transform calc(.65s * var(--fx-mult)) cubic-bezier(.2,.9,.3,1);text-align:center}
 .fxwm{font-family:'Cinzel',Georgia,serif;font-weight:800;font-size:38px;color:#e9eff7;letter-spacing:9px;text-shadow:0 3px 22px rgba(0,0,0,.85)}
 .fxsub{font-family:'Cinzel',Georgia,serif;font-size:13px;color:#aab6c6;letter-spacing:5px;margin-top:8px;text-shadow:0 2px 12px rgba(0,0,0,.85)}
+.fxcrown{opacity:1;transform:none}
+.fxcrown .fxseal{width:92px;height:92px;margin:0 auto 14px;border-radius:50%;background:#162031;box-shadow:0 0 0 2px #8f9db4, 0 6px 26px rgba(0,0,0,.6);transform:scale(0);transition:transform calc(.55s * var(--fx-mult)) cubic-bezier(.2,1.45,.4,1)}
+.fxcrown .fxseal svg{display:block;margin:20px 0 0 23px}
+.fxcrown .fxwm{opacity:0;transform:scale(.88);transition:opacity calc(.5s * var(--fx-mult)),transform calc(.6s * var(--fx-mult)) cubic-bezier(.2,.9,.3,1)}
+.fxcrown .fxsub{opacity:0;transition:opacity calc(.5s * var(--fx-mult))}
+.pill.ward{background:#1a2740;color:#9dc0f0;border-color:#3a5c9e}
 .fxstamp{opacity:1;transform:none}
 .fxstamp .fxmark{position:absolute;left:50%;margin-left:-29px;top:-14px;opacity:0;transform:scale(2.8);transition:transform calc(.26s * var(--fx-mult)) cubic-bezier(.5,0,.75,0),opacity calc(.2s * var(--fx-mult))}
 .fxstamp .fxwm{display:flex;justify-content:center;padding-left:9px}
@@ -224,7 +230,7 @@ a{color:var(--accent)}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260721115455</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260721121033</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -7621,7 +7627,9 @@ async function runOp(op, pi, ctx) {
     }
     case "blockNextAttack":
       P.blockAtkGt = G.gt + 1; P.blockAtkUsed = false;
-      log(`${P.name}: the first attack against your Heroes next turn will be blocked.`);
+      P.blockAtkSrc = ctx.sourceName || null;
+      P.blockAtkLane = ctx.laneIdx != null ? ctx.laneIdx : null;
+      log(`${ctx.sourceName ? ctx.sourceName + ": t" : "T"}he first attack against ${P.isAI ? "the AI's" : "your"} Heroes next turn will be blocked.`, P.isAI ? "ai" : "");
       break;
     case "breakLine": {
       P.breakLineTurn = G.gt;
@@ -8851,6 +8859,7 @@ async function resolveAttack(pi, attackerLis, target) {
   if (target.face) {
     const total = attackerLis.reduce((s, li) => s + effAtk(pi, li), 0);
     O.mortality -= total;
+    fxSignal("faceAttack", { pi, lanes: attackerLis.slice(), dpi: 1 - pi, n: total, onslaught: attackerLis.length > 1 });
     log(`${names} attack${attackerLis.length > 1 ? "" : "s"} directly: ${O.name} loses ${total} Mortality!`, P.isAI ? "ai" : "");
     if (total > 0) emit("loseMortality", 1 - pi, {});
     // Skarn-style: "whenever he deals damage directly to Mortality, draw"
@@ -8887,7 +8896,12 @@ async function resolveAttack(pi, attackerLis, target) {
   // Vhessune: anyone's attack declaration feeds her controller Pulse (capped)
   for (let vp = 0; vp < 2; vp++) for (const t of heroesOf(vp)) { const vh = heroAt(t); if (isSilenced(vh)) continue; const vm = (cardById(vh.cardId).text || "").match(/whenever any player declares an attack, gain (\d+) Pulse(?: \(maximum (\d+) Pulse per (?:round|turn)[^)]*\))?/i); if (vm) { if (vh.vhGt !== G.gt) { vh.vhGt = G.gt; vh.vhCnt = 0; } const cap = vm[2] ? +vm[2] : 99; if (vh.vhCnt < cap) { vh.vhCnt++; gainPulse(vp, +vm[1], cardById(vh.cardId).name); } } }
   // Benedar: first attack against this defender's Heroes this turn is blocked
-  { const D2 = G.players[1 - pi]; if (D2.blockAtkGt === G.gt && !D2.blockAtkUsed) { D2.blockAtkUsed = true; combat.blocked = true; log(`${D2.name}'s ward of coin and steel blocks the attack!`, D2.isAI ? "ai" : ""); } }
+  { const D2 = G.players[1 - pi];
+    if (D2.blockAtkGt === G.gt && !D2.blockAtkUsed) {
+      D2.blockAtkUsed = true; combat.blocked = true;
+      log(`${D2.blockAtkSrc || "A ward of coin and steel"} blocks the attack — no combat occurs.`, D2.isAI ? "ai" : "");
+      fxSignal("block", { pi: 1 - pi, li: D2.blockAtkLane != null ? D2.blockAtkLane : dLi, name: D2.blockAtkSrc || "Ward" });
+    } }
   // Tolui: onslaught mates gain Attack; defender can't prevent/block/redirect
   if (attackerLis.length > 1) {
     for (const ali of attackerLis) { const ah = heroAt({ pi, li: ali }); if (ah && !isSilenced(ah) && /participates in an Onslaught, all participating Heroes gain \+(\d+) Attack/i.test(cardById(ah.cardId).text || "")) { const tm = cardById(ah.cardId).text.match(/gain \+(\d+) Attack/i); combat.atkMod += +tm[1]; combat.toluiLock = true; log(`${cardById(ah.cardId).name} leads the charge (+${tm[1]} Attack each)!`, P.isAI ? "ai" : ""); break; } }
@@ -9592,7 +9606,11 @@ const UI = {
         if (pi === G.active && L.hero.attacksUsed >= maxAttacksOf(pi, li)) div.classList.add("exhausted");
         if (pi === 0 && UI.sel.includes(li)) div.classList.add("selected");
         if (UI.targetableHeroes().some(t => t.pi === pi && t.li === li)) div.classList.add("targetable");
-        const relicPills = L.hero.relics.map(r => `<span class="pill relic" data-ruid="${r.uid}" title="${(cardById(r.cardId).text || "").replace(/"/g, "&quot;")}">${cardById(r.cardId).name}${r.counters ? " ⚒" + r.counters : ""}</span>`).join(" ");
+        // an armed "block the next attack" ward is invisible otherwise, which
+        // makes cards like Benedar look as though they did nothing
+        const wardPill = (P.blockAtkGt >= G.gt && !P.blockAtkUsed && P.blockAtkLane === li)
+          ? `<span class="pill ward" title="The first attack declared against your Heroes on your opponent's next turn is blocked.">ward armed</span>` : "";
+        const relicPills = wardPill + L.hero.relics.map(r => `<span class="pill relic" data-ruid="${r.uid}" title="${(cardById(r.cardId).text || "").replace(/"/g, "&quot;")}">${cardById(r.cardId).name}${r.counters ? " ⚒" + r.counters : ""}</span>`).join(" ");
         const freeRelic = C().relicSlotsPerHero - L.hero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0);
         div.innerHTML = `<div class="cost-orb">${c.cost}</div>
           <div class="nm">${c.name}</div>
@@ -10506,24 +10524,35 @@ const FX = {
       FX.go(wash, ";opacity:0");
     }, 200 + cells.length * COLLAPSE);
 
-    if (!c) return;
-    FX.after(() => {
-      for (let li = 0; li < 4; li++) { const e2 = FX.laneEl(w, li); if (e2 && e2.style) { e2.style.transition = "opacity .5s"; e2.style.opacity = ".28"; } }
-      [0, 150, 300, 450].forEach((d, i) => FX.after(() => {
-        const size = 90;
-        const ring = FX.spawn(`left:${c.x - size / 2}px;top:${c.y - size / 2}px;width:${size}px;height:${size}px;border:2px solid ${i % 2 ? "#8f9db4" : "#4d76c4"};border-radius:50%;opacity:.85`, 1100, "fxring");
-        FX.go(ring, ";transform:scale(5);opacity:0");
-      }, d));
-      const med = FX.spawn(`left:${c.x - 46}px;top:${c.y - 46}px;width:92px;height:92px;border-radius:50%;background:#162031;box-shadow:0 0 0 2px #8f9db4;transform:scale(0)`, 3200, "fxmedal");
-      if (med) {
-        // offset so the mark's ink centre, not its grid centre, sits in the medallion
-        med.innerHTML = `<svg viewBox="0 0 40 44" width="46" height="50" style="margin:20px 0 0 23px" aria-hidden="true">${MARK_PATHS}</svg>`;
-        FX.go(med, ";transform:scale(1)");
-        FX.after(() => { med.style.cssText += ";transform:translateY(-46px) scale(.92)"; }, 800);
-      }
-      const name = (G.players[w] && G.players[w].name) || "You";
-      FX.title("VICTORY", name.toUpperCase() + " PREVAILS", 900, 2000);
-    }, SEAL_AT);
+    FX.after(() => FX.crown(w), SEAL_AT);
+  },
+
+  /* One composed lockup: seal, then VICTORY, then who won. Previously the
+     medallion and the banner were positioned independently and overlapped. */
+  crown(w) {
+    for (let li = 0; li < 4; li++) { const e2 = FX.laneEl(w, li); if (e2 && e2.style) { e2.style.transition = `opacity ${FX.ms(500)}ms`; e2.style.opacity = ".28"; } }
+    const who = (G.players[w] && G.players[w].name) || "You";
+    // "You" is a pronoun, not a name — "YOU PREVAILS" reads as broken English
+    const line = /^you$/i.test(who) ? "YOU PREVAIL" : who.toUpperCase() + " PREVAILS";
+    const d = FX.spawn("left:0;right:0;top:30%", 4200, "fxtitle fxcrown");
+    if (!d) return;
+    d.innerHTML =
+      `<div class="fxseal"><svg viewBox="0 0 40 44" width="46" height="50" aria-hidden="true">${MARK_PATHS}</svg></div>` +
+      `<div class="fxwm">VICTORY</div>` +
+      `<div class="fxsub">${line}</div>`;
+    const kids = d.children || [];
+    const seal = kids[0], wm = kids[1], sub = kids[2];
+
+    FX.after(() => { if (seal && seal.style) seal.style.transform = "scale(1)"; }, 40);
+    [0, 160, 320].forEach((t, i) => FX.after(() => {
+      const r = FX.rect(seal) || FX.rect(d);   // fall back to the lockup if the seal is not measurable
+      if (!r) return;
+      const size = 92;
+      const ring = FX.spawn(`left:${r.left + r.width / 2 - size / 2}px;top:${r.top + r.height / 2 - size / 2}px;width:${size}px;height:${size}px;border:2px solid ${i % 2 ? "#8f9db4" : "#4d76c4"};border-radius:50%;opacity:.8`, 1100, "fxring");
+      FX.go(ring, ";transform:scale(4.4);opacity:0");
+    }, 120 + t));
+    FX.after(() => { if (wm && wm.style) { wm.style.opacity = "1"; wm.style.transform = "none"; } }, 380);
+    FX.after(() => { if (sub && sub.style) sub.style.opacity = "1"; }, 780);
   },
 
   /* ------------------------- arcane event motion -------------------------
@@ -10571,8 +10600,24 @@ const FX = {
     } else if (kind === "reveal") {
       FX.ring(lane, "#c7aee8", 1.7);
       FX.chip(lane, "Hex — " + d.name, "#e6d8fb", "rgba(42,33,64,.94)");
+    } else if (kind === "block") {
+      FX.ring(lane, "#9dc0f0", 2.1);
+      FX.chip(lane, d.name + " — attack blocked", "#cfe0ff", "rgba(26,39,64,.94)");
+    } else if (kind === "faceAttack") {
+      const to = FX.faceEl(d.dpi);
+      if (!to) return;
+      d.lanes.forEach((li, k) => {
+        const from = FX.laneEl(d.pi === 0 ? 0 : 1, li);
+        FX.after(() => FX.streak(from, to, FX.laneColor(d.pi, li)), k * 110);
+      });
+      FX.after(() => {
+        FX.ring(to, "#e0736b", 2.4);
+        FX.float(to, "-" + d.n, "#f0d9a0");
+        FX.chip(to, d.onslaught ? "Direct hit — Onslaught" : "Direct hit", "#f6e6c0", "rgba(74,52,16,.94)");
+      }, d.lanes.length * 110);
     }
   },
+  faceEl(pi) { return $(pi === 0 ? "my-face" : "ai-face"); },
   laneColor(pi, li) {
     try { const L = G.players[pi].lanes[li]; return realmColor(L && L.realm); } catch (e) { return "#8fa0c0"; }
   },

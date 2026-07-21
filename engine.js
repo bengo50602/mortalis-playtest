@@ -2192,7 +2192,9 @@ async function runOp(op, pi, ctx) {
     }
     case "blockNextAttack":
       P.blockAtkGt = G.gt + 1; P.blockAtkUsed = false;
-      log(`${P.name}: the first attack against your Heroes next turn will be blocked.`);
+      P.blockAtkSrc = ctx.sourceName || null;
+      P.blockAtkLane = ctx.laneIdx != null ? ctx.laneIdx : null;
+      log(`${ctx.sourceName ? ctx.sourceName + ": t" : "T"}he first attack against ${P.isAI ? "the AI's" : "your"} Heroes next turn will be blocked.`, P.isAI ? "ai" : "");
       break;
     case "breakLine": {
       P.breakLineTurn = G.gt;
@@ -3422,6 +3424,7 @@ async function resolveAttack(pi, attackerLis, target) {
   if (target.face) {
     const total = attackerLis.reduce((s, li) => s + effAtk(pi, li), 0);
     O.mortality -= total;
+    fxSignal("faceAttack", { pi, lanes: attackerLis.slice(), dpi: 1 - pi, n: total, onslaught: attackerLis.length > 1 });
     log(`${names} attack${attackerLis.length > 1 ? "" : "s"} directly: ${O.name} loses ${total} Mortality!`, P.isAI ? "ai" : "");
     if (total > 0) emit("loseMortality", 1 - pi, {});
     // Skarn-style: "whenever he deals damage directly to Mortality, draw"
@@ -3458,7 +3461,12 @@ async function resolveAttack(pi, attackerLis, target) {
   // Vhessune: anyone's attack declaration feeds her controller Pulse (capped)
   for (let vp = 0; vp < 2; vp++) for (const t of heroesOf(vp)) { const vh = heroAt(t); if (isSilenced(vh)) continue; const vm = (cardById(vh.cardId).text || "").match(/whenever any player declares an attack, gain (\d+) Pulse(?: \(maximum (\d+) Pulse per (?:round|turn)[^)]*\))?/i); if (vm) { if (vh.vhGt !== G.gt) { vh.vhGt = G.gt; vh.vhCnt = 0; } const cap = vm[2] ? +vm[2] : 99; if (vh.vhCnt < cap) { vh.vhCnt++; gainPulse(vp, +vm[1], cardById(vh.cardId).name); } } }
   // Benedar: first attack against this defender's Heroes this turn is blocked
-  { const D2 = G.players[1 - pi]; if (D2.blockAtkGt === G.gt && !D2.blockAtkUsed) { D2.blockAtkUsed = true; combat.blocked = true; log(`${D2.name}'s ward of coin and steel blocks the attack!`, D2.isAI ? "ai" : ""); } }
+  { const D2 = G.players[1 - pi];
+    if (D2.blockAtkGt === G.gt && !D2.blockAtkUsed) {
+      D2.blockAtkUsed = true; combat.blocked = true;
+      log(`${D2.blockAtkSrc || "A ward of coin and steel"} blocks the attack — no combat occurs.`, D2.isAI ? "ai" : "");
+      fxSignal("block", { pi: 1 - pi, li: D2.blockAtkLane != null ? D2.blockAtkLane : dLi, name: D2.blockAtkSrc || "Ward" });
+    } }
   // Tolui: onslaught mates gain Attack; defender can't prevent/block/redirect
   if (attackerLis.length > 1) {
     for (const ali of attackerLis) { const ah = heroAt({ pi, li: ali }); if (ah && !isSilenced(ah) && /participates in an Onslaught, all participating Heroes gain \+(\d+) Attack/i.test(cardById(ah.cardId).text || "")) { const tm = cardById(ah.cardId).text.match(/gain \+(\d+) Attack/i); combat.atkMod += +tm[1]; combat.toluiLock = true; log(`${cardById(ah.cardId).name} leads the charge (+${tm[1]} Attack each)!`, P.isAI ? "ai" : ""); break; } }
