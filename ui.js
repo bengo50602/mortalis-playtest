@@ -785,6 +785,18 @@ const MARK_PATHS =
   '<rect x="22" y="28" width="4.4" height="14" rx="1.2" fill="#b8c3d1"/>' +
   '<rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>';
 
+// The same mark in the defeat palette, so the losing end screen reads red all
+// the way through rather than a blue crest inside a red seal.
+const MARK_RED = {
+  "#3a5c9e": "#7a4a46", "#4d76c4": "#a8635c", "#1c2f5c": "#4a2523", "#26417a": "#63332f",
+  "#dfe6ef": "#f0d3d0", "#0e1116": "#160b0a", "#aab6c6": "#d9a49f",
+  "#6d7b8f": "#8f6360", "#b8c3d1": "#d1b0ad", "#55627a": "#7a504d",
+};
+function markPaths(red) {
+  if (!red) return MARK_PATHS;
+  return MARK_PATHS.replace(/#[0-9a-f]{6}/gi, (h) => MARK_RED[h.toLowerCase()] || h);
+}
+
 // Miniature of the approved "Sovereign Seal" card back, for deck piles, the
 // opponent's hand and cards in flight. `wordmark` adds MORTALIS under the seal
 // (only legible at pile size).
@@ -1114,11 +1126,14 @@ const FX = {
     const who = (G.players[w] && G.players[w].name) || "You";
     // "You" is a pronoun, not a name — "YOU PREVAILS" reads as broken English
     const line = /^you$/i.test(who) ? "YOU PREVAIL" : who.toUpperCase() + " PREVAILS";
-    const d = FX.spawn("left:0;right:0;top:30%", 4200, "fxtitle fxcrown");
+    const lost = w !== 0;                    // player 0 is always the local player
+    const d = FX.spawn("left:0;right:0;top:30%", 4200, "fxtitle fxcrown" + (lost ? " lost" : ""));
     if (!d) return;
+    // viewBox is the mark's ink box (centre 20.2, 22.5) with room for the
+    // stroke, so the browser centres the mark itself rather than its grid
     d.innerHTML =
-      `<div class="fxseal"><svg viewBox="0 0 40 44" width="46" height="50" aria-hidden="true">${MARK_PATHS}</svg></div>` +
-      `<div class="fxwm">VICTORY</div>` +
+      `<div class="fxseal"><svg viewBox="5 2 30.4 41" width="64" height="70" aria-hidden="true">${markPaths(lost)}</svg></div>` +
+      `<div class="fxwm">${lost ? "DEFEAT" : "VICTORY"}</div>` +
       `<div class="fxsub">${line}</div>`;
     const kids = d.children || [];
     const seal = kids[0], wm = kids[1], sub = kids[2];
@@ -1128,7 +1143,8 @@ const FX = {
       const r = FX.rect(seal) || FX.rect(d);   // fall back to the lockup if the seal is not measurable
       if (!r) return;
       const size = 92;
-      const ring = FX.spawn(`left:${r.left + r.width / 2 - size / 2}px;top:${r.top + r.height / 2 - size / 2}px;width:${size}px;height:${size}px;border:2px solid ${i % 2 ? "#8f9db4" : "#4d76c4"};border-radius:50%;opacity:.8`, 1100, "fxring");
+      const col = lost ? (i % 2 ? "#e0736b" : "#a33b33") : (i % 2 ? "#8f9db4" : "#4d76c4");
+      const ring = FX.spawn(`left:${r.left + r.width / 2 - size / 2}px;top:${r.top + r.height / 2 - size / 2}px;width:${size}px;height:${size}px;border:2px solid ${col};border-radius:50%;opacity:.8`, 1100, "fxring");
       FX.go(ring, ";transform:scale(4.4);opacity:0");
     }, 120 + t));
     FX.after(() => { if (wm && wm.style) { wm.style.opacity = "1"; wm.style.transform = "none"; } }, 380);
