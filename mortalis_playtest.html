@@ -233,7 +233,7 @@ a{color:var(--accent)}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260721121400</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260721121545</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -10546,7 +10546,9 @@ const FX = {
      medallion and the banner were positioned independently and overlapped. */
   crown(w) {
     for (let li = 0; li < 4; li++) { const e2 = FX.laneEl(w, li); if (e2 && e2.style) { e2.style.transition = `opacity ${FX.ms(500)}ms`; e2.style.opacity = ".28"; } }
-    const who = (G.players[w] && G.players[w].name) || "You";
+    // The AI's board name carries its difficulty ("AI (medium)"), which reads
+    // badly in a banner; a PvP opponent's typed name is used as-is.
+    const who = (((G.players[w] && G.players[w].name) || "You").replace(/\s*\([^)]*\)\s*$/, "") || "Your opponent");
     // "You" is a pronoun, not a name — "YOU PREVAILS" reads as broken English
     const line = /^you$/i.test(who) ? "YOU PREVAIL" : who.toUpperCase() + " PREVAILS";
     const lost = w !== 0;                    // player 0 is always the local player

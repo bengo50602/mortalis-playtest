@@ -1123,7 +1123,9 @@ const FX = {
      medallion and the banner were positioned independently and overlapped. */
   crown(w) {
     for (let li = 0; li < 4; li++) { const e2 = FX.laneEl(w, li); if (e2 && e2.style) { e2.style.transition = `opacity ${FX.ms(500)}ms`; e2.style.opacity = ".28"; } }
-    const who = (G.players[w] && G.players[w].name) || "You";
+    // The AI's board name carries its difficulty ("AI (medium)"), which reads
+    // badly in a banner; a PvP opponent's typed name is used as-is.
+    const who = (((G.players[w] && G.players[w].name) || "You").replace(/\s*\([^)]*\)\s*$/, "") || "Your opponent");
     // "You" is a pronoun, not a name — "YOU PREVAILS" reads as broken English
     const line = /^you$/i.test(who) ? "YOU PREVAIL" : who.toUpperCase() + " PREVAILS";
     const lost = w !== 0;                    // player 0 is always the local player
