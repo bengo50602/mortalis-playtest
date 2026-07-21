@@ -600,7 +600,7 @@ const UI = {
     UI.show("game");
     UI.render();
     FX.intro();
-    if (G.active === 1) setTimeout(() => UI.runAI(), FX.busy ? 3600 : 0);
+    if (G.active === 1) setTimeout(() => UI.runAI(), FX.busy ? FX.ms(3600) : 0);
   },
 
   async runAI() {
@@ -811,6 +811,12 @@ const SUPPORT_STYLE = {
    the difference. That means draws, plays, burns, AI turns, PvP syncs and
    tutorial scripts all animate for free, with no hooks in the rules code.     */
 const FX = {
+  // Design timings below are written at "1x". Everything that schedules or
+  // animates routes through FX.ms(), so this one number sets the pace of the
+  // whole game. The stylesheet reads the same figure from --fx-mult.
+  speed: 1.4,
+  ms(n) { return Math.round(n * FX.speed); },
+  after(fn, n) { return setTimeout(fn, FX.ms(n)); },
   DUR: 340,
   on: true,
   gref: null,
@@ -881,7 +887,7 @@ const FX = {
     // the game just ended: collapse the loser's board, then crown the winner
     if (prev && sameGame && !prev.over && now.over && now.winner != null) {
       FX.q.length = 0;
-      setTimeout(() => FX.finale(now.winner), 260);
+      FX.after(() => FX.finale(now.winner), 260);
       return;
     }
     if (!prev || !sameGame || !FX.live()) { FX.q.length = 0; return; }
@@ -939,7 +945,7 @@ const FX = {
       if (!to) return;
       FX.fly(from, to, { mode: pi === 0 ? "face" : "flip", card, delay: k * 70, fade: true });
       // a realm-coloured sigil blooms where the card lands
-      setTimeout(() => {
+      FX.after(() => {
         FX.ring(laneEl, li >= 0 ? FX.laneColor(pi, li) : realmColor(card.realm), 1.7);
         if (card.type !== "hero") FX.chip(laneEl, card.type[0].toUpperCase() + card.type.slice(1) + " — " + card.name, "#dfe5ef", "rgba(32,40,56,.92)");
       }, FX.DUR + k * 70 - 60);
@@ -964,14 +970,51 @@ const FX = {
     const d = FX.spawn("left:0;right:0;top:40%;opacity:0;transform:scale(.86)", delay + hold + 700, "fxtitle");
     if (!d) return;
     d.innerHTML = `<div class="fxwm">${main}</div>${sub ? `<div class="fxsub">${sub}</div>` : ""}`;
-    setTimeout(() => { d.style.cssText += ";opacity:1;transform:scale(1)"; }, delay);
-    setTimeout(() => { d.style.opacity = "0"; }, delay + hold);
+    FX.after(() => { d.style.cssText += ";opacity:1;transform:scale(1)"; }, delay);
+    FX.after(() => { d.style.opacity = "0"; }, delay + hold);
   },
+  /* The opening wordmark: the mark stamps down, shocks a ring outward, then
+     rises above MORTALIS as the letters unfurl from behind it. */
+  stamp(delay, hold) {
+    const d = FX.spawn("left:0;right:0;top:36%", delay + hold + 900, "fxtitle fxstamp");
+    if (!d) return;
+    d.innerHTML =
+      `<div class="fxmark"><svg viewBox="0 0 40 44" width="58" height="64" aria-hidden="true">${MARK_PATHS}</svg></div>` +
+      `<div class="fxwm">${"MORTALIS".split("").map(ch => `<span>${ch}</span>`).join("")}</div>` +
+      `<div class="fxsub"><i></i><b>REALMS</b><i></i></div>`;
+    const kids = d.children || [];
+    const mark = kids[0], wm = kids[1], sub = kids[2];
+    const sp = wm && wm.children ? [...wm.children] : [];
+    sp.forEach((s, i) => { if (s.style) s.style.transform = `translateX(${Math.round((i - 3.5) * -26)}px)`; });
+
+    FX.after(() => { if (mark && mark.style) { mark.style.transform = "scale(1)"; mark.style.opacity = "1"; } }, delay);
+    FX.after(() => {
+      const r = FX.rect(mark);
+      if (r) {
+        const size = 74;
+        const sh = FX.spawn(`left:${r.left + r.width / 2 - size / 2}px;top:${r.top + r.height / 2 - size / 2}px;width:${size}px;height:${size}px;opacity:.9`, 700, "fxshock");
+        FX.go(sh, ";transform:scale(4.6);opacity:0");
+      }
+      if (mark && mark.style) {
+        mark.style.transition = `transform ${FX.ms(500)}ms cubic-bezier(.2,.9,.3,1), opacity ${FX.ms(500)}ms`;
+        mark.style.transform = "translateY(-56px) scale(.6)";
+      }
+      sp.forEach(s => { if (s.style) { s.style.opacity = "1"; s.style.transform = "none"; } });
+    }, delay + 280);
+    FX.after(() => {
+      if (!sub || !sub.querySelectorAll) return;
+      [...sub.querySelectorAll("i")].forEach(i => { if (i.style) i.style.width = "28px"; });
+      const b = sub.querySelector("b");
+      if (b && b.style) b.style.opacity = "1";
+    }, delay + 880);
+    FX.after(() => { d.style.opacity = "0"; }, delay + hold);
+  },
+
   suspend(ms) {
     FX.busy = true;
     const wasBusy = UI.busy;
     UI.busy = true;
-    setTimeout(() => {
+    FX.after(() => {
       FX.busy = false; UI.busy = wasBusy;
       FX.snap = null; FX.gref = null;      // resync silently; the deal already played
       try { UI.render(); } catch (e) {}
@@ -990,7 +1033,8 @@ const FX = {
     }
     if (!cells.length) return;
 
-    const CREST = 55, DEAL_AT = 420 + cells.length * CREST, DEAL = 80, TOTAL = DEAL_AT + 900 + 1900;
+    const CREST = 55, DEAL_AT = 420 + cells.length * CREST, DEAL = 80;
+    const STAMP_AT = DEAL_AT + 620, STAMP_HOLD = 1800, TOTAL = STAMP_AT + STAMP_HOLD + 800;
     FX.suspend(TOTAL);
 
     cells.forEach((o, i) => {
@@ -999,19 +1043,19 @@ const FX = {
       if (s) {
         s.innerHTML = realmCrest(o.realm, 22, o.col, "rgba(18,21,28,.6)") || "";
         FX.go(s, ";opacity:1");
-        setTimeout(() => { s.style.cssText += `;transform:translate(${o.r.left + o.r.width / 2 - c.x}px, ${o.r.top + 10 - c.y}px) scale(.85);opacity:0`; }, 60 + i * CREST);
+        FX.after(() => { s.style.cssText += `;transform:translate(${o.r.left + o.r.width / 2 - c.x}px, ${o.r.top + 10 - c.y}px) scale(.85);opacity:0`; }, 60 + i * CREST);
       }
-      setTimeout(() => {
+      FX.after(() => {
         if (!o.el.style) return;
         o.el.style.opacity = "1"; o.el.style.transform = "none";
         o.el.style.boxShadow = `0 0 0 1px ${o.col}, 0 0 22px -6px ${o.col}`;
         FX.ring(o.el, o.col, 2.1);
-        setTimeout(() => { if (o.el.style) o.el.style.boxShadow = ""; }, 800);
+        FX.after(() => { if (o.el.style) o.el.style.boxShadow = ""; }, 800);
       }, 420 + i * CREST);
     });
 
     // ...then the opening hands are dealt off the decks, card by card
-    setTimeout(() => {
+    FX.after(() => {
       for (const pi of [0, 1]) {
         const pile = FX.rect(FX.pileEl(pi));
         const hand = FX.handEl(pi);
@@ -1030,7 +1074,7 @@ const FX = {
       }
     }, DEAL_AT);
 
-    FX.title("MORTALIS", "— REALMS —", DEAL_AT + 700, 1500);
+    FX.stamp(STAMP_AT, STAMP_HOLD);
   },
 
   /* The loser's board collapses, then the Sovereign Seal names the winner. */
@@ -1046,20 +1090,20 @@ const FX = {
     const COLLAPSE = 170, SEAL_AT = 400 + cells.length * COLLAPSE, TOTAL = SEAL_AT + 3400;
     FX.suspend(TOTAL);
 
-    cells.forEach((o, i) => setTimeout(() => {
+    cells.forEach((o, i) => FX.after(() => {
       FX.shatter(o.el, o.col);
       if (o.el.style) { o.el.style.transition = "opacity .5s, transform .5s"; o.el.style.opacity = "0"; o.el.style.transform = "translateY(16px) scale(.9)"; }
     }, 200 + i * COLLAPSE));
 
-    setTimeout(() => {
+    FX.after(() => {
       const wash = FX.spawn("left:0;right:0;top:0;bottom:0;background:#e0736b;opacity:.24", 900, "fxwash");
       FX.go(wash, ";opacity:0");
     }, 200 + cells.length * COLLAPSE);
 
     if (!c) return;
-    setTimeout(() => {
+    FX.after(() => {
       for (let li = 0; li < 4; li++) { const e2 = FX.laneEl(w, li); if (e2 && e2.style) { e2.style.transition = "opacity .5s"; e2.style.opacity = ".28"; } }
-      [0, 150, 300, 450].forEach((d, i) => setTimeout(() => {
+      [0, 150, 300, 450].forEach((d, i) => FX.after(() => {
         const size = 90;
         const ring = FX.spawn(`left:${c.x - size / 2}px;top:${c.y - size / 2}px;width:${size}px;height:${size}px;border:2px solid ${i % 2 ? "#8f9db4" : "#4d76c4"};border-radius:50%;opacity:.85`, 1100, "fxring");
         FX.go(ring, ";transform:scale(5);opacity:0");
@@ -1069,7 +1113,7 @@ const FX = {
         // offset so the mark's ink centre, not its grid centre, sits in the medallion
         med.innerHTML = `<svg viewBox="0 0 40 44" width="46" height="50" style="margin:20px 0 0 23px" aria-hidden="true">${MARK_PATHS}</svg>`;
         FX.go(med, ";transform:scale(1)");
-        setTimeout(() => { med.style.cssText += ";transform:translateY(-46px) scale(.92)"; }, 800);
+        FX.after(() => { med.style.cssText += ";transform:translateY(-46px) scale(.92)"; }, 800);
       }
       const name = (G.players[w] && G.players[w].name) || "You";
       FX.title("VICTORY", name.toUpperCase() + " PREVAILS", 900, 2000);
@@ -1097,7 +1141,7 @@ const FX = {
   drain() {
     if (!FX.q.length) return;
     const q = FX.q.splice(0, FX.q.length);
-    q.forEach((e, i) => setTimeout(() => { try { FX.play(e.kind, e.data); } catch (err) { /* motion is never fatal */ } }, i * 90));
+    q.forEach((e, i) => FX.after(() => { try { FX.play(e.kind, e.data); } catch (err) { /* motion is never fatal */ } }, i * 90));
   },
   play(kind, d) {
     if (!FX.live()) return;
@@ -1107,9 +1151,9 @@ const FX = {
       const to = FX.laneEl(d.dpi === 0 ? 0 : 1, d.dli);
       d.lanes.forEach((li, k) => {
         const from = FX.laneEl(d.pi === 0 ? 0 : 1, li);
-        setTimeout(() => FX.streak(from, to, FX.laneColor(d.pi, li)), k * 110);
+        FX.after(() => FX.streak(from, to, FX.laneColor(d.pi, li)), k * 110);
       });
-      if (d.onslaught) setTimeout(() => FX.ring(to, "#e0a45c", 1.9), d.lanes.length * 110);
+      if (d.onslaught) FX.after(() => FX.ring(to, "#e0a45c", 1.9), d.lanes.length * 110);
     } else if (kind === "damage") {
       FX.float(lane, "-" + d.n, "#e0736b");
     } else if (kind === "destroy") {
@@ -1133,7 +1177,7 @@ const FX = {
     d.className = "fxbit " + (cls || "");
     d.style.cssText += css;
     L.appendChild(d);
-    setTimeout(() => { if (d.parentNode) d.parentNode.removeChild(d); }, ms);
+    FX.after(() => { if (d.parentNode) d.parentNode.removeChild(d); }, ms);
     return d;
   },
   go(el, css) { if (el) requestAnimationFrame(() => { el.style.cssText += css; }); },
@@ -1168,7 +1212,7 @@ const FX = {
     const d = FX.spawn(`left:${r.left + 4}px;top:${r.top - 6}px;max-width:${Math.max(90, r.width - 8)}px;background:${bg};color:${col};opacity:0`, 1500, "fxchip");
     if (d) d.textContent = txt;
     FX.go(d, ";opacity:1;transform:translateY(-16px)");
-    setTimeout(() => { if (d) d.style.opacity = "0"; }, 1000);
+    FX.after(() => { if (d) d.style.opacity = "0"; }, 1000);
   },
   shatter(el, col) {
     const r = FX.rect(el);
@@ -1189,8 +1233,9 @@ const FX = {
     g.className = "fxghost";
     g.style.left = a.left + "px"; g.style.top = a.top + "px";
     g.style.width = a.width + "px"; g.style.height = a.height + "px";
-    g.style.transitionDuration = FX.DUR + "ms";
-    if (o.delay) g.style.transitionDelay = o.delay + "ms";
+    const dur = FX.ms(FX.DUR), delay = FX.ms(o.delay || 0);
+    g.style.transitionDuration = dur + "ms";
+    if (delay) g.style.transitionDelay = delay + "ms";
     const c = o.card;
     const face = c ? `<div class="ff ft"><div class="gnm">${c.name}</div><div class="gmeta">${c.realm}</div>
         <div class="gmeta">${c.type === "hero" ? c.atk + "/" + c.hp : c.type}</div></div>` : `<div class="ff ft"></div>`;
@@ -1198,8 +1243,8 @@ const FX = {
     L.appendChild(g);
     const fin = g.firstChild;
     if (fin && fin.style) {
-      fin.style.transitionDuration = FX.DUR + "ms";
-      if (o.delay) fin.style.transitionDelay = o.delay + "ms";
+      fin.style.transitionDuration = dur + "ms";
+      if (delay) fin.style.transitionDelay = delay + "ms";
       if (o.mode === "face") { fin.style.transition = "none"; fin.style.transform = "rotateY(180deg)"; }
     }
     const s = (o.shrink != null) ? o.shrink : Math.min(b.width / a.width, b.height / a.height);
@@ -1210,10 +1255,10 @@ const FX = {
       if (o.fade) g.style.opacity = "0";
       if (o.mode === "flip" && fin && fin.style) { void g.offsetWidth; fin.style.transform = "rotateY(180deg)"; }
     });
-    setTimeout(() => {
+    setTimeout(() => {          // dur and delay are already real milliseconds
       if (g.parentNode) g.parentNode.removeChild(g);
       if (o.done) o.done();
-    }, FX.DUR + (o.delay || 0) + 60);
+    }, dur + delay + 60);
   },
 };
 
