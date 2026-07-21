@@ -2177,7 +2177,7 @@ window.DEFAULT_DATA = {
    "atk": 150,
    "hp": 90,
    "rarity": "Ultra-Rare",
-   "text": "Jebe may attack any enemy lane and takes 20 less combat damage in any combat he initiates. Whenever Jebe destroys an enemy Hero in combat, gain 2 Pulse.",
+   "text": "Jebe may attack any enemy lane. Jebe has +10 Attack for each different Realm among the Heroes you control. Whenever Jebe destroys an enemy Hero in combat, gain 2 Pulse.",
    "auxCost": 6,
    "auxSlots": 2,
    "auxText": "While in this slot, all Heroes you control may attack any enemy lane."

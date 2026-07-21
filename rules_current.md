@@ -1163,7 +1163,7 @@ While in this slot, at the start of each of your turns, if the Hero in this lane
 
 **Jebe, Arrow of the Endless Sky**
 Hero Mode — Cost: 8 Pulse | Attack/Health: 150/90 | Rarity: Ultra-Rare
-Jebe may attack any enemy lane and takes 20 less combat damage in any combat he initiates. Whenever Jebe destroys an enemy Hero in combat, gain 2 Pulse.
+Jebe may attack any enemy lane. Jebe has +10 Attack for each different Realm among the Heroes you control. Whenever Jebe destroys an enemy Hero in combat, gain 2 Pulse.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, all Heroes you control may attack any enemy lane.
 

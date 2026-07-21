@@ -811,6 +811,7 @@ const SUPPORT_STYLE = {
    tutorial scripts all animate for free, with no hooks in the rules code.     */
 const FX = {
   DUR: 340,
+  on: true,
   gref: null,
   snap: null,
   pre: [[], []],
@@ -874,11 +875,12 @@ const FX = {
     try { now = FX.take(); } catch (e) { return; }
     const prev = FX.snap, sameGame = FX.gref === G;
     FX.snap = now; FX.gref = G;
-    if (!prev || !sameGame || !FX.live()) return;
-    if (now.gt < prev.gt) return;                       // undo / rewind: don't animate
+    if (!prev || !sameGame || !FX.live()) { FX.q.length = 0; return; }
+    if (now.gt < prev.gt) { FX.q.length = 0; return; }   // undo / rewind: don't animate
     for (const pi of [0, 1]) {
       try { FX.animateSide(pi, prev, now); } catch (e) { /* motion must never break the board */ }
     }
+    FX.drain();                                          // attacks, effects, deaths
   },
 
   diffHand(prev, now) {
@@ -923,13 +925,124 @@ const FX = {
       const cid = prev.hand[pi][hi];
       const card = cardById(cid);
       const li = (now.board[pi][cid] != null && prev.board[pi][cid] == null) ? now.board[pi][cid] : -1;
-      const to = FX.rect(FX.laneEl(pi, li));
+      const laneEl = FX.laneEl(pi, li);
+      const to = FX.rect(laneEl);
       if (!to) return;
       FX.fly(from, to, { mode: pi === 0 ? "face" : "flip", card, delay: k * 70, fade: true });
+      // a realm-coloured sigil blooms where the card lands
+      setTimeout(() => {
+        FX.ring(laneEl, li >= 0 ? FX.laneColor(pi, li) : realmColor(card.realm), 1.7);
+        if (card.type !== "hero") FX.chip(laneEl, card.type[0].toUpperCase() + card.type.slice(1) + " — " + card.name, "#dfe5ef", "rgba(32,40,56,.92)");
+      }, FX.DUR + k * 70 - 60);
     });
 
     // ---- overdraw burn: deck -> away ----
     if (burned && pile) FX.fly(pile, { left: pile.left, top: pile.top + (pi === 0 ? 40 : -40), width: pile.width, height: pile.height }, { mode: "back", fade: true, shrink: .7 });
+  },
+
+  /* ------------------------- arcane event motion -------------------------
+     The engine calls FX.signal() at attack / damage / destroy / effect / hex
+     points. Those are queued rather than played immediately, because the engine
+     is mid-flight and about to re-render the board — playing them from settle()
+     guarantees the lanes we measure are the ones on screen.                  */
+  q: [],
+  lastFx: {},
+  signal(kind, data) {
+    if (!FX.on || !FX.live()) return;
+    if (kind === "effect") {                       // one flourish per effect, not per op
+      if (!data.name) return;
+      const key = data.name + "@" + data.pi + ":" + data.li;
+      const t = Date.now();
+      if (FX.lastFx[key] && t - FX.lastFx[key] < 900) return;
+      FX.lastFx[key] = t;
+    }
+    if (FX.q.length < 24) FX.q.push({ kind, data });
+  },
+  drain() {
+    if (!FX.q.length) return;
+    const q = FX.q.splice(0, FX.q.length);
+    q.forEach((e, i) => setTimeout(() => { try { FX.play(e.kind, e.data); } catch (err) { /* motion is never fatal */ } }, i * 90));
+  },
+  play(kind, d) {
+    if (!FX.live()) return;
+    const lane = FX.laneEl(d.pi === 0 ? 0 : 1, d.li);
+    const col = (kind === "attack") ? null : FX.laneColor(d.pi, d.li);
+    if (kind === "attack") {
+      const to = FX.laneEl(d.dpi === 0 ? 0 : 1, d.dli);
+      d.lanes.forEach((li, k) => {
+        const from = FX.laneEl(d.pi === 0 ? 0 : 1, li);
+        setTimeout(() => FX.streak(from, to, FX.laneColor(d.pi, li)), k * 110);
+      });
+      if (d.onslaught) setTimeout(() => FX.ring(to, "#e0a45c", 1.9), d.lanes.length * 110);
+    } else if (kind === "damage") {
+      FX.float(lane, "-" + d.n, "#e0736b");
+    } else if (kind === "destroy") {
+      FX.shatter(lane, FX.laneColor(d.pi, d.li));
+      FX.chip(lane, d.name + " destroyed", "#f0c4c0", "rgba(74,26,24,.92)");
+    } else if (kind === "effect") {
+      FX.ring(lane, col, 1.5);
+      FX.chip(lane, d.name, "#dfe5ef", "rgba(32,40,56,.92)");
+    } else if (kind === "reveal") {
+      FX.ring(lane, "#c7aee8", 1.7);
+      FX.chip(lane, "Hex — " + d.name, "#e6d8fb", "rgba(42,33,64,.94)");
+    }
+  },
+  laneColor(pi, li) {
+    try { const L = G.players[pi].lanes[li]; return realmColor(L && L.realm); } catch (e) { return "#8fa0c0"; }
+  },
+  spawn(css, ms, cls) {
+    const L = FX.layer();
+    if (!L || typeof L.appendChild !== "function") return null;
+    const d = document.createElement("div");
+    d.className = "fxbit " + (cls || "");
+    d.style.cssText += css;
+    L.appendChild(d);
+    setTimeout(() => { if (d.parentNode) d.parentNode.removeChild(d); }, ms);
+    return d;
+  },
+  go(el, css) { if (el) requestAnimationFrame(() => { el.style.cssText += css; }); },
+
+  streak(fromEl, toEl, col) {
+    const a = FX.rect(fromEl), b = FX.rect(toEl);
+    if (!a || !b) return;
+    const x1 = a.left + a.width / 2, y1 = a.top + a.height / 2;
+    const x2 = b.left + b.width / 2, y2 = b.top + b.height / 2;
+    const len = Math.hypot(x2 - x1, y2 - y1), ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+    const s = FX.spawn(`left:${x1}px;top:${y1 - 2}px;width:${len}px;height:4px;background:${col};box-shadow:0 0 12px ${col};transform:rotate(${ang}deg) scaleX(0);opacity:.95`, 620, "fxstreak");
+    FX.go(s, `;transform:rotate(${ang}deg) scaleX(1);opacity:0`);
+    FX.ring(toEl, col, 1.4);
+  },
+  ring(el, col, scale) {
+    const r = FX.rect(el);
+    if (!r) return;
+    const size = Math.min(r.width, r.height) * .7;
+    const c = FX.spawn(`left:${r.left + r.width / 2 - size / 2}px;top:${r.top + r.height / 2 - size / 2}px;width:${size}px;height:${size}px;border:2px solid ${col};border-radius:50%;opacity:.9`, 700, "fxring");
+    FX.go(c, `;transform:scale(${scale || 1.6});opacity:0`);
+  },
+  float(el, txt, col) {
+    const r = FX.rect(el);
+    if (!r) return;
+    const d = FX.spawn(`left:${r.left + r.width / 2 - 26}px;top:${r.top + r.height / 2 - 10}px;width:52px;text-align:center;color:${col};font-size:16px;font-weight:700;text-shadow:0 1px 4px #000`, 950, "fxnum");
+    if (d) d.textContent = txt;
+    FX.go(d, ";transform:translateY(-34px);opacity:0");
+  },
+  chip(el, txt, col, bg) {
+    const r = FX.rect(el);
+    if (!r) return;
+    const d = FX.spawn(`left:${r.left + 4}px;top:${r.top - 6}px;max-width:${Math.max(90, r.width - 8)}px;background:${bg};color:${col};opacity:0`, 1500, "fxchip");
+    if (d) d.textContent = txt;
+    FX.go(d, ";opacity:1;transform:translateY(-16px)");
+    setTimeout(() => { if (d) d.style.opacity = "0"; }, 1000);
+  },
+  shatter(el, col) {
+    const r = FX.rect(el);
+    if (!r) return;
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2;
+      const p = FX.spawn(`left:${cx}px;top:${cy}px;width:8px;height:11px;background:${col};opacity:.95`, 720, "fxshard");
+      FX.go(p, `;transform:translate(${Math.cos(a) * 58}px, ${Math.sin(a) * 50}px) rotate(${Math.round(a * 70)}deg);opacity:0`);
+    }
   },
 
   fly(a, b, o) {
@@ -967,6 +1080,9 @@ const FX = {
     }, FX.DUR + (o.delay || 0) + 60);
   },
 };
+
+// the engine reaches the motion layer through window.FX (see fxSignal in engine.js)
+window.FX = FX;
 
 /* ================================ EDITOR ================================ */
 

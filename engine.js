@@ -1025,6 +1025,8 @@ function compileCard(card) {
       let dynH;
       if ((dynH = norm(card.text).match(/(?:He|She|It|\w+) continuously has \+(\d+) Attack and \+(\d+) Health for each blood counter on (?:him|her|it)/i))) { out.dynSelf = { kind: "blood", atk: +dynH[1], hp: +dynH[2] }; out.autoBits.push("blood-counter growth"); }
       if ((dynH = norm(card.text).match(/all Heroes you control continuously have \+(\d+) Attack and \+(\d+) Health for each different Realm among the Heroes you control(?: \(maximum \+(\d+) Attack and \+(\d+) Health\))?/i))) { out.dynTeam = { kind: "perRealm", atk: +dynH[1], hp: +dynH[2], capAtk: dynH[3] ? +dynH[3] : 0, capHp: dynH[4] ? +dynH[4] : 0 }; out.autoBits.push("unity aura"); }
+      // Jebe: this Hero alone scales with how many Realms you are fielding
+      if ((dynH = norm(card.text).match(/(?:He|She|It|\w+) has \+(\d+) Attack(?: and \+(\d+) Health)? for each different Realm among (?:the )?Heroes you control/i))) { out.dynRealmSelf = { atk: +dynH[1], hp: +(dynH[2] || 0) }; out.autoBits.push("realm-count growth"); }
       const em = norm(card.text).match(/^When .+? enters play, (.*?)(?:\. While |\.$|$)/i);
       if (em) { out.onEnter = parseOps(em[1]); if (out.onEnter) out.autoBits.push("on-enter"); }
       // aux side
@@ -1156,6 +1158,13 @@ function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { co
 
 function log(msg, cls) { G.log.push({ msg, cls: cls || "", turn: G.turn }); if (window.UI) UI.onLog(); }
 
+/* Motion hook. The UI installs window.FX and queues these to play after the
+   next render; the engine never waits on it and never reads anything back, so
+   game logic is identical whether or not anything is listening. */
+function fxSignal(kind, data) {
+  try { if (typeof window !== "undefined" && window.FX && window.FX.signal) window.FX.signal(kind, data); } catch (e) { /* motion must never break a rule */ }
+}
+
 function pushUndo() { if (!G) return; UNDO.push(JSON.stringify(G)); if (UNDO.length > 50) UNDO.shift(); }
 function undo() { if (!UNDO.length) return false; G = JSON.parse(UNDO.pop()); return true; }
 
@@ -1196,6 +1205,10 @@ function collectAuras(tpi, tli, bare) {
           const d7 = src.f.dynEquip;
           if (d7.kind === "blood") atk += d7.atk * ((src.ref && src.ref.blood) || 0);
           else if (d7.kind === "perOther") { let g7 = d7.atk * Math.max(0, heroesOf(tpi).length - 1); if (d7.cap) g7 = Math.min(g7, d7.cap); atk += g7; }
+        }
+        if (src.f.dynRealmSelf && pi === tpi && li === tli && !src.equippedHere && L.hero) {
+          const rn = new Set(heroesOf(tpi).map(t3 => cardById(heroAt(t3).cardId).realm)).size;
+          atk += src.f.dynRealmSelf.atk * rn; hp += src.f.dynRealmSelf.hp * rn;
         }
         if (src.f.dynTeam && pi === tpi) {
           const d8 = src.f.dynTeam;
@@ -1427,6 +1440,7 @@ function checkWin() {
 
 async function runOp(op, pi, ctx) {
   ctx = ctx || {};
+  fxSignal("effect", { pi, li: ctx.laneIdx != null ? ctx.laneIdx : -1, name: ctx.sourceName || "" });
   const P = G.players[pi], O = G.players[1 - pi];
   const nameOf = (t) => cardById(G.players[t.pi].lanes[t.li].hero.cardId).name;
   switch (op.op) {
@@ -2555,6 +2569,7 @@ function dealDamage(t, amount, opts) {
   const before = curHp(t.pi, t.li);
   h.dmg += amount;
   log(`${c.name} takes ${amount} damage${opts.sourceName ? " (" + opts.sourceName + ")" : ""}.`);
+  fxSignal("damage", { pi: t.pi, li: t.li, n: amount });
   emit("enemyHpDown", 1 - t.pi, {});
   // Vrist: other same-realm Heroes grow from their wounds
   for (const w of heroesOf(t.pi)) {
@@ -2662,6 +2677,7 @@ function destroyHero(pi, li, killer, opts) {
     }
   }
   G.deathGt = G.deathGt || {}; G.deathGt[pi] = G.gt;
+  fxSignal("destroy", { pi, li, name: c.name, realm: c.realm });
   P.lanes[li].hero = null;
   if (P.championUid === h.uid) P.championUid = null;   // Champion status ends with the Hero
   log(`${c.name} dies.${h.relics.length ? " Its Relics are destroyed." : ""}`);
@@ -2737,6 +2753,7 @@ async function fireHexes(ownerPi, event, ctx) {
     if (!pay) { log(`Your Hex "${card.name}" fizzles (declined).`); P.slots[si] = null; emit("supportSpent", 1 - ownerPi, {}); continue; }
     P.pulse -= hexCost;
     log(`${P.name}'s Hex triggers: ${card.name}!`, P.isAI ? "ai" : "");
+    fxSignal("reveal", { pi: ownerPi, li: s.laneIdx, name: card.name, kind: "hex" });
     const opCtx = Object.assign({ sourceName: card.name, laneIdx: s.laneIdx }, ctx);
     for (const op of f.hexTrig.ops) {
       if (opCtx.abort) break;
@@ -3606,6 +3623,7 @@ async function resolveAttack(pi, attackerLis, target) {
   };
   const defAtk = combat.defMatch && alive.length === 1 ? atkOf(alive[0]) : Math.max(0, effAtk(1 - pi, dLi, defBare) + (combat.defAtkMod || 0));
   const defName = cardById(defHero.cardId).name;
+  fxSignal("attack", { pi, lanes: alive.slice(), dpi: 1 - pi, dli: dLi, onslaught: alive.length > 1 });
 
   if (alive.length === 1) {
     const aAtk = atkOf(alive[0]);
