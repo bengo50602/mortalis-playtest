@@ -126,6 +126,14 @@ a{color:var(--accent)}
 .opphand{display:flex;gap:5px;padding:6px 2px;flex-wrap:nowrap;overflow:hidden;align-items:center;min-height:70px}
 .oppcard{flex:0 0 44px;width:44px;height:62px;border-radius:5px;box-shadow:0 0 0 1.3px #8f9db4,0 2px 7px rgba(0,0,0,.5);overflow:hidden}
 .handempty{font-size:11px;color:#5e6673;font-style:italic}
+/* opening & victory sequences */
+.fxtitle{transition:opacity .55s,transform .65s cubic-bezier(.2,.9,.3,1);text-align:center}
+.fxwm{font-family:'Cinzel',Georgia,serif;font-weight:800;font-size:38px;color:#e9eff7;letter-spacing:9px;text-shadow:0 3px 22px rgba(0,0,0,.85)}
+.fxsub{font-family:'Cinzel',Georgia,serif;font-size:13px;color:#aab6c6;letter-spacing:5px;margin-top:8px;text-shadow:0 2px 12px rgba(0,0,0,.85)}
+.fxcrest{transition:transform .6s cubic-bezier(.2,.8,.3,1),opacity .3s}
+.fxwash{transition:opacity .75s}
+.fxmedal{transition:transform .55s cubic-bezier(.2,1.4,.4,1),opacity .5s}
+@media (max-width:640px){.fxwm{font-size:26px;letter-spacing:5px}}
 /* arcane event motion: streaks, sigils, damage numbers, shatter */
 .fxbit{position:absolute;pointer-events:none;will-change:transform,opacity}
 .fxstreak{transform-origin:left center;border-radius:2px;transition:transform .18s ease-out,opacity .34s .16s}
@@ -214,7 +222,7 @@ a{color:var(--accent)}
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
   <span class="netstate" id="netstate"></span>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good)">How to play</button></a>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260721112718</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260721113847</span>
   <div class="spacer"></div>
   <button id="tab-play" class="active-tab" style="display:none">Play</button>
   <button id="tab-cards">Edit cards</button>
@@ -345,10 +353,10 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="cards.js?v=20260721112718"></script>
-<script src="rules.js?v=20260721112718"></script>
-<script src="engine.js?v=20260721112718"></script>
-<script src="ui.js?v=20260721112718"></script>
+<script src="cards.js?v=20260721113847"></script>
+<script src="rules.js?v=20260721113847"></script>
+<script src="engine.js?v=20260721113847"></script>
+<script src="ui.js?v=20260721113847"></script>
 <script>
 /* ================= Mortalis PvP layer (host-authoritative, PeerJS) ================= */
 (function () {
@@ -447,6 +455,7 @@ a{color:var(--accent)}
     log(`PvP: ${NET.myName} vs ${NET.oppName}. ${G.players[G.firstPlayer].name} goes first.`);
     show("screen-game");
     UI.render();
+    if (window.FX && FX.intro) FX.intro();
   }
 
   // broadcast state after every render (throttled)
@@ -545,7 +554,12 @@ a{color:var(--accent)}
       active: swap(g.active), firstPlayer: swap(g.firstPlayer),
       winner: g.winner == null ? null : swap(g.winner),
     });
-    if (!NET.started) { NET.started = true; show("screen-game"); }
+    if (!NET.started) {
+      NET.started = true; show("screen-game");
+      origRender();
+      if (window.FX && FX.intro) FX.intro();     // the guest gets the same opening
+      return;
+    }
     origRender();
   }
   if (window.location) { /* guest overrides engine entry points with network senders */ }

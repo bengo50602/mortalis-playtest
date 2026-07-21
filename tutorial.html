@@ -108,6 +108,14 @@ a{color:var(--accent)}
 .opphand{display:flex;gap:5px;padding:6px 2px;flex-wrap:nowrap;overflow:hidden;align-items:center;min-height:70px}
 .oppcard{flex:0 0 44px;width:44px;height:62px;border-radius:5px;box-shadow:0 0 0 1.3px #8f9db4,0 2px 7px rgba(0,0,0,.5);overflow:hidden}
 .handempty{font-size:11px;color:#5e6673;font-style:italic}
+/* opening & victory sequences */
+.fxtitle{transition:opacity .55s,transform .65s cubic-bezier(.2,.9,.3,1);text-align:center}
+.fxwm{font-family:'Cinzel',Georgia,serif;font-weight:800;font-size:38px;color:#e9eff7;letter-spacing:9px;text-shadow:0 3px 22px rgba(0,0,0,.85)}
+.fxsub{font-family:'Cinzel',Georgia,serif;font-size:13px;color:#aab6c6;letter-spacing:5px;margin-top:8px;text-shadow:0 2px 12px rgba(0,0,0,.85)}
+.fxcrest{transition:transform .6s cubic-bezier(.2,.8,.3,1),opacity .3s}
+.fxwash{transition:opacity .75s}
+.fxmedal{transition:transform .55s cubic-bezier(.2,1.4,.4,1),opacity .5s}
+@media (max-width:640px){.fxwm{font-size:26px;letter-spacing:5px}}
 /* arcane event motion: streaks, sigils, damage numbers, shatter */
 .fxbit{position:absolute;pointer-events:none;will-change:transform,opacity}
 .fxstreak{transform-origin:left center;border-radius:2px;transition:transform .18s ease-out,opacity .34s .16s}
@@ -175,7 +183,7 @@ a{color:var(--accent)}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span style="font-size:12px;color:var(--muted);margin-left:6px">Interactive tutorial</span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260721112718</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260721113847</span>
   <div class="spacer"></div>
   <button id="btn-restart">Restart tutorial</button>
   <a href="index.html"><button>Exit to game</button></a>
@@ -269,10 +277,10 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 
-<script src="cards.js?v=20260721112718"></script>
-<script src="rules.js?v=20260721112718"></script>
-<script src="engine.js?v=20260721112718"></script>
-<script src="ui.js?v=20260721112718"></script>
+<script src="cards.js?v=20260721113847"></script>
+<script src="rules.js?v=20260721113847"></script>
+<script src="engine.js?v=20260721113847"></script>
+<script src="ui.js?v=20260721113847"></script>
 <script>
 /* ===================== Mortalis interactive tutorial ===================== */
 (function () {
