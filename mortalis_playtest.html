@@ -256,7 +256,7 @@ a{color:var(--accent)}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260722180714</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260722181611</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -10996,7 +10996,9 @@ const RulesTab = {
 
 window.addEventListener("DOMContentLoaded", () => {
   loadDB();
-  $("verinfo").textContent = `${DB.cards.length} cards · ${DB.realms.length} realms`;
+  // the tutorial page has no version line, and shares this boot handler
+  const ver = $("verinfo");
+  if (ver) ver.textContent = `${DB.cards.length} cards · ${DB.realms.length} realms`;
   // For a player, the authoring UI is not hidden — it is taken out of the page,
   // so there is nothing to unhide, tab to, or click through to.
   if (!DEV) {
@@ -11093,9 +11095,11 @@ window.addEventListener("DOMContentLoaded", () => {
     UI.render();
   });
 
-  // rules tab buttons
-  $("btn-save-consts").onclick = () => RulesTab.saveConsts();
-  $("btn-save-rules").onclick = () => RulesTab.saveText();
+  // rules tab buttons — these live inside #screen-rules, which is removed for players
+  if (DEV) {
+    on("btn-save-consts", () => RulesTab.saveConsts());
+    on("btn-save-rules", () => RulesTab.saveText());
+  }
 
   UI.show("setup");
 });

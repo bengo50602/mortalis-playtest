@@ -1542,7 +1542,9 @@ const RulesTab = {
 
 window.addEventListener("DOMContentLoaded", () => {
   loadDB();
-  $("verinfo").textContent = `${DB.cards.length} cards · ${DB.realms.length} realms`;
+  // the tutorial page has no version line, and shares this boot handler
+  const ver = $("verinfo");
+  if (ver) ver.textContent = `${DB.cards.length} cards · ${DB.realms.length} realms`;
   // For a player, the authoring UI is not hidden — it is taken out of the page,
   // so there is nothing to unhide, tab to, or click through to.
   if (!DEV) {
@@ -1639,9 +1641,11 @@ window.addEventListener("DOMContentLoaded", () => {
     UI.render();
   });
 
-  // rules tab buttons
-  $("btn-save-consts").onclick = () => RulesTab.saveConsts();
-  $("btn-save-rules").onclick = () => RulesTab.saveText();
+  // rules tab buttons — these live inside #screen-rules, which is removed for players
+  if (DEV) {
+    on("btn-save-consts", () => RulesTab.saveConsts());
+    on("btn-save-rules", () => RulesTab.saveText());
+  }
 
   UI.show("setup");
 });
