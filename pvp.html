@@ -222,6 +222,29 @@ a{color:var(--accent)}
 .brand-hero .wm2 i:last-child{background:linear-gradient(90deg,#4d76c4,transparent)}
 @media (max-width:640px){.brand-hero .wm1{font-size:30px;letter-spacing:4px}.brand-hero .mk{width:74px;height:81px}}
 </style>
+<script>
+/* Surfaces any script error on screen instead of failing silently. Without this
+   a single exception leaves a dead button and no clue why. */
+(function () {
+  function show(msg, where) {
+    var d = document.getElementById("errbar");
+    if (!d) {
+      d = document.createElement("div");
+      d.id = "errbar";
+      d.style.cssText = "position:fixed;left:0;right:0;top:0;z-index:9999;background:#4a1a18;color:#ffd9d5;font:13px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:10px 16px;border-bottom:1px solid #c0554d;white-space:pre-wrap;max-height:40vh;overflow:auto";
+      (document.body || document.documentElement).appendChild(d);
+    }
+    d.textContent = "Something broke — please send this to Claude:\n" + msg + (where ? "\n  at " + where : "");
+  }
+  window.addEventListener("error", function (e) {
+    show((e.error && e.error.message) || e.message || "unknown error",
+         (e.filename || "").split("/").pop() + ":" + e.lineno);
+  });
+  window.addEventListener("unhandledrejection", function (e) {
+    show("Unhandled promise rejection: " + ((e.reason && e.reason.message) || e.reason));
+  });
+})();
+</script>
 </head>
 <body>
 <div class="topbar">
@@ -240,7 +263,7 @@ a{color:var(--accent)}
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
   <span class="netstate" id="netstate"></span>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good)">How to play</button></a>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260722172559</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260722172946</span>
   <div class="spacer"></div>
   <button id="tab-play" class="active-tab" style="display:none">Play</button>
   <button id="tab-cards">Edit cards</button>
@@ -371,10 +394,10 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="cards.js?v=20260722172559"></script>
-<script src="rules.js?v=20260722172559"></script>
-<script src="engine.js?v=20260722172559"></script>
-<script src="ui.js?v=20260722172559"></script>
+<script src="cards.js?v=20260722172946"></script>
+<script src="rules.js?v=20260722172946"></script>
+<script src="engine.js?v=20260722172946"></script>
+<script src="ui.js?v=20260722172946"></script>
 <script>
 /* ================= Mortalis PvP layer (host-authoritative, PeerJS) ================= */
 (function () {
