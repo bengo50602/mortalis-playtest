@@ -81,6 +81,7 @@ const UI = {
   /* ---------------- rendering ---------------- */
   render() {
     if (!G) return;
+    FX.watchdog();
     $("turn-ind").textContent = G.over ? `GAME OVER — ${G.players[G.winner].name} wins` :
       `Turn ${Math.ceil(G.gt / 2)} — ${G.players[G.active].name}${G.active === 0 ? " (you)" : ""}`;
     let selMsg = "";
@@ -859,7 +860,12 @@ const FX = {
   snap: null,
   pre: [[], []],
 
+  reduced() {
+    try { return typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches; }
+    catch (e) { return false; }
+  },
   live() {
+    if (FX.reduced()) return false;          // no motion at all, rather than invisible motion
     return typeof requestAnimationFrame === "function" &&
            typeof document !== "undefined" && !!document.body &&
            UI.screen === "game" && !!G;
@@ -1046,15 +1052,33 @@ const FX = {
     FX.after(() => { d.style.opacity = "0"; }, delay + hold);
   },
 
+  deadline: 0,
+  restore: null,
+  undim() {
+    for (const pi of [0, 1]) for (let li = 0; li < 4; li++) {
+      const el = FX.laneEl(pi, li);
+      if (el && el.style) { el.style.opacity = ""; el.style.transform = ""; el.style.transition = ""; el.style.boxShadow = ""; }
+    }
+  },
+  // If a ceremony is somehow still holding the board past its own deadline,
+  // end it. Called on every render and on any click, so the board can never
+  // stay dark and unresponsive.
+  watchdog() {
+    if (FX.restore && FX.deadline && Date.now() > FX.deadline) FX.restore();
+  },
   suspend(ms) {
     FX.busy = true;
     const wasBusy = UI.busy;
     UI.busy = true;
-    FX.after(() => {
+    FX.deadline = Date.now() + FX.ms(ms) + 500;
+    FX.restore = () => {
+      FX.restore = null; FX.deadline = 0;
       FX.busy = false; UI.busy = wasBusy;
+      FX.undim();
       FX.snap = null; FX.gref = null;      // resync silently; the deal already played
       try { UI.render(); } catch (e) {}
-    }, ms);
+    };
+    FX.after(() => { if (FX.restore) FX.restore(); }, ms);
   },
 
   /* Sigils converge onto the lanes, then the opening hands are dealt. */
@@ -1590,6 +1614,8 @@ window.addEventListener("DOMContentLoaded", () => {
   on("btn-sandbox-toggle", () => { UI.sandboxOpen = !UI.sandboxOpen; const sb = $("sandbox"); if (sb) sb.style.display = UI.sandboxOpen ? "" : "none"; });
   $("ai-face").onclick = () => UI.clickFace(1);
   $("overlay").onclick = (e) => { if (e.target === $("overlay")) UI.closeZoom(); };
+  // a click is also a chance to notice a ceremony that overstayed its welcome
+  document.addEventListener("click", () => { try { FX.watchdog(); } catch (e) {} }, true);
 
   document.querySelectorAll("[data-sb]").forEach(b => b.onclick = () => {
     if (!G) return;
