@@ -233,18 +233,23 @@ a{color:var(--accent)}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260721121615</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260722171437</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
   <button id="tab-play" class="active-tab">Play</button>
-  <button id="tab-cards">Edit cards</button>
-  <button id="tab-rules">Edit rules</button>
   <button id="btn-newgame">New game</button>
-  <button id="btn-export" title="Download all your edits as a JSON file">Export</button>
-  <button id="btn-import">Import</button>
-  <input type="file" id="import-file" accept=".json" style="display:none">
-  <button id="btn-reset" title="Discard all edits and restore the published rulebook data">Reset to rulebook</button>
+  <!-- Authoring tools. Hidden from players; the card/rule editors, import,
+       export and reset only appear with ?dev=1 on the URL. The rulebook itself
+       is authored in rules_current.md and compiled by build_data.py. -->
+  <span id="devtools" style="display:none;gap:8px">
+    <button id="tab-cards">Edit cards</button>
+    <button id="tab-rules">Edit rules</button>
+    <button id="btn-export" title="Download all your edits as a JSON file">Export</button>
+    <button id="btn-import">Import</button>
+    <input type="file" id="import-file" accept=".json" style="display:none">
+    <button id="btn-reset" title="Discard all edits and restore the published rulebook data">Reset to rulebook</button>
+  </span>
 </div>
 
 <div id="screen-setup" class="screen visible">
@@ -9426,6 +9431,17 @@ async function aiTakeTurn() {
 
 const $ = (id) => document.getElementById(id);
 
+// Authoring tools are for maintaining the game, not for playing it. They stay
+// hidden unless the page is opened with ?dev=1, which also survives a reload
+// via localStorage so the flag only has to be typed once.
+const DEV = (() => {
+  try {
+    const q = typeof location !== "undefined" && /[?&]dev=([01])/.exec(location.search || "");
+    if (q) { localStorage.setItem("mr_dev", q[1]); return q[1] === "1"; }
+    return localStorage.getItem("mr_dev") === "1";
+  } catch (e) { return false; }
+})();
+
 const UI = {
   screen: "setup",
   sel: [],            // selected attacker lane indexes
@@ -9440,9 +9456,10 @@ const UI = {
   show(screen) {
     UI.screen = screen;
     for (const s of ["setup", "game", "cards", "rules"]) $("screen-" + s).classList.toggle("visible", s === screen);
-    $("tab-play").classList.toggle("active-tab", screen === "setup" || screen === "game");
-    $("tab-cards").classList.toggle("active-tab", screen === "cards");
-    $("tab-rules").classList.toggle("active-tab", screen === "rules");
+    const tab = (id, on) => { const b = $(id); if (b) b.classList.toggle("active-tab", on); };
+    tab("tab-play", screen === "setup" || screen === "game");
+    tab("tab-cards", screen === "cards");
+    tab("tab-rules", screen === "rules");
     if (screen === "cards") Editor.render();
     if (screen === "rules") RulesTab.render();
   },
@@ -9985,7 +10002,7 @@ const UI = {
         UI.addAction("Discard from slot", () => { pushUndo(); G.players[0].slots[ctx.si] = null; log(`${c.name} discarded from slot.`); });
       }
     }
-    UI.addAction("Edit this card", () => { Editor.selectId = c.id; UI.show("cards"); });
+    if (DEV) UI.addAction("Edit this card", () => { Editor.selectId = c.id; UI.show("cards"); });
     UI.addAction("Close", () => {});
   },
 
@@ -10922,28 +10939,36 @@ const RulesTab = {
 window.addEventListener("DOMContentLoaded", () => {
   loadDB();
   $("verinfo").textContent = `${DB.cards.length} cards · ${DB.realms.length} realms`;
-  if (window.CUSTOM_DATA && window.CUSTOM_DATA.cards) $("btn-reset").textContent = "Reset to published data";
+  const devbar = $("devtools");
+  if (devbar) devbar.style.display = DEV ? "inline-flex" : "none";
+  if (DEV && window.CUSTOM_DATA && window.CUSTOM_DATA.cards && $("btn-reset")) $("btn-reset").textContent = "Reset to published data";
   UI.renderSetup();
 
-  $("tab-play").onclick = () => UI.show(G ? "game" : "setup");
-  $("tab-cards").onclick = () => UI.show("cards");
-  $("tab-rules").onclick = () => UI.show("rules");
-  $("btn-newgame").onclick = () => { UI.renderSetup(); UI.show("setup"); };
+  const on = (id, fn) => { const b = $(id); if (b) b.onclick = fn; };
+  on("tab-play", () => UI.show(G ? "game" : "setup"));
+  on("btn-newgame", () => { UI.renderSetup(); UI.show("setup"); });
+  if (DEV) {
+    on("tab-cards", () => UI.show("cards"));
+    on("tab-rules", () => UI.show("rules"));
+  }
 
-  $("btn-export").onclick = exportDB;
-  $("btn-import").onclick = () => $("import-file").click();
-  $("import-file").onchange = (e) => {
-    const f = e.target.files[0];
-    if (!f) return;
-    const r = new FileReader();
-    r.onload = () => {
-      try { importDB(r.result); UI.toast("Imported."); UI.renderSetup(); if (UI.screen === "cards") Editor.render(); }
-      catch (err) { UI.toast("Import failed: " + err.message); }
+  if (DEV) {
+    on("btn-export", exportDB);
+    on("btn-import", () => $("import-file").click());
+    const imp = $("import-file");
+    if (imp) imp.onchange = (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      const r = new FileReader();
+      r.onload = () => {
+        try { importDB(r.result); UI.toast("Imported."); UI.renderSetup(); if (UI.screen === "cards") Editor.render(); }
+        catch (err) { UI.toast("Import failed: " + err.message); }
+      };
+      r.readAsText(f);
+      e.target.value = "";
     };
-    r.readAsText(f);
-    e.target.value = "";
-  };
-  $("btn-reset").onclick = () => {
+  }
+  on("btn-reset", () => {
     if (confirm("Discard ALL your edits (cards, constants, rule text) and restore the published rulebook data?")) {
       resetDB();
       UI.toast("Reset to rulebook defaults.");
@@ -10951,7 +10976,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (UI.screen === "cards") Editor.render();
       if (UI.screen === "rules") RulesTab.render();
     }
-  };
+  });
 
   // setup controls
   document.querySelectorAll("#diff-btns button").forEach(b => b.onclick = () => {

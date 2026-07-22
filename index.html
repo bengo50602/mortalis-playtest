@@ -233,18 +233,23 @@ a{color:var(--accent)}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260721121615</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260722171437</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
   <button id="tab-play" class="active-tab">Play</button>
-  <button id="tab-cards">Edit cards</button>
-  <button id="tab-rules">Edit rules</button>
   <button id="btn-newgame">New game</button>
-  <button id="btn-export" title="Download all your edits as a JSON file">Export</button>
-  <button id="btn-import">Import</button>
-  <input type="file" id="import-file" accept=".json" style="display:none">
-  <button id="btn-reset" title="Discard all edits and restore the published rulebook data">Reset to rulebook</button>
+  <!-- Authoring tools. Hidden from players; the card/rule editors, import,
+       export and reset only appear with ?dev=1 on the URL. The rulebook itself
+       is authored in rules_current.md and compiled by build_data.py. -->
+  <span id="devtools" style="display:none;gap:8px">
+    <button id="tab-cards">Edit cards</button>
+    <button id="tab-rules">Edit rules</button>
+    <button id="btn-export" title="Download all your edits as a JSON file">Export</button>
+    <button id="btn-import">Import</button>
+    <input type="file" id="import-file" accept=".json" style="display:none">
+    <button id="btn-reset" title="Discard all edits and restore the published rulebook data">Reset to rulebook</button>
+  </span>
 </div>
 
 <div id="screen-setup" class="screen visible">
@@ -389,10 +394,10 @@ a{color:var(--accent)}
 <div id="overlay"><div class="bigcard" id="bigcard"></div></div>
 <div id="toast"></div>
 
-<script src="cards.js?v=20260721121615"></script>
-<script src="rules.js?v=20260721121615"></script>
-<script src="custom.js?v=20260721121615"></script>
-<script src="engine.js?v=20260721121615"></script>
-<script src="ui.js?v=20260721121615"></script>
+<script src="cards.js?v=20260722171437"></script>
+<script src="rules.js?v=20260722171437"></script>
+<script src="custom.js?v=20260722171437"></script>
+<script src="engine.js?v=20260722171437"></script>
+<script src="ui.js?v=20260722171437"></script>
 </body>
 </html>
