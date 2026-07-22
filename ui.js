@@ -26,6 +26,7 @@ const UI = {
 
   /* ---------------- screens & tabs ---------------- */
   show(screen) {
+    if (!DEV && (screen === "cards" || screen === "rules")) return;   // not a player's to open
     UI.screen = screen;
     for (const s of ["setup", "game", "cards", "rules"]) $("screen-" + s).classList.toggle("visible", s === screen);
     const tab = (id, on) => { const b = $(id); if (b) b.classList.toggle("active-tab", on); };
@@ -531,13 +532,16 @@ const UI = {
           });
         });
       }
-      // manual adjudication controls — always available, both sides
-      UI.addAction("−10 HP", () => { pushUndo(); dealDamage(t, 10, { sourceName: "manual" }); });
-      UI.addAction("+10 heal", () => { pushUndo(); h.dmg = Math.max(0, h.dmg - 10); });
-      UI.addAction("+10 ATK", () => { pushUndo(); h.permAtk += 10; });
-      UI.addAction("−10 ATK", () => { pushUndo(); h.permAtk -= 10; });
-      UI.addAction("+10 max HP", () => { pushUndo(); h.permHp += 10; });
-      UI.addAction("Destroy", () => { pushUndo(); destroyHero(t.pi, t.li, null, {}); });
+      // manual adjudication controls — authoring only; these let you rewrite the
+      // board by hand, so a player must never be offered them
+      if (DEV) {
+        UI.addAction("−10 HP", () => { pushUndo(); dealDamage(t, 10, { sourceName: "manual" }); });
+        UI.addAction("+10 heal", () => { pushUndo(); h.dmg = Math.max(0, h.dmg - 10); });
+        UI.addAction("+10 ATK", () => { pushUndo(); h.permAtk += 10; });
+        UI.addAction("−10 ATK", () => { pushUndo(); h.permAtk -= 10; });
+        UI.addAction("+10 max HP", () => { pushUndo(); h.permHp += 10; });
+        UI.addAction("Destroy", () => { pushUndo(); destroyHero(t.pi, t.li, null, {}); });
+      }
     }
     if (ctx.kind === "aux" && ctx.pi === 0) {
       const inst = G.players[0].lanes[ctx.li].aux.find(a => a && a.uid === ctx.auxUid);
@@ -548,7 +552,7 @@ const UI = {
             async () => { pushUndo(); await activateAbility(0, ctx.li, inst, c.name, ab, i); }, !used && !!ab.ops);
         });
       }
-      UI.addAction("Destroy Aux", () => { pushUndo(); removeAux(ctx.pi, ctx.li, ctx.auxUid); log(`${c.name} (Aux) destroyed.`); });
+      if (DEV) UI.addAction("Destroy Aux", () => { pushUndo(); removeAux(ctx.pi, ctx.li, ctx.auxUid); log(`${c.name} (Aux) destroyed.`); });
     }
     if (ctx.kind === "slot") {
       const s = G.players[ctx.pi].slots[ctx.si];
@@ -556,8 +560,8 @@ const UI = {
         if (s.kind === "rite") {
           const r = fx(s.cardId).rite;
           if (r && r.early) UI.addAction("Resolve early (smaller effect)", async () => { pushUndo(); await resolveRite(0, ctx.si, "early"); }, true);
-          UI.addAction("Resolve payoff now", async () => { pushUndo(); await resolveRite(0, ctx.si, "payoff"); });
-          UI.addAction("+1 counter", () => { pushUndo(); s.counters++; });
+          if (DEV) UI.addAction("Resolve payoff now", async () => { pushUndo(); await resolveRite(0, ctx.si, "payoff"); });
+          if (DEV) UI.addAction("+1 counter", () => { pushUndo(); s.counters++; });
         }
         if (s.kind === "hex") {
           UI.addAction(`Trigger manually (pay ${c.cost})`, async () => {
@@ -571,7 +575,7 @@ const UI = {
             if (f.hexTrig && f.hexTrig !== "manual") for (const op of f.hexTrig.ops) if (!["combatAtk", "combatAtkSet", "combatSwap", "block", "negate"].includes(op.op)) await runOp(op, 0, { laneIdx: s.laneIdx, sourceName: c.name });
           }, true);
         }
-        UI.addAction("Discard from slot", () => { pushUndo(); G.players[0].slots[ctx.si] = null; log(`${c.name} discarded from slot.`); });
+        if (DEV) UI.addAction("Discard from slot", () => { pushUndo(); G.players[0].slots[ctx.si] = null; log(`${c.name} discarded from slot.`); });
       }
     }
     if (DEV) UI.addAction("Edit this card", () => { Editor.selectId = c.id; UI.show("cards"); });
@@ -1511,6 +1515,14 @@ const RulesTab = {
 window.addEventListener("DOMContentLoaded", () => {
   loadDB();
   $("verinfo").textContent = `${DB.cards.length} cards · ${DB.realms.length} realms`;
+  // For a player, the authoring UI is not hidden — it is taken out of the page,
+  // so there is nothing to unhide, tab to, or click through to.
+  if (!DEV) {
+    for (const id of ["devtools", "screen-cards", "screen-rules", "sandbox", "btn-sandbox-toggle"]) {
+      const el = $(id);
+      if (el && el.parentNode && el.parentNode.removeChild) el.parentNode.removeChild(el);
+    }
+  }
   const devbar = $("devtools");
   if (devbar) devbar.style.display = DEV ? "inline-flex" : "none";
   if (DEV && window.CUSTOM_DATA && window.CUSTOM_DATA.cards && $("btn-reset")) $("btn-reset").textContent = "Reset to published data";
@@ -1571,7 +1583,7 @@ window.addEventListener("DOMContentLoaded", () => {
   $("btn-endturn").onclick = () => UI.endTurnClicked();
   $("btn-undo").onclick = () => { if (undo()) { UI.sel = []; UI.pending = null; UI.render(); UI.toast("Undone."); } else UI.toast("Nothing to undo."); };
   $("btn-cancel").onclick = () => UI.settlePending(null);
-  $("btn-sandbox-toggle").onclick = () => { UI.sandboxOpen = !UI.sandboxOpen; $("sandbox").style.display = UI.sandboxOpen ? "" : "none"; };
+  on("btn-sandbox-toggle", () => { UI.sandboxOpen = !UI.sandboxOpen; const sb = $("sandbox"); if (sb) sb.style.display = UI.sandboxOpen ? "" : "none"; });
   $("ai-face").onclick = () => UI.clickFace(1);
   $("overlay").onclick = (e) => { if (e.target === $("overlay")) UI.closeZoom(); };
 

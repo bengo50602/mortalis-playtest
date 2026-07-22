@@ -22,7 +22,10 @@ function baseData() {
 }
 function loadDB() {
   DB = null;
-  const saved = localStorage.getItem(LS_KEY);
+  // Locally saved edits are an authoring feature. A player's build ignores them
+  // entirely, so nothing anyone pokes into storage can change the game they or
+  // anyone else is served.
+  const saved = (typeof DEV !== "undefined" && DEV) ? localStorage.getItem(LS_KEY) : null;
   if (saved) {
     try { DB = JSON.parse(saved); } catch (e) { DB = null; }
   }
@@ -35,7 +38,7 @@ function loadDB() {
   if (!DB.rulesText) DB.rulesText = window.DEFAULT_RULES_TEXT;
   recompileAll();
 }
-function saveDB() { localStorage.setItem(LS_KEY, JSON.stringify(DB)); }
+function saveDB() { if (typeof DEV !== "undefined" && DEV) localStorage.setItem(LS_KEY, JSON.stringify(DB)); }
 function resetDB() { localStorage.removeItem(LS_KEY); loadDB(); }
 function exportDB() {
   const blob = new Blob([JSON.stringify(DB, null, 1)], { type: "application/json" });
