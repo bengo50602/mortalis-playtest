@@ -28,7 +28,11 @@ const UI = {
   show(screen) {
     if (!DEV && (screen === "cards" || screen === "rules")) return;   // not a player's to open
     UI.screen = screen;
-    for (const s of ["setup", "game", "cards", "rules"]) $("screen-" + s).classList.toggle("visible", s === screen);
+    // the card/rule screens are removed from a player's page, so they may be absent
+    for (const s of ["setup", "game", "cards", "rules"]) {
+      const el = $("screen-" + s);
+      if (el) el.classList.toggle("visible", s === screen);
+    }
     const tab = (id, on) => { const b = $(id); if (b) b.classList.toggle("active-tab", on); };
     tab("tab-play", screen === "setup" || screen === "game");
     tab("tab-cards", screen === "cards");
