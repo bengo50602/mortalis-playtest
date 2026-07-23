@@ -555,7 +555,7 @@ At the start of each of your turns, if an enemy Hero died since the start of you
 Hero Mode — Cost: 8 Pulse | Attack/Health: 140/100 | Rarity: Ultra-Rare
 While Zeraphel is in play, whenever any enemy card (Hero, Relic, Auxiliary, Hex, Rite, or Pact) is destroyed, gain 1 Pulse (maximum 3 Pulse per turn from this effect). Once per turn, you may pay 4 Pulse to destroy an enemy Auxiliary card.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
-While in this slot, whenever you gain Pulse from a card effect, the Hero in this lane gains +10 Attack until end of turn.
+While in this slot, whenever you gain Pulse from a card effect, the Hero in this lane gains +10 Attack and +10 Health permanently.
 
 **Grand Magus Ostrellan**
 Hero Mode — Cost: 8 Pulse | Attack/Health: 150/90 | Rarity: Ultra-Rare

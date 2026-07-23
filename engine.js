@@ -3441,8 +3441,17 @@ async function resolveAttack(pi, attackerLis, target) {
   const ctx = { laneIdx: dLi, combat, attacker: { pi, li: attackerLis[0] }, defender: { pi: 1 - pi, li: dLi } };
   if (!heroAt(ctx.defender)) { log(`No Hero in the targeted lane — attack fizzles.`); return; }
   log(`${names} attack${attackerLis.length > 1 ? " (Onslaught)" : "s"} ${cardById(heroAt(ctx.defender).cardId).name}.`, P.isAI ? "ai" : "");
-  // defender may pull a single attacker onto a protector Hero
-  if (attackerLis.length === 1) { await defensiveRedirect(pi, ctx); dLi = ctx.defender.li; ctx.laneIdx = dLi; }
+  // The defender may pull the attack onto a protector Hero (Corvazzo, Tessio,
+  // Escort Detail...). This must fire for an Onslaught too — Corvazzo is a tank
+  // meant to soak the whole charge — but NOT when a Tolui-style Onslaught has
+  // locked out prevention/blocking/redirection.
+  {
+    const toluiLock = attackerLis.length > 1 && attackerLis.some(ali => {
+      const ah = heroAt({ pi, li: ali });
+      return ah && !isSilenced(ah) && /participates in an Onslaught, all participating Heroes gain \+\d+ Attack/i.test(cardById(ah.cardId).text || "");
+    });
+    if (!toluiLock) { await defensiveRedirect(pi, ctx); dLi = ctx.defender.li; ctx.laneIdx = dLi; }
+  }
   await fireHexes(1 - pi, "attackLane", ctx);
   for (const ali of attackerLis) await fireHexes(pi, "ownAttack", { laneIdx: ali, combat });
   applyCombatAuxMods(pi, attackerLis, ctx.defender.li, combat, ctx.defender);

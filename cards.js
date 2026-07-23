@@ -872,7 +872,7 @@ window.DEFAULT_DATA = {
    "text": "While Zeraphel is in play, whenever any enemy card (Hero, Relic, Auxiliary, Hex, Rite, or Pact) is destroyed, gain 1 Pulse (maximum 3 Pulse per turn from this effect). Once per turn, you may pay 4 Pulse to destroy an enemy Auxiliary card.",
    "auxCost": 6,
    "auxSlots": 2,
-   "auxText": "While in this slot, whenever you gain Pulse from a card effect, the Hero in this lane gains +10 Attack until end of turn."
+   "auxText": "While in this slot, whenever you gain Pulse from a card effect, the Hero in this lane gains +10 Attack and +10 Health permanently."
   },
   {
    "id": "runespire--grand-magus-ostrellan",

@@ -291,16 +291,17 @@ const UI = {
         d.style.setProperty("--sc", st.col);
         d.style.setProperty("--sbg", st.bg);
         const hidden = s.kind === "hex" && s.faceDown && pi === 1;
-        let label;
+        let label, ritePill = "";
         if (hidden) label = "face-down Hex";
         else if (s.kind === "rite") {
-          const r = fx(s.cardId).rite;
-          label = `${c.name} · ${s.counters}/${(r && (r.timer || r.counterMax)) || "?"}`;
+          const rp = UI.riteProgress(s);
+          label = c.name;
+          ritePill = `<span class="ritep${rp.ready ? " ready" : ""}">${rp.text}</span>`;
         } else label = c.name;
-        d.innerHTML = `<svg viewBox="0 0 12 12" width="11" height="11" style="color:${st.col}">${st.glyph}</svg><span>${label}</span>${s.kind === "hex" && s.faceDown && pi === 0 ? '<span class="fd">set</span>' : ""}`;
+        d.innerHTML = `<svg viewBox="0 0 12 12" width="11" height="11" style="color:${st.col}">${st.glyph}</svg><span>${label}</span>${ritePill}${s.kind === "hex" && s.faceDown && pi === 0 ? '<span class="fd">set</span>' : ""}`;
         if (!hidden) {
           d.onclick = (e) => { e.stopPropagation(); UI.zoomCard(c, { kind: "slot", pi, si }); };
-          d.onmouseenter = () => INS.card(c, INS.row("lane", String(li + 1)) + (s.kind === "rite" ? INS.row("progress", s.counters + " counters") : ""));
+          d.onmouseenter = () => INS.card(c, INS.row("lane", String(li + 1)) + (s.kind === "rite" ? INS.row("progress", UI.riteProgress(s).hover) : ""));
           d.onmouseleave = () => INS.clear();
         } else {
           d.onmouseenter = () => INS.show(`<div style="color:#c7aee8">A face-down Hex is set in this lane.</div><div style="color:#8a93a4;margin-top:4px">You won't see what it is until it triggers — attacking into this lane is a risk.</div>`);
@@ -315,6 +316,28 @@ const UI = {
       lane.appendChild(body);
       el.appendChild(lane);
     });
+  },
+
+  // A Rite advances toward a payoff. Timer Rites tick once per turn; counter
+  // Rites tick when their event fires. Either way s.counters is progress and
+  // the target is when it resolves — surface both, plainly.
+  riteProgress(s) {
+    const r = fx(s.cardId).rite;
+    const target = (r && (r.timer || r.counterMax)) || 0;
+    const now = s.counters || 0;
+    const left = Math.max(0, target - now);
+    const byTurn = !!(r && r.timer);
+    if (!target) return { text: "in progress", hover: `${now} counters`, ready: false };
+    const ready = left <= 0;
+    return {
+      text: ready ? "resolves now" : `${now}/${target}`,
+      ready,
+      hover: byTurn
+        ? (ready ? "resolves at the start of your next turn"
+                 : `turn ${now} of ${target} — ${left} more turn${left === 1 ? "" : "s"} to the payoff`)
+        : (ready ? "target reached — resolves on your next turn"
+                 : `${now} of ${target} counters — ${left} more to the payoff`),
+    };
   },
 
   // one-line gist of an Auxiliary card's effect for the slot label
