@@ -265,7 +265,7 @@ a{color:var(--accent)}
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
   <span class="netstate" id="netstate"></span>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good)">How to play</button></a>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260723174916</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260723180131</span>
   <div class="spacer"></div>
   <button id="tab-play" class="active-tab" style="display:none">Play</button>
   <button id="tab-cards">Edit cards</button>
@@ -400,10 +400,10 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="cards.js?v=20260723174916"></script>
-<script src="rules.js?v=20260723174916"></script>
-<script src="engine.js?v=20260723174916"></script>
-<script src="ui.js?v=20260723174916"></script>
+<script src="cards.js?v=20260723180131"></script>
+<script src="rules.js?v=20260723180131"></script>
+<script src="engine.js?v=20260723180131"></script>
+<script src="ui.js?v=20260723180131"></script>
 <script>
 /* ================= Mortalis PvP layer (host-authoritative, PeerJS) ================= */
 (function () {
@@ -412,7 +412,13 @@ a{color:var(--accent)}
   window.PVP_MODE = true;
 
   const NET = { role: null, conn: null, peer: null, myName: "Player", oppName: "Opponent", started: false, reqId: 1, pending: {} };
-  const show = (id) => { document.querySelectorAll(".screen").forEach(s => s.classList.remove("visible")); $$(id).classList.add("visible"); };
+  const show = (id) => {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("visible"));
+    $$(id).classList.add("visible");
+    // Keep UI.screen in sync — FX.live() gates every animation on it being "game".
+    if (id === "screen-game") UI.screen = "game";
+    else if (id === "screen-setup" || id === "screen-lobby") UI.screen = "setup";
+  };
   const setNet = (msg) => { $$("netstate").textContent = msg; };
 
   /* ---------- lobby ---------- */
@@ -559,6 +565,17 @@ a{color:var(--accent)}
       sendTimer = setTimeout(sendState, 80);
     }
   };
+
+  // Record the combat/effect flourishes the engine emits so the host can relay
+  // them to the guest with the next state sync. The host still plays them live.
+  if (window.FX && !FX.__pvpHooked) {
+    FX.__pvpHooked = true;
+    const realSignal = FX.signal.bind(FX);
+    FX.signal = function (kind, data) {
+      if (NET.role === "host" && NET.started) (NET.sigBuf = NET.sigBuf || []).push({ kind, data });
+      return realSignal(kind, data);
+    };
+  }
   function sendState() {
     if (!G) return;
     const g = JSON.parse(JSON.stringify(G));
@@ -566,7 +583,8 @@ a{color:var(--accent)}
     g.players[0].hand = g.players[0].hand.map(() => "hidden");   // host's hand hidden from guest
     g.players[0].deck = g.players[0].deck.map(() => "hidden");
     g.players[1].deck = g.players[1].deck.map(() => "hidden");
-    send({ t: "state", g });
+    send({ t: "state", g, sig: NET.sigBuf || [] });
+    NET.sigBuf = [];
   }
 
   // remote decisions: route picks/confirms to the guest when the decision is theirs
@@ -638,20 +656,39 @@ a{color:var(--accent)}
   }
 
   /* ---------- guest: thin client ---------- */
-  function applyState(g) {
+  function applyState(g, sig) {
     const swap = x => (x == null ? x : 1 - x);
-    G = Object.assign({}, g, {
+    const next = Object.assign({}, g, {
       players: [g.players[1], g.players[0]],
       active: swap(g.active), firstPlayer: swap(g.firstPlayer),
       winner: g.winner == null ? null : swap(g.winner),
     });
+    // Reuse the SAME G object so FX.settle's `gref === G` diff holds across syncs
+    // — otherwise every sync looks like a brand-new game and nothing animates.
+    if (!G) G = next;
+    else { for (const k of Object.keys(G)) delete G[k]; Object.assign(G, next); }
     if (!NET.started) {
       NET.started = true; show("screen-game");
       origRender();
       if (window.FX && FX.intro) FX.intro();     // the guest gets the same opening
       return;
     }
-    origRender();
+    origRender();                                // draw/play + ceremonies animate off the diff
+    replaySignals(sig);                          // attacks/effects/deaths relayed from the host
+  }
+
+  // The host runs the engine, so combat/effect/death flourishes only fire there.
+  // Replay the ones it relayed, swapped into the guest's own perspective.
+  function replaySignals(sigs) {
+    if (!Array.isArray(sigs) || !sigs.length || !window.FX || UI.screen !== "game" || FX.busy) return;
+    const sw = x => (x == null ? x : 1 - x);
+    for (const s of sigs) {
+      const d = Object.assign({}, s.data);
+      if (d.pi != null) d.pi = sw(d.pi);
+      if (d.dpi != null) d.dpi = sw(d.dpi);
+      try { FX.signal(s.kind, d); } catch (e) {}
+    }
+    try { FX.drain(); } catch (e) {}
   }
   if (window.location) { /* guest overrides engine entry points with network senders */ }
   function guestArm() {
@@ -676,7 +713,7 @@ a{color:var(--accent)}
   async function onMsg(m) {
     if (m.t === "hello") { NET.oppName = m.name || "Opponent"; $$("oppinfo").textContent = "Connected with " + NET.oppName + "."; }
     else if (m.t === "ready") { NET.oppName = m.name || NET.oppName; ready.opp = true; ready.oppRealms = m.realms; ready.oppDeck = m.deck || null; $$("oppinfo").textContent = NET.oppName + " is ready."; maybeStart(); }
-    else if (m.t === "state" && NET.role === "guest") { if (!window.__armed) { guestArm(); window.__armed = true; } applyState(m.g); }
+    else if (m.t === "state" && NET.role === "guest") { if (!window.__armed) { guestArm(); window.__armed = true; } applyState(m.g, m.sig); }
     else if (m.t === "action" && NET.role === "host") await hostHandleAction(m.a);
     else if (m.t === "ask" && NET.role === "guest") {
       let v = null;
