@@ -28,15 +28,16 @@ const UI = {
   show(screen) {
     if (!DEV && (screen === "cards" || screen === "rules")) return;   // not a player's to open
     UI.screen = screen;
-    // the card/rule screens are removed from a player's page, so they may be absent
-    for (const s of ["setup", "game", "cards", "rules"]) {
+    for (const s of ["setup", "game", "decks", "cards", "rules"]) {
       const el = $("screen-" + s);
       if (el) el.classList.toggle("visible", s === screen);
     }
     const tab = (id, on) => { const b = $(id); if (b) b.classList.toggle("active-tab", on); };
     tab("tab-play", screen === "setup" || screen === "game");
+    tab("tab-decks", screen === "decks");
     tab("tab-cards", screen === "cards");
     tab("tab-rules", screen === "rules");
+    if (screen === "decks") Decks.render();
     if (screen === "cards") Editor.render();
     if (screen === "rules") RulesTab.render();
   },
@@ -627,7 +628,7 @@ const UI = {
         });
         sel.value = arr[i] || names[i % names.length];
         arr[i] = sel.value;
-        sel.onchange = () => { arr[i] = sel.value; };
+        sel.onchange = () => { arr[i] = sel.value; if (arr === UI.setup.mine) UI.renderDeckPicker(); };
         wrap.appendChild(sel);
         el.appendChild(wrap);
       }
@@ -636,6 +637,37 @@ const UI = {
     if (!UI.setup.ai.length) UI.setup.ai = shuffle(names).slice(0, C().lanes);
     mk("player-realms", UI.setup.mine);
     mk("ai-realms", UI.setup.ai);
+    UI.renderDeckPicker();
+  },
+
+  // deck selection for the match — Randomize plus any saved deck legal for the
+  // chosen realms. Illegal decks are shown greyed with the reason.
+  renderDeckPicker() {
+    const el = $("deck-pick");
+    if (!el) return;
+    const realms = UI.setup.mine.slice(0, C().lanes);
+    const decks = loadDecks();
+    if (UI.setup.deck == null) UI.setup.deck = "random";
+    let html = `<div class="deck-opt rnd ${UI.setup.deck === "random" ? "sel" : ""}" data-d="random">
+      <span class="tick">${UI.setup.deck === "random" ? "●" : "○"}</span>Randomize<span class="sub">auto-build a fresh legal deck</span></div>`;
+    for (const d of decks) {
+      const v = validateDeck(d, realms);
+      const legal = v.playable;   // exactly deckSize and all realms fit
+      if (!legal && UI.setup.deck === d.id) UI.setup.deck = "random";
+      const reason = v.total !== v.size ? `${v.total}/${v.size}` : (v.issues[0] || "");
+      html += `<div class="deck-opt ${legal ? "" : "disabled"} ${UI.setup.deck === d.id ? "sel" : ""}" data-d="${legal ? d.id : ""}">
+        <span class="tick">${UI.setup.deck === d.id ? "●" : "○"}</span>${(d.name || "Untitled").replace(/</g, "&lt;")}
+        <span class="sub">${legal ? deckRealms(d).join(" · ") || "ready" : "can't use — " + reason}</span></div>`;
+    }
+    html += `<div class="deck-opt" data-d="__build" style="border-style:dashed;color:var(--accent)"><span class="tick">＋</span>Build a deck…</div>`;
+    el.innerHTML = html;
+    el.querySelectorAll(".deck-opt").forEach(it => it.onclick = () => {
+      const d = it.dataset.d;
+      if (d === "__build") { UI.show("decks"); return; }
+      if (!d) return;   // disabled
+      UI.setup.deck = d;
+      UI.renderDeckPicker();
+    });
   },
 
   startGame() {
@@ -644,7 +676,15 @@ const UI = {
     const first = s.first === "you" ? 0 : s.first === "ai" ? 1 : (Math.random() < 0.5 ? 0 : 1);
     UI.sel = [];
     UI.pending = null;
-    newGame({ playerRealms: s.mine.slice(), aiRealms, difficulty: s.difficulty, first });
+    // a chosen deck plays as its exact card list; "random" (or an illegal deck)
+    // falls back to the auto-builder
+    let playerDeck = null;
+    if (s.deck && s.deck !== "random") {
+      const d = loadDecks().find(x => x.id === s.deck);
+      if (d && validateDeck(d, s.mine.slice(0, C().lanes)).playable) playerDeck = expandDeck(d);
+      else UI.toast("That deck no longer fits these realms — using a random deck.");
+    }
+    newGame({ playerRealms: s.mine.slice(), aiRealms, difficulty: s.difficulty, first, playerDeck });
     UI.show("game");
     UI.render();
     FX.intro();
@@ -1381,6 +1421,203 @@ const FX = {
 // the engine reaches the motion layer through window.FX (see fxSignal in engine.js)
 window.FX = FX;
 
+/* ============================== DECKBUILDER ==============================
+   Player-built decks: pick up to 4 realms, add up to `copyLimit` of any card in
+   those realms toward a `deckSize`-card deck, name it, keep as many as you like.
+   Layout A (collection list + decklist) with a toggle to a visual grid.        */
+const TYPE_ORDER = ["hero", "relic", "hex", "rite", "pact", "incantation"];
+const Decks = {
+  cur: null,          // the deck being edited
+  filter: "all",
+  gridView: false,
+
+  render() {
+    const wrap = $("db-wrap");
+    if (!wrap) return;
+    const list = loadDecks();
+    if (!Decks.cur) Decks.cur = list[0] || Decks.blank();
+
+    wrap.innerHTML = `
+      <div class="db-side">
+        <h3>My decks</h3>
+        <div class="db-decklist" id="db-decklist"></div>
+        <button class="primary" id="db-new" style="width:100%">＋ New deck</button>
+      </div>
+      <div class="db-main">
+        <div class="db-toprow">
+          <input class="db-name" id="db-name" maxlength="34" placeholder="Deck name" value="${(Decks.cur.name || "").replace(/"/g, "&quot;")}">
+          <button id="db-dup" title="Duplicate this deck">Duplicate</button>
+          <button id="db-del" title="Delete this deck">Delete</button>
+        </div>
+        <div class="db-realmrow" id="db-realmrow"></div>
+        <div class="db-filt" id="db-filt"></div>
+        <div id="db-coll"></div>
+      </div>
+      <div class="db-list">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <span style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Your deck</span>
+          <span class="db-count" id="db-count">0</span>
+        </div>
+        <div class="db-listwrap" id="db-listwrap"></div>
+        <div class="db-legal" id="db-legal"></div>
+        <button class="primary" id="db-save" style="width:100%;margin-top:9px">Save deck</button>
+      </div>`;
+
+    Decks.renderSidebar();
+    Decks.renderRealms();
+    Decks.renderFilters();
+    Decks.renderCollection();
+    Decks.renderList();
+
+    $("db-name").oninput = (e) => { Decks.cur.name = e.target.value; };
+    $("db-new").onclick = () => { Decks.cur = Decks.blank(); Decks.render(); };
+    $("db-dup").onclick = () => {
+      Decks.cur = { id: uidDeck(), name: (Decks.cur.name || "Deck") + " copy", cards: (Decks.cur.cards || []).map(e => e.slice()) };
+      Decks.persist(); Decks.render();
+    };
+    $("db-del").onclick = () => {
+      if (!Decks.cur.id) { Decks.cur = Decks.blank(); Decks.render(); return; }
+      if (!confirm(`Delete "${Decks.cur.name || "this deck"}"?`)) return;
+      saveDecks(loadDecks().filter(d => d.id !== Decks.cur.id));
+      Decks.cur = loadDecks()[0] || Decks.blank();
+      Decks.render();
+    };
+    $("db-save").onclick = () => Decks.save();
+  },
+
+  blank() { return { id: null, name: "New deck", cards: [] }; },
+
+  qtyOf(id) { const e = (Decks.cur.cards || []).find(x => x[0] === id); return e ? e[1] : 0; },
+  setQty(id, q) {
+    q = Math.max(0, Math.min(C().copyLimit, q));
+    Decks.cur.cards = (Decks.cur.cards || []).filter(x => x[0] !== id);
+    if (q > 0) Decks.cur.cards.push([id, q]);
+  },
+  usedRealms() { return [...new Set((Decks.cur.cards || []).map(e => (cardById(e[0]) || {}).realm).filter(Boolean))]; },
+
+  renderSidebar() {
+    const el = $("db-decklist");
+    const list = loadDecks();
+    if (!list.length) { el.innerHTML = `<div class="db-empty">No saved decks yet. Build one on the right.</div>`; }
+    else el.innerHTML = list.map(d => {
+      const v = validateDeck(d);
+      return `<div class="db-deckitem ${d.id === Decks.cur.id ? "sel" : ""}" data-id="${d.id}">
+        <span class="dn">${(d.name || "Untitled").replace(/</g, "&lt;")}</span>
+        <span class="dc ${v.playable ? "ok" : ""}">${v.total}/${v.size}</span></div>`;
+    }).join("");
+    el.querySelectorAll(".db-deckitem").forEach(it => it.onclick = () => {
+      Decks.cur = loadDecks().find(d => d.id === it.dataset.id) || Decks.blank();
+      Decks.render();
+    });
+  },
+
+  renderRealms() {
+    const el = $("db-realmrow");
+    const used = Decks.usedRealms();
+    el.innerHTML = `<span class="lbl">Realms (max ${C().lanes}) —</span>` + realmNames().map(r => {
+      const on = used.includes(r);
+      const locked = !on && used.length >= C().lanes;
+      return `<span class="db-realm ${on ? "on" : ""}" data-r="${r}" style="${on ? `background:${realmColor(r)}` : ""};${locked ? "opacity:.35;pointer-events:none" : ""}"><span class="rc" style="background:${realmColor(r)}"></span>${r}</span>`;
+    }).join("");
+    el.querySelectorAll(".db-realm").forEach(it => it.onclick = () => {
+      const r = it.dataset.r;
+      if (Decks.usedRealms().includes(r)) {
+        const has = (Decks.cur.cards || []).filter(e => (cardById(e[0]) || {}).realm === r);
+        if (has.length && !confirm(`Remove all ${r} cards from this deck?`)) return;
+        Decks.cur.cards = (Decks.cur.cards || []).filter(e => (cardById(e[0]) || {}).realm !== r);
+      }
+      Decks.filter = "all";
+      Decks.render();
+    });
+  },
+
+  renderFilters() {
+    const el = $("db-filt");
+    const fs = ["all"].concat(TYPE_ORDER);
+    el.innerHTML = fs.map(f => `<button class="${f === Decks.filter ? "on" : ""}" data-f="${f}">${f === "all" ? "All" : f[0].toUpperCase() + f.slice(1)}</button>`).join("")
+      + `<span class="grow"></span><button id="db-viewtoggle">${Decks.gridView ? "List view" : "Grid view"}</button>`;
+    el.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { Decks.filter = b.dataset.f; Decks.renderFilters(); Decks.renderCollection(); });
+    $("db-viewtoggle").onclick = () => { Decks.gridView = !Decks.gridView; Decks.renderFilters(); Decks.renderCollection(); };
+  },
+
+  renderCollection() {
+    const el = $("db-coll");
+    // once the realm cap is reached, restrict the pool to those realms
+    const used = Decks.usedRealms();
+    const capped = used.length >= C().lanes;
+    let cards = DB.cards
+      .filter(c => !capped || used.includes(c.realm))
+      .filter(c => Decks.filter === "all" || c.type === Decks.filter)
+      .sort((a, b) => (a.cost - b.cost) || a.name.localeCompare(b.name));
+
+    if (Decks.gridView) {
+      el.className = "db-collgrid";
+      el.innerHTML = cards.map(c => {
+        const q = Decks.qtyOf(c.id);
+        return `<div class="db-gc" data-id="${c.id}">${q ? `<span class="ghave">${q}×</span>` : ""}<span class="gco">${c.cost}</span>
+          <div class="gn">${c.name}</div><div class="gt"><span class="rc" style="width:9px;height:9px;border-radius:2px;background:${realmColor(c.realm)}"></span>${c.type === "hero" ? c.atk + "/" + c.hp : c.type}</div></div>`;
+      }).join("") || `<div class="db-empty">No cards match.</div>`;
+    } else {
+      el.className = "db-coll";
+      el.innerHTML = cards.map(c => {
+        const q = Decks.qtyOf(c.id);
+        return `<div class="db-crow ${q >= C().copyLimit ? "max" : ""}" data-id="${c.id}">
+          <span class="cost">${c.cost}</span><span class="rc" style="background:${realmColor(c.realm)}"></span>
+          <span class="nm">${c.name}</span>
+          <span class="st">${c.type === "hero" ? c.atk + "/" + c.hp : c.type}</span>
+          <span class="have">${q ? q + "×" : ""}</span></div>`;
+      }).join("") || `<div class="db-empty">No cards match.</div>`;
+    }
+    el.querySelectorAll("[data-id]").forEach(it => {
+      it.onclick = () => { Decks.setQty(it.dataset.id, Decks.qtyOf(it.dataset.id) + 1); Decks.afterChange(); };
+      it.oncontextmenu = (e) => { e.preventDefault(); Decks.setQty(it.dataset.id, Decks.qtyOf(it.dataset.id) - 1); Decks.afterChange(); };
+    });
+  },
+
+  afterChange() { Decks.renderRealms(); Decks.renderCollection(); Decks.renderList(); },
+
+  renderList() {
+    const el = $("db-listwrap");
+    const cards = (Decks.cur.cards || []).map(e => ({ c: cardById(e[0]), q: e[1] })).filter(x => x.c);
+    const total = cards.reduce((s, x) => s + x.q, 0);
+    const cnt = $("db-count");
+    cnt.textContent = `${total} / ${C().deckSize}`;
+    cnt.className = "db-count" + (total === C().deckSize ? " full" : total > C().deckSize ? " over" : "");
+    let html = "";
+    for (const ty of TYPE_ORDER) {
+      const group = cards.filter(x => x.c.type === ty).sort((a, b) => a.c.cost - b.c.cost);
+      if (!group.length) continue;
+      html += `<div class="db-grp">${ty[0].toUpperCase() + ty.slice(1)} · ${group.reduce((s, x) => s + x.q, 0)}</div>`;
+      html += group.map(x => `<div class="db-di" data-id="${x.c.id}"><span class="q">${x.q}×</span><span class="rc" style="background:${realmColor(x.c.realm)}"></span><span class="dn">${x.c.name}</span><span class="st" style="font-size:10px;color:var(--muted)">${x.c.cost}</span><span class="x">−</span></div>`).join("");
+    }
+    el.innerHTML = html || `<div class="db-empty">Click cards on the left to add them.</div>`;
+    el.querySelectorAll("[data-id]").forEach(it => it.onclick = () => { Decks.setQty(it.dataset.id, Decks.qtyOf(it.dataset.id) - 1); Decks.afterChange(); });
+
+    const v = validateDeck(Decks.cur);
+    const lg = $("db-legal");
+    if (v.playable) lg.innerHTML = `<span style="color:var(--good)">✓ Legal — ready to play.</span>`;
+    else if (v.issues.length) lg.innerHTML = `<span class="bad">Not yet playable:</span> ${v.issues.slice(0, 3).join("; ")}${total !== C().deckSize ? (v.issues.length ? "; " : "") + `${total < C().deckSize ? C().deckSize - total + " more card" + (C().deckSize - total === 1 ? "" : "s") + " needed" : total - C().deckSize + " too many"}` : ""}.`;
+    else lg.innerHTML = `<span class="bad">${total < C().deckSize ? C().deckSize - total + " more cards needed" : total - C().deckSize + " too many"}</span> to reach ${C().deckSize}. You can still save it as a draft.`;
+  },
+
+  persist() {
+    if (!Decks.cur.id) return;
+    const list = loadDecks();
+    const i = list.findIndex(d => d.id === Decks.cur.id);
+    if (i >= 0) list[i] = Decks.cur; else list.push(Decks.cur);
+    saveDecks(list);
+  },
+  save() {
+    if (!(Decks.cur.cards || []).length) { UI.toast("Add some cards first."); return; }
+    if (!Decks.cur.name || !Decks.cur.name.trim()) Decks.cur.name = "Untitled deck";
+    if (!Decks.cur.id) Decks.cur.id = uidDeck();
+    Decks.persist();
+    const v = validateDeck(Decks.cur);
+    UI.toast(v.playable ? "Deck saved — ready to play." : `Saved as a draft (${v.total}/${v.size}).`);
+    Decks.render();
+  },
+};
+
 /* ================================ EDITOR ================================ */
 
 const Editor = {
@@ -1583,6 +1820,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const on = (id, fn) => { const b = $(id); if (b) b.onclick = fn; };
   on("tab-play", () => UI.show(G ? "game" : "setup"));
+  on("tab-decks", () => UI.show("decks"));
   on("btn-newgame", () => { UI.renderSetup(); UI.show("setup"); });
   if (DEV) {
     on("tab-cards", () => UI.show("cards"));

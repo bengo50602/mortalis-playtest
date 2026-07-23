@@ -57,6 +57,51 @@ function cardById(id) { return DB.cards.find(c => c.id === id); }
 function realmNames() { return DB.realms.map(r => r.name); }
 function C() { return DB.constants; }
 
+/* ------------------------------ saved decks ------------------------------
+   Player-built decks, kept separately from the card database. This is ordinary
+   player data (not the authoring editor), so every player gets it regardless of
+   the ?dev flag. A deck is { id, name, realms:[…≤4], cards:[[cardId, qty], …] }.  */
+const DECKS_KEY = "mortalis_decks_v1";
+function loadDecks() {
+  try { const raw = localStorage.getItem(DECKS_KEY); const list = raw ? JSON.parse(raw) : []; return Array.isArray(list) ? list : []; }
+  catch (e) { return []; }
+}
+function saveDecks(list) {
+  try { localStorage.setItem(DECKS_KEY, JSON.stringify(list)); return true; } catch (e) { return false; }
+}
+function deckCount(deck) { return (deck.cards || []).reduce((s, e) => s + (e[1] || 0), 0); }
+function deckRealms(deck) {
+  // the realms a deck actually draws from, derived from its cards
+  const s = new Set();
+  for (const [id] of (deck.cards || [])) { const c = cardById(id); if (c) s.add(c.realm); }
+  return [...s];
+}
+// A deck may be played in a match iff every card's realm is among the match's
+// chosen realms, every card exists, no card exceeds the copy limit, and the
+// total is exactly the deck size.
+function validateDeck(deck, realms) {
+  const size = C().deckSize, lim = C().copyLimit;
+  const total = deckCount(deck);
+  const issues = [];
+  for (const [id, q] of (deck.cards || [])) {
+    const c = cardById(id);
+    if (!c) { issues.push("a card no longer exists"); continue; }
+    if (q > lim) issues.push(`${c.name} has ${q} copies (max ${lim})`);
+  }
+  if (realms) {
+    const allowed = new Set(realms);
+    for (const r of deckRealms(deck)) if (!allowed.has(r)) issues.push(`includes ${r}, not among your realms`);
+  }
+  const ok = issues.length === 0 && total === size;
+  return { ok, total, size, playable: ok, drafts: total !== size, issues };
+}
+function expandDeck(deck) {
+  const out = [];
+  for (const [id, q] of (deck.cards || [])) for (let i = 0; i < q; i++) if (cardById(id)) out.push(id);
+  return out;
+}
+function uidDeck() { return "d" + Date.now().toString(36) + Math.floor(Math.random() * 1e4).toString(36); }
+
 /* ============================ EFFECT COMPILER ============================ */
 // Best-effort: recognizes the common wording patterns from the rulebook and
 // turns them into engine behavior. Anything it can't parse is flagged
@@ -1104,17 +1149,18 @@ function uid() { return UID++; }
 
 function newGame(opts) {
   UNDO = [];
-  const mkPlayer = (name, isAI, realms) => ({
+  const mkPlayer = (name, isAI, realms, customPile) => ({
     name, isAI, mortality: C().startingMortality, pulse: 0, fatigue: 0, turnCount: 0, championUid: null, discard: [], mods: [], heroesPlayedTurn: 0, relicDiscountTurn: 0, relicDiscountExpire: -1, pulseOverrideGt: -1, pulseOverrideAmt: 5,
     realms: realms.slice(0, C().lanes),
     lanes: realms.slice(0, C().lanes).map(r => ({ realm: r, hero: null, aux: [null, null] })),
     slots: new Array(C().sharedSlots).fill(null),
-    deck: buildDeck(realms), hand: [],
+    // a custom deck (an array of card ids) plays as-is, shuffled; otherwise auto-build
+    deck: (customPile && customPile.length) ? shuffle(customPile.slice()) : buildDeck(realms), hand: [],
   });
   G = {
     players: [
-      mkPlayer(opts.names ? opts.names[0] : "You", false, opts.playerRealms),
-      mkPlayer(opts.names ? opts.names[1] : "AI (" + opts.difficulty + ")", !opts.humanOpponent, opts.aiRealms),
+      mkPlayer(opts.names ? opts.names[0] : "You", false, opts.playerRealms, opts.playerDeck),
+      mkPlayer(opts.names ? opts.names[1] : "AI (" + opts.difficulty + ")", !opts.humanOpponent, opts.aiRealms, opts.aiDeck),
     ],
     difficulty: opts.difficulty,
     active: opts.first, firstPlayer: opts.first,

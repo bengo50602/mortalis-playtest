@@ -265,7 +265,7 @@ a{color:var(--accent)}
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
   <span class="netstate" id="netstate"></span>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good)">How to play</button></a>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260723151856</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260723153723</span>
   <div class="spacer"></div>
   <button id="tab-play" class="active-tab" style="display:none">Play</button>
   <button id="tab-cards">Edit cards</button>
@@ -310,9 +310,13 @@ a{color:var(--accent)}
       <p class="netstate" id="oppinfo"></p>
       <p class="setup-label">Pick your 4 realms (repeats are fine). Lanes open center-first: 2 &amp; 3 at the start, lane 1 on turn 3, lane 4 on turn 5. Decks auto-build to 40 cards.</p>
       <div class="lane-picks" id="pvp-realms"></div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+        <button id="btn-pvp-rand">Randomize realms</button>
+      </div>
+      <p class="setup-label">Your deck — a saved deck that fits your realms, or randomize. Build decks on the <a href="index.html#decks">main menu</a>.</p>
       <div style="display:flex;gap:8px;align-items:center">
-        <button id="btn-pvp-rand">Randomize</button>
-        <div class="spacer" style="flex:1"></div>
+        <select id="pvp-deck" style="flex:1"></select>
+        <div class="spacer" style="flex:0"></div>
         <button class="primary" id="btn-ready" style="padding:8px 22px">Ready</button>
         <span class="netstate" id="readymsg"></span>
       </div>
@@ -396,10 +400,10 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="cards.js?v=20260723151856"></script>
-<script src="rules.js?v=20260723151856"></script>
-<script src="engine.js?v=20260723151856"></script>
-<script src="ui.js?v=20260723151856"></script>
+<script src="cards.js?v=20260723153723"></script>
+<script src="rules.js?v=20260723153723"></script>
+<script src="engine.js?v=20260723153723"></script>
+<script src="ui.js?v=20260723153723"></script>
 <script>
 /* ================= Mortalis PvP layer (host-authoritative, PeerJS) ================= */
 (function () {
@@ -423,11 +427,38 @@ a{color:var(--accent)}
       const sel = document.createElement("select");
       realmNames().forEach(r => { const o = document.createElement("option"); o.value = o.textContent = r; sel.appendChild(o); });
       sel.selectedIndex = Math.floor(Math.random() * realmNames().length);
+      sel.onchange = renderPvpDeckPick;
       wrap.appendChild(sel);
     }
+    renderPvpDeckPick();
   }
   const myRealms = () => Array.from($$("pvp-realms").querySelectorAll("select")).map(s => s.value);
-  $$("btn-pvp-rand").onclick = () => $$("pvp-realms").querySelectorAll("select").forEach(s => { s.selectedIndex = Math.floor(Math.random() * realmNames().length); });
+  $$("btn-pvp-rand").onclick = () => { $$("pvp-realms").querySelectorAll("select").forEach(s => { s.selectedIndex = Math.floor(Math.random() * realmNames().length); }); renderPvpDeckPick(); };
+
+  // deck dropdown for PvP: Randomize plus saved decks legal for these realms
+  function renderPvpDeckPick() {
+    const sel = $$("pvp-deck");
+    if (!sel) return;
+    const realms = myRealms();
+    const prev = sel.value;
+    sel.innerHTML = `<option value="random">Randomize — fresh legal deck</option>`;
+    for (const d of loadDecks()) {
+      const v = validateDeck(d, realms);
+      const o = document.createElement("option");
+      o.value = d.id;
+      o.textContent = v.playable ? `${d.name} (${deckRealms(d).join(", ")})` : `${d.name} — can't use (${v.total !== v.size ? v.total + "/" + v.size : "wrong realms"})`;
+      o.disabled = !v.playable;
+      sel.appendChild(o);
+    }
+    if ([...sel.options].some(o => o.value === prev && !o.disabled)) sel.value = prev; else sel.value = "random";
+  }
+  // the card-id list this player will play, or null to auto-build
+  function myDeckPile() {
+    const sel = $$("pvp-deck");
+    if (!sel || sel.value === "random") return null;
+    const d = loadDecks().find(x => x.id === sel.value);
+    return (d && validateDeck(d, myRealms()).playable) ? expandDeck(d) : null;
+  }
 
   $$("btn-host").onclick = () => {
     NET.myName = $$("pvp-name").value.trim() || "Host";
@@ -477,12 +508,14 @@ a{color:var(--accent)}
   }
   const send = (m) => { try { NET.conn && NET.conn.open && NET.conn.send(m); } catch (e) {} };
 
-  const ready = { me: false, opp: false, oppRealms: null };
+  const ready = { me: false, opp: false, oppRealms: null, oppDeck: null };
   $$("btn-ready").onclick = () => {
     ready.me = true;
+    ready.myDeck = myDeckPile();          // remembered for the host to build with
     $$("btn-ready").disabled = true;
+    $$("pvp-deck").disabled = true;
     $$("readymsg").textContent = "Waiting for opponent…";
-    send({ t: "ready", name: NET.myName, realms: myRealms() });
+    send({ t: "ready", name: NET.myName, realms: myRealms(), deck: ready.myDeck });
     maybeStart();
   };
   function maybeStart() {
@@ -490,11 +523,26 @@ a{color:var(--accent)}
     hostStartGame();
   }
 
+  // The host builds the game, so it must not trust a deck the guest sent — a
+  // tampered client could ship an illegal one. Rebuild it as a deck object and
+  // run it through the same validator; anything that fails falls back to random.
+  function validatedPile(pile, realms) {
+    if (!Array.isArray(pile) || !pile.length) return null;
+    const counts = {};
+    for (const id of pile) counts[id] = (counts[id] || 0) + 1;
+    const deck = { cards: Object.entries(counts) };
+    return validateDeck(deck, realms).playable ? pile.slice() : null;
+  }
+
   /* ---------- host: authoritative game ---------- */
   function hostStartGame() {
     NET.started = true;
+    const myPile = validatedPile(ready.myDeck, myRealms());
+    const oppPile = validatedPile(ready.oppDeck, ready.oppRealms);
+    if (ready.oppDeck && !oppPile) log(`${NET.oppName}'s deck was not legal — they'll play a random deck.`);
     newGame({ playerRealms: myRealms(), aiRealms: ready.oppRealms, difficulty: "pvp",
-      first: Math.random() < 0.5 ? 0 : 1, humanOpponent: true, names: [NET.myName, NET.oppName] });
+      first: Math.random() < 0.5 ? 0 : 1, humanOpponent: true, names: [NET.myName, NET.oppName],
+      playerDeck: myPile, aiDeck: oppPile });
     log(`PvP: ${NET.myName} vs ${NET.oppName}. ${G.players[G.firstPlayer].name} goes first.`);
     show("screen-game");
     UI.render();
@@ -627,7 +675,7 @@ a{color:var(--accent)}
   /* ---------- messages ---------- */
   async function onMsg(m) {
     if (m.t === "hello") { NET.oppName = m.name || "Opponent"; $$("oppinfo").textContent = "Connected with " + NET.oppName + "."; }
-    else if (m.t === "ready") { NET.oppName = m.name || NET.oppName; ready.opp = true; ready.oppRealms = m.realms; $$("oppinfo").textContent = NET.oppName + " is ready."; maybeStart(); }
+    else if (m.t === "ready") { NET.oppName = m.name || NET.oppName; ready.opp = true; ready.oppRealms = m.realms; ready.oppDeck = m.deck || null; $$("oppinfo").textContent = NET.oppName + " is ready."; maybeStart(); }
     else if (m.t === "state" && NET.role === "guest") { if (!window.__armed) { guestArm(); window.__armed = true; } applyState(m.g); }
     else if (m.t === "action" && NET.role === "host") await hostHandleAction(m.a);
     else if (m.t === "ask" && NET.role === "guest") {

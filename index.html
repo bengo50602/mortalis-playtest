@@ -171,6 +171,71 @@ a{color:var(--accent)}
 .fxghost .gmeta{color:#8a93a4;margin-top:3px}
 @media (prefers-reduced-motion:reduce){.fxlayer{display:none}}
 
+/* ---- deckbuilder ---- */
+.db-wrap{display:grid;grid-template-columns:210px minmax(0,1fr) 280px;gap:12px;align-items:start}
+.db-side{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px}
+.db-side h3{margin:0 0 8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.db-decklist{display:flex;flex-direction:column;gap:5px;margin-bottom:9px}
+.db-deckitem{display:flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid var(--line2);border-radius:7px;cursor:pointer;font-size:12.5px}
+.db-deckitem:hover{background:#1a212c}
+.db-deckitem.sel{border-color:var(--accent);background:var(--accent-bg)}
+.db-deckitem .dn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.db-deckitem .dc{font-size:10px;color:var(--muted);flex-shrink:0}
+.db-deckitem .dc.ok{color:var(--good)}
+.db-main{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;min-height:420px}
+.db-toprow{display:flex;gap:8px;align-items:center;margin-bottom:9px;flex-wrap:wrap}
+.db-name{flex:1;min-width:140px;font-size:15px;font-weight:600;background:#12161d;border:1px solid var(--line2);border-radius:7px;padding:7px 10px;color:var(--ink)}
+.db-realmrow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.db-realmrow .lbl{font-size:11px;color:var(--muted)}
+.db-realm{font-size:11px;padding:3px 9px;border-radius:14px;border:1px solid var(--line2);background:#171c25;color:#9aa4b6;cursor:pointer;display:flex;align-items:center;gap:5px}
+.db-realm.on{color:#12151c;font-weight:700;border-color:transparent}
+.db-realm .rc{width:9px;height:9px;border-radius:2px;display:inline-block}
+.db-filt{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;align-items:center}
+.db-filt button{font-size:10.5px;padding:3px 9px;border-radius:6px;border:1px solid #2c333f;background:#171c25;color:#9aa4b6;cursor:pointer}
+.db-filt button.on{background:#26324a;color:#cfe0ff;border-color:var(--accent)}
+.db-filt .grow{flex:1}
+.db-coll{max-height:440px;overflow:auto}
+.db-crow{display:flex;align-items:center;gap:8px;padding:5px 7px;border-radius:6px;cursor:pointer;border:1px solid transparent}
+.db-crow:hover{background:#1a212c;border-color:#2c333f}
+.db-crow .cost{width:19px;height:19px;border-radius:50%;background:#26324a;color:#cfe0ff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.db-crow .rc{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.db-crow .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px}
+.db-crow .st{font-size:10.5px;color:var(--muted);flex-shrink:0}
+.db-crow .have{font-size:10px;color:#e0a45c;font-weight:700;flex-shrink:0;min-width:20px;text-align:right}
+.db-crow.max{opacity:.5}
+.db-collgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;max-height:440px;overflow:auto}
+.db-gc{background:linear-gradient(180deg,#232b3a,#1a1f28);border:1px solid #3a4353;border-radius:8px;padding:7px;position:relative;min-height:98px;display:flex;flex-direction:column;cursor:pointer}
+.db-gc:hover{border-color:#66718a}
+.db-gc .gco{position:absolute;top:-7px;left:6px;width:21px;height:21px;border-radius:50%;background:#26324a;color:#cfe0ff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #12161d}
+.db-gc .gn{font-size:10.5px;font-weight:600;color:#eceae4;margin-top:9px;line-height:1.2}
+.db-gc .gt{font-size:9px;color:var(--muted);margin-top:auto;display:flex;align-items:center;gap:4px}
+.db-gc .ghave{position:absolute;top:5px;right:6px;font-size:10px;font-weight:700;color:#e0a45c}
+.db-list{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px;position:sticky;top:64px}
+.db-count{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.db-count.full{color:var(--good)}.db-count.over{color:var(--bad)}
+.db-listwrap{max-height:400px;overflow:auto;margin-top:8px}
+.db-grp{font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:#6d7686;margin:8px 0 3px}
+.db-di{display:flex;align-items:center;gap:6px;padding:3px 5px;border-radius:5px;font-size:12px;cursor:pointer}
+.db-di:hover{background:#241c1c}
+.db-di .q{color:#e0a45c;font-weight:700;width:22px;flex-shrink:0}
+.db-di .dn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.db-di .rc{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.db-di .x{margin-left:auto;color:#6d7686}
+.db-legal{font-size:11px;margin-top:9px;line-height:1.5;color:var(--muted)}
+.db-legal .bad{color:var(--warn)}
+.db-empty{color:#5e6673;font-size:11px;padding:10px 4px}
+/* deck picker on the setup screen */
+.deck-pick{display:flex;flex-direction:column;gap:6px;margin:4px 0 14px}
+.deck-opt{display:flex;align-items:center;gap:9px;padding:8px 10px;border:1px solid var(--line2);border-radius:8px;cursor:pointer;font-size:13px}
+.deck-opt:hover{background:#1a212c}
+.deck-opt.sel{border-color:var(--accent);background:var(--accent-bg)}
+.deck-opt .tick{color:var(--line2);font-weight:700}
+.deck-opt.sel .tick{color:var(--good)}
+.deck-opt.rnd{border-style:dashed}
+.deck-opt .sub{margin-left:auto;font-size:11px;color:var(--muted)}
+.deck-opt.disabled{opacity:.45;cursor:not-allowed}
+@media (max-width:920px){.db-wrap{grid-template-columns:1fr}.db-list{position:static}}
+
 /* ---- zoom overlay ---- */
 #overlay{position:fixed;inset:0;background:rgba(6,8,11,.72);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 #overlay.visible{display:flex}
@@ -258,11 +323,12 @@ a{color:var(--accent)}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260723151856</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260723153723</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
   <button id="tab-play" class="active-tab">Play</button>
+  <button id="tab-decks">Decks</button>
   <button id="btn-newgame">New game</button>
   <!-- Authoring tools. Hidden from players; the card/rule editors, import,
        export and reset only appear with ?dev=1 on the URL. The rulebook itself
@@ -303,6 +369,8 @@ a{color:var(--accent)}
     <div style="display:flex;gap:8px;align-items:center">
       <button id="btn-rand-mine">Randomize mine</button>
     </div>
+    <p class="setup-label">Your deck — pick a saved deck that fits these realms, or randomize.</p>
+    <div class="deck-pick" id="deck-pick"></div>
     <p class="setup-label">AI realms</p>
     <div style="display:flex;gap:8px;margin-bottom:6px" id="ai-mode-btns">
       <button data-m="random" class="active-tab">Random</button>
@@ -384,6 +452,10 @@ a{color:var(--accent)}
   </div>
 </div>
 
+<div id="screen-decks" class="screen">
+  <div class="db-wrap" id="db-wrap"></div>
+</div>
+
 <div id="screen-cards" class="screen">
   <div class="editgrid">
     <div>
@@ -419,10 +491,10 @@ a{color:var(--accent)}
 <div id="overlay"><div class="bigcard" id="bigcard"></div></div>
 <div id="toast"></div>
 
-<script src="cards.js?v=20260723151856"></script>
-<script src="rules.js?v=20260723151856"></script>
-<script src="custom.js?v=20260723151856"></script>
-<script src="engine.js?v=20260723151856"></script>
-<script src="ui.js?v=20260723151856"></script>
+<script src="cards.js?v=20260723153723"></script>
+<script src="rules.js?v=20260723153723"></script>
+<script src="custom.js?v=20260723153723"></script>
+<script src="engine.js?v=20260723153723"></script>
+<script src="ui.js?v=20260723153723"></script>
 </body>
 </html>
