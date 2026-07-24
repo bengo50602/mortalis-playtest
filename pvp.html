@@ -265,7 +265,7 @@ a{color:var(--accent)}
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
   <span class="netstate" id="netstate"></span>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good)">How to play</button></a>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260723182612</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260723210202</span>
   <div class="spacer"></div>
   <button id="tab-play" class="active-tab" style="display:none">Play</button>
   <button id="tab-cards">Edit cards</button>
@@ -400,10 +400,10 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="cards.js?v=20260723182612"></script>
-<script src="rules.js?v=20260723182612"></script>
-<script src="engine.js?v=20260723182612"></script>
-<script src="ui.js?v=20260723182612"></script>
+<script src="cards.js?v=20260723210202"></script>
+<script src="rules.js?v=20260723210202"></script>
+<script src="engine.js?v=20260723210202"></script>
+<script src="ui.js?v=20260723210202"></script>
 <script>
 /* ================= Mortalis PvP layer (host-authoritative, PeerJS) ================= */
 (function () {
@@ -552,9 +552,7 @@ a{color:var(--accent)}
     log(`PvP: ${NET.myName} vs ${NET.oppName}. ${G.players[G.firstPlayer].name} goes first.`);
     show("screen-game");
     UI.render();
-    // No opening ceremony in PvP: it locks input for its duration, which in a
-    // networked game means neither player can act at the start. Draw/play/combat
-    // animations don't block and still run.
+    if (window.FX && FX.intro) FX.intro(true);   // lite opening — visuals only, never locks input
   }
 
   // broadcast state after every render (throttled)
@@ -671,7 +669,8 @@ a{color:var(--accent)}
     else { for (const k of Object.keys(G)) delete G[k]; Object.assign(G, next); }
     if (!NET.started) {
       NET.started = true; show("screen-game");
-      origRender();                              // no blocking opening ceremony in PvP
+      origRender();
+      if (window.FX && FX.intro) FX.intro(true);   // lite opening — visuals only, never locks input
       return;
     }
     origRender();                                // draw/play + ceremonies animate off the diff

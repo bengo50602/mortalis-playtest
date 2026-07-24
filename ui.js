@@ -1049,10 +1049,13 @@ const FX = {
       const to = FX.rect(laneEl);
       if (!to) return;
       FX.fly(from, to, { mode: pi === 0 ? "face" : "flip", card, delay: k * 70, fade: true });
-      // a realm-coloured sigil blooms where the card lands
+      // a realm-coloured sigil blooms where the card lands. `card` can be
+      // undefined in PvP — the opponent's played card came from a masked
+      // ("hidden") hand — so fall back to the lane's own colour and no chip.
       FX.after(() => {
-        FX.ring(laneEl, li >= 0 ? FX.laneColor(pi, li) : realmColor(card.realm), 1.7);
-        if (card.type !== "hero") FX.chip(laneEl, card.type[0].toUpperCase() + card.type.slice(1) + " — " + card.name, "#dfe5ef", "rgba(32,40,56,.92)");
+        const col = li >= 0 ? FX.laneColor(pi, li) : (card ? realmColor(card.realm) : "#8fa0c0");
+        FX.ring(laneEl, col, 1.7);
+        if (card && card.type !== "hero") FX.chip(laneEl, card.type[0].toUpperCase() + card.type.slice(1) + " — " + card.name, "#dfe5ef", "rgba(32,40,56,.92)");
       }, FX.DUR + k * 70 - 60);
     });
 
@@ -1144,8 +1147,10 @@ const FX = {
     FX.after(() => { if (FX.restore) FX.restore(); }, ms);
   },
 
-  /* Sigils converge onto the lanes, then the opening hands are dealt. */
-  intro() {
+  /* Sigils converge onto the lanes, then (in the full version) the opening hands
+     are dealt. `lite` — used in PvP — plays the sigils and wordmark but does NOT
+     lock input or hide/deal the hand, so it can never freeze a networked player. */
+  intro(lite) {
     if (!FX.live() || FX.busy) return;
     const c = FX.boardCentre();
     if (!c) return;
@@ -1158,7 +1163,7 @@ const FX = {
 
     const CREST = 55, DEAL_AT = 420 + cells.length * CREST, DEAL = 80;
     const STAMP_AT = DEAL_AT + 620, STAMP_HOLD = 1800, TOTAL = STAMP_AT + STAMP_HOLD + 800;
-    FX.suspend(TOTAL);
+    if (!lite) FX.suspend(TOTAL);
 
     cells.forEach((o, i) => {
       if (o.el.style) { o.el.style.transition = "opacity .45s, transform .45s"; o.el.style.opacity = "0"; o.el.style.transform = "scale(.93)"; }
@@ -1177,8 +1182,10 @@ const FX = {
       }, 420 + i * CREST);
     });
 
-    // ...then the opening hands are dealt off the decks, card by card
-    FX.after(() => {
+    // ...then the opening hands are dealt off the decks, card by card. Skipped
+    // in lite mode: dealing hides the hand cards, which is only safe while input
+    // is locked — and lite mode never locks.
+    if (!lite) FX.after(() => {
       for (const pi of [0, 1]) {
         const pile = FX.rect(FX.pileEl(pi));
         const hand = FX.handEl(pi);
@@ -1197,7 +1204,7 @@ const FX = {
       }
     }, DEAL_AT);
 
-    FX.stamp(STAMP_AT, STAMP_HOLD);
+    FX.stamp(lite ? 420 + cells.length * CREST : STAMP_AT, STAMP_HOLD);
   },
 
   /* The loser's board collapses, then the Sovereign Seal names the winner. */
