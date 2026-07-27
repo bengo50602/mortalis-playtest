@@ -323,7 +323,7 @@ a{color:var(--accent)}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260723210501</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260727181737</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -7133,7 +7133,7 @@ async function runOp(op, pi, ctx) {
       if (!owned.length) { log(`No Relic to destroy — effect fizzles.`); ctx.abort = true; break; }
       let pick = owned[0];
       if (!P.isAI && owned.length > 1) {
-        const idx = promptPick("Destroy which of your Relics?", owned.map(o => `${cardById(o.r.cardId).name} (lane ${o.li + 1})`));
+        const idx = await promptPick("Destroy which of your Relics?", owned.map(o => `${cardById(o.r.cardId).name} (lane ${o.li + 1})`));
         if (idx == null) { ctx.abort = true; break; }
         pick = owned[idx];
       }
@@ -7148,7 +7148,7 @@ async function runOp(op, pi, ctx) {
       G.players[pi].lanes.forEach((L, li) => { const seen = new Set(); for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); auxes.push({ li, a }); } });
       if (!auxes.length) { log(`No Auxiliary card to destroy — effect fizzles.`); ctx.abort = true; break; }
       let pick = auxes[0];
-      if (!P.isAI && auxes.length > 1) { const idx = promptPick("Destroy which Auxiliary card?", auxes.map(o => `${cardById(o.a.cardId).name} (lane ${o.li + 1})`)); if (idx == null) { ctx.abort = true; break; } pick = auxes[idx]; }
+      if (!P.isAI && auxes.length > 1) { const idx = await promptPick("Destroy which Auxiliary card?", auxes.map(o => `${cardById(o.a.cardId).name} (lane ${o.li + 1})`)); if (idx == null) { ctx.abort = true; break; } pick = auxes[idx]; }
       removeAux(pi, pick.li, pick.a.uid);
       log(`${P.name} destroys own Auxiliary ${cardById(pick.a.cardId).name}.`);
       break;
@@ -7163,7 +7163,7 @@ async function runOp(op, pi, ctx) {
       });
       if (!opts3.length) { log(`Nothing to destroy — effect fizzles.`); ctx.abort = true; break; }
       let pick = opts3[0];
-      if (!P.isAI && opts3.length > 1) { const idx = promptPick("Destroy which of your Relics/Auxiliaries?", opts3.map(o => o.label)); if (idx == null) { ctx.abort = true; break; } pick = opts3[idx]; }
+      if (!P.isAI && opts3.length > 1) { const idx = await promptPick("Destroy which of your Relics/Auxiliaries?", opts3.map(o => o.label)); if (idx == null) { ctx.abort = true; break; } pick = opts3[idx]; }
       ctx.lastCost = cardById(pick.obj.cardId).cost;
       if (pick.kind === "relic") { const h2 = G.players[pi].lanes[pick.li].hero; h2.relics = h2.relics.filter(r => r !== pick.obj); }
       else removeAux(pi, pick.li, pick.obj.uid);
@@ -7266,7 +7266,7 @@ async function runOp(op, pi, ctx) {
       if (!P.discard) P.discard = [];
       const hIdxs = P.discard.map((id, ix) => ({ id, ix })).filter(x => cardById(x.id).type === "hero");
       if (!hIdxs.length) { log(`No Hero in your discard pile.`); break; }
-      let pickH = P.isAI ? hIdxs.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0] : hIdxs[(() => { const i = promptPick("Return which Hero from your discard pile?", hIdxs.map(x => cardById(x.id).name)); return i == null ? -1 : i; })()];
+      let pickH = P.isAI ? hIdxs.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0] : hIdxs[await (async () => { const i = await promptPick("Return which Hero from your discard pile?", hIdxs.map(x => cardById(x.id).name)); return i == null ? -1 : i; })()];
       if (!pickH) break;
       P.hand.push(pickH.id); P.discard.splice(pickH.ix, 1);
       log(`${P.name} returns ${cardById(pickH.id).name} from the discard pile to hand.`, P.isAI ? "ai" : "");
@@ -7295,7 +7295,7 @@ async function runOp(op, pi, ctx) {
       const lanes = G.players[1 - pi].lanes.map((L, li) => li).filter(li => laneUnlocked(1 - pi, li));
       if (!lanes.length) break;
       let li = lanes[0];
-      if (!P.isAI) { const idx = promptPick("Seal which enemy lane?", lanes.map(l => `Lane ${l + 1} (${G.players[1 - pi].lanes[l].realm})`)); if (idx == null) break; li = lanes[idx]; }
+      if (!P.isAI) { const idx = await promptPick("Seal which enemy lane?", lanes.map(l => `Lane ${l + 1} (${G.players[1 - pi].lanes[l].realm})`)); if (idx == null) break; li = lanes[idx]; }
       else li = lanes.sort((a, b) => (heroAt({ pi: 1 - pi, li: b }) ? 0 : 1) - (heroAt({ pi: 1 - pi, li: a }) ? 0 : 1))[0];
       G.players[1 - pi].lanes[li].sealedUntil = G.gt + 2;
       log(`${P.name} seals ${O.name}'s Lane ${li + 1} until next turn.`);
@@ -7375,7 +7375,7 @@ async function runOp(op, pi, ctx) {
       if (P.isAI) { const max = Math.min(2, P.hand.length); for (let i = 0; i < max; i++) { P.discard.push(P.hand.splice(Math.floor(Math.random() * P.hand.length), 1)[0]); n++; } }
       else {
         while (P.hand.length) {
-          const idx = promptPick(`Discard a card for +${op.per} Attack each (${n} so far) — cancel to stop`, P.hand.map(id => cardById(id).name));
+          const idx = await promptPick(`Discard a card for +${op.per} Attack each (${n} so far) — cancel to stop`, P.hand.map(id => cardById(id).name));
           if (idx == null) break;
           P.discard.push(P.hand.splice(idx, 1)[0]); n++;
         }
@@ -7402,7 +7402,7 @@ async function runOp(op, pi, ctx) {
       if (!cands.length || !lanes.length) { log(`No Hero/lane available to raise from the discard pile.`); break; }
       let pickC = cands.filter(x => lanes.some(l => l.L.realm === cardById(x.id).realm));
       if (!pickC.length) { log(`No matching Realm lane for the discarded Heroes.`); break; }
-      let chosen = P.isAI ? pickC.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0] : pickC[(() => { const i = promptPick("Play which Hero from your discard pile (free)?", pickC.map(x => cardById(x.id).name)); return i == null ? -1 : i; })()];
+      let chosen = P.isAI ? pickC.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0] : pickC[await (async () => { const i = await promptPick("Play which Hero from your discard pile (free)?", pickC.map(x => cardById(x.id).name)); return i == null ? -1 : i; })()];
       if (!chosen) break;
       const lane = lanes.find(l => l.L.realm === cardById(chosen.id).realm);
       P.discard.splice(chosen.ix, 1);
@@ -7497,7 +7497,7 @@ async function runOp(op, pi, ctx) {
       const near = heroesOf(1 - pi).filter(t => !isUntargetable(t) && ctx.laneIdx != null && Math.abs(t.li - ctx.laneIdx) <= 1);
       if (!near.length) { log(`No enemy Hero in range.`); break; }
       let pay = maxPay;
-      if (!P.isAI) { const idx = promptPick(`Pay how much Pulse? (${op.per} damage each)`, Array.from({ length: maxPay }, (_, i) => `${i + 1} Pulse — ${(i + 1) * op.per} damage`)); if (idx == null) break; pay = idx + 1; }
+      if (!P.isAI) { const idx = await promptPick(`Pay how much Pulse? (${op.per} damage each)`, Array.from({ length: maxPay }, (_, i) => `${i + 1} Pulse — ${(i + 1) * op.per} damage`)); if (idx == null) break; pay = idx + 1; }
       P.pulse -= pay;
       let t = P.isAI ? near.sort((a, b) => curHp(a.pi, a.li) - curHp(b.pi, b.li))[0] : await UI.pickHero(`Deal ${pay * op.per} damage to which nearby enemy?`, near);
       if (!t) break;
@@ -7516,7 +7516,7 @@ async function runOp(op, pi, ctx) {
       for (const a of G.players[1 - pi].lanes[li2].aux) if (a && !seen2.has(a.uid)) { seen2.add(a.uid); supports.push({ kind: "aux", obj: a, label: `Aux ${cardById(a.cardId).name}` }); }
       if (!supports.length) { log(`No valid enemy Relic or Auxiliary in the opposing lane.`); break; }
       let pick = supports[0];
-      if (!P.isAI && supports.length > 1) { const idx = promptPick("Destroy which enemy card in the opposing lane?", supports.map(x => x.label)); if (idx == null) break; pick = supports[idx]; }
+      if (!P.isAI && supports.length > 1) { const idx = await promptPick("Destroy which enemy card in the opposing lane?", supports.map(x => x.label)); if (idx == null) break; pick = supports[idx]; }
       if (pick.kind === "relic" && !canDestroyRelic(1 - pi, li2)) break;
       h2.attacksUsed++; h2.hasAttacked = true; h2.attackedTurn = G.gt;
       if (pick.kind === "relic" && fh) fh.relics = fh.relics.filter(r => r !== pick.obj);
@@ -7555,7 +7555,7 @@ async function runOp(op, pi, ctx) {
         if (!supports.length) { if (!i) log(`No valid enemy ${op.only || "Relic/Auxiliary"} to destroy.`); break; }
         let pick = supports.sort((a, b) => cardById(b.obj.cardId).cost - cardById(a.obj.cardId).cost)[0];
         if (!P.isAI) {
-          const idx = promptPick(`Destroy which enemy Relic/Auxiliary? (${i + 1} of up to ${op.n})`, supports.map(s => s.label));
+          const idx = await promptPick(`Destroy which enemy Relic/Auxiliary? (${i + 1} of up to ${op.n})`, supports.map(s => s.label));
           if (idx == null) break;
           pick = supports[idx];
         }
@@ -7581,7 +7581,7 @@ async function runOp(op, pi, ctx) {
       if (!slots.length) { log(`No Hex/Rite/Pact to destroy — fizzles.`); break; }
       let pick = slots.find(s => s.p !== pi) || slots[0];
       if (!P.isAI) {
-        const idx = promptPick("Destroy which Hex/Rite/Pact?", slots.map(s => s.label));
+        const idx = await promptPick("Destroy which Hex/Rite/Pact?", slots.map(s => s.label));
         if (idx == null) break;
         pick = slots[idx];
       }
@@ -7618,7 +7618,7 @@ async function runOp(op, pi, ctx) {
       const heroes = heroesOf(pi);
       if (!owned.length || heroes.length < 2) { log(`No Relic to move.`); break; }
       let pick = owned[0];
-      if (!P.isAI) { const idx = promptPick("Move which Relic?", owned.map(o => `${cardById(o.r.cardId).name} (lane ${o.li + 1})`)); if (idx == null) break; pick = owned[idx]; }
+      if (!P.isAI) { const idx = await promptPick("Move which Relic?", owned.map(o => `${cardById(o.r.cardId).name} (lane ${o.li + 1})`)); if (idx == null) break; pick = owned[idx]; }
       const relCard = cardById(pick.r.cardId);
       const dests = heroes.filter(t => t.li !== pick.li && (!C().relicRealmLocked || cardById(heroAt(t).cardId).realm === relCard.realm) && (C().relicSlotsPerHero - heroAt(t).relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0)) >= (relCard.slots || 1));
       if (!dests.length) { log(`No legal Hero to move ${relCard.name} to.`); break; }
@@ -7632,7 +7632,7 @@ async function runOp(op, pi, ctx) {
     case "attachRelic": {
       const relIdxs = P.hand.map((id, ix) => ({ id, ix })).filter(x => cardById(x.id).type === "relic");
       if (!relIdxs.length) { log(`No Relic in hand to attach.`); break; }
-      let pickR = P.isAI ? relIdxs.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0] : relIdxs[(() => { const i = promptPick("Attach which Relic from your hand?", relIdxs.map(x => cardById(x.id).name)); return i == null ? -1 : i; })()];
+      let pickR = P.isAI ? relIdxs.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0] : relIdxs[await (async () => { const i = await promptPick("Attach which Relic from your hand?", relIdxs.map(x => cardById(x.id).name)); return i == null ? -1 : i; })()];
       if (!pickR) break;
       const relCard = cardById(pickR.id);
       let heroesE = op.target === "laneHero" && ctx.laneIdx != null ? (heroAt({ pi, li: ctx.laneIdx }) ? [{ pi, li: ctx.laneIdx }] : [])
@@ -7655,7 +7655,7 @@ async function runOp(op, pi, ctx) {
       if (!P.discard) P.discard = [];
       const relIdxs = P.discard.map((id, ix) => ({ id, ix })).filter(x => cardById(x.id).type === "relic");
       if (!relIdxs.length) { log(`No Relic in your discard pile.`); break; }
-      let pickR = P.isAI ? relIdxs.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0] : relIdxs[(() => { const i = promptPick("Return which Relic from your discard pile?", relIdxs.map(x => cardById(x.id).name)); return i == null ? -1 : i; })()];
+      let pickR = P.isAI ? relIdxs.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0] : relIdxs[await (async () => { const i = await promptPick("Return which Relic from your discard pile?", relIdxs.map(x => cardById(x.id).name)); return i == null ? -1 : i; })()];
       if (!pickR) break;
       P.hand.push(pickR.id); P.discard.splice(pickR.ix, 1);
       log(`${P.name} returns ${cardById(pickR.id).name} from the discard pile to hand.`, P.isAI ? "ai" : "");
@@ -7669,7 +7669,7 @@ async function runOp(op, pi, ctx) {
         const avail = rels.filter(x => canDestroyRelic(1 - pi, x.t.li));
         if (!avail.length) break;
         let pick = avail.sort((a, b) => cardById(b.r.cardId).cost - cardById(a.r.cardId).cost)[0];
-        if (!P.isAI) { const idx = promptPick(`Destroy which enemy Relic? (${k + 1} of ${op.n})`, avail.map(x => `${cardById(x.r.cardId).name} on ${cardById(heroAt(x.t).cardId).name}`)); if (idx == null) break; pick = avail[idx]; }
+        if (!P.isAI) { const idx = await promptPick(`Destroy which enemy Relic? (${k + 1} of ${op.n})`, avail.map(x => `${cardById(x.r.cardId).name} on ${cardById(heroAt(x.t).cardId).name}`)); if (idx == null) break; pick = avail[idx]; }
         const hero = heroAt(pick.t);
         hero.relics = hero.relics.filter(r => r !== pick.r);
         destroyed++;
@@ -7686,7 +7686,7 @@ async function runOp(op, pi, ctx) {
       if (!owned.length) { log(`No Relic to place a forge counter on.`); break; }
       let pick = owned.sort((a, b) => (b.r.counters || 0) - (a.r.counters || 0))[0];
       if (!P.isAI && owned.length > 1) {
-        const idx = promptPick("Place a forge counter on which Relic?", owned.map(o => `${cardById(o.r.cardId).name} (lane ${o.li + 1}, ${o.r.counters || 0} counters)`));
+        const idx = await promptPick("Place a forge counter on which Relic?", owned.map(o => `${cardById(o.r.cardId).name} (lane ${o.li + 1}, ${o.r.counters || 0} counters)`));
         if (idx == null) break;
         pick = owned[idx];
       }
@@ -7706,7 +7706,7 @@ async function runOp(op, pi, ctx) {
       if (!opts2.length) { log(`Nothing to destroy — fizzles.`); break; }
       let pick = opts2[0];
       if (!P.isAI) {
-        const idx = promptPick("Destroy which enemy card?", opts2.map(o => o.label));
+        const idx = await promptPick("Destroy which enemy card?", opts2.map(o => o.label));
         if (idx == null) break;
         pick = opts2[idx];
       }
@@ -7769,7 +7769,7 @@ async function runOp(op, pi, ctx) {
         if (!idxs.length) { if (!k) log(`No matching Relic in deck.`); break; }
         let pick;
         if (P.isAI) pick = idxs.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0];
-        else { const ci = promptPick("Search your deck — put which Relic into your hand?", idxs.map(x => `${cardById(x.id).name} (${cardById(x.id).realm}, ${cardById(x.id).cost})`)); if (ci == null) break; pick = idxs[ci]; }
+        else { const ci = await promptPick("Search your deck — put which Relic into your hand?", idxs.map(x => `${cardById(x.id).name} (${cardById(x.id).realm}, ${cardById(x.id).cost})`)); if (ci == null) break; pick = idxs[ci]; }
         P.hand.push(pick.id); P.deck.splice(pick.ix, 1);
         log(`${P.name} searches up a Relic: ${cardById(pick.id).name}.`);
       }
@@ -7832,7 +7832,15 @@ async function activateAbility(pi, li, holder, sourceName, ab, idx, relicInst) {
   } else if (!P.isAI) UI.toast("Effect not scripted — adjudicate it with the manual controls (cost already paid).");
 }
 
-function promptPick(title, options) {
+// A list choice ("pay how much Pulse?", "choose which card"). In PvP the host
+// runs the engine for BOTH players, so this must be routed to whoever's decision
+// it is (the turn player) rather than popping on the host. window.PVP_PICK does
+// that; solo play falls straight through to the local prompt.
+async function promptPick(title, options) {
+  if (window.PVP_PICK) return await PVP_PICK(title, options);
+  return localPromptPick(title, options);
+}
+function localPromptPick(title, options) {
   // browsers can block window.prompt (and it doesn't exist in test harnesses):
   // fall back to the largest option so the ability never silently does nothing.
   if (typeof prompt !== "function") return options.length - 1;
@@ -9402,7 +9410,7 @@ async function initiateJointStrike(pi, ctx) {
   let pair;
   if (P.isAI) pair = usable.sort((x, y) => (effAtk(pi, y[0]) + effAtk(pi, y[1])) - (effAtk(pi, x[0]) + effAtk(pi, x[1])))[0];
   else {
-    const idx = promptPick("Joint Strike — which pair of neighboring Heroes?", usable.map(pr => `${cardById(heroAt({ pi, li: pr[0] }).cardId).name} + ${cardById(heroAt({ pi, li: pr[1] }).cardId).name}`));
+    const idx = await promptPick("Joint Strike — which pair of neighboring Heroes?", usable.map(pr => `${cardById(heroAt({ pi, li: pr[0] }).cardId).name} + ${cardById(heroAt({ pi, li: pr[1] }).cardId).name}`));
     if (idx == null) return;
     pair = usable[idx];
   }
