@@ -2739,6 +2739,13 @@ function destroyHero(pi, li, killer, opts) {
   fxSignal("destroy", { pi, li, name: c.name, realm: c.realm });
   P.lanes[li].hero = null;
   if (P.championUid === h.uid) P.championUid = null;   // Champion status ends with the Hero
+  // A destroyed Hero (and its Relics) go to the owner's discard pile, so
+  // "return/play a card from your discard pile" effects have something to find.
+  // (The return-to-hand saves above already returned early, so this is only the
+  // true-death path.)
+  if (!P.discard) P.discard = [];
+  P.discard.push(h.cardId);
+  for (const r of h.relics) P.discard.push(r.cardId);
   log(`${c.name} dies.${h.relics.length ? " Its Relics are destroyed." : ""}`);
   if (opts.overkill > 0) {
     const cap = C().overkillCap;
@@ -3059,6 +3066,7 @@ async function playSpell(pi, handIdx) { // pact or incantation
     if (negate.negated) { log(`${card.name} is negated!`); return; }
   } else {
     P.slots[si] = { uid: uid(), cardId: card.id, kind: "pact", expireGt: G.gt + 1 };
+    P.__pactSlotUid = P.slots[si].uid;
   }
   const ops = fx(card.id).spellOps;
   if (ops && ops !== "manual") {
@@ -3082,6 +3090,15 @@ async function playSpell(pi, handIdx) { // pact or incantation
         }
       }
     }
+  } else {
+    // A Pact resolves once and is spent — remove it from its slot immediately and
+    // send it to the discard pile. Its delayed parts (e.g. "at the start of your
+    // next turn…") are stored on the player, not the slot, so nothing is lost.
+    const psi = P.slots.findIndex(s => s && s.uid === P.__pactSlotUid);
+    if (psi >= 0) P.slots[psi] = null;
+    P.__pactSlotUid = null;
+    if (!P.discard) P.discard = [];
+    P.discard.push(card.id);
   }
 }
 
