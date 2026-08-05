@@ -40,6 +40,24 @@ const UI = {
     if (screen === "decks") Decks.render();
     if (screen === "cards") Editor.render();
     if (screen === "rules") RulesTab.render();
+    UI.titleBg(screen);
+  },
+
+  /* Cinematic title screen: the video plays only while the setup screen is up,
+     and the top bar hides during the splash (before Start). All guarded, so
+     pages without the video markup are unaffected. */
+  titleBg(screen) {
+    const setup = $("screen-setup"), vid = $("title-video");
+    const splashOn = screen === "setup" && setup && setup.classList.contains("title-mode");
+    if (document.body) document.body.classList.toggle("on-splash", !!splashOn);
+    if (vid) { try { screen === "setup" ? vid.play() : vid.pause(); } catch (e) {} }
+  },
+  // Start button: leave the splash and reveal the New game options.
+  exitTitle() {
+    const setup = $("screen-setup");
+    if (setup) setup.classList.remove("title-mode");
+    if (document.body) document.body.classList.remove("on-splash");
+    UI.titleBg("setup");
   },
 
   toast(msg) {
@@ -1828,7 +1846,10 @@ window.addEventListener("DOMContentLoaded", () => {
   const on = (id, fn) => { const b = $(id); if (b) b.onclick = fn; };
   on("tab-play", () => UI.show(G ? "game" : "setup"));
   on("tab-decks", () => UI.show("decks"));
-  on("btn-newgame", () => { UI.renderSetup(); UI.show("setup"); });
+  // New game / Start both go to the setup options; New game skips the splash.
+  on("btn-newgame", () => { const s = $("screen-setup"); if (s) s.classList.remove("title-mode"); UI.renderSetup(); UI.show("setup"); });
+  on("btn-splash-start", () => { UI.exitTitle(); });
+  UI.titleBg(UI.screen || "setup");   // set the splash state on load
   if (DEV) {
     on("tab-cards", () => UI.show("cards"));
     on("tab-rules", () => UI.show("rules"));
