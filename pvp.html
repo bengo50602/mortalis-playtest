@@ -223,6 +223,19 @@ a{color:var(--accent)}
 .brand-hero .wm2 i{height:1px;width:52px;background:linear-gradient(90deg,transparent,#4d76c4);display:inline-block}
 .brand-hero .wm2 i:last-child{background:linear-gradient(90deg,#4d76c4,transparent)}
 @media (max-width:640px){.brand-hero .wm1{font-size:30px;letter-spacing:4px}.brand-hero .mk{width:74px;height:81px}}
+
+/* ---- battlefield backdrop on the lobby ---- */
+#lobby-bg{position:fixed;inset:0;z-index:0;background:url("lobby_bg.jpg") center/cover no-repeat;background-color:#0b0a0c}
+#lobby-veil{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 42%,rgba(8,7,9,.28),rgba(8,7,9,.66) 78%)}
+#screen-lobby{position:relative;z-index:1}
+#screen-lobby .panel{background:rgba(16,14,16,.8);border-color:rgba(180,150,120,.22);
+  -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);box-shadow:0 14px 40px rgba(0,0,0,.6)}
+#screen-lobby .brand-hero .mk{filter:drop-shadow(0 4px 20px rgba(0,0,0,.7))}
+#screen-lobby .brand-hero .wm1{text-shadow:0 2px 10px rgba(0,0,0,.75),0 0 22px rgba(224,150,90,.25)}
+#screen-lobby .brand-hero .wm2{color:#d8ccc2;text-shadow:0 2px 8px rgba(0,0,0,.8)}
+#screen-lobby .brand-hero .wm2 i{background:linear-gradient(90deg,transparent,#c07b4a)}
+#screen-lobby .brand-hero .wm2 i:last-child{background:linear-gradient(90deg,#c07b4a,transparent)}
 </style>
 <script>
 /* Surfaces any script error on screen instead of failing silently. Without this
@@ -265,7 +278,7 @@ a{color:var(--accent)}
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
   <span class="netstate" id="netstate"></span>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good)">How to play</button></a>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260805211833</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260805215513</span>
   <div class="spacer"></div>
   <button id="tab-play" class="active-tab" style="display:none">Play</button>
   <button id="tab-cards">Edit cards</button>
@@ -278,6 +291,7 @@ a{color:var(--accent)}
 </div>
 
 <div id="screen-lobby" class="screen visible">
+  <div id="lobby-bg"></div><div id="lobby-veil"></div>
   <div class="brand-hero"><svg viewBox="0 0 40 44" class="mk" aria-hidden="true">
 <path d="M20 3 L31 14 L20 14 Z" fill="#3a5c9e"/>
 <path d="M9 14 L20 3 L20 14 Z" fill="#4d76c4"/>
@@ -400,10 +414,10 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="cards.js?v=20260805211833"></script>
-<script src="rules.js?v=20260805211833"></script>
-<script src="engine.js?v=20260805211833"></script>
-<script src="ui.js?v=20260805211833"></script>
+<script src="cards.js?v=20260805215513"></script>
+<script src="rules.js?v=20260805215513"></script>
+<script src="engine.js?v=20260805215513"></script>
+<script src="ui.js?v=20260805215513"></script>
 <script>
 /* ================= Mortalis PvP layer (host-authoritative, PeerJS) ================= */
 (function () {
