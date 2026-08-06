@@ -172,6 +172,14 @@ a{color:var(--accent)}
 @media (prefers-reduced-motion:reduce){.fxlayer{display:none}}
 
 /* ---- deckbuilder ---- */
+/* forest backdrop: a fixed, dimmed photo behind the (now translucent) panels.
+   Both live inside #screen-decks, so they only render while that screen is up. */
+#deck-bg{position:fixed;inset:0;z-index:0;background:url("deck_bg.jpg") center/cover no-repeat;background-color:#0a0e15}
+#deck-veil{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,rgba(6,9,15,.62),rgba(6,9,15,.72))}
+#screen-decks .db-wrap{position:relative;z-index:1}
+#screen-decks .db-side,#screen-decks .db-main,#screen-decks .db-list{
+  background:rgba(17,21,30,.82);border-color:rgba(120,140,170,.22);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 10px 30px rgba(0,0,0,.45)}
 .db-wrap{display:grid;grid-template-columns:210px minmax(0,1fr) 280px;gap:12px;align-items:start}
 .db-side{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px}
 .db-side h3{margin:0 0 8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
@@ -350,7 +358,7 @@ body.on-splash .topbar{display:none}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260805095135</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260805211833</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -489,6 +497,7 @@ body.on-splash .topbar{display:none}
 </div>
 
 <div id="screen-decks" class="screen">
+  <div id="deck-bg"></div><div id="deck-veil"></div>
   <div class="db-wrap" id="db-wrap"></div>
 </div>
 
@@ -527,10 +536,10 @@ body.on-splash .topbar{display:none}
 <div id="overlay"><div class="bigcard" id="bigcard"></div></div>
 <div id="toast"></div>
 
-<script src="cards.js?v=20260805095135"></script>
-<script src="rules.js?v=20260805095135"></script>
-<script src="custom.js?v=20260805095135"></script>
-<script src="engine.js?v=20260805095135"></script>
-<script src="ui.js?v=20260805095135"></script>
+<script src="cards.js?v=20260805211833"></script>
+<script src="rules.js?v=20260805211833"></script>
+<script src="custom.js?v=20260805211833"></script>
+<script src="engine.js?v=20260805211833"></script>
+<script src="ui.js?v=20260805211833"></script>
 </body>
 </html>
