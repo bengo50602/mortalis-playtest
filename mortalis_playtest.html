@@ -358,7 +358,7 @@ body.on-splash .topbar{display:none}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260806221411</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260806224620</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -8792,9 +8792,11 @@ function legalTargetsFor(pi, attackerLis) {
   const free = window.UI && UI.freeTargeting();
   const targetable = attackableEnemyLanes(pi);
   if (free) return { heroes: heroesOf(O), face: true };
-  const anyBoard = heroesOf(O).length > 0;
-  // face damage only when the opponent has no Heroes on the board at all
-  if (!anyBoard) return { heroes: [], face: true };
+  // Face damage is available when the opponent has no *attackable* Heroes. Heroes
+  // that currently cannot be attacked (protection / "cannot be attacked" effects)
+  // do NOT shield the face — otherwise an all-unattackable board would soft-lock
+  // the attacker with no legal move.
+  if (!targetable.length) return { heroes: [], face: true };
   // Bargain of Broken Wills: no redirecting this turn — opposing lane only
   if (G.players[pi].noRedirectTurn === G.gt) {
     const opp = attackerLis.length === 1 ? { pi: O, li: attackerLis[0] } : null;
@@ -10773,12 +10775,26 @@ const UI = {
     });
   },
 
+  // Clear any leftover input lock or ceremony from a previous game. Without this,
+  // a finale/animation that ran during the AI's turn (UI.busy === true) could
+  // restore the lock to `true` and freeze the *next* game before it begins.
+  resetLocks() {
+    UI.busy = false;
+    UI.sel = [];
+    UI.pending = null;
+    if (window.FX) {
+      FX.restore = null; FX.deadline = 0; FX.busy = false;
+      if (FX.q) FX.q.length = 0;
+      FX.snap = null; FX.gref = null;
+      try { FX.undim(); } catch (e) {}
+    }
+  },
+
   startGame() {
     const s = UI.setup;
     const aiRealms = s.aiMode === "pick" ? s.ai.slice() : shuffle(realmNames()).slice(0, C().lanes);
     const first = s.first === "you" ? 0 : s.first === "ai" ? 1 : (Math.random() < 0.5 ? 0 : 1);
-    UI.sel = [];
-    UI.pending = null;
+    UI.resetLocks();
     // a chosen deck plays as its exact card list; "random" (or an illegal deck)
     // falls back to the auto-builder
     let playerDeck = null;
@@ -12308,6 +12324,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   MetaUI.startBattle = function (chapter, stage) {
     var cfg = Campaign.battleConfig(chapter, stage);
+    if (UI.resetLocks) UI.resetLocks();
     Campaign.active = { chapter: chapter, stage: stage };
     newGame(cfg);
     // route the topbar/back-out correctly

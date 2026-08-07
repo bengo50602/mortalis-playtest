@@ -688,12 +688,26 @@ const UI = {
     });
   },
 
+  // Clear any leftover input lock or ceremony from a previous game. Without this,
+  // a finale/animation that ran during the AI's turn (UI.busy === true) could
+  // restore the lock to `true` and freeze the *next* game before it begins.
+  resetLocks() {
+    UI.busy = false;
+    UI.sel = [];
+    UI.pending = null;
+    if (window.FX) {
+      FX.restore = null; FX.deadline = 0; FX.busy = false;
+      if (FX.q) FX.q.length = 0;
+      FX.snap = null; FX.gref = null;
+      try { FX.undim(); } catch (e) {}
+    }
+  },
+
   startGame() {
     const s = UI.setup;
     const aiRealms = s.aiMode === "pick" ? s.ai.slice() : shuffle(realmNames()).slice(0, C().lanes);
     const first = s.first === "you" ? 0 : s.first === "ai" ? 1 : (Math.random() < 0.5 ? 0 : 1);
-    UI.sel = [];
-    UI.pending = null;
+    UI.resetLocks();
     // a chosen deck plays as its exact card list; "random" (or an illegal deck)
     // falls back to the auto-builder
     let playerDeck = null;

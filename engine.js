@@ -3206,9 +3206,11 @@ function legalTargetsFor(pi, attackerLis) {
   const free = window.UI && UI.freeTargeting();
   const targetable = attackableEnemyLanes(pi);
   if (free) return { heroes: heroesOf(O), face: true };
-  const anyBoard = heroesOf(O).length > 0;
-  // face damage only when the opponent has no Heroes on the board at all
-  if (!anyBoard) return { heroes: [], face: true };
+  // Face damage is available when the opponent has no *attackable* Heroes. Heroes
+  // that currently cannot be attacked (protection / "cannot be attacked" effects)
+  // do NOT shield the face — otherwise an all-unattackable board would soft-lock
+  // the attacker with no legal move.
+  if (!targetable.length) return { heroes: [], face: true };
   // Bargain of Broken Wills: no redirecting this turn — opposing lane only
   if (G.players[pi].noRedirectTurn === G.gt) {
     const opp = attackerLis.length === 1 ? { pi: O, li: attackerLis[0] } : null;

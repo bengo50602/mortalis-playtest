@@ -271,6 +271,7 @@
 
   MetaUI.startBattle = function (chapter, stage) {
     var cfg = Campaign.battleConfig(chapter, stage);
+    if (UI.resetLocks) UI.resetLocks();
     Campaign.active = { chapter: chapter, stage: stage };
     newGame(cfg);
     // route the topbar/back-out correctly
