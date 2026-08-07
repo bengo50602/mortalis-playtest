@@ -167,15 +167,15 @@
   };
 
   /* =============================== Campaign ============================= */
-  // 18 chapters. First three are the starter realms; the campaign then crosses
-  // all 15 realms and ends with a three-chapter "Ascendant" reckoning. Each
-  // chapter is 6 duels then a boss. Ultra-rare reward on every third chapter's
-  // boss (3, 6, 9, 12, 15, 18); the rest give a Rare.
+  // 15 chapters — one per realm. First three are the starter realms; the
+  // campaign then crosses the remaining realms, ending at Balemaw. Each chapter
+  // is 6 duels then a boss. Ultra-rare reward on every third chapter's boss
+  // (3, 6, 9, 12, 15); the rest give a Rare.
   var DUELS = 6, BOSS_STAGE = 6, STAGES = 7;
   var CHAPTER_REALMS = [
     "Luminar", "Fangrend", "Brightmantle", "Thornveil", "Gildharbor", "Runespire",
     "Karakhorde", "Ankhara", "Deepforge", "Almsgard", "Oathenhall", "Aurelium",
-    "Zolthec", "Noctavein", "Balemaw", "Aurelium", "Noctavein", "Balemaw"];
+    "Zolthec", "Noctavein", "Balemaw"];
   var CHAPTER_MOOD = {
     Luminar: { color: "#e9c766", sky: "#2a2f52", tag: "Dawnspire Reaches", blurb: "Radiant training grounds where your order first musters." },
     Fangrend: { color: "#7fb0d6", sky: "#26313d", tag: "The Howling Steppe", blurb: "Storm-wolf packs test your resolve on the open tundra." },
@@ -278,8 +278,8 @@
   var Campaign = window.Campaign = {
     active: null,   // set while a campaign battle is in progress: {chapter, stage}
     CHAPTER_REALMS: CHAPTER_REALMS,
-    DUELS: DUELS, BOSS_STAGE: BOSS_STAGE, TOTAL: 18,
-    chapters: function () { var a = []; for (var i = 1; i <= 18; i++) a.push(chapterData(i)); return a; },
+    DUELS: DUELS, BOSS_STAGE: BOSS_STAGE, TOTAL: 15,
+    chapters: function () { var a = []; for (var i = 1; i <= 15; i++) a.push(chapterData(i)); return a; },
     chapter: function (i) { return chapterData(i); },
     opponent: function (i, stage) { return opponentFor(i, stage); },
 
@@ -329,7 +329,7 @@
           var pool = heroesByRealmRarity(ch.realm, ch.rewardRarity);
           var pick = pool[Math.floor(Math.random() * pool.length)];
           if (pick) { var g = Meta.grant(pick.id, 1); out.unlocked.push({ id: pick.id, name: pick.name, rarity: pick.rarity, dup: !g.newCard }); }
-          if (p.campaign.chapter <= i) p.campaign.chapter = Math.min(18, i + 1);
+          if (p.campaign.chapter <= i) p.campaign.chapter = Math.min(15, i + 1);
         } else { Meta.addCoins(Math.round(ch.coinsBoss / 4)); out.coins = Math.round(ch.coinsBoss / 4); }
       } else {
         Meta.addCoins(firstTime ? ch.coinsRegular : Math.round(ch.coinsRegular / 3));

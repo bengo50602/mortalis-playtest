@@ -441,10 +441,10 @@
       var moreStages = Campaign.nextStage(chapter) >= 0;
       var title = res.boss ? "Champion defeated!" : "Victory";
       body = "<h2 style='color:var(--good)'>" + title + "</h2>"
-        + "<div style='color:var(--muted)'>" + (res.boss ? "The champion falls. " + (chapter < 18 ? "Chapter " + (chapter + 1) + " lies ahead." : "The campaign is won — every realm has fallen to you.") : "Duel won.") + "</div>"
+        + "<div style='color:var(--muted)'>" + (res.boss ? "The champion falls. " + (chapter < 15 ? "Chapter " + (chapter + 1) + " lies ahead." : "The campaign is won — every realm has fallen to you.") : "Duel won.") + "</div>"
         + lines + newCards
         + "<div class='row'>"
-        + (moreStages ? "<button class='mbtn primary' id='br-next'>Continue</button>" : (chapter < 18 ? "<button class='mbtn primary' id='br-nextch'>Next chapter</button>" : ""))
+        + (moreStages ? "<button class='mbtn primary' id='br-next'>Continue</button>" : (chapter < 15 ? "<button class='mbtn primary' id='br-nextch'>Next chapter</button>" : ""))
         + "<button class='mbtn' id='br-map'>Campaign map</button>"
         + "<button class='mbtn' id='br-store'>Store</button></div>";
     } else {
@@ -457,7 +457,7 @@
     revealCampaign();
     var hook = function (id, fn) { var b = $(id); if (b) b.onclick = fn; };
     hook("br-next", function () { openChapter(chapter); });
-    hook("br-nextch", function () { openChapter(Math.min(18, chapter + 1)); });
+    hook("br-nextch", function () { openChapter(Math.min(15, chapter + 1)); });
     hook("br-retry", function () { MetaUI.startBattle(chapter, stage); });
     hook("br-map", function () { renderCampaign(); revealCampaign(); });
     hook("br-store", function () { UI.show("store"); });

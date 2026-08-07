@@ -358,7 +358,7 @@ body.on-splash .topbar{display:none}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260807152423</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260807153131</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -9855,15 +9855,15 @@ async function aiTakeTurn() {
   };
 
   /* =============================== Campaign ============================= */
-  // 18 chapters. First three are the starter realms; the campaign then crosses
-  // all 15 realms and ends with a three-chapter "Ascendant" reckoning. Each
-  // chapter is 6 duels then a boss. Ultra-rare reward on every third chapter's
-  // boss (3, 6, 9, 12, 15, 18); the rest give a Rare.
+  // 15 chapters — one per realm. First three are the starter realms; the
+  // campaign then crosses the remaining realms, ending at Balemaw. Each chapter
+  // is 6 duels then a boss. Ultra-rare reward on every third chapter's boss
+  // (3, 6, 9, 12, 15); the rest give a Rare.
   var DUELS = 6, BOSS_STAGE = 6, STAGES = 7;
   var CHAPTER_REALMS = [
     "Luminar", "Fangrend", "Brightmantle", "Thornveil", "Gildharbor", "Runespire",
     "Karakhorde", "Ankhara", "Deepforge", "Almsgard", "Oathenhall", "Aurelium",
-    "Zolthec", "Noctavein", "Balemaw", "Aurelium", "Noctavein", "Balemaw"];
+    "Zolthec", "Noctavein", "Balemaw"];
   var CHAPTER_MOOD = {
     Luminar: { color: "#e9c766", sky: "#2a2f52", tag: "Dawnspire Reaches", blurb: "Radiant training grounds where your order first musters." },
     Fangrend: { color: "#7fb0d6", sky: "#26313d", tag: "The Howling Steppe", blurb: "Storm-wolf packs test your resolve on the open tundra." },
@@ -9966,8 +9966,8 @@ async function aiTakeTurn() {
   var Campaign = window.Campaign = {
     active: null,   // set while a campaign battle is in progress: {chapter, stage}
     CHAPTER_REALMS: CHAPTER_REALMS,
-    DUELS: DUELS, BOSS_STAGE: BOSS_STAGE, TOTAL: 18,
-    chapters: function () { var a = []; for (var i = 1; i <= 18; i++) a.push(chapterData(i)); return a; },
+    DUELS: DUELS, BOSS_STAGE: BOSS_STAGE, TOTAL: 15,
+    chapters: function () { var a = []; for (var i = 1; i <= 15; i++) a.push(chapterData(i)); return a; },
     chapter: function (i) { return chapterData(i); },
     opponent: function (i, stage) { return opponentFor(i, stage); },
 
@@ -10017,7 +10017,7 @@ async function aiTakeTurn() {
           var pool = heroesByRealmRarity(ch.realm, ch.rewardRarity);
           var pick = pool[Math.floor(Math.random() * pool.length)];
           if (pick) { var g = Meta.grant(pick.id, 1); out.unlocked.push({ id: pick.id, name: pick.name, rarity: pick.rarity, dup: !g.newCard }); }
-          if (p.campaign.chapter <= i) p.campaign.chapter = Math.min(18, i + 1);
+          if (p.campaign.chapter <= i) p.campaign.chapter = Math.min(15, i + 1);
         } else { Meta.addCoins(Math.round(ch.coinsBoss / 4)); out.coins = Math.round(ch.coinsBoss / 4); }
       } else {
         Meta.addCoins(firstTime ? ch.coinsRegular : Math.round(ch.coinsRegular / 3));
@@ -12610,10 +12610,10 @@ window.addEventListener("DOMContentLoaded", () => {
       var moreStages = Campaign.nextStage(chapter) >= 0;
       var title = res.boss ? "Champion defeated!" : "Victory";
       body = "<h2 style='color:var(--good)'>" + title + "</h2>"
-        + "<div style='color:var(--muted)'>" + (res.boss ? "The champion falls. " + (chapter < 18 ? "Chapter " + (chapter + 1) + " lies ahead." : "The campaign is won — every realm has fallen to you.") : "Duel won.") + "</div>"
+        + "<div style='color:var(--muted)'>" + (res.boss ? "The champion falls. " + (chapter < 15 ? "Chapter " + (chapter + 1) + " lies ahead." : "The campaign is won — every realm has fallen to you.") : "Duel won.") + "</div>"
         + lines + newCards
         + "<div class='row'>"
-        + (moreStages ? "<button class='mbtn primary' id='br-next'>Continue</button>" : (chapter < 18 ? "<button class='mbtn primary' id='br-nextch'>Next chapter</button>" : ""))
+        + (moreStages ? "<button class='mbtn primary' id='br-next'>Continue</button>" : (chapter < 15 ? "<button class='mbtn primary' id='br-nextch'>Next chapter</button>" : ""))
         + "<button class='mbtn' id='br-map'>Campaign map</button>"
         + "<button class='mbtn' id='br-store'>Store</button></div>";
     } else {
@@ -12626,7 +12626,7 @@ window.addEventListener("DOMContentLoaded", () => {
     revealCampaign();
     var hook = function (id, fn) { var b = $(id); if (b) b.onclick = fn; };
     hook("br-next", function () { openChapter(chapter); });
-    hook("br-nextch", function () { openChapter(Math.min(18, chapter + 1)); });
+    hook("br-nextch", function () { openChapter(Math.min(15, chapter + 1)); });
     hook("br-retry", function () { MetaUI.startBattle(chapter, stage); });
     hook("br-map", function () { renderCampaign(); revealCampaign(); });
     hook("br-store", function () { UI.show("store"); });
