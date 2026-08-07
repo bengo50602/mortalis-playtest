@@ -1844,6 +1844,13 @@ window.addEventListener("DOMContentLoaded", () => {
   UI.renderSetup();
 
   const on = (id, fn) => { const b = $(id); if (b) b.onclick = fn; };
+  // Main menu: always return to the cinematic title splash.
+  on("btn-mainmenu", () => {
+    const s = $("screen-setup");
+    if (s) s.classList.add("title-mode");
+    UI.renderSetup();
+    UI.show("setup");
+  });
   on("tab-play", () => UI.show(G ? "game" : "setup"));
   on("tab-decks", () => UI.show("decks"));
   // New game / Start both go to the setup options; New game skips the splash.

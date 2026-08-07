@@ -284,6 +284,8 @@ function parseOp(cl) {
   if ((m = cl.match(new RegExp(`^gain ${NUM} Pulse for each different Realm among the Heroes you control$`, "i")))) return { op: "pulsePerDistinctRealm", n: +m[1] };
   if ((m = cl.match(new RegExp(`^all Heroes you control continuously have \\+${NUM} Health until the start of your next turn$`, "i")))) return { op: "buff", atk: 0, hp: +m[1], target: "allOwn", dur: 2 };
   if ((m = cl.match(new RegExp(`^an enemy Hero of your choice gets [-−–]${NUM} Attack and a Hero you control of your choice gains \\+${NUM} Attack, until the start of your next turn$`, "i")))) return [{ op: "buff", atk: -+m[1], hp: 0, target: "enemyChoice", dur: 2 }, { op: "buff", atk: +m[2], hp: 0, target: "ownChoice", dur: 2 }];
+  // Khonsahr: an enemy loses Attack while this Hero itself gains it, until your next turn
+  if ((m = cl.match(new RegExp(`^an enemy Hero of your choice gets [-−–]${NUM} Attack and (?:he|she|it|this Hero|\\w+) gains \\+${NUM} Attack, until the (?:end|start) of your next turn$`, "i")))) return [{ op: "buff", atk: -+m[1], hp: 0, target: "enemyChoice", dur: 2 }, { op: "buff", atk: +m[2], hp: 0, target: "self", dur: 2 }];
   if ((m = cl.match(new RegExp(`^every enemy Hero (?:gets [-−–]${NUM} Attack|loses ${NUM} Health)(?: permanently)?[;,]? ?(?:and )?a Hero you control(?: of your choice)? gains \\+${NUM} Attack permanently(?: and heals ${NUM} Health)? for each (?:enemy )?Hero affected(?: this way)?$`, "i")))) {
     return { op: "massReduceBuffPer", redAtk: +(m[1] || 0), redHp: +(m[2] || 0), buffAtk: +m[3], healPer: +(m[4] || 0) };
   }
@@ -491,6 +493,10 @@ function parseOps(text) {
 function compileContinuous(text, sourceKind, out) {
   for (let s of sentences(text)) {
     if (!/continuously|while equipped|while in this slot|while .* is in play|while this card is in play/i.test(s)) continue;
+    // A kill-triggered lane grant ("…the first time each turn a Hero you control
+    // destroys an enemy Hero in combat, the Hero in this lane gains +N Attack
+    // permanently") is NOT a continuous aura — the combat resolver handles it.
+    if (/(?:the first time each turn|whenever) a hero you control destroys an enemy hero in combat, the hero in this lane gains \+\d+ attack permanently/i.test(norm(s))) continue;
     // split off trailing conditional/triggered clauses so the leading aura still compiles
     // ("+30/+30, and when it fights…" / "−30/−30, and whenever your opponent plays a Hero…")
     const lead = s.split(/, and (?:when|whenever) /i)[0];
@@ -958,15 +964,22 @@ function compileActivated(text, list, bits) {
     const cost = m[1] ? +m[1] : 0;
     const clause = m[2].replace(/\s*\([^)]*\)/g, "").trim();
     let ops = null;
-    const parts = clause.split(/, and |, then |; | and (?=[A-Z]\w+ gains |this Hero gains |gain |draw |deal |destroy )/);
-    const got = [];
-    let ok = true;
-    for (const p of parts) {
-      const o = parseOp(p);
-      if (!o) { ok = false; break; }
-      got.push(...[].concat(o));
+    // Try the whole clause first — some abilities are one op whose parts share a
+    // trailing duration ("...gets -N Attack and X gains +M Attack, until…") that
+    // splitting on "and" would orphan. Only split if the whole doesn't parse.
+    const wholeAbility = parseOp(clause.replace(/\.$/, ""));
+    if (wholeAbility) ops = [].concat(wholeAbility);
+    else {
+      const parts = clause.split(/, and |, then |; | and (?=[A-Z]\w+ gains |this Hero gains |gain |draw |deal |destroy )/);
+      const got = [];
+      let ok = true;
+      for (const p of parts) {
+        const o = parseOp(p);
+        if (!o) { ok = false; break; }
+        got.push(...[].concat(o));
+      }
+      if (ok && got.length) ops = got;
     }
-    if (ok && got.length) ops = got;
     list.push({ cost, ops, raw: (cost ? `pay ${cost} Pulse — ` : "") + m[2] });
     if (ops) bits.push("activated ability");
   }
@@ -3250,8 +3263,12 @@ async function fireCombat(event, actorPi, actorLi, targetPi, targetLi) {
     const seenK = new Set();
     for (const L2 of G.players[actorPi].lanes) for (const a of L2.aux) if (a && !seenK.has(a.uid)) {
       seenK.add(a.uid);
-      const km2 = norm(cardById(a.cardId).auxText || "").match(/whenever a Hero you control destroys an enemy Hero in combat, the Hero in this lane gains \+(\d+) Attack permanently/i);
+      const at = norm(cardById(a.cardId).auxText || "");
+      const km2 = at.match(/whenever a Hero you control destroys an enemy Hero in combat, the Hero in this lane gains \+(\d+) Attack permanently/i);
       if (km2 && L2.hero) { L2.hero.permAtk += +km2[1]; log(`${cardById(a.cardId).name}: ${cardById(L2.hero.cardId).name} gains +${km2[1]} Attack permanently.`); }
+      // Khonsahr aux: the FIRST such kill each turn (once per turn per aux)
+      const kf = at.match(/the first time each turn a Hero you control destroys an enemy Hero in combat, the Hero in this lane gains \+(\d+) Attack permanently/i);
+      if (kf && L2.hero && a.killGt !== G.gt) { a.killGt = G.gt; L2.hero.permAtk += +kf[1]; log(`${cardById(a.cardId).name}: ${cardById(L2.hero.cardId).name} gains +${kf[1]} Attack permanently.`); }
     }
   }
 
