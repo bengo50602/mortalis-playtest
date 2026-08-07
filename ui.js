@@ -716,6 +716,10 @@ const UI = {
       if (d && validateDeck(d, s.mine.slice(0, C().lanes)).playable) playerDeck = expandDeck(d);
       else UI.toast("That deck no longer fits these realms — using a random deck.");
     }
+    // a signed-in player's "random" deck is built only from cards they've unlocked
+    if (!playerDeck && window.Meta && Meta.current && Meta.current() && Meta.ownedDeck) {
+      playerDeck = Meta.ownedDeck(s.mine.slice(0, C().lanes));
+    }
     newGame({ playerRealms: s.mine.slice(), aiRealms, difficulty: s.difficulty, first, playerDeck });
     UI.show("game");
     UI.render();
@@ -1586,7 +1590,11 @@ const Decks = {
     // once the realm cap is reached, restrict the pool to those realms
     const used = Decks.usedRealms();
     const capped = used.length >= C().lanes;
+    // only cards the signed-in player has unlocked (heroes owned individually;
+    // a realm's support cards unlock with its first hero). No account = no gate.
+    const gated = window.Meta && Meta.current && Meta.current();
     let cards = DB.cards
+      .filter(c => !gated || Meta.owns(c.id))
       .filter(c => !capped || used.includes(c.realm))
       .filter(c => Decks.filter === "all" || c.type === Decks.filter)
       .sort((a, b) => (a.cost - b.cost) || a.name.localeCompare(b.name));

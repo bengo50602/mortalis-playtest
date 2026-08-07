@@ -91,7 +91,31 @@
       + ".login-wrap .tabs button.on{background:var(--accent-bg);color:var(--ink);border-color:var(--accent)}"
       + ".login-wrap .who{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}"
       + ".login-wrap .who button{background:var(--card);border:1px solid var(--line2);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px}"
-      + ".mnote{color:var(--muted);font-size:12px;text-align:center;margin-top:14px;line-height:1.6}";
+      + ".mnote{color:var(--muted);font-size:12px;text-align:center;margin-top:14px;line-height:1.6}"
+      + ".cmap{position:relative;max-width:560px;margin:14px auto 4px;padding:6px 0}"
+      + ".cmap:before{content:'';position:absolute;left:50%;top:6px;bottom:6px;width:3px;background:repeating-linear-gradient(var(--line2) 0 8px,transparent 8px 16px);transform:translateX(-50%)}"
+      + ".cnode{position:relative;width:46%;padding:11px 13px;border-radius:12px;border:1px solid var(--line2);margin:9px 0;background:var(--card);cursor:pointer;transition:transform .12s,box-shadow .2s}"
+      + ".cnode:hover{transform:translateY(-1px)}"
+      + ".cnode.right{margin-left:54%}.cnode.left{margin-right:54%}"
+      + ".cnode .cn{font-size:10px;letter-spacing:2px;color:var(--muted)}"
+      + ".cnode .cr{font-family:'Cinzel',serif;font-size:16px;margin-top:1px}"
+      + ".cnode .cpips{margin-top:7px;display:flex;gap:3px;flex-wrap:wrap}"
+      + ".cnode .cpip{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.16)}"
+      + ".cnode .cpip.on{background:#ffe4a0}"
+      + ".cnode.cur{box-shadow:0 0 0 2px var(--accent),0 6px 20px -8px var(--accent)}"
+      + ".cnode.done{opacity:.9}"
+      + ".cnode.myst{cursor:default;text-align:center;font-family:'Cinzel',serif;letter-spacing:5px;color:var(--muted);opacity:.6;background:repeating-linear-gradient(45deg,#12161d 0 8px,#151a22 8px 16px)}"
+      + ".cnode .chero{position:absolute;top:-12px;left:12px;font-size:22px;color:#ffe4a0;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}"
+      + ".cut{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}"
+      + ".cut-inner{max-width:740px;width:100%;display:flex;gap:24px;align-items:flex-end}"
+      + "@media(max-width:640px){.cut-inner{flex-direction:column;align-items:center}.cut-portrait{width:160px !important}}"
+      + ".cut-portrait{flex:0 0 auto;width:210px;text-align:center}"
+      + ".cut-name{font-family:'Cinzel',serif;font-size:19px;color:#eef3fb;margin-top:8px;line-height:1.2}"
+      + ".cut-title{font-size:12px;color:#cbd6e6;margin-top:2px}"
+      + ".cut-side{flex:1;display:flex;flex-direction:column;gap:12px;min-width:0}"
+      + ".bubble{background:var(--panel);border:1px solid var(--line2);border-radius:14px;padding:11px 15px;font-size:15px;line-height:1.6;color:var(--ink);max-width:100%;animation:ciUp .5s ease both}"
+      + ".bubble .who{font-size:10px;letter-spacing:1px;color:var(--muted);margin-bottom:3px;text-transform:uppercase}"
+      + ".cut-continue{align-self:flex-start;margin-top:4px}";
     var s = document.createElement("style"); s.id = "meta-style"; s.textContent = css;
     document.head.appendChild(s);
   }
@@ -205,68 +229,88 @@
     UI.show("setup");
   }
 
-  /* ------------------------------ campaign map -------------------------- */
+  /* reveal the campaign screen WITHOUT re-rendering its content (our overlays
+     set their own innerHTML; UI.show('campaign') would otherwise redraw the map) */
+  function revealCampaign() {
+    EXTRA.forEach(function (id) { var e = $("screen-" + id); if (e) e.classList.remove("visible"); });
+    ["setup", "game", "decks", "cards", "rules"].forEach(function (c) { var e = $("screen-" + c); if (e) e.classList.remove("visible"); });
+    var e = $("screen-campaign"); if (e) e.classList.add("visible");
+    if (document.body) document.body.classList.remove("on-splash");
+    UI.screen = "campaign"; window.scrollTo(0, 0);
+  }
+
+  /* --------------------------- fog-of-war map --------------------------- */
+  // The hero follows a winding path. Only cleared chapters, the current one, and
+  // a single shrouded "next" node are shown — everything beyond stays a mystery.
   function renderCampaign() {
     var el = $("screen-campaign"); if (!el) return;
-    var chapters = Campaign.chapters();
+    var cur = Campaign.unlockedChapter();
+    var reveal = Math.min(Campaign.TOTAL, cur + 1);   // show one shrouded node ahead
     var cs = Meta.collectionStats();
     var html = "<div class='mpanel'><div class='mhead'><h2>Campaign</h2>"
-      + "<span class='sub'>Collection " + cs.owned + " / " + cs.total + " heroes &nbsp;·&nbsp; <span style='color:var(--warn)'>&#9679; " + Meta.coins() + "</span> coins &nbsp; <span style='color:var(--warn)'>&#9670; " + Meta.seals() + "</span> Seals</span></div>"
-      + "<div class='sub'>Beat a chapter's three challengers, then its Eternal boss. Every boss drops coins and a card; every third chapter's boss gives an ultra-rare. Losses cost nothing — just retry.</div>"
-      + "<div class='ch-grid'>";
-    chapters.forEach(function (ch) {
-      var unlocked = Campaign.isChapterUnlocked(ch.idx);
-      var cleared = Campaign.stagesCleared(ch.idx);
-      var boss = Campaign.bossBeaten(ch.idx);
-      var next = Campaign.nextStage(ch.idx);
+      + "<span class='sub'>Collection " + cs.owned + " / " + cs.total + " heroes &nbsp;·&nbsp; <span style='color:var(--warn)'>&#9679; " + Meta.coins() + "</span> &nbsp; <span style='color:var(--warn)'>&#9670; " + Meta.seals() + "</span></span></div>"
+      + "<div class='sub'>Follow the road. Win six duels, then the chapter's champion. Bosses drop coins, Seals, and a card — an ultra-rare every third chapter. The road ahead is unknown.</div>"
+      + "<div class='cmap'>";
+    for (var i = 1; i <= reveal; i++) {
+      var side = (i % 2) ? "left" : "right";
+      if (i > cur) { // the shrouded next chapter
+        html += "<div class='cnode myst " + side + "'><span class='chero' style='display:none'></span>? ? ?<div style='font-size:11px;letter-spacing:1px;margin-top:4px'>The road continues…</div></div>";
+        continue;
+      }
+      var ch = Campaign.chapter(i);
       var m = ch.mood;
+      var boss = Campaign.bossBeaten(i);
+      var duels = Campaign.duelsCleared(i);
+      var isCur = (i === cur);
       var pips = "";
-      for (var s = 0; s < 3; s++) pips += "<span class='pip " + (cleared > s ? "on" : "") + "'></span>";
-      pips += "<span class='pip " + (boss ? "on" : "") + "' style='margin-left:6px'>&#9733;</span>";
+      for (var s = 0; s < Campaign.DUELS; s++) pips += "<span class='cpip " + (duels > s ? "on" : "") + "'></span>";
+      pips += "<span class='cpip " + (boss ? "on" : "") + "' style='margin-left:5px;border-radius:2px'></span>";
       var rwColor = ch.ultra ? RC["Ultra-Rare"] : RC.Rare;
-      var btnLabel = !unlocked ? "Locked" : boss ? "Replay boss" : next === 3 ? "Face the boss" : "Battle " + (next + 1);
-      html += "<div class='ch-card " + (unlocked ? "" : "locked") + "' style='background:linear-gradient(150deg," + m.sky + " 0%," + shade(m.color, m.sky) + " 100%)'>"
-        + "<div>"
-        + "<div class='num'>CHAPTER " + ch.idx + (boss ? " &nbsp;&#10003; CLEARED" : "") + "</div>"
-        + "<div class='rtag' style='color:" + m.color + "'>" + esc(ch.realm) + "</div>"
-        + "<div class='blurb'>" + esc(ch.blurb) + "</div>"
-        + "<div class='boss'>&#9760; Boss: <b>" + esc(ch.boss ? ch.boss.name : "?") + "</b></div>"
-        + "</div>"
-        + "<div class='foot'><div class='pips'>" + pips + "</div>"
-        + "<span class='rw' style='background:" + rwColor + "22;color:" + rwColor + ";border:1px solid " + rwColor + "55'>" + (ch.ultra ? "ULTRA" : "RARE") + "</span></div>"
-        + "<div style='margin-top:10px;text-align:right'><button data-ch='" + ch.idx + "' " + (unlocked ? "" : "disabled") + ">" + btnLabel + "</button></div>"
+      var label = boss ? "Revisit" : (duels >= Campaign.DUELS ? "Face the champion" : "Continue");
+      html += "<div class='cnode " + side + (isCur ? " cur" : "") + (boss ? " done" : "") + "' data-ch='" + i + "' style='border-color:" + m.color + "66'>"
+        + (isCur ? "<span class='chero' title='You are here'>&#9873;</span>" : "")
+        + "<div class='cn'>CHAPTER " + i + (boss ? " &#10003;" : "") + "</div>"
+        + "<div class='cr' style='color:" + m.color + "'>" + esc(ch.realm) + (ch.ascendant ? " &#9733;" : "") + "</div>"
+        + "<div style='font-size:11px;color:var(--muted);margin-top:2px'>" + esc(ch.title) + "</div>"
+        + "<div class='cpips'>" + pips + "</div>"
+        + "<div style='margin-top:8px;display:flex;justify-content:space-between;align-items:center'>"
+        + "<span class='rw' style='background:" + rwColor + "22;color:" + rwColor + ";border:1px solid " + rwColor + "55;font-size:10px;padding:2px 7px;border-radius:6px'>" + (ch.ultra ? "ULTRA" : "RARE") + "</span>"
+        + "<span style='font-size:11px;color:" + m.color + "'>" + label + " &#8250;</span></div>"
         + "</div>";
-    });
-    html += "</div><div style='margin-top:18px;text-align:center'><button class='mbtn' id='cmp-back'>Back to menu</button></div></div>";
+    }
+    html += "</div><div style='margin-top:6px;text-align:center'><button class='mbtn' id='cmp-back'>Back to menu</button> <button class='mbtn' id='cmp-store'>Store</button></div></div>";
     el.innerHTML = html;
-    el.querySelectorAll("[data-ch]").forEach(function (b) { if (!b.disabled) b.onclick = function () { openChapter(+b.getAttribute("data-ch")); }; });
+    el.querySelectorAll("[data-ch]").forEach(function (b) { b.onclick = function () { openChapter(+b.getAttribute("data-ch")); }; });
     var back = $("cmp-back"); if (back) back.onclick = function () { backToSplash(); };
+    var st = $("cmp-store"); if (st) st.onclick = function () { UI.show("store"); };
   }
-  function shade(c, sky) { return sky; } // gradient toward the sky tone; realm color used for accents
 
   /* ---------------------------- chapter intro --------------------------- */
   function openChapter(i) {
     var ch = Campaign.chapter(i);
     var stage = Campaign.nextStage(i);
-    if (stage < 0) stage = 3; // fully cleared -> replay boss
-    var isBoss = stage === 3;
+    if (stage < 0) stage = Campaign.BOSS_STAGE; // fully cleared -> revisit boss
+    var isBoss = stage === Campaign.BOSS_STAGE;
     var m = ch.mood;
     var el = $("screen-campaign");
-    var stageLabel = isBoss ? "The Eternal" : "Challenger " + (stage + 1) + " of 3";
-    var foeName = isBoss ? ch.boss.name : ch.foes[stage];
-    var html = "<div class='ci' style='background:radial-gradient(120% 90% at 50% 20%," + m.sky + "cc 0%,#05070c 80%)'>"
+    var duelsLeft = Campaign.DUELS - Campaign.duelsCleared(i);
+    var sub = isBoss ? "The champion awaits." : (Campaign.duelsCleared(i) + " of " + Campaign.DUELS + " duels won — " + duelsLeft + " to go.");
+    el.innerHTML = "<div class='ci' style='background:radial-gradient(120% 90% at 50% 20%," + m.sky + "cc 0%,#05070c 80%)'>"
       + "<div class='chn'>CHAPTER " + i + " &nbsp;&#183;&nbsp; " + esc(ch.realm).toUpperCase() + "</div>"
       + "<div class='ctt' style='color:" + m.color + "'>" + esc(ch.title) + "</div>"
       + "<div class='cbl'>" + esc(ch.blurb) + "</div>"
-      + "<div class='cbs'><span class='skull' style='color:" + m.color + "'>" + (isBoss ? "&#9760;" : "&#9876;") + "</span>" + esc(stageLabel) + " &mdash; <b>" + esc(foeName) + "</b>"
-      + (isBoss ? "<div style='font-size:12px;color:#cbd6e6;margin-top:4px'>" + ch.boss.atk + " Attack &#183; " + ch.boss.hp + " Mortality</div>" : "")
-      + "</div>"
-      + "<button class='cgo'>" + (isBoss ? "FACE THE BOSS" : "BEGIN BATTLE") + "</button>"
-      + "<div class='cx'>Back to the map</div>"
-      + "</div>";
-    el.innerHTML = html;
-    el.querySelector(".cgo").onclick = function () { MetaUI.startBattle(i, stage); };
-    el.querySelector(".cx").onclick = function () { renderCampaign(); };
+      + "<div class='cbs' style='color:#cbd6e6'>" + esc(sub) + "</div>"
+      + "<button class='cgo'>" + (isBoss ? "FACE THE CHAMPION" : "NEXT DUEL") + "</button>"
+      + "<div class='cx'>Back to the map</div></div>";
+    revealCampaign();
+    el.querySelector(".cgo").onclick = function () { beginStage(i, stage); };
+    el.querySelector(".cx").onclick = function () { renderCampaign(); revealCampaign(); };
+  }
+
+  // pre-battle cutscene, then the duel
+  function beginStage(i, stage) {
+    var opp = Campaign.opponent(i, stage);
+    cutscene(opp, "pre", { onDone: function () { MetaUI.startBattle(i, stage); } });
   }
 
   MetaUI.startBattle = function (chapter, stage) {
@@ -274,7 +318,6 @@
     if (UI.resetLocks) UI.resetLocks();
     Campaign.active = { chapter: chapter, stage: stage };
     newGame(cfg);
-    // route the topbar/back-out correctly
     var s = $("screen-setup"); if (s) s.classList.remove("title-mode");
     UI.show("game");
     UI.render();
@@ -282,13 +325,104 @@
     if (G.active === 1) setTimeout(function () { UI.runAI(); }, FX.busy ? FX.ms(3600) : 0);
   };
 
+  /* --------------------------- portraits + dialogue -------------------- */
+  function hashName(s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = (h * 16777619) >>> 0; } return h; }
+  var SKINS = ["#e8c9a8", "#d8a878", "#b07a4e", "#8a5a3a", "#c9a98a", "#a9b0bc"];
+  function portraitSVG(opp, size) {
+    size = size || 210;
+    var name = opp.name || "", col = opp.color || "#c9a24a", boss = !!opp.isBoss;
+    var h = hashName(name);
+    var skin = SKINS[(h >> 3) % SKINS.length];
+    var eye = boss ? col : "#20242c";
+    var dark = "#0c0f16";
+    var gear = boss ? (/Balemaw|Noctavein|Zolthec/.test(opp.realm) ? "horns" : "crown") : (h % 5);
+    var parts = "";
+    parts += "<rect x='2' y='2' width='96' height='116' rx='11' fill='" + dark + "' stroke='" + col + "' stroke-width='2.5'/>";
+    if (boss) parts += "<rect x='6' y='6' width='88' height='108' rx='8' fill='none' stroke='" + col + "' stroke-width='1' opacity='.55'/>";
+    parts += "<path d='M14 118 Q50 88 86 118 Z' fill='" + col + "' opacity='.9'/>";
+    parts += "<path d='M22 118 Q50 96 78 118 Z' fill='" + dark + "' opacity='.5'/>";
+    parts += "<rect x='43' y='76' width='14' height='16' fill='" + skin + "'/>";
+    parts += "<ellipse cx='50' cy='60' rx='18' ry='21' fill='" + skin + "'/>";
+    parts += "<ellipse cx='42' cy='62' rx='2.4' ry='2.8' fill='" + eye + "'/><ellipse cx='58' cy='62' rx='2.4' ry='2.8' fill='" + eye + "'/>";
+    if (boss) { parts += "<ellipse cx='42' cy='62' rx='3.6' ry='3.9' fill='none' stroke='" + col + "' opacity='.5'/><ellipse cx='58' cy='62' rx='3.6' ry='3.9' fill='none' stroke='" + col + "' opacity='.5'/>"; }
+    parts += "<path d='M45 71 Q50 74 55 71' stroke='#3a2a22' stroke-width='1.4' fill='none' stroke-linecap='round'/>";
+    if (gear === "hood" || gear === 0) parts += "<path d='M27 66 Q26 34 50 33 Q74 34 73 66 Q73 52 50 48 Q27 52 27 66 Z' fill='" + shadeHex(col, -.45) + "'/>";
+    else if (gear === "helm" || gear === 1) { parts += "<path d='M30 60 Q30 34 50 33 Q70 34 70 60 L70 54 Q50 41 30 54 Z' fill='#8a94a4'/><rect x='48' y='44' width='4' height='24' fill='#6d7686'/>"; }
+    else if (gear === "mitre" || gear === 3) parts += "<path d='M38 44 Q50 16 62 44 Q56 40 50 40 Q44 40 38 44 Z' fill='" + shadeHex(col, .1) + "' stroke='" + col + "' stroke-width='1'/>";
+    else if (gear === "crown") parts += "<path d='M33 42 L37 30 L43 40 L50 26 L57 40 L63 30 L67 42 Q50 36 33 42 Z' fill='#e8c766' stroke='#a9822a' stroke-width='.8'/>";
+    else if (gear === "horns") parts += "<path d='M33 46 Q20 40 22 26 Q30 34 36 42 Z' fill='" + shadeHex(col, -.3) + "'/><path d='M67 46 Q80 40 78 26 Q70 34 64 42 Z' fill='" + shadeHex(col, -.3) + "'/>";
+    else parts += "<path d='M31 52 Q34 36 50 35 Q66 36 69 52 Q60 44 50 44 Q40 44 31 52 Z' fill='#3a2f2a'/>";
+    return "<svg viewBox='0 0 100 120' width='" + size + "' height='" + Math.round(size * 1.2) + "' xmlns='http://www.w3.org/2000/svg' style='display:block;border-radius:12px'>" + parts + "</svg>";
+  }
+  function shadeHex(hex, amt) {
+    var m = /^#?([0-9a-f]{6})$/i.exec(hex || ""); if (!m) return hex;
+    var n = parseInt(m[1], 16), r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+    var f = amt < 0 ? 1 + amt : 1; var add = amt > 0 ? amt * 255 : 0;
+    r = Math.max(0, Math.min(255, Math.round(r * f + add))); g = Math.max(0, Math.min(255, Math.round(g * f + add))); b = Math.max(0, Math.min(255, Math.round(b * f + add)));
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  }
+
+  var TONE = {
+    Luminar: { taunt: ["The Dawn does not yield to wanderers.", "Prove your light is more than a flicker."], win: ["Return when your resolve matches ours."], lose: ["Then the dawn passes to you… for now."] },
+    Fangrend: { taunt: ["The pack smells weakness on you.", "Howl, or be hunted."], win: ["Weak. The tundra keeps its own."], lose: ["A worthy kill — you've earned the howl."] },
+    Brightmantle: { taunt: ["Heretic. The White Flame will judge you.", "Kneel, or be purified."], win: ["Ash to ash. The Flame endures."], lose: ["The Flame chose you. So be it."] },
+    Thornveil: { taunt: ["The wood remembers every trespasser.", "Turn back, or take root here forever."], win: ["The thorns feed well tonight."], lose: ["Pass, then. The canopy parts for you."] },
+    Gildharbor: { taunt: ["Everything has a price — even your defeat.", "I've already bought your loss."], win: ["A poor investment on your part."], lose: ["Hah! You've earned your coin."] },
+    Runespire: { taunt: ["Your fate is already written in the sigils.", "The Spire suffers no fools."], win: ["As the runes foretold."], lose: ["The pattern bends to you. Curious."] },
+    Karakhorde: { taunt: ["We ride you down before you draw breath.", "The sky itself is our arrow."], win: ["Too slow. The horde rolls on."], lose: ["Swift and fierce — ride with honor."] },
+    Ankhara: { taunt: ["Death is a door I have opened many times.", "You will kneel in the necropolis."], win: ["Another name for the tombs."], lose: ["Even the god-kings bow… to you."] },
+    Deepforge: { taunt: ["I forged my victory before you arrived.", "Steel does not break for wanderers."], win: ["Brittle. Back to the crucible."], lose: ["Well-struck. The anvil respects you."] },
+    Almsgard: { taunt: ["I have suffered worse than you.", "Mercy is a blade you cannot parry."], win: ["Endure, and return stronger."], lose: ["The door opens for you, pilgrim."] },
+    Oathenhall: { taunt: ["My oath is unbreakable. Is yours?", "I have never yielded a field."], win: ["An oath kept. You are turned away."], lose: ["My vow is fulfilled — the field is yours."] },
+    Aurelium: { taunt: ["The Legion has never lost. You won't be the first.", "The empire bows to no one."], win: ["Undefeated still, as always."], lose: ["Impossible… the Undefeated, undone."] },
+    Zolthec: { taunt: ["The sun demands blood, and you will bleed.", "Your defeat feeds the eclipse."], win: ["The sun sets on you."], lose: ["The eclipse breaks. You are the dawn."] },
+    Noctavein: { taunt: ["Your warmth will be exquisite.", "Linger, and I will drink you dry."], win: ["Drained, like all the rest."], lose: ["Delicious defiance… the court is yours."] },
+    Balemaw: { taunt: ["Every soul strikes a bargain here. What's yours?", "The Red Gate hungers."], win: ["The bargain is sealed. You lose all."], lose: ["A debt paid — the Gate yields to you."] },
+  };
+  var PLAYER_LINES = ["Then let's not waste words.", "We'll see whose realm stands.", "I've come too far to fall here.", "Enough talk — draw your cards."];
+  function dialogueFor(opp, phase, won) {
+    var t = TONE[opp.realm] || { taunt: ["Face me."], win: ["You lose."], lose: ["Well fought."] };
+    var seed = hashName(opp.name);
+    if (phase === "pre") {
+      var line = opp.isBoss ? t.taunt[0] : t.taunt[seed % t.taunt.length];
+      return [{ who: "them", text: line }, { who: "you", text: PLAYER_LINES[seed % PLAYER_LINES.length] }];
+    }
+    var arr = won ? t.lose : t.win;
+    return [{ who: "them", text: arr[seed % arr.length] }];
+  }
+
+  // full-screen cutscene: opponent portrait + text bubbles + Continue
+  function cutscene(opp, phase, opts) {
+    opts = opts || {};
+    var lines = dialogueFor(opp, phase, opts.won);
+    var el = $("screen-campaign");
+    var m = Campaign.chapter(opp.chapter).mood;
+    var bubbles = lines.map(function (l, i) {
+      var mine = l.who === "you";
+      return "<div class='bubble " + (mine ? "you" : "them") + "' style='animation-delay:" + (i * 0.45) + "s;" + (mine ? "align-self:flex-end;border-color:var(--accent)" : "") + "'>"
+        + "<div class='who'>" + (mine ? "You" : esc(opp.name)) + "</div>" + esc(l.text) + "</div>";
+    }).join("");
+    var cont = phase === "pre" ? (opp.isBoss ? "To battle &#9876;" : "Begin the duel &#9876;") : "Continue &#8250;";
+    el.innerHTML = "<div class='cut' style='background:radial-gradient(120% 90% at 28% 25%," + m.sky + "e6 0%,#05070c 82%)'>"
+      + "<div class='cut-inner'>"
+      + "<div class='cut-portrait'>" + portraitSVG(opp, 210)
+      + "<div class='cut-name'>" + esc(opp.name) + "</div><div class='cut-title'>" + esc(opp.title || "") + (opp.title ? " &#183; " : "") + esc(opp.realm) + "</div></div>"
+      + "<div class='cut-side'>" + bubbles + "<button class='mbtn primary cut-continue'>" + cont + "</button></div>"
+      + "</div></div>";
+    revealCampaign();
+    var b = el.querySelector(".cut-continue"); if (b) b.onclick = function () { if (opts.onDone) opts.onDone(); };
+  }
+
   /* ------------------------ battle result (campaign) -------------------- */
   MetaUI.onBattleEnd = function (winner) {
     if (!Campaign.active) return;
     var info = Campaign.active; Campaign.active = null;
     var won = winner === 0;
+    var opp = Campaign.opponent(info.chapter, info.stage);
     var delay = (window.FX && FX.busy) ? 3400 : 300;
-    setTimeout(function () { showBattleResult(info.chapter, info.stage, won); }, delay);
+    setTimeout(function () {
+      cutscene(opp, "post", { won: won, onDone: function () { showBattleResult(info.chapter, info.stage, won); } });
+    }, delay);
   };
   function showBattleResult(chapter, stage, won) {
     var ch = Campaign.chapter(chapter);
@@ -305,27 +439,27 @@
         ? "<div style='color:var(--muted);font-size:13px;margin-top:10px'>New card" + (res.unlocked.length > 1 ? "s" : "") + " unlocked</div><div class='reveal'>" + cards + "</div>"
         : "";
       var moreStages = Campaign.nextStage(chapter) >= 0;
-      var title = res.boss ? "Boss defeated!" : "Victory";
+      var title = res.boss ? "Champion defeated!" : "Victory";
       body = "<h2 style='color:var(--good)'>" + title + "</h2>"
-        + "<div style='color:var(--muted)'>" + (res.boss ? esc(ch.boss.name) + " falls. Chapter " + (chapter < 9 ? (chapter + 1) + " unlocked." : "9 — the campaign is won!") : "Challenger defeated.") + "</div>"
+        + "<div style='color:var(--muted)'>" + (res.boss ? "The champion falls. " + (chapter < 18 ? "Chapter " + (chapter + 1) + " lies ahead." : "The campaign is won — every realm has fallen to you.") : "Duel won.") + "</div>"
         + lines + newCards
         + "<div class='row'>"
-        + (moreStages ? "<button class='mbtn primary' id='br-next'>Next battle</button>" : (chapter < 9 ? "<button class='mbtn primary' id='br-nextch'>Next chapter</button>" : ""))
+        + (moreStages ? "<button class='mbtn primary' id='br-next'>Continue</button>" : (chapter < 18 ? "<button class='mbtn primary' id='br-nextch'>Next chapter</button>" : ""))
         + "<button class='mbtn' id='br-map'>Campaign map</button>"
         + "<button class='mbtn' id='br-store'>Store</button></div>";
     } else {
       body = "<h2 style='color:var(--bad)'>Defeat</h2>"
         + "<div style='color:var(--muted)'>No penalty — regroup and try again.</div>"
-        + "<div class='row'><button class='mbtn primary' id='br-retry'>Retry battle</button>"
+        + "<div class='row'><button class='mbtn primary' id='br-retry'>Retry duel</button>"
         + "<button class='mbtn' id='br-map'>Campaign map</button></div>";
     }
     el.innerHTML = "<div class='mover'><div class='mmodal'>" + body + "</div></div>";
-    UI.show("campaign");
+    revealCampaign();
     var hook = function (id, fn) { var b = $(id); if (b) b.onclick = fn; };
     hook("br-next", function () { openChapter(chapter); });
-    hook("br-nextch", function () { openChapter(Math.min(9, chapter + 1)); });
+    hook("br-nextch", function () { openChapter(Math.min(18, chapter + 1)); });
     hook("br-retry", function () { MetaUI.startBattle(chapter, stage); });
-    hook("br-map", function () { renderCampaign(); });
+    hook("br-map", function () { renderCampaign(); revealCampaign(); });
     hook("br-store", function () { UI.show("store"); });
     renderChip();
   }

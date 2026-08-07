@@ -83,10 +83,12 @@ function validateDeck(deck, realms) {
   const size = C().deckSize, lim = C().copyLimit;
   const total = deckCount(deck);
   const issues = [];
+  const gated = window.Meta && Meta.current && Meta.current();
   for (const [id, q] of (deck.cards || [])) {
     const c = cardById(id);
     if (!c) { issues.push("a card no longer exists"); continue; }
     if (q > lim) issues.push(`${c.name} has ${q} copies (max ${lim})`);
+    if (gated && !Meta.owns(id)) issues.push(`${c.name} isn't unlocked yet`);
   }
   if (realms) {
     const allowed = new Set(realms);
@@ -1168,7 +1170,7 @@ function newGame(opts) {
     lanes: realms.slice(0, C().lanes).map(r => ({ realm: r, hero: null, aux: [null, null] })),
     slots: new Array(C().sharedSlots).fill(null),
     // a custom deck (an array of card ids) plays as-is, shuffled; otherwise auto-build
-    deck: (customPile && customPile.length) ? shuffle(customPile.slice()) : buildDeck(realms), hand: [],
+    deck: (customPile && customPile.length) ? shuffle(customPile.slice()) : buildDeck(realms, isAI ? opts.difficulty : null), hand: [],
   });
   G = {
     players: [
@@ -1185,9 +1187,19 @@ function newGame(opts) {
   startTurn();
 }
 
-function buildDeck(realms) {
+// difficulty (AI only) caps hero rarity: easy = commons/uncommons, medium adds
+// rares, hard uses everything (rares, ultra-rares, and Eternals). Support cards
+// carry no rarity and are always eligible. A null difficulty = no cap.
+function heroRarityCeiling(difficulty) {
+  if (difficulty === "easy") return ["Common", "Uncommon"];
+  if (difficulty === "medium") return ["Common", "Uncommon", "Rare"];
+  return null; // hard / player random deck: no cap
+}
+function buildDeck(realms, difficulty) {
   const uniq = [...new Set(realms)];
-  const pool = DB.cards.filter(c => uniq.includes(c.realm));
+  const ceiling = heroRarityCeiling(difficulty);
+  const allow = c => c.type !== "hero" || !ceiling || ceiling.includes(c.rarity);
+  const pool = DB.cards.filter(c => uniq.includes(c.realm) && allow(c));
   const targets = { hero: 26, relic: 8, hex: 6, rite: 4, pact: 3, incantation: 3 };
   const deck = [];
   const counts = {};
@@ -3952,7 +3964,10 @@ async function aiDoPlay(pi, p) {
 
 async function aiTakeTurn() {
   const pi = 1, P = G.players[pi], O = G.players[0];
-  const d = G.difficulty;
+  // Play SKILL is always maxed ("hard"). The Easy/Medium/Hard setting only
+  // controls how good the AI's *deck* is (chosen at deck-build time), never how
+  // well it pilots that deck.
+  const d = "hard";
   const step = () => new Promise(r => setTimeout(r, 300));
 
   // ---- play phase ----

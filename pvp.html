@@ -279,7 +279,7 @@ a{color:var(--accent)}
   <span class="netstate" id="netstate"></span>
   <a href="index.html" style="text-decoration:none"><button>Main menu</button></a>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good)">How to play</button></a>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260806224811</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260807152423</span>
   <div class="spacer"></div>
   <button id="tab-play" class="active-tab" style="display:none">Play</button>
   <button id="tab-cards">Edit cards</button>
@@ -334,6 +334,19 @@ a{color:var(--accent)}
         <div class="spacer" style="flex:0"></div>
         <button class="primary" id="btn-ready" style="padding:8px 22px">Ready</button>
         <span class="netstate" id="readymsg"></span>
+      </div>
+      <div id="wager-box" style="margin-top:14px;border-top:1px solid var(--line);padding-top:12px">
+        <p class="setup-label" style="margin-top:0">Coin wager (optional) — winner takes the pot. <span id="wager-coins" style="color:var(--warn)"></span></p>
+        <div id="wager-controls" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <input id="wager-amt" type="number" min="0" step="10" value="0" style="width:110px" placeholder="coins">
+          <button id="btn-wager">Propose wager</button>
+          <span class="netstate" id="wager-msg"></span>
+        </div>
+        <div id="wager-offer" style="display:none;margin-top:8px;gap:8px;align-items:center">
+          <span class="netstate" id="wager-offer-msg"></span>
+          <button class="primary" id="btn-wager-accept" style="padding:6px 16px">Accept</button>
+          <button id="btn-wager-decline" style="padding:6px 16px">Decline</button>
+        </div>
       </div>
     </div>
   </div>
@@ -415,10 +428,11 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="cards.js?v=20260806224811"></script>
-<script src="rules.js?v=20260806224811"></script>
-<script src="engine.js?v=20260806224811"></script>
-<script src="ui.js?v=20260806224811"></script>
+<script src="cards.js?v=20260807152423"></script>
+<script src="rules.js?v=20260807152423"></script>
+<script src="engine.js?v=20260807152423"></script>
+<script src="meta.js?v=20260807152423"></script>
+<script src="ui.js?v=20260807152423"></script>
 <script>
 /* ================= Mortalis PvP layer (host-authoritative, PeerJS) ================= */
 (function () {
@@ -529,6 +543,59 @@ a{color:var(--accent)}
   }
   const send = (m) => { try { NET.conn && NET.conn.open && NET.conn.send(m); } catch (e) {} };
 
+  /* ---------- coin wager (optional, agreed in the lobby) ----------
+     Both players must be signed in (same localStorage profiles as the main app).
+     Settlement is per-device and trust-based: on game end the winner adds the
+     agreed amount and the loser subtracts it. */
+  const Wager = {
+    proposed: 0, incoming: 0, agreed: 0, settled: false,
+    coins() { return (window.Meta && Meta.current && Meta.current()) ? Meta.coins() : null; },
+    lockUI() { const a = $$("wager-amt"), b = $$("btn-wager"); if (a) a.disabled = true; if (b) b.disabled = true; },
+    refresh() {
+      const c = this.coins(), cs = $$("wager-coins");
+      if (c == null) { if (cs) cs.textContent = "Sign in on the main menu to wager coins."; this.lockUI(); return; }
+      if (cs) cs.textContent = "You have " + c + " coins.";
+    },
+    propose() {
+      const c = this.coins(); if (c == null) return;
+      const amt = Math.max(0, Math.floor(+($$("wager-amt").value) || 0));
+      if (!amt) { this.clear(true); $$("wager-msg").textContent = "Wager cleared."; send({ t: "wager-decline" }); return; }
+      if (amt > c) { $$("wager-msg").textContent = "You only have " + c + " coins."; return; }
+      this.proposed = amt; this.agreed = 0;
+      send({ t: "wager", amount: amt, name: NET.myName });
+      $$("wager-msg").textContent = "Proposed " + amt + " — waiting for " + NET.oppName + "…";
+    },
+    onPropose(amt, name) {
+      const c = this.coins();
+      this.incoming = amt; this.proposed = 0; this.agreed = 0;
+      $$("wager-offer").style.display = "flex";
+      $$("wager-offer-msg").textContent = (name || NET.oppName) + " proposes a " + amt + "-coin wager.";
+      const can = c != null && c >= amt;
+      $$("btn-wager-accept").disabled = !can;
+      $$("wager-msg").textContent = can ? "" : (c == null ? "Sign in to accept." : "You only have " + c + " coins.");
+    },
+    accept() {
+      const c = this.coins(); if (c == null || c < this.incoming) return;
+      this.agreed = this.incoming; this.incoming = 0;
+      $$("wager-offer").style.display = "none";
+      $$("wager-msg").textContent = "Wager set: " + this.agreed + " coins. Winner takes the pot.";
+      this.lockUI(); send({ t: "wager-accept", amount: this.agreed });
+    },
+    decline() { this.incoming = 0; $$("wager-offer").style.display = "none"; $$("wager-msg").textContent = "Wager declined."; send({ t: "wager-decline" }); },
+    onAccept(amt) { this.agreed = amt; this.proposed = 0; $$("wager-msg").textContent = "Wager set: " + amt + " coins. Winner takes the pot."; this.lockUI(); },
+    onDecline() { this.proposed = 0; $$("wager-msg").textContent = NET.oppName + " declined the wager."; },
+    clear(silent) { this.proposed = 0; this.incoming = 0; this.agreed = 0; const o = $$("wager-offer"); if (o) o.style.display = "none"; },
+    settle() {
+      if (this.settled || !this.agreed || !G || !G.over || G.winner == null) return;
+      if (!(window.Meta && Meta.current && Meta.current())) return;
+      this.settled = true;
+      const iWon = G.winner === 0;   // each side views itself as player 0
+      Meta.addCoins(iWon ? this.agreed : -this.agreed);
+      if (window.UI && UI.toast) UI.toast(iWon ? ("You won " + this.agreed + " coins from the wager!") : ("You lost " + this.agreed + " coins on the wager."));
+    },
+  };
+  window.__PVP_Wager = Wager;
+
   const ready = { me: false, opp: false, oppRealms: null, oppDeck: null };
   $$("btn-ready").onclick = () => {
     ready.me = true;
@@ -579,6 +646,7 @@ a{color:var(--accent)}
       clearTimeout(sendTimer);
       sendTimer = setTimeout(sendState, 80);
     }
+    try { Wager.settle(); } catch (e) {}
   };
 
   // Record the combat/effect flourishes the engine emits so the host can relay
@@ -698,6 +766,7 @@ a{color:var(--accent)}
     }
     origRender();                                // draw/play + ceremonies animate off the diff
     replaySignals(sig);                          // attacks/effects/deaths relayed from the host
+    try { Wager.settle(); } catch (e) {}         // pay out the coin wager once, on game end
   }
 
   // The host runs the engine, so combat/effect/death flourishes only fire there.
@@ -748,6 +817,9 @@ a{color:var(--accent)}
       send({ t: "pick", id: m.id, v });
     }
     else if (m.t === "pick" && NET.role === "host") { const res = NET.pending[m.id]; if (res) { delete NET.pending[m.id]; res(m.v); } }
+    else if (m.t === "wager") Wager.onPropose(m.amount, m.name);
+    else if (m.t === "wager-accept") Wager.onAccept(m.amount);
+    else if (m.t === "wager-decline") Wager.onDecline();
   }
 
   /* runs after ui.js's own DOMContentLoaded init: force published data + take over the screen */
@@ -755,6 +827,10 @@ a{color:var(--accent)}
     DB = baseData(); recompileAll();          // undo any localStorage edits loadDB pulled in
     show("screen-lobby");
     $$("verinfo").textContent = DB.cards.length + " cards · PvP room-code play";
+    const wb = $$("btn-wager"); if (wb) wb.onclick = () => Wager.propose();
+    const wa = $$("btn-wager-accept"); if (wa) wa.onclick = () => Wager.accept();
+    const wd = $$("btn-wager-decline"); if (wd) wd.onclick = () => Wager.decline();
+    try { Wager.refresh(); } catch (e) {}
   });
 })();
 </script>
