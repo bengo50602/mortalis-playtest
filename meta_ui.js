@@ -362,24 +362,26 @@
     return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
   }
 
+  // Clear, story-driven lines. You are a survivor whose village was burned by
+  // Azhûl the Ash-Crowned; his servants across the realms stand between you and him.
   var TONE = {
-    Luminar: { taunt: ["The Dawn does not yield to wanderers.", "Prove your light is more than a flicker."], win: ["Return when your resolve matches ours."], lose: ["Then the dawn passes to you… for now."] },
-    Fangrend: { taunt: ["The pack smells weakness on you.", "Howl, or be hunted."], win: ["Weak. The tundra keeps its own."], lose: ["A worthy kill — you've earned the howl."] },
-    Brightmantle: { taunt: ["Heretic. The White Flame will judge you.", "Kneel, or be purified."], win: ["Ash to ash. The Flame endures."], lose: ["The Flame chose you. So be it."] },
-    Thornveil: { taunt: ["The wood remembers every trespasser.", "Turn back, or take root here forever."], win: ["The thorns feed well tonight."], lose: ["Pass, then. The canopy parts for you."] },
-    Gildharbor: { taunt: ["Everything has a price — even your defeat.", "I've already bought your loss."], win: ["A poor investment on your part."], lose: ["Hah! You've earned your coin."] },
-    Runespire: { taunt: ["Your fate is already written in the sigils.", "The Spire suffers no fools."], win: ["As the runes foretold."], lose: ["The pattern bends to you. Curious."] },
-    Karakhorde: { taunt: ["We ride you down before you draw breath.", "The sky itself is our arrow."], win: ["Too slow. The horde rolls on."], lose: ["Swift and fierce — ride with honor."] },
-    Ankhara: { taunt: ["Death is a door I have opened many times.", "You will kneel in the necropolis."], win: ["Another name for the tombs."], lose: ["Even the god-kings bow… to you."] },
-    Deepforge: { taunt: ["I forged my victory before you arrived.", "Steel does not break for wanderers."], win: ["Brittle. Back to the crucible."], lose: ["Well-struck. The anvil respects you."] },
-    Almsgard: { taunt: ["I have suffered worse than you.", "Mercy is a blade you cannot parry."], win: ["Endure, and return stronger."], lose: ["The door opens for you, pilgrim."] },
-    Oathenhall: { taunt: ["My oath is unbreakable. Is yours?", "I have never yielded a field."], win: ["An oath kept. You are turned away."], lose: ["My vow is fulfilled — the field is yours."] },
-    Aurelium: { taunt: ["The Legion has never lost. You won't be the first.", "The empire bows to no one."], win: ["Undefeated still, as always."], lose: ["Impossible… the Undefeated, undone."] },
-    Zolthec: { taunt: ["The sun demands blood, and you will bleed.", "Your defeat feeds the eclipse."], win: ["The sun sets on you."], lose: ["The eclipse breaks. You are the dawn."] },
-    Noctavein: { taunt: ["Your warmth will be exquisite.", "Linger, and I will drink you dry."], win: ["Drained, like all the rest."], lose: ["Delicious defiance… the court is yours."] },
-    Balemaw: { taunt: ["Every soul strikes a bargain here. What's yours?", "The Red Gate hungers."], win: ["The bargain is sealed. You lose all."], lose: ["A debt paid — the Gate yields to you."] },
+    Luminar: { taunt: ["Even the Dawn knights kneel to Azhûl now. You can't win this.", "Go home, wanderer. Oh — you don't have one anymore, do you?"], win: ["You're not ready. Turn back while you still breathe."], lose: ["Then the road is yours. He waits at the end of it."] },
+    Fangrend: { taunt: ["My pack follows the strongest, and that's Azhûl. Not you.", "You fight for the dead. We fight to keep living."], win: ["Grief isn't strength. You just proved it."], lose: ["You fight like someone with nothing left to lose. Go on."] },
+    Brightmantle: { taunt: ["Your village burned and no god lifted a hand. Kneel to the one who did.", "I'll send you to the family you lost."], win: ["Anger made you careless — and dead."], lose: ["Maybe the gods sent you after all. Pass."] },
+    Thornveil: { taunt: ["These woods eat trespassers, even grieving ones.", "Azhûl pays in gold. Your revenge pays nothing."], win: ["The forest keeps one more lost soul."], lose: ["Go. The way to his gate is clear."] },
+    Gildharbor: { taunt: ["I sold your village's location to Azhûl. Just business.", "Everything's for sale here — including how badly you lose."], win: ["You should've spent more on your deck."], lose: ["All right, all right — you've bought your passage."] },
+    Runespire: { taunt: ["I've read how this ends. You don't reach him.", "Azhûl rewrote fate itself. You can't out-fight destiny."], win: ["Exactly as the runes said."], lose: ["The future… changed. You changed it. How?"] },
+    Karakhorde: { taunt: ["We ride under Azhûl's banner now. Join the horde or the dead.", "You're one rider. We are the whole storm."], win: ["Too slow to matter."], lose: ["Ride on, then. Take your storm to him."] },
+    Ankhara: { taunt: ["Death doesn't frighten me. Should it frighten you?", "Your home is ash. Soon you will be too."], win: ["One more name for the tombs."], lose: ["Even the god-kings step aside. Go end him."] },
+    Deepforge: { taunt: ["Azhûl paid me to build your ending. Here it is.", "Steel doesn't grieve. Steel just wins."], win: ["Back to the forge with you."], lose: ["Well struck. Maybe you can break him too."] },
+    Almsgard: { taunt: ["I've lost more than you can imagine, and still I serve him.", "Set down your grudge. It only gets you killed."], win: ["Rest now. Your war ends here."], lose: ["Carry your grief to his gate, then. Go gently."] },
+    Oathenhall: { taunt: ["I swore an oath to Azhûl, and I keep my oaths.", "Turn around now and I'll let you live."], win: ["An oath kept. You're turned away."], lose: ["My vow is spent. The road is yours."] },
+    Aurelium: { taunt: ["The Legion has never lost — not to him, not to you.", "One grieving wanderer against an empire? Really?"], win: ["Undefeated, as always."], lose: ["Impossible… take that fire to the Ash-Crowned."] },
+    Zolthec: { taunt: ["Azhûl promised us an endless sun. Your blood buys it.", "The eclipse is coming. You won't see past it."], win: ["The sun sets on you."], lose: ["The eclipse breaks. Go — end his reign."] },
+    Noctavein: { taunt: ["Azhûl feeds us the fallen. You'll do nicely.", "Stay a while. Let me drink that grief of yours."], win: ["Drained, like all the rest."], lose: ["Such spite in you… his gate is that way."] },
+    Balemaw: { taunt: ["I burned your village to draw you here. And here you stand.", "You crossed fifteen realms for revenge. Was it worth it?"], win: ["You were always going to lose. I made certain of it."], lose: ["Impossible… undone by a nobody from a village of ash…"] },
   };
-  var PLAYER_LINES = ["Then let's not waste words.", "We'll see whose realm stands.", "I've come too far to fall here.", "Enough talk — draw your cards."];
+  var PLAYER_LINES = ["You stand between me and Azhûl. Move, or fall.", "Your master burned my home. You're just in the way.", "I've buried everyone I loved. You don't frighten me.", "Step aside. My fight is with the Ash-Crowned."];
   function dialogueFor(opp, phase, won) {
     var t = TONE[opp.realm] || { taunt: ["Face me."], win: ["You lose."], lose: ["Well fought."] };
     var seed = hashName(opp.name);

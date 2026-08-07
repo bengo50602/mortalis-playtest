@@ -168,7 +168,9 @@ constants = {
     "pulseBase": grab(r"gain Pulse equal to \*\*(\d+)\*\* on your first turn", None),
     "pulseCap": grab(r"maximum of \*\*(\d+) Pulse\*\* per turn", 8),
     "firstTurnPulse": grab(r"gains only \*\*(\d+) Pulse\*\* on their first turn", 99),
-    "secondPlayerPulse": grab(r"starts the game with \*\*(\d+) bonus Pulse\*\*", 3),
+    "secondPlayerPulse": grab(r"going second \*\*gains (\d+) bonus Pulse\*\*", 1),
+    # Unused Pulse is lost at end of turn unless the doc explicitly says it carries over.
+    "pulseCarryover": ("carries over indefinitely" in core),
     "deckSize": grab(r"\*\*Deck size:\*\* (\d+) cards", 50),
     "copyLimit": grab(r"\*\*Copy limit:\*\* \d+-(\d+)", 3),
     "lanes": 4, "auxSlotsPerLane": 2,

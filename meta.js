@@ -233,7 +233,7 @@
     Aurelium: { name: "Imperator Severan Ashmark", title: "The Undefeated" },
     Zolthec: { name: "Sun-Priest Itzucan", title: "Herald of the Eclipse" },
     Noctavein: { name: "Sovereign Vhastian the Crimson", title: "Lord of the Velvet Court" },
-    Balemaw: { name: "Azhûl the Final Bargain", title: "Warden of the Red Gate" },
+    Balemaw: { name: "Azhûl the Ash-Crowned", title: "the tyrant who burned your village" },
   };
 
   function chapterData(i) { // i is 1-based (1..18)

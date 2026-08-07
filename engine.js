@@ -1182,7 +1182,7 @@ function newGame(opts) {
     turn: 0, gt: 0, over: false, winner: null, log: [],
   };
   for (const p of G.players) for (let i = 0; i < C().startingHand; i++) drawCard(G.players.indexOf(p), true);
-  if (C().secondPlayerPulse) { G.players[1 - opts.first].pulse += C().secondPlayerPulse; }   // going-second compensation
+  // going-second compensation is applied on the second player's first turn (see startTurn)
   log(`New game — you: ${opts.playerRealms.join(", ")} vs AI: ${opts.aiRealms.join(", ")}. ${G.players[opts.first].name} goes first.`);
   startTurn();
 }
@@ -1404,8 +1404,14 @@ function startTurn() {
     basePulse = C().firstTurnPulse;
     log(`${P.name} goes first — only ${basePulse} Pulse this turn.`);
   }
+  // going-second fairness: a one-time bonus folded into the second player's
+  // very first turn (works whether or not Pulse carries over)
+  if (P.turnCount === 1 && pi !== G.firstPlayer && C().secondPlayerPulse) basePulse += C().secondPlayerPulse;
   if (P.pulseOverrideGt === G.gt) log(`${P.name}'s base Pulse gain is ${basePulse} this turn.`);
-  P.pulse += basePulse;
+  // Refresh economy (pulseCarryover === false): each turn you get exactly this
+  // turn's allotment and unspent Pulse is lost — so cheap Heroes matter every
+  // turn and you can't bank for giants. Legacy mode banks Pulse indefinitely.
+  if (C().pulseCarryover === false) P.pulse = basePulse; else P.pulse += basePulse;
   const skipDraw = C().firstPlayerSkipsDraw && G.gt === 1 && pi === G.firstPlayer;
   log(`— ${P.name}'s turn (turn ${Math.ceil(G.gt / 2)}) —`, P.isAI ? "ai turnhdr" : "turnhdr");
   if (!skipDraw) for (let i = 0; i < C().drawPerTurn; i++) drawCard(pi);
