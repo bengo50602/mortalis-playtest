@@ -1011,6 +1011,8 @@ const FX = {
     if (prev && sameGame && !prev.over && now.over && now.winner != null) {
       FX.q.length = 0;
       FX.after(() => FX.finale(now.winner), 260);
+      // campaign battles hand off to the reward/retry flow after the finale
+      if (window.Campaign && Campaign.active && window.MetaUI) { try { MetaUI.onBattleEnd(now.winner); } catch (e) {} }
       return;
     }
     if (!prev || !sameGame || !FX.live()) { FX.q.length = 0; return; }

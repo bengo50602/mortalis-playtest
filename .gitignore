@@ -1,3 +1,4 @@
 .DS_Store
 .claude/settings.local.json
 rules_current.md.bak
+node_modules/
