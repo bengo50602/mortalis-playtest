@@ -1471,6 +1471,44 @@ window.FX = FX;
    those realms toward a `deckSize`-card deck, name it, keep as many as you like.
    Layout A (collection list + decklist) with a toggle to a visual grid.        */
 const TYPE_ORDER = ["hero", "relic", "hex", "rite", "pact", "incantation"];
+
+/* ---- shared deckbuilder card helpers ---- */
+function dbRarityColor(r) {
+  return { Common: "#9aa4b2", Uncommon: "#7fb069", Rare: "#5b8fd6", "Ultra-Rare": "#c78bd6", Eternal: "#e0a45c" }[r] || "#7f8794";
+}
+function dbCap(s) { return s ? s[0].toUpperCase() + s.slice(1) : s; }
+// one grid tile: cost, realm crest, rarity, name, stats, type chip, and count.
+function dbGridCard(c, qty) {
+  const rc = dbRarityColor(c.rarity);
+  const rcol = realmColor(c.realm);
+  const crest = realmCrest(c.realm, 15, rcol, "#12151c") || `<span style="display:inline-block;width:11px;height:11px;border-radius:2px;background:${rcol}"></span>`;
+  const rlabel = c.rarity ? c.rarity.replace("Ultra-Rare", "Ultra") : "Support";
+  const stat = c.type === "hero"
+    ? `<span style="color:#e0a45c">${c.atk}</span><span style="color:#6d7686">/</span><span style="color:#8fbc8f">${c.hp}</span>`
+    : (c.type === "relic" ? `<span style="color:#9aa4b6;font-size:10px">${c.slots} slot${c.slots > 1 ? "s" : ""}</span>` : "");
+  return `<div class="db-gc" data-id="${c.id}" title="${c.realm}" style="border-color:${rc}66">
+      <span class="gco">${c.cost}</span>
+      <div class="gc-top"><span class="gc-rar" style="color:${rc}">${rlabel}</span><span class="gc-crest">${crest}</span></div>
+      <div class="gn">${c.name}</div>
+      <div class="gc-stats">${stat}</div>
+      <div class="gt"><span class="gc-type">${dbCap(c.type)}</span>${qty ? `<span class="gc-qty">${qty}×</span>` : ""}</div>
+    </div>`;
+}
+// tooltip content: full stats + both modes' effect text, like the in-game card.
+function dbCardInfo(c) {
+  const rc = dbRarityColor(c.rarity);
+  let modes;
+  if (c.type === "hero") modes = `
+    <div class="tip-mode">Hero — Cost ${c.cost} Pulse · ${c.atk}/${c.hp}</div>
+    <p class="tip-body">${c.text || "—"}</p>
+    <div class="tip-mode">Auxiliary — Cost ${c.auxCost} Pulse · ${c.auxSlots} slot${c.auxSlots > 1 ? "s" : ""}</div>
+    <p class="tip-body">${c.auxText || "—"}</p>`;
+  else if (c.type === "relic") modes = `<div class="tip-mode">Relic — ${c.slots} slot${c.slots > 1 ? "s" : ""} · Cost ${c.cost} Pulse</div><p class="tip-body">${c.text || "—"}</p>`;
+  else modes = `<div class="tip-mode">${dbCap(c.type)} — Cost ${c.cost} Pulse</div><p class="tip-body">${c.text || "—"}</p>`;
+  return `<div class="tip-hdr"><span class="tip-crest">${realmCrest(c.realm, 18, realmColor(c.realm), "#12151c") || ""}</span><span class="tip-nm">${c.name}</span></div>
+    <div class="tip-sub"><span style="color:${rc};font-weight:700">${c.rarity || "Support card"}</span> · ${c.realm} · ${dbCap(c.type)}</div>${modes}`;
+}
+
 const Decks = {
   cur: null,          // the deck being edited
   filter: "all",
@@ -1505,7 +1543,8 @@ const Decks = {
         </div>
         <div class="db-listwrap" id="db-listwrap"></div>
         <div class="db-legal" id="db-legal"></div>
-        <button class="primary" id="db-save" style="width:100%;margin-top:9px">Save deck</button>
+        <button id="db-viewdeck" style="width:100%;margin-top:9px">▦ View full deck</button>
+        <button class="primary" id="db-save" style="width:100%;margin-top:6px">Save deck</button>
       </div>`;
 
     Decks.renderSidebar();
@@ -1528,9 +1567,63 @@ const Decks = {
       Decks.render();
     };
     $("db-save").onclick = () => Decks.save();
+    $("db-viewdeck").onclick = () => Decks.showFullDeck();
   },
 
   blank() { return { id: null, name: "New deck", cards: [] }; },
+
+  /* ---- hover tooltip: full stats + effects, like the in-game inspector ---- */
+  showTip(c, ev) {
+    if (!c) return;
+    let t = $("db-tip");
+    if (!t) { t = document.createElement("div"); t.id = "db-tip"; t.className = "db-tip"; document.body.appendChild(t); }
+    t.innerHTML = dbCardInfo(c);
+    t.style.display = "block";
+    Decks.moveTip(ev);
+  },
+  moveTip(ev) {
+    const t = $("db-tip"); if (!t || t.style.display === "none") return;
+    const pad = 16, w = t.offsetWidth || 300, h = t.offsetHeight || 200;
+    let x = ev.clientX + pad, y = ev.clientY + pad;
+    if (x + w > window.innerWidth - 8) x = ev.clientX - w - pad;
+    if (y + h > window.innerHeight - 8) y = window.innerHeight - h - 8;
+    if (x < 8) x = 8; if (y < 8) y = 8;
+    t.style.left = x + "px"; t.style.top = y + "px";
+  },
+  hideTip() { const t = $("db-tip"); if (t) t.style.display = "none"; },
+
+  /* ---- lay the whole deck out together ---- */
+  showFullDeck() {
+    let ov = $("deckview");
+    if (!ov) {
+      ov = document.createElement("div"); ov.id = "deckview"; ov.className = "deckview";
+      document.body.appendChild(ov);
+      ov.onclick = (e) => { if (e.target === ov) Decks.hideFullDeck(); };
+    }
+    const cards = (Decks.cur.cards || []).map(e => ({ c: cardById(e[0]), q: e[1] })).filter(x => x.c);
+    const total = cards.reduce((s, x) => s + x.q, 0);
+    let body = "";
+    for (const ty of TYPE_ORDER) {
+      const grp = cards.filter(x => x.c.type === ty).sort((a, b) => (a.c.cost - b.c.cost) || a.c.name.localeCompare(b.c.name));
+      if (!grp.length) continue;
+      body += `<div class="dv-grp">${ty[0].toUpperCase() + ty.slice(1)} · ${grp.reduce((s, x) => s + x.q, 0)}</div>`;
+      body += `<div class="dv-grid">` + grp.map(x => dbGridCard(x.c, x.q)).join("") + `</div>`;
+    }
+    ov.innerHTML = `<div class="dv-panel">
+      <div class="dv-head"><h3>${(Decks.cur.name || "Deck").replace(/</g, "&lt;")} — <span style="color:${total === C().deckSize ? "var(--good)" : "var(--warn)"}">${total}/${C().deckSize}</span></h3>
+        <button id="dv-close">Close</button></div>
+      ${body || `<div class="db-empty">This deck is empty — add cards from the collection.</div>`}</div>`;
+    ov.style.display = "flex";
+    $("dv-close").onclick = () => Decks.hideFullDeck();
+    ov.querySelectorAll("[data-id]").forEach(it => {
+      const c = cardById(it.dataset.id);
+      it.onmouseenter = (e) => Decks.showTip(c, e);
+      it.onmousemove = (e) => Decks.moveTip(e);
+      it.onmouseleave = () => Decks.hideTip();
+      it.oncontextmenu = (e) => { e.preventDefault(); Decks.setQty(it.dataset.id, Decks.qtyOf(it.dataset.id) - 1); Decks.hideTip(); Decks.showFullDeck(); Decks.renderRealms(); Decks.renderCollection(); Decks.renderList(); };
+    });
+  },
+  hideFullDeck() { Decks.hideTip(); const ov = $("deckview"); if (ov) ov.style.display = "none"; },
 
   qtyOf(id) { const e = (Decks.cur.cards || []).find(x => x[0] === id); return e ? e[1] : 0; },
   setQty(id, q) {
@@ -1580,9 +1673,8 @@ const Decks = {
     const el = $("db-filt");
     const fs = ["all"].concat(TYPE_ORDER);
     el.innerHTML = fs.map(f => `<button class="${f === Decks.filter ? "on" : ""}" data-f="${f}">${f === "all" ? "All" : f[0].toUpperCase() + f.slice(1)}</button>`).join("")
-      + `<span class="grow"></span><button id="db-viewtoggle">${Decks.gridView ? "List view" : "Grid view"}</button>`;
+      + `<span class="grow"></span><span class="db-hint">Click to add · right-click to remove · hover for details</span>`;
     el.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { Decks.filter = b.dataset.f; Decks.renderFilters(); Decks.renderCollection(); });
-    $("db-viewtoggle").onclick = () => { Decks.gridView = !Decks.gridView; Decks.renderFilters(); Decks.renderCollection(); };
   },
 
   renderCollection() {
@@ -1599,31 +1691,19 @@ const Decks = {
       .filter(c => Decks.filter === "all" || c.type === Decks.filter)
       .sort((a, b) => (a.cost - b.cost) || a.name.localeCompare(b.name));
 
-    if (Decks.gridView) {
-      el.className = "db-collgrid";
-      el.innerHTML = cards.map(c => {
-        const q = Decks.qtyOf(c.id);
-        return `<div class="db-gc" data-id="${c.id}">${q ? `<span class="ghave">${q}×</span>` : ""}<span class="gco">${c.cost}</span>
-          <div class="gn">${c.name}</div><div class="gt"><span class="rc" style="width:9px;height:9px;border-radius:2px;background:${realmColor(c.realm)}"></span>${c.type === "hero" ? c.atk + "/" + c.hp : c.type}</div></div>`;
-      }).join("") || `<div class="db-empty">No cards match.</div>`;
-    } else {
-      el.className = "db-coll";
-      el.innerHTML = cards.map(c => {
-        const q = Decks.qtyOf(c.id);
-        return `<div class="db-crow ${q >= C().copyLimit ? "max" : ""}" data-id="${c.id}">
-          <span class="cost">${c.cost}</span><span class="rc" style="background:${realmColor(c.realm)}"></span>
-          <span class="nm">${c.name}</span>
-          <span class="st">${c.type === "hero" ? c.atk + "/" + c.hp : c.type}</span>
-          <span class="have">${q ? q + "×" : ""}</span></div>`;
-      }).join("") || `<div class="db-empty">No cards match.</div>`;
-    }
+    el.className = "db-collgrid";
+    el.innerHTML = cards.map(c => dbGridCard(c, Decks.qtyOf(c.id))).join("") || `<div class="db-empty">No cards match.</div>`;
     el.querySelectorAll("[data-id]").forEach(it => {
+      const c = cardById(it.dataset.id);
       it.onclick = () => { Decks.setQty(it.dataset.id, Decks.qtyOf(it.dataset.id) + 1); Decks.afterChange(); };
       it.oncontextmenu = (e) => { e.preventDefault(); Decks.setQty(it.dataset.id, Decks.qtyOf(it.dataset.id) - 1); Decks.afterChange(); };
+      it.onmouseenter = (e) => Decks.showTip(c, e);
+      it.onmousemove = (e) => Decks.moveTip(e);
+      it.onmouseleave = () => Decks.hideTip();
     });
   },
 
-  afterChange() { Decks.renderRealms(); Decks.renderCollection(); Decks.renderList(); },
+  afterChange() { Decks.hideTip(); Decks.renderRealms(); Decks.renderCollection(); Decks.renderList(); },
 
   renderList() {
     const el = $("db-listwrap");

@@ -215,9 +215,27 @@ a{color:var(--accent)}
 .db-gc{background:linear-gradient(180deg,#232b3a,#1a1f28);border:1px solid #3a4353;border-radius:8px;padding:7px;position:relative;min-height:98px;display:flex;flex-direction:column;cursor:pointer}
 .db-gc:hover{border-color:#66718a}
 .db-gc .gco{position:absolute;top:-7px;left:6px;width:21px;height:21px;border-radius:50%;background:#26324a;color:#cfe0ff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #12161d}
-.db-gc .gn{font-size:10.5px;font-weight:600;color:#eceae4;margin-top:9px;line-height:1.2}
-.db-gc .gt{font-size:9px;color:var(--muted);margin-top:auto;display:flex;align-items:center;gap:4px}
-.db-gc .ghave{position:absolute;top:5px;right:6px;font-size:10px;font-weight:700;color:#e0a45c}
+.db-gc .gn{font-size:11px;font-weight:600;color:#eceae4;margin-top:3px;line-height:1.2}
+.db-gc .gc-top{display:flex;justify-content:flex-end;align-items:center;gap:5px;min-height:18px}
+.db-gc .gc-rar{font-size:8px;letter-spacing:.4px;text-transform:uppercase;font-weight:700}
+.db-gc .gc-crest{display:flex;align-items:center}
+.db-gc .gc-stats{font-size:13px;font-weight:700;margin:3px 0;min-height:15px}
+.db-gc .gt{font-size:9px;color:var(--muted);margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:4px}
+.db-gc .gc-type{font-size:8px;letter-spacing:.4px;text-transform:uppercase;color:#9aa4b6;border:1px solid #39414f;border-radius:4px;padding:1px 5px}
+.db-gc .gc-qty{font-size:10px;font-weight:700;color:#e0a45c}
+.db-hint{font-size:9.5px;color:#6d7686;letter-spacing:.2px}
+.db-tip{position:fixed;z-index:9999;max-width:300px;background:#12161d;border:1px solid #4a5266;border-radius:10px;padding:11px 13px;box-shadow:0 14px 34px rgba(0,0,0,.6);pointer-events:none;display:none}
+.db-tip .tip-hdr{display:flex;align-items:center;gap:7px}
+.db-tip .tip-nm{font-weight:700;font-size:13px;color:#f1efe9;line-height:1.15}
+.db-tip .tip-sub{font-size:10.5px;color:#8a93a4;margin:4px 0 6px;letter-spacing:.2px}
+.db-tip .tip-mode{font-size:9.5px;letter-spacing:.6px;text-transform:uppercase;color:#9db8e6;margin-top:7px}
+.db-tip .tip-body{margin:2px 0 0;color:#c8d1e0;line-height:1.45;font-size:11.5px}
+.deckview{position:fixed;inset:0;z-index:9000;background:rgba(6,10,18,.86);display:none;align-items:flex-start;justify-content:center;padding:24px;overflow:auto}
+.dv-panel{background:var(--panel);border:1px solid var(--line2);border-radius:14px;padding:18px 20px;max-width:1040px;width:100%}
+.dv-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.dv-head h3{margin:0}
+.dv-grp{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+.dv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
 .db-list{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px;position:sticky;top:64px}
 .db-count{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
 .db-count.full{color:var(--good)}.db-count.over{color:var(--bad)}
@@ -358,7 +376,7 @@ body.on-splash .topbar{display:none}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260807153732</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260807155616</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -537,12 +555,12 @@ body.on-splash .topbar{display:none}
 <div id="overlay"><div class="bigcard" id="bigcard"></div></div>
 <div id="toast"></div>
 
-<script src="cards.js?v=20260807153732"></script>
-<script src="rules.js?v=20260807153732"></script>
-<script src="custom.js?v=20260807153732"></script>
-<script src="engine.js?v=20260807153732"></script>
-<script src="meta.js?v=20260807153732"></script>
-<script src="ui.js?v=20260807153732"></script>
-<script src="meta_ui.js?v=20260807153732"></script>
+<script src="cards.js?v=20260807155616"></script>
+<script src="rules.js?v=20260807155616"></script>
+<script src="custom.js?v=20260807155616"></script>
+<script src="engine.js?v=20260807155616"></script>
+<script src="meta.js?v=20260807155616"></script>
+<script src="ui.js?v=20260807155616"></script>
+<script src="meta_ui.js?v=20260807155616"></script>
 </body>
 </html>
