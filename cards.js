@@ -4761,9 +4761,9 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Acolyte Serelle",
    "type": "hero",
-   "cost": 2,
+   "cost": 1,
    "atk": 20,
-   "hp": 40,
+   "hp": 60,
    "rarity": "Common",
    "text": "When Serelle enters play, a Hero you control gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health).",
    "auxCost": 1,
@@ -4775,9 +4775,9 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Brother Lumen",
    "type": "hero",
-   "cost": 2,
+   "cost": 1,
    "atk": 20,
-   "hp": 40,
+   "hp": 60,
    "rarity": "Common",
    "text": "Once per turn, you may pay 1 Pulse: a Hero you control heals 20 Health.",
    "auxCost": 1,
@@ -4789,9 +4789,9 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Sister Cantrelle of the Dawn Chorus",
    "type": "hero",
-   "cost": 3,
+   "cost": 2,
    "atk": 40,
-   "hp": 50,
+   "hp": 70,
    "rarity": "Common",
    "text": "When Cantrelle enters play, remove all enemy-imposed stat reductions and negative effects (silences, attack restrictions, and similar) from a Hero you control, restoring the stats it would have without them.",
    "auxCost": 1,
@@ -4803,12 +4803,12 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Vicar Tobias Whitewell",
    "type": "hero",
-   "cost": 4,
+   "cost": 3,
    "atk": 50,
-   "hp": 70,
+   "hp": 100,
    "rarity": "Common",
    "text": "Once per turn, you may pay 2 Pulse: a Hero you control gains a ward that prevents the next 30 damage it would take (wards stack and absorb damage before Health).",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the first time each turn the Hero in this lane takes damage, it gains a ward that prevents the next 10 damage it would take (wards stack)."
   },
@@ -4817,12 +4817,12 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Exorcist Danior Vey",
    "type": "hero",
-   "cost": 4,
+   "cost": 3,
    "atk": 50,
-   "hp": 70,
+   "hp": 100,
    "rarity": "Uncommon",
    "text": "Once per turn, you may pay 1 Pulse: remove all enemy-imposed stat reductions and negative effects from a Hero you control, restoring the stats it would have without them. While Danior is in play, Heroes you control cannot be silenced (their ability text cannot be blanked).",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 2,
    "auxText": "While in this slot, at the start of each of your turns, remove all enemy-imposed stat reductions and negative effects from one Hero you control, restoring the stats it would have without them."
   },
@@ -4831,12 +4831,12 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Canoness Elspet the Kind",
    "type": "hero",
-   "cost": 5,
+   "cost": 4,
    "atk": 60,
-   "hp": 90,
+   "hp": 130,
    "rarity": "Uncommon",
    "text": "While Elspet is in play, whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn).",
-   "auxCost": 3,
+   "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, your healing card effects heal an additional 10 Health."
   },
@@ -4845,12 +4845,12 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Prelate Miriabel of the White Flame",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 70,
-   "hp": 110,
+   "hp": 150,
    "rarity": "Rare",
    "text": "Once per turn, you may pay 2 Pulse: a Hero you control heals 40 Health and gains a ward that prevents the next 20 damage it would take (wards stack).",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 1,
    "auxText": "While in this slot, whenever a Hero you control is healed by a card effect, it also gains a ward that prevents the next 10 damage it would take (wards stack; maximum twice per turn)."
   },
@@ -4859,12 +4859,12 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Warden-Cleric Osgood Bright",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 70,
-   "hp": 110,
+   "hp": 150,
    "rarity": "Rare",
    "text": "While Osgood is in play, whenever a Hero you control's ward is fully consumed (reduced to 0 by damage), that Hero heals 30 Health.",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack)."
   },
@@ -4873,12 +4873,12 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "High Oracle Vessamine",
    "type": "hero",
-   "cost": 8,
+   "cost": 7,
    "atk": 100,
-   "hp": 140,
+   "hp": 200,
    "rarity": "Ultra-Rare",
    "text": "At the start of each of your turns, gain 1 Pulse and each Hero you control heals 10 Health. Once per turn, you may pay 3 Pulse: remove all enemy-imposed stat reductions and negative effects from all Heroes you control, restoring the stats they would have without them.",
-   "auxCost": 6,
+   "auxCost": 5,
    "auxSlots": 2,
    "auxText": "While in this slot, whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn)."
   },
@@ -4887,12 +4887,12 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Saint-Aspirant Corwin Dawnhand",
    "type": "hero",
-   "cost": 8,
+   "cost": 7,
    "atk": 100,
-   "hp": 140,
+   "hp": 200,
    "rarity": "Ultra-Rare",
    "text": "When Corwin enters play, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack and absorb damage before Health).",
-   "auxCost": 6,
+   "auxCost": 5,
    "auxSlots": 1,
    "auxText": "While in this slot, once per turn, when a Hero you control would take lethal combat damage, it first gains a ward that prevents the next 20 damage it would take (if the ward absorbs enough of the damage, it survives)."
   },
@@ -4901,12 +4901,12 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Solivane Sanctavere, Voice of the First Light",
    "type": "hero",
-   "cost": 10,
+   "cost": 9,
    "atk": 120,
-   "hp": 180,
+   "hp": 250,
    "rarity": "Eternal",
    "text": "At the start of each of your turns, gain 2 Pulse, each Hero you control heals 20 Health, and one Hero you control of your choice gains a ward that prevents the next 20 damage it would take (wards stack). Once per turn, you may pay 2 Pulse: remove all enemy-imposed stat reductions and negative effects from a Hero you control, restoring the stats it would have without them.",
-   "auxCost": 8,
+   "auxCost": 7,
    "auxSlots": 2,
    "auxText": "While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack) and heals 10 Health. Whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn)."
   },
@@ -4925,7 +4925,7 @@ window.DEFAULT_DATA = {
    "name": "Censer of Sweet Smoke",
    "type": "relic",
    "slots": 1,
-   "cost": 2,
+   "cost": 1,
    "text": "While equipped, at the start of each of your turns, this Hero heals 20 Health."
   },
   {
@@ -4934,7 +4934,7 @@ window.DEFAULT_DATA = {
    "name": "Aegis of the White Flame",
    "type": "relic",
    "slots": 1,
-   "cost": 3,
+   "cost": 2,
    "text": "While equipped, this Hero continuously has +20 Health. The first time each turn this Hero's ward absorbs damage, it gains a ward that prevents the next 10 damage it would take (wards stack)."
   },
   {
@@ -4943,7 +4943,7 @@ window.DEFAULT_DATA = {
    "name": "Vestments of the First Light",
    "type": "relic",
    "slots": 2,
-   "cost": 4,
+   "cost": 3,
    "text": "While equipped, this Hero continuously has +20 Attack and +40 Health. At the start of each of your turns, this Hero gains a ward that prevents the next 20 damage it would take (wards stack)."
   },
   {
@@ -4952,7 +4952,7 @@ window.DEFAULT_DATA = {
    "name": "The Sanctavere Reliquary",
    "type": "relic",
    "slots": 2,
-   "cost": 5,
+   "cost": 4,
    "text": "While equipped, this Hero continuously has +30 Attack and +50 Health. Once per turn, you may pay 1 Pulse: remove all enemy-imposed stat reductions and negative effects from this Hero (restoring the stats it would have without them), and it heals 20 Health."
   },
   {
@@ -4968,7 +4968,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Circle of Protection",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy Hero attacks a Hero in this lane, before combat, the defender gains a ward that prevents the next 30 damage it would take (wards absorb damage before Health). After this effect triggers once, destroy this card."
   },
   {
@@ -4976,7 +4976,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Rite of Undoing",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy card effect reduces the stats of a Hero you control, remove all enemy-imposed stat reductions and negative effects from that Hero, including the reduction that just triggered this card. After this effect triggers once, destroy this card."
   },
   {
@@ -4984,7 +4984,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Litany Against the Dark",
    "type": "hex",
-   "cost": 3,
+   "cost": 2,
    "text": "When an enemy card effect would silence a Hero you control or blank its ability text, prevent that effect. After this effect triggers once, destroy this card."
   },
   {
@@ -4992,7 +4992,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "The Vigil Eternal",
    "type": "hex",
-   "cost": 5,
+   "cost": 4,
    "text": "The first time each turn the Hero in this lane takes damage, it gains a ward that prevents the next 20 damage it would take (wards stack). This card is not destroyed after triggering and may trigger again on future turns."
   },
   {
@@ -5000,7 +5000,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "The Gathering Light",
    "type": "rite",
-   "cost": 2,
+   "cost": 1,
    "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack and absorb damage before Health), then destroy this Rite. At any point before then, you may instead end this Rite early — one Hero you control immediately gains a ward that prevents the next 20 damage it would take."
   },
   {
@@ -5008,7 +5008,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Consecration of the Field",
    "type": "rite",
-   "cost": 3,
+   "cost": 2,
    "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, each Hero you control heals 40 Health and gains +10 Health permanently, then destroy this Rite. At any point before then, you may instead end this Rite early — each Hero you control heals 10 Health immediately."
   },
   {
@@ -5016,7 +5016,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Oath of the First Light",
    "type": "rite",
-   "cost": 4,
+   "cost": 3,
    "text": "This Rite gains 1 counter whenever you heal a Hero with a card effect (maximum 1 counter per turn). When it reaches 3 counters, destroy this Rite and give all Brightmantle Heroes you control +10 Attack and +30 Health permanently."
   },
   {
@@ -5024,7 +5024,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Reckoning of the Dawnfire",
    "type": "rite",
-   "cost": 5,
+   "cost": 4,
    "text": "Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately."
   },
   {
@@ -5040,7 +5040,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Tithe of Light",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, lose 20 Mortality. Each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack), and you gain 1 Pulse."
   },
   {
@@ -5048,7 +5048,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Fast of the Faithful",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, discard 1 card. Gain 2 Pulse, and a Hero you control gains a ward that prevents the next 20 damage it would take (wards stack)."
   },
   {
@@ -5056,7 +5056,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Vow of the Shieldbearer",
    "type": "pact",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Pact resolves, choose a Hero you control — it cannot attack next turn. It gains a ward that prevents the next 40 damage it would take (wards stack) and +20 Health permanently."
   },
   {
@@ -5064,7 +5064,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Radiant Mending",
    "type": "incantation",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Incantation resolves, a Hero you control heals 40 Health and gains a ward that prevents the next 10 damage it would take (wards stack)."
   },
   {
@@ -5072,7 +5072,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Purge the Shadow",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, remove all enemy-imposed stat reductions and negative effects from up to 2 Heroes you control (restoring the stats they would have without them); each heals 20 Health."
   },
   {
@@ -5080,7 +5080,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Aegis of Dawn",
    "type": "incantation",
-   "cost": 5,
+   "cost": 4,
    "text": "When this Incantation resolves, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack), and you gain 1 Pulse for each Hero warded this way (maximum 3)."
   },
   {
@@ -5088,7 +5088,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Rally the Faithful",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
   },
   {
@@ -5096,7 +5096,7 @@ window.DEFAULT_DATA = {
    "realm": "Brightmantle",
    "name": "Purifying Flame",
    "type": "incantation",
-   "cost": 4,
+   "cost": 3,
    "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
   },
   {

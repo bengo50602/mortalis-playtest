@@ -2373,69 +2373,69 @@ When this Incantation resolves, every enemy Hero loses 10 Health (stat reduction
 *(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
 
 **Acolyte Serelle**
-Hero Mode — Cost: 2 Pulse | Attack/Health: 20/40 | Rarity: Common
+Hero Mode — Cost: 1 Pulse | Attack/Health: 20/60 | Rarity: Common
 When Serelle enters play, a Hero you control gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health).
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, at the start of each of your turns, the Hero in this lane gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health).
 
 **Brother Lumen**
-Hero Mode — Cost: 2 Pulse | Attack/Health: 20/40 | Rarity: Common
+Hero Mode — Cost: 1 Pulse | Attack/Health: 20/60 | Rarity: Common
 Once per turn, you may pay 1 Pulse: a Hero you control heals 20 Health.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 1 per turn).
 
 **Sister Cantrelle of the Dawn Chorus**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 40/50 | Rarity: Common
+Hero Mode — Cost: 2 Pulse | Attack/Health: 40/70 | Rarity: Common
 When Cantrelle enters play, remove all enemy-imposed stat reductions and negative effects (silences, attack restrictions, and similar) from a Hero you control, restoring the stats it would have without them.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 When this card enters play, remove all enemy-imposed stat reductions and negative effects from a Hero you control (restoring the stats it would have without them), and it heals 20 Health. Then destroy this card.
 
 **Vicar Tobias Whitewell**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 50/70 | Rarity: Common
+Hero Mode — Cost: 3 Pulse | Attack/Health: 50/100 | Rarity: Common
 Once per turn, you may pay 2 Pulse: a Hero you control gains a ward that prevents the next 30 damage it would take (wards stack and absorb damage before Health).
-Auxiliary Mode — Cost: 2 Pulse | 1 slot
+Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the first time each turn the Hero in this lane takes damage, it gains a ward that prevents the next 10 damage it would take (wards stack).
 
 **Exorcist Danior Vey**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 50/70 | Rarity: Uncommon
+Hero Mode — Cost: 3 Pulse | Attack/Health: 50/100 | Rarity: Uncommon
 Once per turn, you may pay 1 Pulse: remove all enemy-imposed stat reductions and negative effects from a Hero you control, restoring the stats it would have without them. While Danior is in play, Heroes you control cannot be silenced (their ability text cannot be blanked).
-Auxiliary Mode — Cost: 2 Pulse | 2 slots
+Auxiliary Mode — Cost: 1 Pulse | 2 slots
 While in this slot, at the start of each of your turns, remove all enemy-imposed stat reductions and negative effects from one Hero you control, restoring the stats it would have without them.
 
 **Canoness Elspet the Kind**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 60/90 | Rarity: Uncommon
+Hero Mode — Cost: 4 Pulse | Attack/Health: 60/130 | Rarity: Uncommon
 While Elspet is in play, whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn).
-Auxiliary Mode — Cost: 3 Pulse | 1 slot
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, your healing card effects heal an additional 10 Health.
 
 **Prelate Miriabel of the White Flame**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 70/110 | Rarity: Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 70/150 | Rarity: Rare
 Once per turn, you may pay 2 Pulse: a Hero you control heals 40 Health and gains a ward that prevents the next 20 damage it would take (wards stack).
-Auxiliary Mode — Cost: 4 Pulse | 1 slot
+Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, whenever a Hero you control is healed by a card effect, it also gains a ward that prevents the next 10 damage it would take (wards stack; maximum twice per turn).
 
 **Warden-Cleric Osgood Bright**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 70/110 | Rarity: Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 70/150 | Rarity: Rare
 While Osgood is in play, whenever a Hero you control's ward is fully consumed (reduced to 0 by damage), that Hero heals 30 Health.
-Auxiliary Mode — Cost: 4 Pulse | 2 slots
+Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack).
 
 **High Oracle Vessamine**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 100/140 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 100/200 | Rarity: Ultra-Rare
 At the start of each of your turns, gain 1 Pulse and each Hero you control heals 10 Health. Once per turn, you may pay 3 Pulse: remove all enemy-imposed stat reductions and negative effects from all Heroes you control, restoring the stats they would have without them.
-Auxiliary Mode — Cost: 6 Pulse | 2 slots
+Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn).
 
 **Saint-Aspirant Corwin Dawnhand**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 100/140 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 100/200 | Rarity: Ultra-Rare
 When Corwin enters play, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack and absorb damage before Health).
-Auxiliary Mode — Cost: 6 Pulse | 1 slot
+Auxiliary Mode — Cost: 5 Pulse | 1 slot
 While in this slot, once per turn, when a Hero you control would take lethal combat damage, it first gains a ward that prevents the next 20 damage it would take (if the ward absorbs enough of the damage, it survives).
 
 **Solivane Sanctavere, Voice of the First Light**
-Hero Mode — Cost: 10 Pulse | Attack/Health: 120/180 | Rarity: Eternal
+Hero Mode — Cost: 9 Pulse | Attack/Health: 120/250 | Rarity: Eternal
 At the start of each of your turns, gain 2 Pulse, each Hero you control heals 20 Health, and one Hero you control of your choice gains a ward that prevents the next 20 damage it would take (wards stack). Once per turn, you may pay 2 Pulse: remove all enemy-imposed stat reductions and negative effects from a Hero you control, restoring the stats it would have without them.
-Auxiliary Mode — Cost: 8 Pulse | 2 slots
+Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack) and heals 10 Health. Whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn).
 
 ### Relics
@@ -2443,16 +2443,16 @@ While in this slot, at the start of each of your turns, each Hero you control ga
 **Dawnlight Pendant** — 1 slot | Cost: 1 Pulse
 While equipped, this Hero continuously has +20 Health. When this Relic is equipped, this Hero gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health).
 
-**Censer of Sweet Smoke** — 1 slot | Cost: 2 Pulse
+**Censer of Sweet Smoke** — 1 slot | Cost: 1 Pulse
 While equipped, at the start of each of your turns, this Hero heals 20 Health.
 
-**Aegis of the White Flame** — 1 slot | Cost: 3 Pulse
+**Aegis of the White Flame** — 1 slot | Cost: 2 Pulse
 While equipped, this Hero continuously has +20 Health. The first time each turn this Hero's ward absorbs damage, it gains a ward that prevents the next 10 damage it would take (wards stack).
 
-**Vestments of the First Light** — 2 slots | Cost: 4 Pulse
+**Vestments of the First Light** — 2 slots | Cost: 3 Pulse
 While equipped, this Hero continuously has +20 Attack and +40 Health. At the start of each of your turns, this Hero gains a ward that prevents the next 20 damage it would take (wards stack).
 
-**The Sanctavere Reliquary** — 2 slots | Cost: 5 Pulse
+**The Sanctavere Reliquary** — 2 slots | Cost: 4 Pulse
 While equipped, this Hero continuously has +30 Attack and +50 Health. Once per turn, you may pay 1 Pulse: remove all enemy-imposed stat reductions and negative effects from this Hero (restoring the stats it would have without them), and it heals 20 Health.
 
 ### Hexes
@@ -2461,31 +2461,31 @@ While equipped, this Hero continuously has +30 Attack and +50 Health. Once per t
 **Benediction** — Cost: 1 Pulse
 When the Hero in this lane takes combat damage and survives, it heals 20 Health and you gain 1 Pulse. After this effect triggers once, destroy this card.
 
-**Circle of Protection** — Cost: 2 Pulse
+**Circle of Protection** — Cost: 1 Pulse
 When an enemy Hero attacks a Hero in this lane, before combat, the defender gains a ward that prevents the next 30 damage it would take (wards absorb damage before Health). After this effect triggers once, destroy this card.
 
-**Rite of Undoing** — Cost: 2 Pulse
+**Rite of Undoing** — Cost: 1 Pulse
 When an enemy card effect reduces the stats of a Hero you control, remove all enemy-imposed stat reductions and negative effects from that Hero, including the reduction that just triggered this card. After this effect triggers once, destroy this card.
 
-**Litany Against the Dark** — Cost: 3 Pulse
+**Litany Against the Dark** — Cost: 2 Pulse
 When an enemy card effect would silence a Hero you control or blank its ability text, prevent that effect. After this effect triggers once, destroy this card.
 
-**The Vigil Eternal** — Cost: 5 Pulse
+**The Vigil Eternal** — Cost: 4 Pulse
 The first time each turn the Hero in this lane takes damage, it gains a ward that prevents the next 20 damage it would take (wards stack). This card is not destroyed after triggering and may trigger again on future turns.
 
 ### Rites
 *(Delayed setup/payoff)*
 
-**The Gathering Light** — Cost: 2 Pulse
+**The Gathering Light** — Cost: 1 Pulse
 Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack and absorb damage before Health), then destroy this Rite. At any point before then, you may instead end this Rite early — one Hero you control immediately gains a ward that prevents the next 20 damage it would take.
 
-**Consecration of the Field** — Cost: 3 Pulse
+**Consecration of the Field** — Cost: 2 Pulse
 Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, each Hero you control heals 40 Health and gains +10 Health permanently, then destroy this Rite. At any point before then, you may instead end this Rite early — each Hero you control heals 10 Health immediately.
 
-**Oath of the First Light** — Cost: 4 Pulse
+**Oath of the First Light** — Cost: 3 Pulse
 This Rite gains 1 counter whenever you heal a Hero with a card effect (maximum 1 counter per turn). When it reaches 3 counters, destroy this Rite and give all Brightmantle Heroes you control +10 Attack and +30 Health permanently.
 
-**Reckoning of the Dawnfire** — Cost: 5 Pulse
+**Reckoning of the Dawnfire** — Cost: 4 Pulse
 Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately.
 
 ### Pacts
@@ -2494,31 +2494,31 @@ Starting the turn after this Rite is played, count 4 of your turns. At the end o
 **Sacrament of Ashes** — Cost: 1 Pulse
 When this Pact resolves, destroy an Auxiliary card you control. A Hero you control heals 40 Health, and all enemy-imposed stat reductions and negative effects are removed from it (restoring the stats it would have without them).
 
-**Tithe of Light** — Cost: 2 Pulse
+**Tithe of Light** — Cost: 1 Pulse
 When this Pact resolves, lose 20 Mortality. Each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack), and you gain 1 Pulse.
 
-**Fast of the Faithful** — Cost: 2 Pulse
+**Fast of the Faithful** — Cost: 1 Pulse
 When this Pact resolves, discard 1 card. Gain 2 Pulse, and a Hero you control gains a ward that prevents the next 20 damage it would take (wards stack).
 
-**Vow of the Shieldbearer** — Cost: 3 Pulse
+**Vow of the Shieldbearer** — Cost: 2 Pulse
 When this Pact resolves, choose a Hero you control — it cannot attack next turn. It gains a ward that prevents the next 40 damage it would take (wards stack) and +20 Health permanently.
 
 ### Incantations
 *(Direct spells, no full board wipes, no unconditional Mortality burn)*
 
-**Radiant Mending** — Cost: 2 Pulse
+**Radiant Mending** — Cost: 1 Pulse
 When this Incantation resolves, a Hero you control heals 40 Health and gains a ward that prevents the next 10 damage it would take (wards stack).
 
-**Purge the Shadow** — Cost: 3 Pulse
+**Purge the Shadow** — Cost: 2 Pulse
 When this Incantation resolves, remove all enemy-imposed stat reductions and negative effects from up to 2 Heroes you control (restoring the stats they would have without them); each heals 20 Health.
 
-**Aegis of Dawn** — Cost: 5 Pulse
+**Aegis of Dawn** — Cost: 4 Pulse
 When this Incantation resolves, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack), and you gain 1 Pulse for each Hero warded this way (maximum 3).
 
-**Rally the Faithful** — Cost: 3 Pulse
+**Rally the Faithful** — Cost: 2 Pulse
 When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms.
 
-**Purifying Flame** — Cost: 4 Pulse
+**Purifying Flame** — Cost: 3 Pulse
 When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining.
 
 ## Appendix P: Kessendo Realm — Full Card Set
