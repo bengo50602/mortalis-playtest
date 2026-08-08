@@ -5192,7 +5192,7 @@ window.DEFAULT_DATA = {
    "atk": 130,
    "hp": 50,
    "rarity": "Rare",
-   "text": "Whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Masayo permanently gains +20 Attack.",
+   "text": "Whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Masayo permanently gains +10 Attack.",
    "auxCost": 4,
    "auxSlots": 2,
    "auxText": "While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice."
@@ -5206,7 +5206,7 @@ window.DEFAULT_DATA = {
    "atk": 120,
    "hp": 60,
    "rarity": "Rare",
-   "text": "Whenever Genji destroys an enemy Hero in combat, he gains +20 Attack permanently.",
+   "text": "Whenever Genji destroys an enemy Hero in combat, he gains +10 Attack permanently.",
    "auxCost": 4,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane deals its full Attack as damage to any enemy Hero it fights in combat, even if that enemy Hero's Attack is higher (overriding the normal \"higher Attack takes no damage\" rule for this lane only)."
@@ -5220,7 +5220,7 @@ window.DEFAULT_DATA = {
    "atk": 180,
    "hp": 60,
    "rarity": "Ultra-Rare",
-   "text": "Whenever Setsuna destroys an enemy Hero in combat, she gains +30 Attack permanently.",
+   "text": "Whenever Setsuna destroys an enemy Hero in combat, she gains +20 Attack permanently.",
    "auxCost": 6,
    "auxSlots": 2,
    "auxText": "While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice."
@@ -5248,7 +5248,7 @@ window.DEFAULT_DATA = {
    "atk": 220,
    "hp": 80,
    "rarity": "Eternal",
-   "text": "Whenever an enemy Hero dies, gain 2 Pulse. Whenever Yorimoto destroys an enemy Hero in combat, he gains +30 Attack permanently.",
+   "text": "Whenever an enemy Hero dies, gain 2 Pulse. Whenever Yorimoto destroys an enemy Hero in combat, he gains +20 Attack permanently.",
    "auxCost": 7,
    "auxSlots": 2,
    "auxText": "While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice."
@@ -5352,7 +5352,7 @@ window.DEFAULT_DATA = {
    "name": "Way of the Sword",
    "type": "rite",
    "cost": 2,
-   "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead."
+   "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +20 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead."
   },
   {
    "id": "kessendo--oath-of-bushido",
@@ -5376,7 +5376,7 @@ window.DEFAULT_DATA = {
    "name": "Seppuku Gambit",
    "type": "pact",
    "cost": 2,
-   "text": "When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack."
+   "text": "When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +30 Attack."
   },
   {
    "id": "kessendo--discipline-of-steel",

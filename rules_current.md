@@ -2566,19 +2566,19 @@ While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Masayo, Blade of the Fallen Sun**
 Hero Mode — Cost: 6 Pulse | Attack/Health: 130/50 | Rarity: Rare
-Whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Masayo permanently gains +20 Attack.
+Whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Masayo permanently gains +10 Attack.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
 
 **Genji the Unbowed**
 Hero Mode — Cost: 6 Pulse | Attack/Health: 120/60 | Rarity: Rare
-Whenever Genji destroys an enemy Hero in combat, he gains +20 Attack permanently.
+Whenever Genji destroys an enemy Hero in combat, he gains +10 Attack permanently.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While in this slot, the Hero in this lane deals its full Attack as damage to any enemy Hero it fights in combat, even if that enemy Hero's Attack is higher (overriding the normal "higher Attack takes no damage" rule for this lane only).
 
 **Setsuna, Widow of Blades**
 Hero Mode — Cost: 8 Pulse | Attack/Health: 180/60 | Rarity: Ultra-Rare
-Whenever Setsuna destroys an enemy Hero in combat, she gains +30 Attack permanently.
+Whenever Setsuna destroys an enemy Hero in combat, she gains +20 Attack permanently.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
 
@@ -2590,7 +2590,7 @@ While in this slot, the Hero in this lane continuously has +50 Attack. At the st
 
 **Yorimoto, the Last Shogun**
 Hero Mode — Cost: 10 Pulse | Attack/Health: 220/80 | Rarity: Eternal
-Whenever an enemy Hero dies, gain 2 Pulse. Whenever Yorimoto destroys an enemy Hero in combat, he gains +30 Attack permanently.
+Whenever an enemy Hero dies, gain 2 Pulse. Whenever Yorimoto destroys an enemy Hero in combat, he gains +20 Attack permanently.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
 
@@ -2637,7 +2637,7 @@ The first time each turn an enemy Hero attacks this lane, that attack is blocked
 Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately.
 
 **Way of the Sword** — Cost: 2 Pulse
-Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead.
+Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +20 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead.
 
 **Oath of Bushido** — Cost: 4 Pulse
 This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Kessendo Hero you control +20 Attack permanently.
@@ -2649,7 +2649,7 @@ Starting the turn after this Rite is played, count 4 of your turns. At the end o
 *(Risk/reward, cost varies by card)*
 
 **Seppuku Gambit** — Cost: 2 Pulse
-When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack.
+When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +30 Attack.
 
 **Discipline of Steel** — Cost: 2 Pulse
 When this Pact resolves, discard 2 cards from your hand, then draw 3 cards.
