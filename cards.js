@@ -1916,7 +1916,7 @@ window.DEFAULT_DATA = {
    "atk": 140,
    "hp": 120,
    "rarity": "Ultra-Rare",
-   "text": "Once per turn, you may pay 3 Pulse: an enemy Hero of your choice gets −20 Attack and Khonsahr gains +20 Attack, until the end of your next turn.",
+   "text": "Once per turn, you may pay 3 Pulse: an enemy Hero of your choice gets −10 Attack and Khonsahr gains +10 Attack, until the end of your next turn.",
    "auxCost": 6,
    "auxSlots": 1,
    "auxText": "While in this slot, the first time each turn a Hero you control destroys an enemy Hero in combat, the Hero in this lane gains +20 Attack permanently."
@@ -2042,7 +2042,7 @@ window.DEFAULT_DATA = {
    "name": "Oath of the Dynasty",
    "type": "rite",
    "cost": 4,
-   "text": "This Rite gains 1 counter whenever one of your card effects reduces an enemy Hero's Attack while granting a Hero you control Attack (maximum 1 counter per turn). When it reaches 3 counters, destroy this Rite and give all Ankhara Heroes you control +20 Attack permanently."
+   "text": "This Rite gains 1 counter whenever one of your card effects reduces an enemy Hero's Attack while granting a Hero you control Attack (maximum 1 counter per turn). When it reaches 3 counters, destroy this Rite and give all Ankhara Heroes you control +10 Attack permanently."
   },
   {
    "id": "ankhara--reckoning-of-the-silent-river",
@@ -5136,7 +5136,7 @@ window.DEFAULT_DATA = {
    "atk": 60,
    "hp": 40,
    "rarity": "Common",
-   "text": "Whenever an enemy Hero dies, gain 2 Pulse.",
+   "text": "Whenever an enemy Hero dies, gain 1 Pulse.",
    "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack. At the start of each of your turns, that Hero takes 10 damage."
@@ -5195,7 +5195,7 @@ window.DEFAULT_DATA = {
    "text": "Whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Masayo permanently gains +10 Attack.",
    "auxCost": 4,
    "auxSlots": 2,
-   "auxText": "While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice."
+   "auxText": "While this card is in play, whenever any enemy Hero dies, deal 15 damage to an enemy Hero of your choice."
   },
   {
    "id": "kessendo--genji-the-unbowed",
@@ -5223,7 +5223,7 @@ window.DEFAULT_DATA = {
    "text": "Whenever Setsuna destroys an enemy Hero in combat, she gains +20 Attack permanently.",
    "auxCost": 6,
    "auxSlots": 2,
-   "auxText": "While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice."
+   "auxText": "While this card is in play, whenever any enemy Hero dies, deal 15 damage to an enemy Hero of your choice."
   },
   {
    "id": "kessendo--kaito-the-hundred-cuts",
@@ -5251,7 +5251,7 @@ window.DEFAULT_DATA = {
    "text": "Whenever an enemy Hero dies, gain 2 Pulse. Whenever Yorimoto destroys an enemy Hero in combat, he gains +20 Attack permanently.",
    "auxCost": 7,
    "auxSlots": 2,
-   "auxText": "While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice."
+   "auxText": "While this card is in play, whenever any enemy Hero dies, deal 15 damage to an enemy Hero of your choice."
   },
   {
    "id": "kessendo--honed-katana",
@@ -5360,7 +5360,7 @@ window.DEFAULT_DATA = {
    "name": "Oath of Bushido",
    "type": "rite",
    "cost": 4,
-   "text": "This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Kessendo Hero you control +20 Attack permanently."
+   "text": "This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Kessendo Hero you control +10 Attack permanently."
   },
   {
    "id": "kessendo--reckoning-of-blades",
@@ -6105,7 +6105,7 @@ window.DEFAULT_DATA = {
    "atk": 70,
    "hp": 40,
    "rarity": "Common",
-   "text": "When Harpy Skirmisher enters play, choose an enemy Hero — it cannot attack during your opponent's next turn.",
+   "text": "When Harpy Skirmisher enters play, deal 20 damage to an enemy Hero of your choice.",
    "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
@@ -6147,7 +6147,7 @@ window.DEFAULT_DATA = {
    "atk": 60,
    "hp": 50,
    "rarity": "Common",
-   "text": "When Stone-Gazer Acolyte enters play, choose an enemy Hero — it cannot attack during your opponent's next turn.",
+   "text": "When Stone-Gazer Acolyte enters play, an enemy Hero of your choice gets −20 Attack permanently.",
    "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
@@ -6161,7 +6161,7 @@ window.DEFAULT_DATA = {
    "atk": 130,
    "hp": 70,
    "rarity": "Uncommon",
-   "text": "When Cyclops Boulderhurler enters play, destroy an enemy Hero with 50 or less Health remaining.",
+   "text": "When Cyclops Boulderhurler enters play, destroy an enemy Hero with 40 or less Health remaining.",
    "auxCost": 4,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
@@ -6217,7 +6217,7 @@ window.DEFAULT_DATA = {
    "atk": 150,
    "hp": 70,
    "rarity": "Ultra-Rare",
-   "text": "When Medusa, the Gorgon Queen enters play, destroy an enemy Hero with 60 or less Health remaining and choose an enemy Hero — it cannot attack during your opponent's next turn.",
+   "text": "When Medusa, the Gorgon Queen enters play, destroy an enemy Hero with 40 or less Health remaining and choose an enemy Hero — it cannot attack during your opponent's next turn.",
    "auxCost": 6,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +50 Attack. At the start of each of your turns, that Hero takes 20 damage."

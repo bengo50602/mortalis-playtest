@@ -2311,7 +2311,7 @@ async function runOp(op, pi, ctx) {
       const t = targets[0];
       if (!t) { log(`No Hero to Knight.`); break; }
       knight(pi, t);
-      if (op.buff) { heroAt(t).permAtk += op.buff.atk || 0; heroAt(t).permHp += op.buff.hp || 0; if (op.buff.atk || op.buff.hp) log(`${nameOf(t)} gains +${op.buff.atk || 0}/+${op.buff.hp || 0} permanently.`); }
+      if (op.buff) { const kh = heroAt(t); if (kh) { kh.permAtk += op.buff.atk || 0; kh.permHp += op.buff.hp || 0; if (op.buff.atk || op.buff.hp) log(`${nameOf(t)} gains +${op.buff.atk || 0}/+${op.buff.hp || 0} permanently.`); } }
       break;
     }
     case "healthTransfer": {

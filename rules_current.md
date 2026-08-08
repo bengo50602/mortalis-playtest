@@ -1023,7 +1023,7 @@ While in this slot, whenever your opponent plays a Hero, that Hero enters play w
 
 **Khonsahr, the Devouring Moon**
 Hero Mode — Cost: 8 Pulse | Attack/Health: 140/120 | Rarity: Ultra-Rare
-Once per turn, you may pay 3 Pulse: an enemy Hero of your choice gets −20 Attack and Khonsahr gains +20 Attack, until the end of your next turn.
+Once per turn, you may pay 3 Pulse: an enemy Hero of your choice gets −10 Attack and Khonsahr gains +10 Attack, until the end of your next turn.
 Auxiliary Mode — Cost: 6 Pulse | 1 slot
 While in this slot, the first time each turn a Hero you control destroys an enemy Hero in combat, the Hero in this lane gains +20 Attack permanently.
 
@@ -1078,7 +1078,7 @@ Starting the turn after this Rite is played, count 2 of your turns. At the end o
 Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, play a Hero card of cost 6 or less from your discard pile into an empty lane without paying its cost, then destroy this Rite. At any point before then, you may instead end this Rite early to return a Hero card from your discard pile to your hand.
 
 **Oath of the Dynasty** — Cost: 4 Pulse
-This Rite gains 1 counter whenever one of your card effects reduces an enemy Hero's Attack while granting a Hero you control Attack (maximum 1 counter per turn). When it reaches 3 counters, destroy this Rite and give all Ankhara Heroes you control +20 Attack permanently.
+This Rite gains 1 counter whenever one of your card effects reduces an enemy Hero's Attack while granting a Hero you control Attack (maximum 1 counter per turn). When it reaches 3 counters, destroy this Rite and give all Ankhara Heroes you control +10 Attack permanently.
 
 **Reckoning of the Silent River** — Cost: 5 Pulse
 Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately.
@@ -2542,7 +2542,7 @@ While in this slot, the first time each turn the Hero in this lane destroys an e
 
 **Toru Ashborn**
 Hero Mode — Cost: 3 Pulse | Attack/Health: 60/40 | Rarity: Common
-Whenever an enemy Hero dies, gain 2 Pulse.
+Whenever an enemy Hero dies, gain 1 Pulse.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Attack. At the start of each of your turns, that Hero takes 10 damage.
 
@@ -2568,7 +2568,7 @@ While in this slot, the Hero in this lane continuously has +30 Attack.
 Hero Mode — Cost: 6 Pulse | Attack/Health: 130/50 | Rarity: Rare
 Whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Masayo permanently gains +10 Attack.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
-While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
+While this card is in play, whenever any enemy Hero dies, deal 15 damage to an enemy Hero of your choice.
 
 **Genji the Unbowed**
 Hero Mode — Cost: 6 Pulse | Attack/Health: 120/60 | Rarity: Rare
@@ -2580,7 +2580,7 @@ While in this slot, the Hero in this lane deals its full Attack as damage to any
 Hero Mode — Cost: 8 Pulse | Attack/Health: 180/60 | Rarity: Ultra-Rare
 Whenever Setsuna destroys an enemy Hero in combat, she gains +20 Attack permanently.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
-While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
+While this card is in play, whenever any enemy Hero dies, deal 15 damage to an enemy Hero of your choice.
 
 **Kaito, the Hundred Cuts**
 Hero Mode — Cost: 8 Pulse | Attack/Health: 200/50 | Rarity: Ultra-Rare
@@ -2592,7 +2592,7 @@ While in this slot, the Hero in this lane continuously has +50 Attack. At the st
 Hero Mode — Cost: 10 Pulse | Attack/Health: 220/80 | Rarity: Eternal
 Whenever an enemy Hero dies, gain 2 Pulse. Whenever Yorimoto destroys an enemy Hero in combat, he gains +20 Attack permanently.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
-While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
+While this card is in play, whenever any enemy Hero dies, deal 15 damage to an enemy Hero of your choice.
 
 
 ### Relics
@@ -2640,7 +2640,7 @@ Starting the turn after this Rite is played, count 3 of your turns. At the end o
 Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +20 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead.
 
 **Oath of Bushido** — Cost: 4 Pulse
-This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Kessendo Hero you control +20 Attack permanently.
+This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Kessendo Hero you control +10 Attack permanently.
 
 **Reckoning of Blades** — Cost: 5 Pulse
 Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately.
@@ -2985,7 +2985,7 @@ When this Incantation resolves, destroy an enemy Hero with 70 or less Health rem
 
 **Harpy Skirmisher**
 Hero Mode — Cost: 3 Pulse | Attack/Health: 70/40 | Rarity: Common
-When Harpy Skirmisher enters play, choose an enemy Hero — it cannot attack during your opponent's next turn.
+When Harpy Skirmisher enters play, deal 20 damage to an enemy Hero of your choice.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
@@ -3003,13 +3003,13 @@ While in this slot, the Hero in this lane continuously has +20 Attack.
 
 **Stone-Gazer Acolyte**
 Hero Mode — Cost: 4 Pulse | Attack/Health: 60/50 | Rarity: Common
-When Stone-Gazer Acolyte enters play, choose an enemy Hero — it cannot attack during your opponent's next turn.
+When Stone-Gazer Acolyte enters play, an enemy Hero of your choice gets −20 Attack permanently.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Cyclops Boulderhurler**
 Hero Mode — Cost: 6 Pulse | Attack/Health: 130/70 | Rarity: Uncommon
-When Cyclops Boulderhurler enters play, destroy an enemy Hero with 50 or less Health remaining.
+When Cyclops Boulderhurler enters play, destroy an enemy Hero with 40 or less Health remaining.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +40 Attack.
 
@@ -3033,7 +3033,7 @@ While in this slot, the Hero in this lane continuously has +50 Attack.
 
 **Medusa, the Gorgon Queen**
 Hero Mode — Cost: 8 Pulse | Attack/Health: 150/70 | Rarity: Ultra-Rare
-When Medusa, the Gorgon Queen enters play, destroy an enemy Hero with 60 or less Health remaining and choose an enemy Hero — it cannot attack during your opponent's next turn.
+When Medusa, the Gorgon Queen enters play, destroy an enemy Hero with 40 or less Health remaining and choose an enemy Hero — it cannot attack during your opponent's next turn.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +50 Attack. At the start of each of your turns, that Hero takes 20 damage.
 
