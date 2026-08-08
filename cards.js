@@ -5517,6 +5517,179 @@ window.DEFAULT_DATA = {
    "auxText": "While this card is in play, whenever any enemy Hero dies, deal 40 damage to an enemy Hero of your choice."
   },
   {
+   "id": "drakhaan--dragonscale-plate",
+   "realm": "Drakhaan",
+   "name": "Dragonscale Plate",
+   "type": "relic",
+   "slots": 1,
+   "cost": 2,
+   "text": "While equipped, this Hero continuously has +50 Health."
+  },
+  {
+   "id": "drakhaan--wyrmfang-blade",
+   "realm": "Drakhaan",
+   "name": "Wyrmfang Blade",
+   "type": "relic",
+   "slots": 1,
+   "cost": 2,
+   "text": "While equipped, this Hero continuously has +40 Attack."
+  },
+  {
+   "id": "drakhaan--molten-warblade",
+   "realm": "Drakhaan",
+   "name": "Molten Warblade",
+   "type": "relic",
+   "slots": 1,
+   "cost": 3,
+   "text": "While equipped, this Hero continuously has +60 Attack."
+  },
+  {
+   "id": "drakhaan--emberforged-gauntlets",
+   "realm": "Drakhaan",
+   "name": "Emberforged Gauntlets",
+   "type": "relic",
+   "slots": 2,
+   "cost": 4,
+   "text": "While equipped, this Hero continuously has +50 Attack. Whenever this Hero wins a fight (deals damage while taking none), also deal 30 damage to the Hero in the opposing lane, if one is present."
+  },
+  {
+   "id": "drakhaan--crown-of-the-wyrm-king",
+   "realm": "Drakhaan",
+   "name": "Crown of the Wyrm King",
+   "type": "relic",
+   "slots": 2,
+   "cost": 5,
+   "text": "While equipped, this Hero continuously has +80 Attack and +30 Health."
+  },
+  {
+   "id": "drakhaan--searing-retort",
+   "realm": "Drakhaan",
+   "name": "Searing Retort",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "drakhaan--wing-buffet",
+   "realm": "Drakhaan",
+   "name": "Wing Buffet",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 40 for that combat only. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "drakhaan--cinder-snare",
+   "realm": "Drakhaan",
+   "name": "Cinder Snare",
+   "type": "hex",
+   "cost": 3,
+   "text": "When a Hero in this lane dies, deal 60 damage to whichever Hero killed it. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "drakhaan--draconic-ambush",
+   "realm": "Drakhaan",
+   "name": "Draconic Ambush",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, deal 50 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "drakhaan--molten-bulwark",
+   "realm": "Drakhaan",
+   "name": "Molten Bulwark",
+   "type": "hex",
+   "cost": 4,
+   "text": "The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns."
+  },
+  {
+   "id": "drakhaan--the-gathering-flame",
+   "realm": "Drakhaan",
+   "name": "The Gathering Flame",
+   "type": "rite",
+   "cost": 3,
+   "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately."
+  },
+  {
+   "id": "drakhaan--hoard-of-ages",
+   "realm": "Drakhaan",
+   "name": "Hoard of Ages",
+   "type": "rite",
+   "cost": 2,
+   "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead."
+  },
+  {
+   "id": "drakhaan--oath-of-the-wyrm",
+   "realm": "Drakhaan",
+   "name": "Oath of the Wyrm",
+   "type": "rite",
+   "cost": 4,
+   "text": "This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Drakhaan Hero you control +20 Attack permanently."
+  },
+  {
+   "id": "drakhaan--cataclysm-rising",
+   "realm": "Drakhaan",
+   "name": "Cataclysm Rising",
+   "type": "rite",
+   "cost": 5,
+   "text": "Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately."
+  },
+  {
+   "id": "drakhaan--trial-by-fire",
+   "realm": "Drakhaan",
+   "name": "Trial by Fire",
+   "type": "pact",
+   "cost": 2,
+   "text": "When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack."
+  },
+  {
+   "id": "drakhaan--dragon-s-bargain",
+   "realm": "Drakhaan",
+   "name": "Dragon's Bargain",
+   "type": "pact",
+   "cost": 2,
+   "text": "When this Pact resolves, discard 2 cards from your hand, then draw 3 cards."
+  },
+  {
+   "id": "drakhaan--feed-the-flame",
+   "realm": "Drakhaan",
+   "name": "Feed the Flame",
+   "type": "pact",
+   "cost": 1,
+   "text": "When this Pact resolves, destroy a Hero you control in any lane. Gain Pulse equal to that Hero's cost, immediately and only once."
+  },
+  {
+   "id": "drakhaan--reckless-immolation",
+   "realm": "Drakhaan",
+   "name": "Reckless Immolation",
+   "type": "pact",
+   "cost": 3,
+   "text": "When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane."
+  },
+  {
+   "id": "drakhaan--dragonfire",
+   "realm": "Drakhaan",
+   "name": "Dragonfire",
+   "type": "incantation",
+   "cost": 4,
+   "text": "When this Incantation resolves, deal damage to an enemy Hero equal to the current Attack of your Hero in the same lane."
+  },
+  {
+   "id": "drakhaan--incinerate",
+   "realm": "Drakhaan",
+   "name": "Incinerate",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, deal 40 damage to a Hero of your choice."
+  },
+  {
+   "id": "drakhaan--draconic-fury",
+   "realm": "Drakhaan",
+   "name": "Draconic Fury",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms."
+  },
+  {
    "id": "golmerad--boulderkin",
    "realm": "Golmerad",
    "name": "Boulderkin",
@@ -5669,6 +5842,179 @@ window.DEFAULT_DATA = {
    "auxCost": 8,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +120 Health."
+  },
+  {
+   "id": "golmerad--runestone-bulwark",
+   "realm": "Golmerad",
+   "name": "Runestone Bulwark",
+   "type": "relic",
+   "slots": 1,
+   "cost": 2,
+   "text": "While equipped, this Hero continuously has +60 Health."
+  },
+  {
+   "id": "golmerad--granite-plating",
+   "realm": "Golmerad",
+   "name": "Granite Plating",
+   "type": "relic",
+   "slots": 1,
+   "cost": 2,
+   "text": "While equipped, this Hero continuously has +50 Health."
+  },
+  {
+   "id": "golmerad--ironbark-shell",
+   "realm": "Golmerad",
+   "name": "Ironbark Shell",
+   "type": "relic",
+   "slots": 1,
+   "cost": 3,
+   "text": "While equipped, this Hero continuously has +80 Health."
+  },
+  {
+   "id": "golmerad--thornmail-casing",
+   "realm": "Golmerad",
+   "name": "Thornmail Casing",
+   "type": "relic",
+   "slots": 2,
+   "cost": 4,
+   "text": "While equipped, this Hero continuously has +60 Health. Whenever this Hero wins a fight (deals damage while taking none), also deal 30 damage to the Hero in the opposing lane, if one is present."
+  },
+  {
+   "id": "golmerad--heart-of-the-mountain",
+   "realm": "Golmerad",
+   "name": "Heart of the Mountain",
+   "type": "relic",
+   "slots": 2,
+   "cost": 5,
+   "text": "While equipped, this Hero continuously has +40 Attack and +80 Health."
+  },
+  {
+   "id": "golmerad--crushing-retort",
+   "realm": "Golmerad",
+   "name": "Crushing Retort",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "golmerad--grinding-halt",
+   "realm": "Golmerad",
+   "name": "Grinding Halt",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 40 for that combat only. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "golmerad--avalanche-trap",
+   "realm": "Golmerad",
+   "name": "Avalanche Trap",
+   "type": "hex",
+   "cost": 3,
+   "text": "When a Hero in this lane dies, deal 50 damage to whichever Hero killed it. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "golmerad--stone-ward",
+   "realm": "Golmerad",
+   "name": "Stone Ward",
+   "type": "hex",
+   "cost": 4,
+   "text": "The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns."
+  },
+  {
+   "id": "golmerad--rockslide-snare",
+   "realm": "Golmerad",
+   "name": "Rockslide Snare",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "golmerad--the-long-vigil",
+   "realm": "Golmerad",
+   "name": "The Long Vigil",
+   "type": "rite",
+   "cost": 3,
+   "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately."
+  },
+  {
+   "id": "golmerad--slow-fortification",
+   "realm": "Golmerad",
+   "name": "Slow Fortification",
+   "type": "rite",
+   "cost": 2,
+   "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead."
+  },
+  {
+   "id": "golmerad--oath-of-the-mountain",
+   "realm": "Golmerad",
+   "name": "Oath of the Mountain",
+   "type": "rite",
+   "cost": 4,
+   "text": "This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Golmerad Hero you control +20 Attack permanently."
+  },
+  {
+   "id": "golmerad--reckoning-of-stone",
+   "realm": "Golmerad",
+   "name": "Reckoning of Stone",
+   "type": "rite",
+   "cost": 5,
+   "text": "Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately."
+  },
+  {
+   "id": "golmerad--bulwark-sacrifice",
+   "realm": "Golmerad",
+   "name": "Bulwark Sacrifice",
+   "type": "pact",
+   "cost": 1,
+   "text": "When this Pact resolves, destroy a Hero you control in any lane. Gain Pulse equal to that Hero's cost, immediately and only once."
+  },
+  {
+   "id": "golmerad--stoneblood-rite",
+   "realm": "Golmerad",
+   "name": "Stoneblood Rite",
+   "type": "pact",
+   "cost": 2,
+   "text": "When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack."
+  },
+  {
+   "id": "golmerad--grinding-bargain",
+   "realm": "Golmerad",
+   "name": "Grinding Bargain",
+   "type": "pact",
+   "cost": 2,
+   "text": "When this Pact resolves, discard 2 cards from your hand, then draw 3 cards."
+  },
+  {
+   "id": "golmerad--reckless-quarry",
+   "realm": "Golmerad",
+   "name": "Reckless Quarry",
+   "type": "pact",
+   "cost": 3,
+   "text": "When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane."
+  },
+  {
+   "id": "golmerad--fortify",
+   "realm": "Golmerad",
+   "name": "Fortify",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, each Hero you control heals 30 Health and gains +10 Attack until the end of your next turn."
+  },
+  {
+   "id": "golmerad--stone-skin",
+   "realm": "Golmerad",
+   "name": "Stone Skin",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, a Hero you control heals 40 Health and gains a ward that prevents the next 30 damage it would take."
+  },
+  {
+   "id": "golmerad--bastion-s-call",
+   "realm": "Golmerad",
+   "name": "Bastion's Call",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms."
   },
   {
    "id": "heliaxos--harpy-skirmisher",
@@ -5825,6 +6171,179 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +70 Attack."
   },
   {
+   "id": "heliaxos--aegis-shield",
+   "realm": "Heliaxos",
+   "name": "Aegis Shield",
+   "type": "relic",
+   "slots": 1,
+   "cost": 2,
+   "text": "While equipped, this Hero continuously has +50 Health."
+  },
+  {
+   "id": "heliaxos--spear-of-the-hero",
+   "realm": "Heliaxos",
+   "name": "Spear of the Hero",
+   "type": "relic",
+   "slots": 1,
+   "cost": 2,
+   "text": "While equipped, this Hero continuously has +40 Attack."
+  },
+  {
+   "id": "heliaxos--golden-fleece",
+   "realm": "Heliaxos",
+   "name": "Golden Fleece",
+   "type": "relic",
+   "slots": 1,
+   "cost": 3,
+   "text": "While equipped, this Hero continuously has +30 Attack and +30 Health."
+  },
+  {
+   "id": "heliaxos--gorgon-visage",
+   "realm": "Heliaxos",
+   "name": "Gorgon Visage",
+   "type": "relic",
+   "slots": 2,
+   "cost": 4,
+   "text": "While equipped, this Hero continuously has +50 Attack. Whenever this Hero wins a fight (deals damage while taking none), also deal 30 damage to the Hero in the opposing lane, if one is present."
+  },
+  {
+   "id": "heliaxos--olympian-laurel",
+   "realm": "Heliaxos",
+   "name": "Olympian Laurel",
+   "type": "relic",
+   "slots": 2,
+   "cost": 5,
+   "text": "While equipped, this Hero continuously has +70 Attack and +40 Health."
+  },
+  {
+   "id": "heliaxos--medusan-glare",
+   "realm": "Heliaxos",
+   "name": "Medusan Glare",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "heliaxos--siren-s-lull",
+   "realm": "Heliaxos",
+   "name": "Siren's Lull",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 40 for that combat only. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "heliaxos--nemean-retort",
+   "realm": "Heliaxos",
+   "name": "Nemean Retort",
+   "type": "hex",
+   "cost": 3,
+   "text": "When a Hero in this lane dies, deal 50 damage to whichever Hero killed it. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "heliaxos--labyrinth-ward",
+   "realm": "Heliaxos",
+   "name": "Labyrinth Ward",
+   "type": "hex",
+   "cost": 4,
+   "text": "The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns."
+  },
+  {
+   "id": "heliaxos--stone-snare",
+   "realm": "Heliaxos",
+   "name": "Stone Snare",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "heliaxos--trial-of-heracles",
+   "realm": "Heliaxos",
+   "name": "Trial of Heracles",
+   "type": "rite",
+   "cost": 3,
+   "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately."
+  },
+  {
+   "id": "heliaxos--blessing-of-athena",
+   "realm": "Heliaxos",
+   "name": "Blessing of Athena",
+   "type": "rite",
+   "cost": 2,
+   "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead."
+  },
+  {
+   "id": "heliaxos--oath-of-olympus",
+   "realm": "Heliaxos",
+   "name": "Oath of Olympus",
+   "type": "rite",
+   "cost": 4,
+   "text": "This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Heliaxos Hero you control +20 Attack permanently."
+  },
+  {
+   "id": "heliaxos--wrath-of-the-titans",
+   "realm": "Heliaxos",
+   "name": "Wrath of the Titans",
+   "type": "rite",
+   "cost": 5,
+   "text": "Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately."
+  },
+  {
+   "id": "heliaxos--promethean-bargain",
+   "realm": "Heliaxos",
+   "name": "Promethean Bargain",
+   "type": "pact",
+   "cost": 2,
+   "text": "When this Pact resolves, discard 2 cards from your hand, then draw 3 cards."
+  },
+  {
+   "id": "heliaxos--sacrifice-to-the-gods",
+   "realm": "Heliaxos",
+   "name": "Sacrifice to the Gods",
+   "type": "pact",
+   "cost": 1,
+   "text": "When this Pact resolves, destroy a Hero you control in any lane. Gain Pulse equal to that Hero's cost, immediately and only once."
+  },
+  {
+   "id": "heliaxos--hubris",
+   "realm": "Heliaxos",
+   "name": "Hubris",
+   "type": "pact",
+   "cost": 2,
+   "text": "When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack."
+  },
+  {
+   "id": "heliaxos--reckless-offering",
+   "realm": "Heliaxos",
+   "name": "Reckless Offering",
+   "type": "pact",
+   "cost": 3,
+   "text": "When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane."
+  },
+  {
+   "id": "heliaxos--bolt-of-zeus",
+   "realm": "Heliaxos",
+   "name": "Bolt of Zeus",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, deal 40 damage to a Hero of your choice."
+  },
+  {
+   "id": "heliaxos--petrifying-gaze",
+   "realm": "Heliaxos",
+   "name": "Petrifying Gaze",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, choose an enemy Hero — it cannot attack during your opponent's next turn."
+  },
+  {
+   "id": "heliaxos--favor-of-the-gods",
+   "realm": "Heliaxos",
+   "name": "Favor of the Gods",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms."
+  },
+  {
    "id": "gribrok--snik-the-cutpurse",
    "realm": "Gribrok",
    "name": "Snik the Cutpurse",
@@ -5979,6 +6498,179 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +50 Attack."
   },
   {
+   "id": "gribrok--rusty-shiv",
+   "realm": "Gribrok",
+   "name": "Rusty Shiv",
+   "type": "relic",
+   "slots": 1,
+   "cost": 1,
+   "text": "While equipped, this Hero continuously has +20 Attack."
+  },
+  {
+   "id": "gribrok--stolen-trinket",
+   "realm": "Gribrok",
+   "name": "Stolen Trinket",
+   "type": "relic",
+   "slots": 1,
+   "cost": 2,
+   "text": "While equipped, this Hero continuously has +30 Attack."
+  },
+  {
+   "id": "gribrok--patchwork-armor",
+   "realm": "Gribrok",
+   "name": "Patchwork Armor",
+   "type": "relic",
+   "slots": 1,
+   "cost": 2,
+   "text": "While equipped, this Hero continuously has +30 Health."
+  },
+  {
+   "id": "gribrok--sticky-fingers-glove",
+   "realm": "Gribrok",
+   "name": "Sticky Fingers Glove",
+   "type": "relic",
+   "slots": 2,
+   "cost": 3,
+   "text": "While equipped, this Hero continuously has +30 Attack and +20 Health."
+  },
+  {
+   "id": "gribrok--kingpin-s-signet",
+   "realm": "Gribrok",
+   "name": "Kingpin's Signet",
+   "type": "relic",
+   "slots": 2,
+   "cost": 4,
+   "text": "While equipped, this Hero continuously has +40 Attack and +30 Health."
+  },
+  {
+   "id": "gribrok--caltrops",
+   "realm": "Gribrok",
+   "name": "Caltrops",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "gribrok--tripwire",
+   "realm": "Gribrok",
+   "name": "Tripwire",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 30 for that combat only. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "gribrok--spiteful-trap",
+   "realm": "Gribrok",
+   "name": "Spiteful Trap",
+   "type": "hex",
+   "cost": 3,
+   "text": "When a Hero in this lane dies, deal 40 damage to whichever Hero killed it. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "gribrok--barricade",
+   "realm": "Gribrok",
+   "name": "Barricade",
+   "type": "hex",
+   "cost": 4,
+   "text": "The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns."
+  },
+  {
+   "id": "gribrok--snare-pit",
+   "realm": "Gribrok",
+   "name": "Snare Pit",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "gribrok--the-long-con",
+   "realm": "Gribrok",
+   "name": "The Long Con",
+   "type": "rite",
+   "cost": 3,
+   "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately."
+  },
+  {
+   "id": "gribrok--stashed-loot",
+   "realm": "Gribrok",
+   "name": "Stashed Loot",
+   "type": "rite",
+   "cost": 2,
+   "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead."
+  },
+  {
+   "id": "gribrok--oath-of-the-warren",
+   "realm": "Gribrok",
+   "name": "Oath of the Warren",
+   "type": "rite",
+   "cost": 4,
+   "text": "This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Gribrok Hero you control +20 Attack permanently."
+  },
+  {
+   "id": "gribrok--grand-heist",
+   "realm": "Gribrok",
+   "name": "Grand Heist",
+   "type": "rite",
+   "cost": 5,
+   "text": "Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately."
+  },
+  {
+   "id": "gribrok--backstab-bargain",
+   "realm": "Gribrok",
+   "name": "Backstab Bargain",
+   "type": "pact",
+   "cost": 3,
+   "text": "When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane."
+  },
+  {
+   "id": "gribrok--fence-the-goods",
+   "realm": "Gribrok",
+   "name": "Fence the Goods",
+   "type": "pact",
+   "cost": 2,
+   "text": "When this Pact resolves, discard 2 cards from your hand, then draw 3 cards."
+  },
+  {
+   "id": "gribrok--throw-under-the-cart",
+   "realm": "Gribrok",
+   "name": "Throw Under the Cart",
+   "type": "pact",
+   "cost": 1,
+   "text": "When this Pact resolves, destroy a Hero you control in any lane. Gain Pulse equal to that Hero's cost, immediately and only once."
+  },
+  {
+   "id": "gribrok--desperate-gambit",
+   "realm": "Gribrok",
+   "name": "Desperate Gambit",
+   "type": "pact",
+   "cost": 2,
+   "text": "When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack."
+  },
+  {
+   "id": "gribrok--pickpocket",
+   "realm": "Gribrok",
+   "name": "Pickpocket",
+   "type": "incantation",
+   "cost": 2,
+   "text": "When this Incantation resolves, steal 3 Pulse from your opponent."
+  },
+  {
+   "id": "gribrok--sabotage",
+   "realm": "Gribrok",
+   "name": "Sabotage",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, deal 40 damage to a Hero of your choice."
+  },
+  {
+   "id": "gribrok--mob-rush",
+   "realm": "Gribrok",
+   "name": "Mob Rush",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms."
+  },
+  {
    "id": "vhorrath--bone-acolyte",
    "realm": "Vhorrath",
    "name": "Bone Acolyte",
@@ -6131,6 +6823,179 @@ window.DEFAULT_DATA = {
    "auxCost": 8,
    "auxSlots": 2,
    "auxText": "While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice."
+  },
+  {
+   "id": "vhorrath--bone-fetish",
+   "realm": "Vhorrath",
+   "name": "Bone Fetish",
+   "type": "relic",
+   "slots": 1,
+   "cost": 1,
+   "text": "While equipped, this Hero continuously has +20 Attack."
+  },
+  {
+   "id": "vhorrath--grave-shroud",
+   "realm": "Vhorrath",
+   "name": "Grave Shroud",
+   "type": "relic",
+   "slots": 1,
+   "cost": 2,
+   "text": "While equipped, this Hero continuously has +40 Health."
+  },
+  {
+   "id": "vhorrath--soul-lantern",
+   "realm": "Vhorrath",
+   "name": "Soul Lantern",
+   "type": "relic",
+   "slots": 1,
+   "cost": 2,
+   "text": "While equipped, this Hero continuously has +30 Attack."
+  },
+  {
+   "id": "vhorrath--reliquary-of-bone",
+   "realm": "Vhorrath",
+   "name": "Reliquary of Bone",
+   "type": "relic",
+   "slots": 2,
+   "cost": 3,
+   "text": "While equipped, this Hero continuously has +30 Attack and +30 Health."
+  },
+  {
+   "id": "vhorrath--crown-of-the-lich",
+   "realm": "Vhorrath",
+   "name": "Crown of the Lich",
+   "type": "relic",
+   "slots": 2,
+   "cost": 5,
+   "text": "While equipped, this Hero continuously has +50 Attack and +40 Health."
+  },
+  {
+   "id": "vhorrath--grasping-dead",
+   "realm": "Vhorrath",
+   "name": "Grasping Dead",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "vhorrath--withering-curse",
+   "realm": "Vhorrath",
+   "name": "Withering Curse",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 40 for that combat only. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "vhorrath--vengeful-spirit",
+   "realm": "Vhorrath",
+   "name": "Vengeful Spirit",
+   "type": "hex",
+   "cost": 3,
+   "text": "When a Hero in this lane dies, deal 50 damage to whichever Hero killed it. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "vhorrath--warding-bones",
+   "realm": "Vhorrath",
+   "name": "Warding Bones",
+   "type": "hex",
+   "cost": 4,
+   "text": "The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns."
+  },
+  {
+   "id": "vhorrath--grave-snare",
+   "realm": "Vhorrath",
+   "name": "Grave Snare",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "vhorrath--the-slow-death",
+   "realm": "Vhorrath",
+   "name": "The Slow Death",
+   "type": "rite",
+   "cost": 3,
+   "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately."
+  },
+  {
+   "id": "vhorrath--ritual-of-undeath",
+   "realm": "Vhorrath",
+   "name": "Ritual of Undeath",
+   "type": "rite",
+   "cost": 2,
+   "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead."
+  },
+  {
+   "id": "vhorrath--oath-of-the-grave",
+   "realm": "Vhorrath",
+   "name": "Oath of the Grave",
+   "type": "rite",
+   "cost": 4,
+   "text": "This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Vhorrath Hero you control +20 Attack permanently."
+  },
+  {
+   "id": "vhorrath--harvest-of-souls",
+   "realm": "Vhorrath",
+   "name": "Harvest of Souls",
+   "type": "rite",
+   "cost": 5,
+   "text": "Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately."
+  },
+  {
+   "id": "vhorrath--blood-rite",
+   "realm": "Vhorrath",
+   "name": "Blood Rite",
+   "type": "pact",
+   "cost": 2,
+   "text": "When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack."
+  },
+  {
+   "id": "vhorrath--grave-robbing",
+   "realm": "Vhorrath",
+   "name": "Grave Robbing",
+   "type": "pact",
+   "cost": 2,
+   "text": "When this Pact resolves, discard 2 cards from your hand, then draw 3 cards."
+  },
+  {
+   "id": "vhorrath--feed-the-ossuary",
+   "realm": "Vhorrath",
+   "name": "Feed the Ossuary",
+   "type": "pact",
+   "cost": 1,
+   "text": "When this Pact resolves, destroy a Hero you control in any lane. Gain Pulse equal to that Hero's cost, immediately and only once."
+  },
+  {
+   "id": "vhorrath--dark-exchange",
+   "realm": "Vhorrath",
+   "name": "Dark Exchange",
+   "type": "pact",
+   "cost": 3,
+   "text": "When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane."
+  },
+  {
+   "id": "vhorrath--raise-dead",
+   "realm": "Vhorrath",
+   "name": "Raise Dead",
+   "type": "incantation",
+   "cost": 4,
+   "text": "When this Incantation resolves, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack."
+  },
+  {
+   "id": "vhorrath--death-bolt",
+   "realm": "Vhorrath",
+   "name": "Death Bolt",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, deal 40 damage to a Hero of your choice."
+  },
+  {
+   "id": "vhorrath--grave-chill",
+   "realm": "Vhorrath",
+   "name": "Grave Chill",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, an enemy Hero of your choice gets -40 Attack until the end of your next turn."
   }
  ],
  "constants": {

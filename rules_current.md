@@ -2721,6 +2721,84 @@ When Vorthalyx, the World-Ender enters play, destroy an enemy Hero with 100 or l
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 40 damage to an enemy Hero of your choice.
 
+
+### Relics
+
+**Dragonscale Plate** — 1 slot | Cost: 2 Pulse
+While equipped, this Hero continuously has +50 Health.
+
+**Wyrmfang Blade** — 1 slot | Cost: 2 Pulse
+While equipped, this Hero continuously has +40 Attack.
+
+**Molten Warblade** — 1 slot | Cost: 3 Pulse
+While equipped, this Hero continuously has +60 Attack.
+
+**Emberforged Gauntlets** — 2 slots | Cost: 4 Pulse
+While equipped, this Hero continuously has +50 Attack. Whenever this Hero wins a fight (deals damage while taking none), also deal 30 damage to the Hero in the opposing lane, if one is present.
+
+**Crown of the Wyrm King** — 2 slots | Cost: 5 Pulse
+While equipped, this Hero continuously has +80 Attack and +30 Health.
+
+### Hexes
+*(Played face-down, trigger automatically when their condition is met)*
+
+**Searing Retort** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card.
+
+**Wing Buffet** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 40 for that combat only. After this effect triggers once, destroy this card.
+
+**Cinder Snare** — Cost: 3 Pulse
+When a Hero in this lane dies, deal 60 damage to whichever Hero killed it. After this effect triggers once, destroy this card.
+
+**Draconic Ambush** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, deal 50 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card.
+
+**Molten Bulwark** — Cost: 4 Pulse
+The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns.
+
+### Rites
+*(Delayed setup/payoff)*
+
+**The Gathering Flame** — Cost: 3 Pulse
+Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately.
+
+**Hoard of Ages** — Cost: 2 Pulse
+Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead.
+
+**Oath of the Wyrm** — Cost: 4 Pulse
+This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Drakhaan Hero you control +20 Attack permanently.
+
+**Cataclysm Rising** — Cost: 5 Pulse
+Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately.
+
+### Pacts
+*(Risk/reward, cost varies by card)*
+
+**Trial by Fire** — Cost: 2 Pulse
+When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack.
+
+**Dragon's Bargain** — Cost: 2 Pulse
+When this Pact resolves, discard 2 cards from your hand, then draw 3 cards.
+
+**Feed the Flame** — Cost: 1 Pulse
+When this Pact resolves, destroy a Hero you control in any lane. Gain Pulse equal to that Hero's cost, immediately and only once.
+
+**Reckless Immolation** — Cost: 3 Pulse
+When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane.
+
+### Incantations
+*(Direct spells, no full board wipes, no unconditional Mortality burn)*
+
+**Dragonfire** — Cost: 4 Pulse
+When this Incantation resolves, deal damage to an enemy Hero equal to the current Attack of your Hero in the same lane.
+
+**Incinerate** — Cost: 3 Pulse
+When this Incantation resolves, deal 40 damage to a Hero of your choice.
+
+**Draconic Fury** — Cost: 3 Pulse
+When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms.
+
 ## Appendix R: Golmerad Realm — Full Card Set
 
 **Realm identity:** Living stone constructs — the guardians of the game. Golmerad Heroes run the highest Health and lowest Attack (immovable walls, no glass cannons). They defend themselves and their allies: taunting enemies into attacking them, shrugging off damage, punishing attackers with retaliation, and mending the whole board each turn. They can't close a game quickly, but they let slower realms survive to their late game.
@@ -2793,6 +2871,80 @@ Hero Mode — Cost: 10 Pulse | Attack/Health: 80/280 | Rarity: Eternal
 While Karngmor, the Everstone is in play, all enemy Hero attacks must target Karngmor's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Karngmor take 30 damage after that combat resolves. At the start of each of your turns, each Hero you control heals 30 Health.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +120 Health.
+
+
+### Relics
+
+**Runestone Bulwark** — 1 slot | Cost: 2 Pulse
+While equipped, this Hero continuously has +60 Health.
+
+**Granite Plating** — 1 slot | Cost: 2 Pulse
+While equipped, this Hero continuously has +50 Health.
+
+**Ironbark Shell** — 1 slot | Cost: 3 Pulse
+While equipped, this Hero continuously has +80 Health.
+
+**Thornmail Casing** — 2 slots | Cost: 4 Pulse
+While equipped, this Hero continuously has +60 Health. Whenever this Hero wins a fight (deals damage while taking none), also deal 30 damage to the Hero in the opposing lane, if one is present.
+
+**Heart of the Mountain** — 2 slots | Cost: 5 Pulse
+While equipped, this Hero continuously has +40 Attack and +80 Health.
+
+### Hexes
+
+**Crushing Retort** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card.
+
+**Grinding Halt** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 40 for that combat only. After this effect triggers once, destroy this card.
+
+**Avalanche Trap** — Cost: 3 Pulse
+When a Hero in this lane dies, deal 50 damage to whichever Hero killed it. After this effect triggers once, destroy this card.
+
+**Stone Ward** — Cost: 4 Pulse
+The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns.
+
+**Rockslide Snare** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card.
+
+### Rites
+
+**The Long Vigil** — Cost: 3 Pulse
+Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately.
+
+**Slow Fortification** — Cost: 2 Pulse
+Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead.
+
+**Oath of the Mountain** — Cost: 4 Pulse
+This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Golmerad Hero you control +20 Attack permanently.
+
+**Reckoning of Stone** — Cost: 5 Pulse
+Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately.
+
+### Pacts
+
+**Bulwark Sacrifice** — Cost: 1 Pulse
+When this Pact resolves, destroy a Hero you control in any lane. Gain Pulse equal to that Hero's cost, immediately and only once.
+
+**Stoneblood Rite** — Cost: 2 Pulse
+When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack.
+
+**Grinding Bargain** — Cost: 2 Pulse
+When this Pact resolves, discard 2 cards from your hand, then draw 3 cards.
+
+**Reckless Quarry** — Cost: 3 Pulse
+When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane.
+
+### Incantations
+
+**Fortify** — Cost: 3 Pulse
+When this Incantation resolves, each Hero you control heals 30 Health and gains +10 Attack until the end of your next turn.
+
+**Stone Skin** — Cost: 3 Pulse
+When this Incantation resolves, a Hero you control heals 40 Health and gains a ward that prevents the next 30 damage it would take.
+
+**Bastion's Call** — Cost: 3 Pulse
+When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms.
 
 ## Appendix S: Heliaxos Realm — Full Card Set
 
@@ -2867,6 +3019,80 @@ When Typhon, the Titan of Storms enters play, choose an enemy Hero — it cannot
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +70 Attack.
 
+
+### Relics
+
+**Aegis Shield** — 1 slot | Cost: 2 Pulse
+While equipped, this Hero continuously has +50 Health.
+
+**Spear of the Hero** — 1 slot | Cost: 2 Pulse
+While equipped, this Hero continuously has +40 Attack.
+
+**Golden Fleece** — 1 slots | Cost: 3 Pulse
+While equipped, this Hero continuously has +30 Attack and +30 Health.
+
+**Gorgon Visage** — 2 slots | Cost: 4 Pulse
+While equipped, this Hero continuously has +50 Attack. Whenever this Hero wins a fight (deals damage while taking none), also deal 30 damage to the Hero in the opposing lane, if one is present.
+
+**Olympian Laurel** — 2 slots | Cost: 5 Pulse
+While equipped, this Hero continuously has +70 Attack and +40 Health.
+
+### Hexes
+
+**Medusan Glare** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card.
+
+**Siren's Lull** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 40 for that combat only. After this effect triggers once, destroy this card.
+
+**Nemean Retort** — Cost: 3 Pulse
+When a Hero in this lane dies, deal 50 damage to whichever Hero killed it. After this effect triggers once, destroy this card.
+
+**Labyrinth Ward** — Cost: 4 Pulse
+The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns.
+
+**Stone Snare** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card.
+
+### Rites
+
+**Trial of Heracles** — Cost: 3 Pulse
+Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately.
+
+**Blessing of Athena** — Cost: 2 Pulse
+Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead.
+
+**Oath of Olympus** — Cost: 4 Pulse
+This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Heliaxos Hero you control +20 Attack permanently.
+
+**Wrath of the Titans** — Cost: 5 Pulse
+Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately.
+
+### Pacts
+
+**Promethean Bargain** — Cost: 2 Pulse
+When this Pact resolves, discard 2 cards from your hand, then draw 3 cards.
+
+**Sacrifice to the Gods** — Cost: 1 Pulse
+When this Pact resolves, destroy a Hero you control in any lane. Gain Pulse equal to that Hero's cost, immediately and only once.
+
+**Hubris** — Cost: 2 Pulse
+When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack.
+
+**Reckless Offering** — Cost: 3 Pulse
+When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane.
+
+### Incantations
+
+**Bolt of Zeus** — Cost: 3 Pulse
+When this Incantation resolves, deal 40 damage to a Hero of your choice.
+
+**Petrifying Gaze** — Cost: 3 Pulse
+When this Incantation resolves, choose an enemy Hero — it cannot attack during your opponent's next turn.
+
+**Favor of the Gods** — Cost: 3 Pulse
+When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms.
+
 ## Appendix T: Gribrok Realm — Full Card Set
 
 **Realm identity:** Goblin cutpurses, saboteurs, and taxmen — the weakest bodies in the game, but masters of resource denial. Gribrok Heroes are cheap and low-statted; their power is starving the enemy's Pulse: stealing it, draining it, and taxing every Hero the opponent tries to play — choking the bank that Hexes and Pacts depend on.
@@ -2940,6 +3166,80 @@ When Gribrok the Underking enters play, steal 5 Pulse from your opponent. While 
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +50 Attack.
 
+
+### Relics
+
+**Rusty Shiv** — 1 slot | Cost: 1 Pulse
+While equipped, this Hero continuously has +20 Attack.
+
+**Stolen Trinket** — 1 slot | Cost: 2 Pulse
+While equipped, this Hero continuously has +30 Attack.
+
+**Patchwork Armor** — 1 slot | Cost: 2 Pulse
+While equipped, this Hero continuously has +30 Health.
+
+**Sticky Fingers Glove** — 2 slots | Cost: 3 Pulse
+While equipped, this Hero continuously has +30 Attack and +20 Health.
+
+**Kingpin's Signet** — 2 slots | Cost: 4 Pulse
+While equipped, this Hero continuously has +40 Attack and +30 Health.
+
+### Hexes
+
+**Caltrops** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card.
+
+**Tripwire** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 30 for that combat only. After this effect triggers once, destroy this card.
+
+**Spiteful Trap** — Cost: 3 Pulse
+When a Hero in this lane dies, deal 40 damage to whichever Hero killed it. After this effect triggers once, destroy this card.
+
+**Barricade** — Cost: 4 Pulse
+The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns.
+
+**Snare Pit** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card.
+
+### Rites
+
+**The Long Con** — Cost: 3 Pulse
+Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately.
+
+**Stashed Loot** — Cost: 2 Pulse
+Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead.
+
+**Oath of the Warren** — Cost: 4 Pulse
+This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Gribrok Hero you control +20 Attack permanently.
+
+**Grand Heist** — Cost: 5 Pulse
+Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately.
+
+### Pacts
+
+**Backstab Bargain** — Cost: 3 Pulse
+When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane.
+
+**Fence the Goods** — Cost: 2 Pulse
+When this Pact resolves, discard 2 cards from your hand, then draw 3 cards.
+
+**Throw Under the Cart** — Cost: 1 Pulse
+When this Pact resolves, destroy a Hero you control in any lane. Gain Pulse equal to that Hero's cost, immediately and only once.
+
+**Desperate Gambit** — Cost: 2 Pulse
+When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack.
+
+### Incantations
+
+**Pickpocket** — Cost: 2 Pulse
+When this Incantation resolves, steal 3 Pulse from your opponent.
+
+**Sabotage** — Cost: 3 Pulse
+When this Incantation resolves, deal 40 damage to a Hero of your choice.
+
+**Mob Rush** — Cost: 3 Pulse
+When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms.
+
 ## Appendix U: Vhorrath Realm — Full Card Set
 
 **Realm identity:** Grave-cults and reanimators — an attrition realm that wins from the discard pile. Vhorrath Heroes carry modest stat lines; their power is recursion, raising fallen Heroes back to the battlefield again and again. Reanimated Heroes return **weakened** (reduced Attack) — unless they are raised by one of the realm's Ultra-Rare or Eternal necromancers, who bring the dead back at full strength.
@@ -3012,3 +3312,76 @@ Hero Mode — Cost: 10 Pulse | Attack/Health: 120/100 | Rarity: Eternal
 When Vhorrath, the Deathless enters play, play a Hero card of cost 10 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
+
+### Relics
+
+**Bone Fetish** — 1 slot | Cost: 1 Pulse
+While equipped, this Hero continuously has +20 Attack.
+
+**Grave Shroud** — 1 slot | Cost: 2 Pulse
+While equipped, this Hero continuously has +40 Health.
+
+**Soul Lantern** — 1 slot | Cost: 2 Pulse
+While equipped, this Hero continuously has +30 Attack.
+
+**Reliquary of Bone** — 2 slots | Cost: 3 Pulse
+While equipped, this Hero continuously has +30 Attack and +30 Health.
+
+**Crown of the Lich** — 2 slots | Cost: 5 Pulse
+While equipped, this Hero continuously has +50 Attack and +40 Health.
+
+### Hexes
+
+**Grasping Dead** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card.
+
+**Withering Curse** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 40 for that combat only. After this effect triggers once, destroy this card.
+
+**Vengeful Spirit** — Cost: 3 Pulse
+When a Hero in this lane dies, deal 50 damage to whichever Hero killed it. After this effect triggers once, destroy this card.
+
+**Warding Bones** — Cost: 4 Pulse
+The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns.
+
+**Grave Snare** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card.
+
+### Rites
+
+**The Slow Death** — Cost: 3 Pulse
+Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately.
+
+**Ritual of Undeath** — Cost: 2 Pulse
+Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead.
+
+**Oath of the Grave** — Cost: 4 Pulse
+This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Vhorrath Hero you control +20 Attack permanently.
+
+**Harvest of Souls** — Cost: 5 Pulse
+Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately.
+
+### Pacts
+
+**Blood Rite** — Cost: 2 Pulse
+When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack.
+
+**Grave Robbing** — Cost: 2 Pulse
+When this Pact resolves, discard 2 cards from your hand, then draw 3 cards.
+
+**Feed the Ossuary** — Cost: 1 Pulse
+When this Pact resolves, destroy a Hero you control in any lane. Gain Pulse equal to that Hero's cost, immediately and only once.
+
+**Dark Exchange** — Cost: 3 Pulse
+When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane.
+
+### Incantations
+
+**Raise Dead** — Cost: 4 Pulse
+When this Incantation resolves, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack.
+
+**Death Bolt** — Cost: 3 Pulse
+When this Incantation resolves, deal 40 damage to a Hero of your choice.
+
+**Grave Chill** — Cost: 3 Pulse
+When this Incantation resolves, an enemy Hero of your choice gets -40 Attack until the end of your next turn.
