@@ -214,6 +214,8 @@ function parseOp(cl) {
   if ((m = cl.match(/^the victorious Hero gains \+(\d+) Health permanently$/i))) return { op: "buff", atk: 0, hp: +m[1], target: "victor", perm: true };
   if ((m = cl.match(/^(?:you may )?play a Hero card of cost (\d+) or less from your discard pile into an empty lane without paying its cost$/i))) return { op: "playFromDiscard", maxCost: +m[1] };
   if ((m = cl.match(/^(?:you may )?return a Hero card(?: of cost (\d+) or less)? from your discard pile to your hand$/i))) return { op: "returnHeroDiscard", maxCost: m[1] ? +m[1] : 99 };
+  // Vaelmort (necromancer): raise a Hero from the discard pile, but weakened
+  if ((m = cl.match(new RegExp(`^reanimate a Hero from your discard pile into an empty lane; it enters with [-−–]${NUM} Attack$`, "i")))) return { op: "reanimate", weaken: +m[1] };
   if ((m = cl.match(/^until the end of your following turn, all Heroes you control may attack any enemy lane and gain \+(\d+) Attack during combats they initiate$/i))) return { op: "armyRide", atk: +m[1] };
   if ((m = cl.match(/^one Hero you control may attack any enemy lane until the end of your next turn$/i))) return { op: "setFlag", flag: "grantAnyLane", target: "ownChoice", until: 2, label: "may attack any lane" };
   if ((m = cl.match(/^until the end of your following turn, all Heroes you control have \+(\d+) Attack and, when they fight, the enemy Hero's Relics and Auxiliary cards grant it no Attack or Health for that combat$/i))) return { op: "armyHunt", atk: +m[1] };
@@ -1905,6 +1907,23 @@ async function runOp(op, pi, ctx) {
       P.discard.splice(chosen.ix, 1);
       G.players[pi].lanes[lane.li].hero = heroInst(chosen.id);
       log(`${P.name} raises ${cardById(chosen.id).name} from the discard pile into lane ${lane.li + 1}!`, P.isAI ? "ai" : "");
+      break;
+    }
+    case "reanimate": {
+      if (!P.discard) P.discard = [];
+      const cands = P.discard.map((id, ix) => ({ id, ix })).filter(x => cardById(x.id).type === "hero" && canPlayNameCheck(pi, cardById(x.id)));
+      const lanes = G.players[pi].lanes.map((L, li) => ({ L, li })).filter(x => !x.L.hero && laneUnlocked(pi, x.li) && !(x.L.sealedUntil > G.gt));
+      const pick = cands.filter(x => lanes.some(l => l.L.realm === cardById(x.id).realm));
+      if (!pick.length || !lanes.length) { log(`No Hero/lane available to reanimate from the discard pile.`); break; }
+      const chosen = P.isAI ? pick.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0]
+        : pick[await (async () => { const i = await promptPick("Reanimate which Hero from your discard pile (weakened)?", pick.map(x => cardById(x.id).name)); return i == null ? -1 : i; })()];
+      if (!chosen) break;
+      const lane = lanes.find(l => l.L.realm === cardById(chosen.id).realm);
+      P.discard.splice(chosen.ix, 1);
+      const inst = heroInst(chosen.id);
+      inst.permAtk = (inst.permAtk || 0) - op.weaken;   // returns weakened
+      G.players[pi].lanes[lane.li].hero = inst;
+      log(`${P.name} reanimates ${cardById(chosen.id).name} from the discard pile into lane ${lane.li + 1} (-${op.weaken} Attack).`, P.isAI ? "ai" : "");
       break;
     }
     case "armyRide": P.armyAnyLaneUntil = G.gt + 2; P.armyInitBonus = op.atk; P.armyInitUntil = G.gt + 2; log(`${P.name}'s Heroes may attack any lane (+${op.atk} when attacking) until the end of next turn!`); break;

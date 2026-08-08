@@ -2861,3 +2861,76 @@ Hero Mode — Cost: 8 Pulse | Attack/Health: 90/70 | Rarity: Eternal
 When Gribrok the Underking enters play, steal 5 Pulse from your opponent. While Gribrok the Underking is in play, Heroes your opponent plays cost 2 additional Pulse.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +50 Attack.
+
+## Appendix U: Vaelmort Realm — Full Card Set
+
+**Realm identity:** Grave-cults and reanimators — an attrition realm that wins from the discard pile. Vaelmort Heroes carry modest stat lines; their power is recursion, raising fallen Heroes back to the battlefield again and again. Reanimated Heroes return **weakened** (reduced Attack) — unless they are raised by one of the realm's Ultra-Rare or Eternal necromancers, who bring the dead back at full strength.
+
+### Heroes
+*(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
+
+**Bone Acolyte**
+Hero Mode — Cost: 2 Pulse | Attack/Health: 30/30 | Rarity: Common
+When Bone Acolyte enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack.
+Auxiliary Mode — Cost: 1 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +10 Attack.
+
+**Grave Tender**
+Hero Mode — Cost: 3 Pulse | Attack/Health: 30/50 | Rarity: Common
+When Grave Tender enters play, return a Hero card from your discard pile to your hand.
+Auxiliary Mode — Cost: 1 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +10 Attack.
+
+**Shambling Thrall**
+Hero Mode — Cost: 3 Pulse | Attack/Health: 50/40 | Rarity: Common
+When Shambling Thrall enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack.
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +20 Attack.
+
+**Corpse Picker**
+Hero Mode — Cost: 2 Pulse | Attack/Health: 20/40 | Rarity: Common
+When Corpse Picker enters play, return a Hero card from your discard pile to your hand.
+Auxiliary Mode — Cost: 1 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +10 Attack.
+
+**Grave-Binder Morr**
+Hero Mode — Cost: 4 Pulse | Attack/Health: 40/50 | Rarity: Uncommon
+When Grave-Binder Morr enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack.
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +20 Attack.
+
+**Tomb Warden Vesh**
+Hero Mode — Cost: 5 Pulse | Attack/Health: 50/60 | Rarity: Uncommon
+When Tomb Warden Vesh enters play, return a Hero card from your discard pile to your hand. Whenever an enemy Hero dies, gain 2 Pulse.
+Auxiliary Mode — Cost: 3 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +30 Attack.
+
+**Sepulcher Lord Kael**
+Hero Mode — Cost: 6 Pulse | Attack/Health: 60/60 | Rarity: Rare
+When Sepulcher Lord Kael enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack.
+Auxiliary Mode — Cost: 4 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +30 Attack.
+
+**Grim Harvester**
+Hero Mode — Cost: 6 Pulse | Attack/Health: 50/70 | Rarity: Rare
+When Grim Harvester enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack. Whenever an enemy Hero dies, gain 3 Pulse.
+Auxiliary Mode — Cost: 4 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +30 Attack.
+
+**Lichlord Mordath**
+Hero Mode — Cost: 8 Pulse | Attack/Health: 80/70 | Rarity: Ultra-Rare
+When Lichlord Mordath enters play, play a Hero card of cost 8 or less from your discard pile into an empty lane without paying its cost.
+Auxiliary Mode — Cost: 6 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +40 Attack.
+
+**Countess Nyxthral**
+Hero Mode — Cost: 8 Pulse | Attack/Health: 70/80 | Rarity: Ultra-Rare
+When Countess Nyxthral enters play, play a Hero card of cost 8 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.
+Auxiliary Mode — Cost: 6 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +40 Attack.
+
+**Vaelmort, the Deathless**
+Hero Mode — Cost: 10 Pulse | Attack/Health: 120/100 | Rarity: Eternal
+When Vaelmort, the Deathless enters play, play a Hero card of cost 10 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.
+Auxiliary Mode — Cost: 8 Pulse | 2 slots
+While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
