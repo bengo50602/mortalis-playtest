@@ -1443,9 +1443,9 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Dockhand Petro",
    "type": "hero",
-   "cost": 2,
+   "cost": 1,
    "atk": 20,
-   "hp": 40,
+   "hp": 60,
    "rarity": "Common",
    "text": "At the start of each of your turns, gain 2 Pulse.",
    "auxCost": 1,
@@ -1457,9 +1457,9 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Old Bassam, Ledger-Keeper",
    "type": "hero",
-   "cost": 2,
+   "cost": 1,
    "atk": 20,
-   "hp": 40,
+   "hp": 60,
    "rarity": "Common",
    "text": "Once per turn, you may pay 2 Pulse to give a Hero you control +20 Health permanently.",
    "auxCost": 1,
@@ -1471,9 +1471,9 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Mira the Coinwright",
    "type": "hero",
-   "cost": 3,
+   "cost": 2,
    "atk": 30,
-   "hp": 60,
+   "hp": 80,
    "rarity": "Common",
    "text": "While Mira is in play, whenever you gain Pulse from a card effect, Mira gains +10 Health permanently (maximum +20 Health per turn from this effect).",
    "auxCost": 1,
@@ -1485,12 +1485,12 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Harbor-Guard Tessio",
    "type": "hero",
-   "cost": 4,
+   "cost": 3,
    "atk": 40,
-   "hp": 80,
+   "hp": 110,
    "rarity": "Common",
    "text": "While Tessio is in play, when an enemy Hero attacks a Hero you control in a neighboring lane, you may redirect that attack to Tessio instead.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the first time each turn the Hero in this lane would take combat damage, prevent 10 of that damage."
   },
@@ -1499,12 +1499,12 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Sindar the Toll-Master",
    "type": "hero",
-   "cost": 4,
+   "cost": 3,
    "atk": 40,
-   "hp": 80,
+   "hp": 110,
    "rarity": "Uncommon",
    "text": "While Sindar is in play, whenever an enemy Hero declares an attack, gain 2 Pulse.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Health and heals 10 Health at the start of each of your turns."
   },
@@ -1513,12 +1513,12 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Captain Zarah of the Amber Fleet",
    "type": "hero",
-   "cost": 5,
+   "cost": 4,
    "atk": 50,
-   "hp": 100,
+   "hp": 140,
    "rarity": "Uncommon",
    "text": "At the start of each of your turns, gain 2 Pulse. Whenever you gain Pulse from a card effect, Zarah heals 10 Health.",
-   "auxCost": 3,
+   "auxCost": 2,
    "auxSlots": 2,
    "auxText": "At the start of each of your turns, gain 3 Pulse."
   },
@@ -1527,12 +1527,12 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Guildmother Ottavia",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 60,
-   "hp": 120,
+   "hp": 170,
    "rarity": "Rare",
    "text": "At the start of each of your turns, gain 3 Pulse.",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, all Heroes you control continuously have +20 Health."
   },
@@ -1541,12 +1541,12 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Benedar, Broker of Shields",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 70,
-   "hp": 110,
+   "hp": 150,
    "rarity": "Rare",
    "text": "Once per turn, you may pay 2 Pulse: the first attack declared against any Hero you control during your opponent's next turn is blocked — no combat occurs and no damage is dealt to either side.",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 1,
    "auxText": "Once per turn, when a Hero you control is attacked, you may pay 2 Pulse to redirect that attack to the Hero in this lane instead."
   },
@@ -1555,12 +1555,12 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Nassrin, the Gilded Tide",
    "type": "hero",
-   "cost": 8,
+   "cost": 7,
    "atk": 90,
-   "hp": 150,
+   "hp": 210,
    "rarity": "Ultra-Rare",
    "text": "At the start of each of your turns, gain 3 Pulse. Once per turn, you may pay 4 Pulse to give a Hero you control +40 Health permanently.",
-   "auxCost": 6,
+   "auxCost": 5,
    "auxSlots": 2,
    "auxText": "At the start of each of your turns, gain 2 Pulse for every full 10 Pulse you have banked (maximum 3 Pulse per turn from this effect)."
   },
@@ -1569,12 +1569,12 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Admiral Corvazzo Ten-Fleets",
    "type": "hero",
-   "cost": 8,
+   "cost": 7,
    "atk": 100,
-   "hp": 140,
+   "hp": 200,
    "rarity": "Ultra-Rare",
    "text": "While Corvazzo is in play, whenever an enemy Hero attacks any other Hero you control, you may pay 2 Pulse to redirect that attack to Corvazzo instead (once per enemy attack).",
-   "auxCost": 6,
+   "auxCost": 5,
    "auxSlots": 1,
    "auxText": "While in this slot, whenever an enemy attack is blocked, prevented, or redirected by one of your card effects, gain 3 Pulse."
   },
@@ -1583,12 +1583,12 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Qeth-Amun, the Everflowing Purse",
    "type": "hero",
-   "cost": 10,
+   "cost": 9,
    "atk": 100,
-   "hp": 200,
+   "hp": 280,
    "rarity": "Eternal",
    "text": "At the start of each of your turns, gain 4 Pulse. While Qeth-Amun is in play, all Heroes you control continuously have +50 Health, and each Hero you control heals 10 Health at the start of each of your turns.",
-   "auxCost": 8,
+   "auxCost": 7,
    "auxSlots": 2,
    "auxText": "At the start of each of your turns, gain 3 Pulse. Whenever you gain Pulse from any card effect, all Heroes you control heal 10 Health."
   },
@@ -1607,7 +1607,7 @@ window.DEFAULT_DATA = {
    "name": "Ledger of Standing Accounts",
    "type": "relic",
    "slots": 1,
-   "cost": 2,
+   "cost": 1,
    "text": "While equipped, at the start of each of your turns, gain 2 Pulse."
   },
   {
@@ -1616,7 +1616,7 @@ window.DEFAULT_DATA = {
    "name": "Banner of Safe Passage",
    "type": "relic",
    "slots": 1,
-   "cost": 3,
+   "cost": 2,
    "text": "While equipped, the first time each turn this Hero would take combat damage, prevent 20 of that damage."
   },
   {
@@ -1625,7 +1625,7 @@ window.DEFAULT_DATA = {
    "name": "The Guild Charter",
    "type": "relic",
    "slots": 2,
-   "cost": 4,
+   "cost": 3,
    "text": "While equipped, this Hero continuously has +20 Attack and +40 Health. At the start of each of your turns, gain 2 Pulse."
   },
   {
@@ -1634,7 +1634,7 @@ window.DEFAULT_DATA = {
    "name": "Colossus of the Harbor Gate",
    "type": "relic",
    "slots": 2,
-   "cost": 5,
+   "cost": 4,
    "text": "While equipped, this Hero continuously has +80 Health. When an enemy Hero redirects an attack into another of your lanes, you may pull that attack to this Hero instead (no cost)."
   },
   {
@@ -1650,7 +1650,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Hired Blades",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy Hero attacks a Hero in this lane, the defending Hero gains +30 Attack for that combat only. After this effect triggers once, destroy this card."
   },
   {
@@ -1658,7 +1658,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Insurance Policy",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When a Hero in this lane dies, gain Pulse equal to that Hero's printed cost and draw 1 card. After this effect triggers once, destroy this card."
   },
   {
@@ -1666,7 +1666,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Escort Detail",
    "type": "hex",
-   "cost": 3,
+   "cost": 2,
    "text": "When an enemy Hero attacks a Hero you control in a neighboring lane, redirect that attack to the Hero in this lane. After this effect triggers once, destroy this card."
   },
   {
@@ -1674,7 +1674,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Closed Port",
    "type": "hex",
-   "cost": 5,
+   "cost": 4,
    "text": "The first time each turn a Hero in this lane would take combat damage, prevent 30 of that damage. This card is not destroyed after triggering and may trigger again on future turns."
   },
   {
@@ -1682,7 +1682,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Slow-Built Bulwark",
    "type": "rite",
-   "cost": 2,
+   "cost": 1,
    "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +10 Attack and +50 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +30 Health immediately instead."
   },
   {
@@ -1690,7 +1690,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "The Long Voyage",
    "type": "rite",
-   "cost": 3,
+   "cost": 2,
    "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, gain 8 Pulse and draw 1 card, then destroy this Rite. At any point before then, you may instead end this Rite early to gain 4 Pulse immediately."
   },
   {
@@ -1698,7 +1698,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Oath of the Guild Compact",
    "type": "rite",
-   "cost": 4,
+   "cost": 3,
    "text": "This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Gildharbor Hero you control +40 Health permanently."
   },
   {
@@ -1706,7 +1706,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Reckoning of the Broken Contract",
    "type": "rite",
-   "cost": 5,
+   "cost": 4,
    "text": "Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately."
   },
   {
@@ -1722,7 +1722,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Cargo Manifest",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, discard 1 card. Gain 3 Pulse and a Hero you control gains +20 Health permanently."
   },
   {
@@ -1730,7 +1730,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Protection Money",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, choose a Hero you control — it cannot attack next turn. That Hero gains +30 Health permanently and you gain 3 Pulse."
   },
   {
@@ -1738,7 +1738,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Buyout",
    "type": "pact",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Pact resolves, destroy a Relic you control. Gain Pulse equal to double that Relic's printed cost."
   },
   {
@@ -1746,7 +1746,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Emergency Provisions",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, choose up to 2 Heroes you control — each heals 30 Health, then each gains +10 Health permanently."
   },
   {
@@ -1754,7 +1754,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Flood the Market",
    "type": "incantation",
-   "cost": 4,
+   "cost": 3,
    "text": "When this Incantation resolves, draw 2 cards, then gain 2 Pulse for each different Realm among the Heroes you control."
   },
   {
@@ -1762,7 +1762,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Hold the Line",
    "type": "incantation",
-   "cost": 5,
+   "cost": 4,
    "text": "When this Incantation resolves, all Heroes you control continuously have +40 Health until the start of your next turn."
   },
   {
@@ -1770,7 +1770,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Merchant's Windfall",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
   },
   {
@@ -1778,7 +1778,7 @@ window.DEFAULT_DATA = {
    "realm": "Gildharbor",
    "name": "Hired Assassin",
    "type": "incantation",
-   "cost": 4,
+   "cost": 3,
    "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
   },
   {
@@ -3094,9 +3094,9 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Page Wilm",
    "type": "hero",
-   "cost": 2,
+   "cost": 1,
    "atk": 20,
-   "hp": 40,
+   "hp": 60,
    "rarity": "Common",
    "text": "When Wilm enters play, draw 1 card.",
    "auxCost": 1,
@@ -3108,9 +3108,9 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Herald Josselin",
    "type": "hero",
-   "cost": 2,
+   "cost": 1,
    "atk": 30,
-   "hp": 30,
+   "hp": 40,
    "rarity": "Common",
    "text": "While Josselin is in play, the first Hero you play each turn costs 1 less Pulse (minimum 1).",
    "auxCost": 1,
@@ -3122,9 +3122,9 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Sir Aldous the Steadfast",
    "type": "hero",
-   "cost": 3,
+   "cost": 2,
    "atk": 40,
-   "hp": 50,
+   "hp": 70,
    "rarity": "Common",
    "text": "Once per turn, when Sir Aldous is attacked and survives the combat, he may immediately attack the Hero that attacked him.",
    "auxCost": 1,
@@ -3136,12 +3136,12 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Marshal Berrick",
    "type": "hero",
-   "cost": 4,
+   "cost": 3,
    "atk": 50,
-   "hp": 70,
+   "hp": 100,
    "rarity": "Common",
    "text": "Once per turn, you may pay 2 Pulse: a Hero you control in a lane neighboring Berrick gains +20 Attack until end of turn.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, Heroes you control in neighboring lanes gain +10 Attack during combats they initiate."
   },
@@ -3150,12 +3150,12 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Chancellor Hubert Mott",
    "type": "hero",
-   "cost": 4,
+   "cost": 3,
    "atk": 50,
-   "hp": 70,
+   "hp": 100,
    "rarity": "Uncommon",
    "text": "At the start of each of your turns, if you control Heroes from 2 or more different Realms, gain 1 Pulse.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 2,
    "auxText": "While in this slot, at the start of each of your turns, if you control Heroes from 3 or more different Realms, draw 1 card."
   },
@@ -3164,12 +3164,12 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Dame Rosalind of the Vale",
    "type": "hero",
-   "cost": 5,
+   "cost": 4,
    "atk": 70,
-   "hp": 80,
+   "hp": 110,
    "rarity": "Uncommon",
    "text": "Once per turn, you may pay 3 Pulse to Knight a Hero you control — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old). While Rosalind is in play, your Champion continuously has +20 Attack and +20 Health.",
-   "auxCost": 3,
+   "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, your Champion continuously has +10 Attack and +10 Health, and heals 10 Health at the start of each of your turns."
   },
@@ -3178,12 +3178,12 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Sir Gareth Twicesworn",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 80,
-   "hp": 100,
+   "hp": 140,
    "rarity": "Rare",
    "text": "Once per turn, you may pay 4 Pulse: choose another Hero you control — it may attack twice this turn.",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, once per turn, you may pay 4 Pulse: a Hero you control in a lane neighboring this one may attack twice this turn."
   },
@@ -3192,12 +3192,12 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Warden Elsbeth of the Twin Banners",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 90,
-   "hp": 90,
+   "hp": 130,
    "rarity": "Rare",
    "text": "Once per turn, Elsbeth and a Hero you control in a lane neighboring her may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike).",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 1,
    "auxText": "While in this slot, when two Heroes you control attack together as a single combat (a Joint Strike), each gains +10 Attack for that combat."
   },
@@ -3206,12 +3206,12 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Lord Commander Ravenshold",
    "type": "hero",
-   "cost": 8,
+   "cost": 7,
    "atk": 110,
-   "hp": 130,
+   "hp": 180,
    "rarity": "Ultra-Rare",
    "text": "Once per turn, you may pay 2 Pulse: two Heroes you control in neighboring lanes may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike) this turn. While Ravenshold is in play, Heroes you control gain +10 Attack during Joint Strikes.",
-   "auxCost": 6,
+   "auxCost": 5,
    "auxSlots": 2,
    "auxText": "While in this slot, once per turn, when a Hero you control is attacked, another Hero you control in a lane neighboring the defender may add half its Attack (rounded to the nearest 10) to the defender's Attack for that combat."
   },
@@ -3220,12 +3220,12 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Queen Isolde the Unifier",
    "type": "hero",
-   "cost": 8,
+   "cost": 7,
    "atk": 110,
-   "hp": 130,
+   "hp": 180,
    "rarity": "Ultra-Rare",
    "text": "While Isolde is in play, all Heroes you control continuously have +10 Attack and +10 Health for each different Realm among the Heroes you control (maximum +20 Attack and +20 Health).",
-   "auxCost": 6,
+   "auxCost": 5,
    "auxSlots": 1,
    "auxText": "While in this slot, at the start of each of your turns, gain 1 Pulse; if you control Heroes from 3 or more different Realms, also draw 1 card."
   },
@@ -3234,12 +3234,12 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "High King Aldemar Oathenkeeper",
    "type": "hero",
-   "cost": 10,
+   "cost": 9,
    "atk": 140,
-   "hp": 160,
+   "hp": 220,
    "rarity": "Eternal",
    "text": "When Aldemar enters play, Knight a Hero you control — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old). While Aldemar is in play, your Champion continuously has +30 Attack and +30 Health, and once per turn you may pay 2 Pulse for your Champion to attack a second time that turn. At the start of each of your turns, gain 1 Pulse and draw 1 card.",
-   "auxCost": 8,
+   "auxCost": 7,
    "auxSlots": 2,
    "auxText": "While in this slot, once per turn, two Heroes you control in neighboring lanes may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike), and Heroes you control gain +10 Attack during Joint Strikes."
   },
@@ -3258,7 +3258,7 @@ window.DEFAULT_DATA = {
    "name": "Heraldic Shield",
    "type": "relic",
    "slots": 1,
-   "cost": 2,
+   "cost": 1,
    "text": "While equipped, this Hero continuously has +30 Health. Once per turn, when this Hero survives being attacked, gain 1 Pulse."
   },
   {
@@ -3267,7 +3267,7 @@ window.DEFAULT_DATA = {
    "name": "Sword of Sworn Service",
    "type": "relic",
    "slots": 1,
-   "cost": 3,
+   "cost": 2,
    "text": "While equipped, this Hero continuously has +10 Attack for each other Hero you control (maximum +30 Attack)."
   },
   {
@@ -3276,7 +3276,7 @@ window.DEFAULT_DATA = {
    "name": "Crown Regalia of Oathenhall",
    "type": "relic",
    "slots": 2,
-   "cost": 4,
+   "cost": 3,
    "text": "While equipped, this Hero continuously has +30 Attack and +30 Health. When this Relic is equipped, you may Knight this Hero — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old)."
   },
   {
@@ -3285,7 +3285,7 @@ window.DEFAULT_DATA = {
    "name": "The Unifier's Banner",
    "type": "relic",
    "slots": 2,
-   "cost": 5,
+   "cost": 4,
    "text": "While equipped, this Hero continuously has +30 Attack and +40 Health, and Heroes you control in neighboring lanes continuously have +10 Attack and +10 Health."
   },
   {
@@ -3301,7 +3301,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Call to Arms",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy Hero attacks a Hero in this lane, the defender gains +10 Attack and +20 Health for that combat only. After this effect triggers once, destroy this card."
   },
   {
@@ -3309,7 +3309,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Oathbound Vengeance",
    "type": "hex",
-   "cost": 3,
+   "cost": 2,
    "text": "When the Hero in this lane is destroyed in combat, Knight another Hero you control — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old) — and it gains +20 Attack permanently. After this effect triggers once, destroy this card."
   },
   {
@@ -3317,7 +3317,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Counter-Charge",
    "type": "hex",
-   "cost": 4,
+   "cost": 3,
    "text": "When an enemy Hero attacks a Hero in this lane and the defender survives, the defender and one Hero you control in a neighboring lane may immediately attack the attacking Hero together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike). After this effect triggers once, destroy this card."
   },
   {
@@ -3325,7 +3325,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Standing Garrison",
    "type": "hex",
-   "cost": 5,
+   "cost": 4,
    "text": "The first time each turn the Hero in this lane is attacked and survives, it may immediately attack the Hero that attacked it. This card is not destroyed after triggering and may trigger again on future turns."
   },
   {
@@ -3333,7 +3333,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Mustering the Banners",
    "type": "rite",
-   "cost": 2,
+   "cost": 1,
    "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, gain 2 Pulse and draw 2 cards, then destroy this Rite. At any point before then, you may instead end this Rite early to draw 1 card immediately."
   },
   {
@@ -3341,7 +3341,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "The Coronation",
    "type": "rite",
-   "cost": 3,
+   "cost": 2,
    "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, Knight a Hero you control — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old) — and it gains +30 Attack and +30 Health permanently, then destroy this Rite. At any point before then, you may instead end this Rite early to Knight a Hero you control — it becomes your Champion (no stat bonus)."
   },
   {
@@ -3349,7 +3349,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Oath of Fealty",
    "type": "rite",
-   "cost": 4,
+   "cost": 3,
    "text": "This Rite gains 1 counter at the start of each of your turns during which you control 3 or more Heroes. When it reaches 3 counters, destroy this Rite; your Champion gains +40 Attack and +40 Health permanently, and each other Hero you control gains +10 Attack and +10 Health permanently."
   },
   {
@@ -3357,7 +3357,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Reckoning of the Broken Oath",
    "type": "rite",
-   "cost": 5,
+   "cost": 4,
    "text": "Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately."
   },
   {
@@ -3373,7 +3373,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Royal Decree",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, discard 1 card. Two Heroes you control in neighboring lanes may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike) this turn."
   },
   {
@@ -3381,7 +3381,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "The King's Ransom",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, lose 20 Mortality. Gain 3 Pulse and draw 1 card."
   },
   {
@@ -3389,7 +3389,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Feast of Allegiance",
    "type": "pact",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Pact resolves, choose a Hero you control — it cannot attack next turn. Gain 2 Pulse, draw 1 card, and that Hero gains +20 Health permanently."
   },
   {
@@ -3397,7 +3397,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "By Royal Command",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, choose a Hero you control: it may attack twice this turn."
   },
   {
@@ -3405,7 +3405,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Rally the Realms",
    "type": "incantation",
-   "cost": 4,
+   "cost": 3,
    "text": "When this Incantation resolves, all Heroes you control gain +10 Attack until end of turn — or +20 Attack if you control Heroes from 3 or more different Realms. Draw 1 card."
   },
   {
@@ -3413,7 +3413,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "For King and Country",
    "type": "incantation",
-   "cost": 5,
+   "cost": 4,
    "text": "When this Incantation resolves, until end of turn: your Champion has +20 Attack and may attack twice, and all other Heroes you control have +10 Attack."
   },
   {
@@ -3421,7 +3421,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Call to the Banners",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
   },
   {
@@ -3429,7 +3429,7 @@ window.DEFAULT_DATA = {
    "realm": "Oathenhall",
    "name": "Sworn Vengeance",
    "type": "incantation",
-   "cost": 4,
+   "cost": 3,
    "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
   },
   {
@@ -3764,9 +3764,9 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Brother Pell",
    "type": "hero",
-   "cost": 2,
+   "cost": 1,
    "atk": 20,
-   "hp": 40,
+   "hp": 60,
    "rarity": "Common",
    "text": "When Brother Pell dies, each other Hero you control heals 20 Health.",
    "auxCost": 1,
@@ -3778,9 +3778,9 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Friar Odo the Loud",
    "type": "hero",
-   "cost": 2,
+   "cost": 1,
    "atk": 20,
-   "hp": 40,
+   "hp": 60,
    "rarity": "Common",
    "text": "While Odo is in play, enemy Heroes must attack Odo's lane if able.",
    "auxCost": 1,
@@ -3792,9 +3792,9 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Sister Maren of the Bowl",
    "type": "hero",
-   "cost": 3,
+   "cost": 2,
    "atk": 30,
-   "hp": 60,
+   "hp": 80,
    "rarity": "Common",
    "text": "Once per turn, you may pay 1 Pulse: a Hero you control heals 20 Health.",
    "auxCost": 1,
@@ -3806,12 +3806,12 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Brother Anselm the Giving",
    "type": "hero",
-   "cost": 4,
+   "cost": 3,
    "atk": 40,
-   "hp": 80,
+   "hp": 110,
    "rarity": "Common",
    "text": "Once per turn, you may move 20 Health from Anselm to another Hero you control (Anselm's current and maximum Health drop by 20; the target's current and maximum Health rise by 20, permanently). If this reduces Anselm to 0 Health, he dies.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, when the Hero in this lane dies, draw 1 card and gain 1 Pulse."
   },
@@ -3820,12 +3820,12 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Prior Benedic",
    "type": "hero",
-   "cost": 4,
+   "cost": 3,
    "atk": 40,
-   "hp": 80,
+   "hp": 110,
    "rarity": "Uncommon",
    "text": "When Benedic dies, draw 2 cards.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, whenever a Hero you control dies, each remaining Hero you control heals 10 Health."
   },
@@ -3834,12 +3834,12 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Sister Ottoline the Shield",
    "type": "hero",
-   "cost": 5,
+   "cost": 4,
    "atk": 50,
-   "hp": 100,
+   "hp": 140,
    "rarity": "Uncommon",
    "text": "While Ottoline is in play, enemy Heroes must attack Ottoline's lane if able. When Ottoline dies, each other Hero you control gains +10 Attack and +20 Health permanently.",
-   "auxCost": 3,
+   "auxCost": 2,
    "auxSlots": 2,
    "auxText": "While in this slot, enemy Heroes must attack this lane if able."
   },
@@ -3848,12 +3848,12 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Abbot Cuthwin of the Long Vigil",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 70,
-   "hp": 110,
+   "hp": 150,
    "rarity": "Rare",
    "text": "When Cuthwin dies, gain 3 Pulse, draw 2 cards, and each Hero you control heals 30 Health.",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 1,
    "auxText": "While in this slot, at the start of each of your turns, each Hero you control heals 10 Health."
   },
@@ -3862,12 +3862,12 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Friar Gislebert the Unbroken Bell",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 70,
-   "hp": 110,
+   "hp": 150,
    "rarity": "Rare",
    "text": "While Gislebert is in play, whenever a Hero you control dies, all remaining Heroes you control gain +10 Attack and +10 Health permanently.",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, when the Hero in this lane dies, all Heroes you control heal 40 Health and you draw 1 card."
   },
@@ -3876,12 +3876,12 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Mother Superior Aldith",
    "type": "hero",
-   "cost": 8,
+   "cost": 7,
    "atk": 90,
-   "hp": 150,
+   "hp": 210,
    "rarity": "Ultra-Rare",
    "text": "While Aldith is in play, all enemy Hero attacks must target Aldith's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane. Aldith takes 10 less combat damage, and enemy Heroes that attack Aldith take 20 damage after that combat resolves. When Aldith dies, each other Hero you control gains +20 Attack and +30 Health permanently, and you draw 2 cards.",
-   "auxCost": 6,
+   "auxCost": 5,
    "auxSlots": 2,
    "auxText": "While in this slot, whenever any Hero you control dies, gain 2 Pulse and each remaining Hero you control heals 20 Health."
   },
@@ -3890,12 +3890,12 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Pilgrim-Saint Wendreth",
    "type": "hero",
-   "cost": 8,
+   "cost": 7,
    "atk": 90,
-   "hp": 150,
+   "hp": 210,
    "rarity": "Ultra-Rare",
    "text": "Once per turn, you may move up to 30 Health from Wendreth to another Hero you control (as a permanent transfer of current and maximum Health). While Wendreth is in play, all enemy Hero attacks must target Wendreth's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane, and enemy Heroes that attack Wendreth take 20 damage after that combat resolves.",
-   "auxCost": 6,
+   "auxCost": 5,
    "auxSlots": 1,
    "auxText": "While in this slot, once per turn, when a Hero you control would take lethal combat damage, prevent 20 of that damage."
   },
@@ -3904,12 +3904,12 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Saint Alberic the Ever-Open Door",
    "type": "hero",
-   "cost": 10,
+   "cost": 9,
    "atk": 110,
-   "hp": 190,
+   "hp": 270,
    "rarity": "Eternal",
    "text": "While Alberic is in play, all enemy Hero attacks must target Alberic's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Alberic take 20 damage after that combat resolves, and at the start of each of your turns, each Hero you control heals 20 Health. When Alberic dies, each other Hero you control gains +30 Attack and +30 Health permanently, you gain 3 Pulse, and you draw 2 cards.",
-   "auxCost": 8,
+   "auxCost": 7,
    "auxSlots": 2,
    "auxText": "While in this slot, whenever a Hero you control dies, each remaining Hero you control gains +10 Attack and +10 Health permanently and heals 20 Health."
   },
@@ -3928,7 +3928,7 @@ window.DEFAULT_DATA = {
    "name": "Rope Cincture",
    "type": "relic",
    "slots": 1,
-   "cost": 2,
+   "cost": 1,
    "text": "While equipped, this Hero continuously has +30 Health. When the equipped Hero dies, each other Hero you control heals 20 Health."
   },
   {
@@ -3937,7 +3937,7 @@ window.DEFAULT_DATA = {
    "name": "Bell of the Last Vigil",
    "type": "relic",
    "slots": 1,
-   "cost": 3,
+   "cost": 2,
    "text": "While equipped, this Hero continuously has +20 Health. When the equipped Hero dies, draw 2 cards."
   },
   {
@@ -3946,7 +3946,7 @@ window.DEFAULT_DATA = {
    "name": "Habit of the Gray Order",
    "type": "relic",
    "slots": 2,
-   "cost": 4,
+   "cost": 3,
    "text": "While equipped, this Hero continuously has +60 Health, and enemy Heroes must attack this Hero's lane if able."
   },
   {
@@ -3955,7 +3955,7 @@ window.DEFAULT_DATA = {
    "name": "Reliquary of the First Friar",
    "type": "relic",
    "slots": 2,
-   "cost": 5,
+   "cost": 4,
    "text": "While equipped, this Hero continuously has +20 Attack and +60 Health. When the equipped Hero dies, each other Hero you control gains +20 Attack and +20 Health permanently."
   },
   {
@@ -3971,7 +3971,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Testament",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When the Hero in this lane dies, draw 2 cards. After this effect triggers once, destroy this card."
   },
   {
@@ -3979,7 +3979,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Sanctuary Bell",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy Hero attacks a Hero in this lane, the defending Hero heals 30 Health before combat damage is calculated. After this effect triggers once, destroy this card."
   },
   {
@@ -3987,7 +3987,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Martyr's Gift",
    "type": "hex",
-   "cost": 3,
+   "cost": 2,
    "text": "When the Hero in this lane dies, another Hero you control gains +30 Attack and +30 Health permanently. After this effect triggers once, destroy this card."
   },
   {
@@ -3995,7 +3995,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "The Open Door",
    "type": "hex",
-   "cost": 5,
+   "cost": 4,
    "text": "The first time each turn a Hero you control dies, each remaining Hero you control heals 20 Health and you gain 1 Pulse. This card is not destroyed after triggering and may trigger again on future turns."
   },
   {
@@ -4003,7 +4003,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "The Long Fast",
    "type": "rite",
-   "cost": 2,
+   "cost": 1,
    "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, each Hero you control heals 40 Health and gains +10 Health permanently, then destroy this Rite. At any point before then, you may instead end this Rite early — one Hero you control heals 20 Health immediately."
   },
   {
@@ -4011,7 +4011,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Consecration of the Poor Yard",
    "type": "rite",
-   "cost": 3,
+   "cost": 2,
    "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, return a Hero card from your discard pile to your hand and gain 2 Pulse, then destroy this Rite. At any point before then, you may instead end this Rite early to gain 1 Pulse immediately."
   },
   {
@@ -4019,7 +4019,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Oath of the Gray Order",
    "type": "rite",
-   "cost": 4,
+   "cost": 3,
    "text": "This Rite gains 1 counter whenever a Hero you control is healed by one of your card effects (maximum 1 counter per turn). When it reaches 3 counters, destroy this Rite and give all Almsgard Heroes you control +10 Attack and +40 Health permanently."
   },
   {
@@ -4027,7 +4027,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Reckoning of the Silent Cloister",
    "type": "rite",
-   "cost": 5,
+   "cost": 4,
    "text": "Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately."
   },
   {
@@ -4043,7 +4043,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "The Last Loaf",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, discard 1 card. A Hero you control heals 40 Health and gains +20 Health permanently."
   },
   {
@@ -4051,7 +4051,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Flagellant's Penance",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, lose 20 Mortality. Each Hero you control heals 30 Health and you gain 1 Pulse."
   },
   {
@@ -4059,7 +4059,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Deathbed Confession",
    "type": "pact",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Pact resolves, destroy a Hero you control (its \"when this Hero dies\" effects trigger as normal). Draw 2 cards and gain 2 Pulse."
   },
   {
@@ -4067,7 +4067,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Laying On of Hands",
    "type": "incantation",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Incantation resolves, a Hero you control heals 50 Health."
   },
   {
@@ -4075,7 +4075,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Hymn of the Meek",
    "type": "incantation",
-   "cost": 4,
+   "cost": 3,
    "text": "When this Incantation resolves, each Hero you control heals 30 Health and gains +10 Health permanently."
   },
   {
@@ -4083,7 +4083,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Miracle at the Gate",
    "type": "incantation",
-   "cost": 5,
+   "cost": 4,
    "text": "When this Incantation resolves, choose a Hero you control: it heals to its maximum Health, gains +20 Health permanently, and you draw 1 card."
   },
   {
@@ -4091,7 +4091,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Blessing of the Open Door",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
   },
   {
@@ -4099,7 +4099,7 @@ window.DEFAULT_DATA = {
    "realm": "Almsgard",
    "name": "Merciful End",
    "type": "incantation",
-   "cost": 4,
+   "cost": 3,
    "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
   },
   {
@@ -5758,12 +5758,12 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Boulderkin",
    "type": "hero",
-   "cost": 3,
+   "cost": 2,
    "atk": 20,
-   "hp": 100,
+   "hp": 140,
    "rarity": "Common",
    "text": "While Boulderkin is in play, enemy Heroes must attack Boulderkin's lane if able.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Health."
   },
@@ -5772,12 +5772,12 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Graniteus",
    "type": "hero",
-   "cost": 3,
+   "cost": 2,
    "atk": 30,
-   "hp": 110,
+   "hp": 150,
    "rarity": "Common",
    "text": "While Graniteus is in play, enemy Heroes must attack Graniteus's lane if able. Graniteus takes 10 less combat damage.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +40 Health."
   },
@@ -5786,12 +5786,12 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Mudward Tunneler",
    "type": "hero",
-   "cost": 4,
+   "cost": 3,
    "atk": 30,
-   "hp": 120,
+   "hp": 170,
    "rarity": "Common",
    "text": "When Mudward Tunneler enters play, each other Hero you control heals 20 Health.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Health."
   },
@@ -5800,12 +5800,12 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Ironhide",
    "type": "hero",
-   "cost": 4,
+   "cost": 3,
    "atk": 40,
-   "hp": 110,
+   "hp": 150,
    "rarity": "Common",
    "text": "While Ironhide is in play, enemy Heroes must attack Ironhide's lane if able. Enemy Heroes that attack Ironhide take 20 damage after that combat resolves.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +40 Health."
   },
@@ -5814,12 +5814,12 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Monolith",
    "type": "hero",
-   "cost": 5,
+   "cost": 4,
    "atk": 40,
-   "hp": 160,
+   "hp": 220,
    "rarity": "Uncommon",
    "text": "While Monolith is in play, all enemy Hero attacks must target Monolith's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane. Monolith takes 20 less combat damage.",
-   "auxCost": 3,
+   "auxCost": 2,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +60 Health."
   },
@@ -5828,12 +5828,12 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Stoneheart Warden",
    "type": "hero",
-   "cost": 5,
+   "cost": 4,
    "atk": 30,
-   "hp": 150,
+   "hp": 210,
    "rarity": "Uncommon",
    "text": "At the start of each of your turns, each Hero you control heals 20 Health.",
-   "auxCost": 3,
+   "auxCost": 2,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +50 Health."
   },
@@ -5842,12 +5842,12 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Colossus",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 50,
-   "hp": 190,
+   "hp": 270,
    "rarity": "Rare",
    "text": "While Colossus is in play, all enemy Hero attacks must target Colossus's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Colossus take 20 damage after that combat resolves. Colossus takes 20 less combat damage.",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +70 Health."
   },
@@ -5856,12 +5856,12 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Bastion Everward",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 40,
-   "hp": 180,
+   "hp": 250,
    "rarity": "Rare",
    "text": "When Bastion Everward enters play, each other Hero you control heals 30 Health. At the start of each of your turns, each Hero you control heals 20 Health.",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +60 Health."
   },
@@ -5870,12 +5870,12 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Adamantus",
    "type": "hero",
-   "cost": 8,
+   "cost": 7,
    "atk": 60,
-   "hp": 240,
+   "hp": 340,
    "rarity": "Ultra-Rare",
    "text": "While Adamantus is in play, all enemy Hero attacks must target Adamantus's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Adamantus take 30 damage after that combat resolves. Adamantus takes 30 less combat damage.",
-   "auxCost": 6,
+   "auxCost": 5,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +90 Health."
   },
@@ -5884,12 +5884,12 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Aegisreach Titan",
    "type": "hero",
-   "cost": 8,
+   "cost": 7,
    "atk": 50,
-   "hp": 230,
+   "hp": 320,
    "rarity": "Ultra-Rare",
    "text": "When Aegisreach Titan enters play, each other Hero you control heals 40 Health. At the start of each of your turns, each Hero you control heals 30 Health.",
-   "auxCost": 6,
+   "auxCost": 5,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +80 Health."
   },
@@ -5898,12 +5898,12 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Karngmor, the Everstone",
    "type": "hero",
-   "cost": 10,
+   "cost": 9,
    "atk": 80,
-   "hp": 280,
+   "hp": 390,
    "rarity": "Eternal",
    "text": "While Karngmor, the Everstone is in play, all enemy Hero attacks must target Karngmor's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Karngmor take 30 damage after that combat resolves. At the start of each of your turns, each Hero you control heals 30 Health.",
-   "auxCost": 8,
+   "auxCost": 7,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +120 Health."
   },
@@ -5913,7 +5913,7 @@ window.DEFAULT_DATA = {
    "name": "Runestone Bulwark",
    "type": "relic",
    "slots": 1,
-   "cost": 2,
+   "cost": 1,
    "text": "While equipped, this Hero continuously has +60 Health."
   },
   {
@@ -5922,7 +5922,7 @@ window.DEFAULT_DATA = {
    "name": "Granite Plating",
    "type": "relic",
    "slots": 1,
-   "cost": 2,
+   "cost": 1,
    "text": "While equipped, this Hero continuously has +50 Health."
   },
   {
@@ -5931,7 +5931,7 @@ window.DEFAULT_DATA = {
    "name": "Ironbark Shell",
    "type": "relic",
    "slots": 1,
-   "cost": 3,
+   "cost": 2,
    "text": "While equipped, this Hero continuously has +80 Health."
   },
   {
@@ -5940,7 +5940,7 @@ window.DEFAULT_DATA = {
    "name": "Thornmail Casing",
    "type": "relic",
    "slots": 2,
-   "cost": 4,
+   "cost": 3,
    "text": "While equipped, this Hero continuously has +60 Health. Whenever this Hero wins a fight (deals damage while taking none), also deal 30 damage to the Hero in the opposing lane, if one is present."
   },
   {
@@ -5949,7 +5949,7 @@ window.DEFAULT_DATA = {
    "name": "Heart of the Mountain",
    "type": "relic",
    "slots": 2,
-   "cost": 5,
+   "cost": 4,
    "text": "While equipped, this Hero continuously has +40 Attack and +80 Health."
   },
   {
@@ -5957,7 +5957,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Crushing Retort",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
   },
   {
@@ -5965,7 +5965,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Grinding Halt",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 40 for that combat only. After this effect triggers once, destroy this card."
   },
   {
@@ -5973,7 +5973,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Avalanche Trap",
    "type": "hex",
-   "cost": 3,
+   "cost": 2,
    "text": "When a Hero in this lane dies, deal 50 damage to whichever Hero killed it. After this effect triggers once, destroy this card."
   },
   {
@@ -5981,7 +5981,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Stone Ward",
    "type": "hex",
-   "cost": 4,
+   "cost": 3,
    "text": "The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns."
   },
   {
@@ -5989,7 +5989,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Rockslide Snare",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
   },
   {
@@ -5997,7 +5997,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "The Long Vigil",
    "type": "rite",
-   "cost": 3,
+   "cost": 2,
    "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately."
   },
   {
@@ -6005,7 +6005,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Slow Fortification",
    "type": "rite",
-   "cost": 2,
+   "cost": 1,
    "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead."
   },
   {
@@ -6013,7 +6013,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Oath of the Mountain",
    "type": "rite",
-   "cost": 4,
+   "cost": 3,
    "text": "This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Golmerad Hero you control +20 Attack permanently."
   },
   {
@@ -6021,7 +6021,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Reckoning of Stone",
    "type": "rite",
-   "cost": 5,
+   "cost": 4,
    "text": "Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately."
   },
   {
@@ -6037,7 +6037,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Stoneblood Rite",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack."
   },
   {
@@ -6045,7 +6045,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Grinding Bargain",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, discard 2 cards from your hand, then draw 3 cards."
   },
   {
@@ -6053,7 +6053,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Reckless Quarry",
    "type": "pact",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane."
   },
   {
@@ -6061,7 +6061,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Fortify",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, each Hero you control heals 30 Health and gains +10 Attack until the end of your next turn."
   },
   {
@@ -6069,7 +6069,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Stone Skin",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, a Hero you control heals 40 Health and gains a ward that prevents the next 30 damage it would take."
   },
   {
@@ -6077,7 +6077,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Bastion's Call",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms."
   },
   {
@@ -6085,7 +6085,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Rallying Bulwark",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
   },
   {
@@ -6093,7 +6093,7 @@ window.DEFAULT_DATA = {
    "realm": "Golmerad",
    "name": "Crushing Blow",
    "type": "incantation",
-   "cost": 4,
+   "cost": 3,
    "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
   },
   {
@@ -6430,7 +6430,7 @@ window.DEFAULT_DATA = {
    "type": "hero",
    "cost": 1,
    "atk": 20,
-   "hp": 20,
+   "hp": 30,
    "rarity": "Common",
    "text": "When Snik the Cutpurse enters play, steal 2 Pulse from your opponent.",
    "auxCost": 1,
@@ -6442,9 +6442,9 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Grubfingers",
    "type": "hero",
-   "cost": 2,
+   "cost": 1,
    "atk": 30,
-   "hp": 20,
+   "hp": 30,
    "rarity": "Common",
    "text": "When Grubfingers enters play, your opponent loses 2 Pulse.",
    "auxCost": 1,
@@ -6456,9 +6456,9 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Pilfer Rat",
    "type": "hero",
-   "cost": 2,
+   "cost": 1,
    "atk": 20,
-   "hp": 30,
+   "hp": 40,
    "rarity": "Common",
    "text": "When Pilfer Rat enters play, steal 1 Pulse from your opponent.",
    "auxCost": 1,
@@ -6470,9 +6470,9 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Muckstab Sneak",
    "type": "hero",
-   "cost": 3,
+   "cost": 2,
    "atk": 40,
-   "hp": 20,
+   "hp": 30,
    "rarity": "Common",
    "text": "When Muckstab Sneak enters play, your opponent loses 3 Pulse.",
    "auxCost": 1,
@@ -6484,12 +6484,12 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Grizzle, the Taxman",
    "type": "hero",
-   "cost": 4,
+   "cost": 3,
    "atk": 40,
-   "hp": 40,
+   "hp": 60,
    "rarity": "Uncommon",
    "text": "While Grizzle, the Taxman is in play, Heroes your opponent plays cost 1 additional Pulse.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
   },
@@ -6498,12 +6498,12 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Nabber Queen",
    "type": "hero",
-   "cost": 4,
+   "cost": 3,
    "atk": 40,
-   "hp": 30,
+   "hp": 40,
    "rarity": "Uncommon",
    "text": "When Nabber Queen enters play, steal 3 Pulse from your opponent.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
   },
@@ -6512,12 +6512,12 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Wartlord Gribok",
    "type": "hero",
-   "cost": 5,
+   "cost": 4,
    "atk": 60,
-   "hp": 40,
+   "hp": 60,
    "rarity": "Rare",
    "text": "When Wartlord Gribok enters play, your opponent loses 3 Pulse. While Wartlord Gribok is in play, Heroes your opponent plays cost 1 additional Pulse.",
-   "auxCost": 3,
+   "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
   },
@@ -6526,12 +6526,12 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Skitterfang the Thief",
    "type": "hero",
-   "cost": 5,
+   "cost": 4,
    "atk": 50,
-   "hp": 40,
+   "hp": 60,
    "rarity": "Rare",
    "text": "When Skitterfang the Thief enters play, steal 4 Pulse from your opponent.",
-   "auxCost": 3,
+   "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
   },
@@ -6540,12 +6540,12 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Vexmaw, the Pulse-Eater",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 60,
-   "hp": 50,
+   "hp": 70,
    "rarity": "Ultra-Rare",
    "text": "When Vexmaw, the Pulse-Eater enters play, steal 4 Pulse from your opponent. While Vexmaw, the Pulse-Eater is in play, Heroes your opponent plays cost 1 additional Pulse.",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
   },
@@ -6554,12 +6554,12 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Grobbla the Swindler",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 50,
-   "hp": 50,
+   "hp": 70,
    "rarity": "Ultra-Rare",
    "text": "When Grobbla the Swindler enters play, your opponent loses 5 Pulse.",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
   },
@@ -6568,12 +6568,12 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Gribrok the Underking",
    "type": "hero",
-   "cost": 8,
+   "cost": 7,
    "atk": 90,
-   "hp": 70,
+   "hp": 100,
    "rarity": "Eternal",
    "text": "When Gribrok the Underking enters play, steal 5 Pulse from your opponent. While Gribrok the Underking is in play, Heroes your opponent plays cost 2 additional Pulse.",
-   "auxCost": 6,
+   "auxCost": 5,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +50 Attack."
   },
@@ -6592,7 +6592,7 @@ window.DEFAULT_DATA = {
    "name": "Stolen Trinket",
    "type": "relic",
    "slots": 1,
-   "cost": 2,
+   "cost": 1,
    "text": "While equipped, this Hero continuously has +30 Attack."
   },
   {
@@ -6601,7 +6601,7 @@ window.DEFAULT_DATA = {
    "name": "Patchwork Armor",
    "type": "relic",
    "slots": 1,
-   "cost": 2,
+   "cost": 1,
    "text": "While equipped, this Hero continuously has +30 Health."
   },
   {
@@ -6610,7 +6610,7 @@ window.DEFAULT_DATA = {
    "name": "Sticky Fingers Glove",
    "type": "relic",
    "slots": 2,
-   "cost": 3,
+   "cost": 2,
    "text": "While equipped, this Hero continuously has +30 Attack and +20 Health."
   },
   {
@@ -6619,7 +6619,7 @@ window.DEFAULT_DATA = {
    "name": "Kingpin's Signet",
    "type": "relic",
    "slots": 2,
-   "cost": 4,
+   "cost": 3,
    "text": "While equipped, this Hero continuously has +40 Attack and +30 Health."
   },
   {
@@ -6627,7 +6627,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Caltrops",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
   },
   {
@@ -6635,7 +6635,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Tripwire",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 30 for that combat only. After this effect triggers once, destroy this card."
   },
   {
@@ -6643,7 +6643,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Spiteful Trap",
    "type": "hex",
-   "cost": 3,
+   "cost": 2,
    "text": "When a Hero in this lane dies, deal 40 damage to whichever Hero killed it. After this effect triggers once, destroy this card."
   },
   {
@@ -6651,7 +6651,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Barricade",
    "type": "hex",
-   "cost": 4,
+   "cost": 3,
    "text": "The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns."
   },
   {
@@ -6659,7 +6659,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Snare Pit",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
   },
   {
@@ -6667,7 +6667,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "The Long Con",
    "type": "rite",
-   "cost": 3,
+   "cost": 2,
    "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately."
   },
   {
@@ -6675,7 +6675,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Stashed Loot",
    "type": "rite",
-   "cost": 2,
+   "cost": 1,
    "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead."
   },
   {
@@ -6683,7 +6683,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Oath of the Warren",
    "type": "rite",
-   "cost": 4,
+   "cost": 3,
    "text": "This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Gribrok Hero you control +20 Attack permanently."
   },
   {
@@ -6691,7 +6691,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Grand Heist",
    "type": "rite",
-   "cost": 5,
+   "cost": 4,
    "text": "Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately."
   },
   {
@@ -6699,7 +6699,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Backstab Bargain",
    "type": "pact",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane."
   },
   {
@@ -6707,7 +6707,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Fence the Goods",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, discard 2 cards from your hand, then draw 3 cards."
   },
   {
@@ -6723,7 +6723,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Desperate Gambit",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack."
   },
   {
@@ -6731,7 +6731,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Pickpocket",
    "type": "incantation",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Incantation resolves, steal 3 Pulse from your opponent."
   },
   {
@@ -6739,7 +6739,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Sabotage",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, deal 40 damage to a Hero of your choice."
   },
   {
@@ -6747,7 +6747,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Mob Rush",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms."
   },
   {
@@ -6755,7 +6755,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Warband Frenzy",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
   },
   {
@@ -6763,7 +6763,7 @@ window.DEFAULT_DATA = {
    "realm": "Gribrok",
    "name": "Backstab",
    "type": "incantation",
-   "cost": 4,
+   "cost": 3,
    "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
   },
   {
@@ -6771,9 +6771,9 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Bone Acolyte",
    "type": "hero",
-   "cost": 2,
+   "cost": 1,
    "atk": 30,
-   "hp": 30,
+   "hp": 40,
    "rarity": "Common",
    "text": "When Bone Acolyte enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack.",
    "auxCost": 1,
@@ -6785,9 +6785,9 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Grave Tender",
    "type": "hero",
-   "cost": 3,
+   "cost": 2,
    "atk": 30,
-   "hp": 50,
+   "hp": 70,
    "rarity": "Common",
    "text": "When Grave Tender enters play, return a Hero card from your discard pile to your hand.",
    "auxCost": 1,
@@ -6799,12 +6799,12 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Shambling Thrall",
    "type": "hero",
-   "cost": 3,
+   "cost": 2,
    "atk": 50,
-   "hp": 40,
+   "hp": 60,
    "rarity": "Common",
    "text": "When Shambling Thrall enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
   },
@@ -6813,9 +6813,9 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Corpse Picker",
    "type": "hero",
-   "cost": 2,
+   "cost": 1,
    "atk": 20,
-   "hp": 40,
+   "hp": 60,
    "rarity": "Common",
    "text": "When Corpse Picker enters play, return a Hero card from your discard pile to your hand.",
    "auxCost": 1,
@@ -6827,12 +6827,12 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Grave-Binder Morr",
    "type": "hero",
-   "cost": 4,
+   "cost": 3,
    "atk": 40,
-   "hp": 50,
+   "hp": 70,
    "rarity": "Uncommon",
    "text": "When Grave-Binder Morr enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack.",
-   "auxCost": 2,
+   "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
   },
@@ -6841,12 +6841,12 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Tomb Warden Vesh",
    "type": "hero",
-   "cost": 5,
+   "cost": 4,
    "atk": 50,
-   "hp": 60,
+   "hp": 80,
    "rarity": "Uncommon",
    "text": "When Tomb Warden Vesh enters play, return a Hero card from your discard pile to your hand. Whenever an enemy Hero dies, gain 2 Pulse.",
-   "auxCost": 3,
+   "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
   },
@@ -6855,12 +6855,12 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Sepulcher Lord Kael",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 60,
-   "hp": 60,
+   "hp": 80,
    "rarity": "Rare",
    "text": "When Sepulcher Lord Kael enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack.",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
   },
@@ -6869,12 +6869,12 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Grim Harvester",
    "type": "hero",
-   "cost": 6,
+   "cost": 5,
    "atk": 50,
-   "hp": 70,
+   "hp": 100,
    "rarity": "Rare",
    "text": "When Grim Harvester enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack. Whenever an enemy Hero dies, gain 3 Pulse.",
-   "auxCost": 4,
+   "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
   },
@@ -6883,12 +6883,12 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Lichlord Mordath",
    "type": "hero",
-   "cost": 8,
+   "cost": 7,
    "atk": 80,
-   "hp": 70,
+   "hp": 100,
    "rarity": "Ultra-Rare",
    "text": "When Lichlord Mordath enters play, play a Hero card of cost 8 or less from your discard pile into an empty lane without paying its cost.",
-   "auxCost": 6,
+   "auxCost": 5,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
   },
@@ -6897,12 +6897,12 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Countess Nyxthral",
    "type": "hero",
-   "cost": 8,
+   "cost": 7,
    "atk": 70,
-   "hp": 80,
+   "hp": 110,
    "rarity": "Ultra-Rare",
    "text": "When Countess Nyxthral enters play, play a Hero card of cost 8 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.",
-   "auxCost": 6,
+   "auxCost": 5,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
   },
@@ -6911,12 +6911,12 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Vhorrath, the Deathless",
    "type": "hero",
-   "cost": 10,
+   "cost": 9,
    "atk": 120,
-   "hp": 100,
+   "hp": 140,
    "rarity": "Eternal",
    "text": "When Vhorrath, the Deathless enters play, play a Hero card of cost 10 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.",
-   "auxCost": 8,
+   "auxCost": 7,
    "auxSlots": 2,
    "auxText": "While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice."
   },
@@ -6935,7 +6935,7 @@ window.DEFAULT_DATA = {
    "name": "Grave Shroud",
    "type": "relic",
    "slots": 1,
-   "cost": 2,
+   "cost": 1,
    "text": "While equipped, this Hero continuously has +40 Health."
   },
   {
@@ -6944,7 +6944,7 @@ window.DEFAULT_DATA = {
    "name": "Soul Lantern",
    "type": "relic",
    "slots": 1,
-   "cost": 2,
+   "cost": 1,
    "text": "While equipped, this Hero continuously has +30 Attack."
   },
   {
@@ -6953,7 +6953,7 @@ window.DEFAULT_DATA = {
    "name": "Reliquary of Bone",
    "type": "relic",
    "slots": 2,
-   "cost": 3,
+   "cost": 2,
    "text": "While equipped, this Hero continuously has +30 Attack and +30 Health."
   },
   {
@@ -6962,7 +6962,7 @@ window.DEFAULT_DATA = {
    "name": "Crown of the Lich",
    "type": "relic",
    "slots": 2,
-   "cost": 5,
+   "cost": 4,
    "text": "While equipped, this Hero continuously has +50 Attack and +40 Health."
   },
   {
@@ -6970,7 +6970,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Grasping Dead",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
   },
   {
@@ -6978,7 +6978,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Withering Curse",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 40 for that combat only. After this effect triggers once, destroy this card."
   },
   {
@@ -6986,7 +6986,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Vengeful Spirit",
    "type": "hex",
-   "cost": 3,
+   "cost": 2,
    "text": "When a Hero in this lane dies, deal 50 damage to whichever Hero killed it. After this effect triggers once, destroy this card."
   },
   {
@@ -6994,7 +6994,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Warding Bones",
    "type": "hex",
-   "cost": 4,
+   "cost": 3,
    "text": "The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns."
   },
   {
@@ -7002,7 +7002,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Grave Snare",
    "type": "hex",
-   "cost": 2,
+   "cost": 1,
    "text": "When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
   },
   {
@@ -7010,7 +7010,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "The Slow Death",
    "type": "rite",
-   "cost": 3,
+   "cost": 2,
    "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately."
   },
   {
@@ -7018,7 +7018,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Ritual of Undeath",
    "type": "rite",
-   "cost": 2,
+   "cost": 1,
    "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead."
   },
   {
@@ -7026,7 +7026,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Oath of the Grave",
    "type": "rite",
-   "cost": 4,
+   "cost": 3,
    "text": "This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Vhorrath Hero you control +20 Attack permanently."
   },
   {
@@ -7034,7 +7034,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Harvest of Souls",
    "type": "rite",
-   "cost": 5,
+   "cost": 4,
    "text": "Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately."
   },
   {
@@ -7042,7 +7042,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Blood Rite",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack."
   },
   {
@@ -7050,7 +7050,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Grave Robbing",
    "type": "pact",
-   "cost": 2,
+   "cost": 1,
    "text": "When this Pact resolves, discard 2 cards from your hand, then draw 3 cards."
   },
   {
@@ -7066,7 +7066,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Dark Exchange",
    "type": "pact",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane."
   },
   {
@@ -7074,7 +7074,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Raise Dead",
    "type": "incantation",
-   "cost": 4,
+   "cost": 3,
    "text": "When this Incantation resolves, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack."
   },
   {
@@ -7082,7 +7082,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Death Bolt",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, deal 40 damage to a Hero of your choice."
   },
   {
@@ -7090,7 +7090,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Grave Chill",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, an enemy Hero of your choice gets -40 Attack until the end of your next turn."
   },
   {
@@ -7098,7 +7098,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Rally the Dead",
    "type": "incantation",
-   "cost": 3,
+   "cost": 2,
    "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
   },
   {
@@ -7106,7 +7106,7 @@ window.DEFAULT_DATA = {
    "realm": "Vhorrath",
    "name": "Soul Reaping",
    "type": "incantation",
-   "cost": 4,
+   "cost": 3,
    "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
   }
  ],
