@@ -1766,6 +1766,22 @@ window.DEFAULT_DATA = {
    "text": "When this Incantation resolves, all Heroes you control continuously have +40 Health until the start of your next turn."
   },
   {
+   "id": "gildharbor--merchant-s-windfall",
+   "realm": "Gildharbor",
+   "name": "Merchant's Windfall",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
+  },
+  {
+   "id": "gildharbor--hired-assassin",
+   "realm": "Gildharbor",
+   "name": "Hired Assassin",
+   "type": "incantation",
+   "cost": 4,
+   "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
+  },
+  {
    "id": "ankhara--senb-tomb-sweeper",
    "realm": "Ankhara",
    "name": "Senb, Tomb-Sweeper",
@@ -3401,6 +3417,22 @@ window.DEFAULT_DATA = {
    "text": "When this Incantation resolves, until end of turn: your Champion has +20 Attack and may attack twice, and all other Heroes you control have +10 Attack."
   },
   {
+   "id": "oathenhall--call-to-the-banners",
+   "realm": "Oathenhall",
+   "name": "Call to the Banners",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
+  },
+  {
+   "id": "oathenhall--sworn-vengeance",
+   "realm": "Oathenhall",
+   "name": "Sworn Vengeance",
+   "type": "incantation",
+   "cost": 4,
+   "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
+  },
+  {
    "id": "zolthec--itzli-flint-bearer",
    "realm": "Zolthec",
    "name": "Itzli, Flint-Bearer",
@@ -4053,6 +4085,22 @@ window.DEFAULT_DATA = {
    "type": "incantation",
    "cost": 5,
    "text": "When this Incantation resolves, choose a Hero you control: it heals to its maximum Health, gains +20 Health permanently, and you draw 1 card."
+  },
+  {
+   "id": "almsgard--blessing-of-the-open-door",
+   "realm": "Almsgard",
+   "name": "Blessing of the Open Door",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
+  },
+  {
+   "id": "almsgard--merciful-end",
+   "realm": "Almsgard",
+   "name": "Merciful End",
+   "type": "incantation",
+   "cost": 4,
+   "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
   },
   {
    "id": "thornveil--lirael-swiftfletch",
@@ -5036,6 +5084,22 @@ window.DEFAULT_DATA = {
    "text": "When this Incantation resolves, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack), and you gain 1 Pulse for each Hero warded this way (maximum 3)."
   },
   {
+   "id": "brightmantle--rally-the-faithful",
+   "realm": "Brightmantle",
+   "name": "Rally the Faithful",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
+  },
+  {
+   "id": "brightmantle--purifying-flame",
+   "realm": "Brightmantle",
+   "name": "Purifying Flame",
+   "type": "incantation",
+   "cost": 4,
+   "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
+  },
+  {
    "id": "kessendo--kenji-the-first-blade",
    "realm": "Kessendo",
    "name": "Kenji, the First Blade",
@@ -5368,7 +5432,7 @@ window.DEFAULT_DATA = {
    "name": "Emberwing Squire",
    "type": "hero",
    "cost": 4,
-   "atk": 90,
+   "atk": 70,
    "hp": 40,
    "rarity": "Common",
    "text": "When Emberwing Squire enters play, an enemy Hero of your choice gets -20 Attack until the end of your next turn.",
@@ -5382,7 +5446,7 @@ window.DEFAULT_DATA = {
    "name": "Scaleguard Vael",
    "type": "hero",
    "cost": 4,
-   "atk": 80,
+   "atk": 60,
    "hp": 50,
    "rarity": "Common",
    "text": "When Scaleguard Vael enters play, destroy an enemy Auxiliary card.",
@@ -5396,7 +5460,7 @@ window.DEFAULT_DATA = {
    "name": "Cinderclaw Drake",
    "type": "hero",
    "cost": 5,
-   "atk": 110,
+   "atk": 90,
    "hp": 40,
    "rarity": "Common",
    "text": "Whenever Cinderclaw Drake deals combat damage to an enemy Hero, that Hero gets -20 Attack permanently.",
@@ -5410,7 +5474,7 @@ window.DEFAULT_DATA = {
    "name": "Wyrmrider Kass",
    "type": "hero",
    "cost": 5,
-   "atk": 100,
+   "atk": 80,
    "hp": 50,
    "rarity": "Common",
    "text": "When Wyrmrider Kass destroys an enemy Hero in combat, she deals 20 damage to the enemy Hero in a lane neighboring the one she attacked, if any.",
@@ -5424,7 +5488,7 @@ window.DEFAULT_DATA = {
    "name": "Pyrelord Draeven",
    "type": "hero",
    "cost": 6,
-   "atk": 140,
+   "atk": 110,
    "hp": 50,
    "rarity": "Uncommon",
    "text": "When Pyrelord Draeven enters play, destroy an enemy Relic or enemy Auxiliary card.",
@@ -5438,7 +5502,7 @@ window.DEFAULT_DATA = {
    "name": "Stormscale Myrrha",
    "type": "hero",
    "cost": 6,
-   "atk": 130,
+   "atk": 100,
    "hp": 60,
    "rarity": "Uncommon",
    "text": "When Stormscale Myrrha enters play, an enemy Hero of your choice gets -40 Attack until the end of your next turn.",
@@ -5452,7 +5516,7 @@ window.DEFAULT_DATA = {
    "name": "Ashmaw the Devourer",
    "type": "hero",
    "cost": 7,
-   "atk": 160,
+   "atk": 130,
    "hp": 60,
    "rarity": "Rare",
    "text": "When Ashmaw the Devourer enters play, destroy an enemy Hero with 60 or less Health remaining.",
@@ -5466,7 +5530,7 @@ window.DEFAULT_DATA = {
    "name": "Volcanic Warden Rax",
    "type": "hero",
    "cost": 7,
-   "atk": 150,
+   "atk": 120,
    "hp": 70,
    "rarity": "Rare",
    "text": "When Volcanic Warden Rax destroys an enemy Hero in combat, he deals 30 damage to the enemy Hero in a lane neighboring the one he attacked, if any.",
@@ -5480,7 +5544,7 @@ window.DEFAULT_DATA = {
    "name": "Nyxaraxi, the Obsidian Wyrm",
    "type": "hero",
    "cost": 9,
-   "atk": 200,
+   "atk": 160,
    "hp": 70,
    "rarity": "Ultra-Rare",
    "text": "When Nyxaraxi, the Obsidian Wyrm enters play, destroy an enemy Auxiliary card and an enemy Hero of your choice gets -40 Attack until the end of your next turn.",
@@ -5494,7 +5558,7 @@ window.DEFAULT_DATA = {
    "name": "Ignathor, Breath of Ruin",
    "type": "hero",
    "cost": 9,
-   "atk": 220,
+   "atk": 180,
    "hp": 60,
    "rarity": "Ultra-Rare",
    "text": "When Ignathor, Breath of Ruin enters play, destroy an enemy Hero with 80 or less Health remaining.",
@@ -5508,7 +5572,7 @@ window.DEFAULT_DATA = {
    "name": "Vorthalyx, the World-Ender",
    "type": "hero",
    "cost": 10,
-   "atk": 240,
+   "atk": 190,
    "hp": 90,
    "rarity": "Eternal",
    "text": "When Vorthalyx, the World-Ender enters play, destroy an enemy Hero with 100 or less Health remaining and destroy an enemy Auxiliary card.",
@@ -6015,6 +6079,22 @@ window.DEFAULT_DATA = {
    "type": "incantation",
    "cost": 3,
    "text": "When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms."
+  },
+  {
+   "id": "golmerad--rallying-bulwark",
+   "realm": "Golmerad",
+   "name": "Rallying Bulwark",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
+  },
+  {
+   "id": "golmerad--crushing-blow",
+   "realm": "Golmerad",
+   "name": "Crushing Blow",
+   "type": "incantation",
+   "cost": 4,
+   "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
   },
   {
    "id": "heliaxos--harpy-skirmisher",
@@ -6671,6 +6751,22 @@ window.DEFAULT_DATA = {
    "text": "When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms."
   },
   {
+   "id": "gribrok--warband-frenzy",
+   "realm": "Gribrok",
+   "name": "Warband Frenzy",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
+  },
+  {
+   "id": "gribrok--backstab",
+   "realm": "Gribrok",
+   "name": "Backstab",
+   "type": "incantation",
+   "cost": 4,
+   "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
+  },
+  {
    "id": "vhorrath--bone-acolyte",
    "realm": "Vhorrath",
    "name": "Bone Acolyte",
@@ -6996,6 +7092,22 @@ window.DEFAULT_DATA = {
    "type": "incantation",
    "cost": 3,
    "text": "When this Incantation resolves, an enemy Hero of your choice gets -40 Attack until the end of your next turn."
+  },
+  {
+   "id": "vhorrath--rally-the-dead",
+   "realm": "Vhorrath",
+   "name": "Rally the Dead",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms."
+  },
+  {
+   "id": "vhorrath--soul-reaping",
+   "realm": "Vhorrath",
+   "name": "Soul Reaping",
+   "type": "incantation",
+   "cost": 4,
+   "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
   }
  ],
  "constants": {

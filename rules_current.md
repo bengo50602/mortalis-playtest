@@ -952,6 +952,12 @@ When this Incantation resolves, all Heroes you control continuously have +40 Hea
 
 ---
 
+**Merchant's Windfall** — Cost: 3 Pulse
+When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms.
+
+**Hired Assassin** — Cost: 4 Pulse
+When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining.
+
 ## Appendix F: Ankhara Realm — Full Card Set
 
 **Realm identity:** Tomb-kings and priest-generals of a sun-scorched river empire. Ankhara Heroes carry balanced, even stat lines, and their signature mechanic is **Attack stealing**: draining Attack from enemy Heroes and claiming it for their own, most often during battle. Their strongest cards drain **every enemy Hero at once**. A secondary theme punishes enemy deployment — enemy Heroes entering play weakened (unlike Balemaw's versions, Ankhara's typically *transfer* what is taken) — rounded out with straightforward stat boosts, augmentation, and enemy support-card destruction.
@@ -1723,6 +1729,12 @@ When this Incantation resolves, until end of turn: your Champion has +20 Attack 
 
 ---
 
+**Call to the Banners** — Cost: 3 Pulse
+When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms.
+
+**Sworn Vengeance** — Cost: 4 Pulse
+When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining.
+
 ## Appendix K: Zolthec Realm — Full Card Set
 
 **Realm identity:** Sun-priests and jaguar-knights of the blood temples. Zolthec Heroes carry mildly Attack-leaning but deliberately understated bodies, because the realm's true engine is **sacrifice**: friendly Heroes are fuel for oversized permanent stat boosts, Pulse, draws, and burn. You trade board presence and card advantage for power that no fair-rate card could offer.
@@ -2030,6 +2042,12 @@ When this Incantation resolves, each Hero you control heals 30 Health and gains 
 When this Incantation resolves, choose a Hero you control: it heals to its maximum Health, gains +20 Health permanently, and you draw 1 card.
 
 ---
+
+**Blessing of the Open Door** — Cost: 3 Pulse
+When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms.
+
+**Merciful End** — Cost: 4 Pulse
+When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining.
 
 ## Appendix M: Thornveil Realm — Full Card Set
 
@@ -2497,6 +2515,12 @@ When this Incantation resolves, remove all enemy-imposed stat reductions and neg
 **Aegis of Dawn** — Cost: 5 Pulse
 When this Incantation resolves, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack), and you gain 1 Pulse for each Hero warded this way (maximum 3).
 
+**Rally the Faithful** — Cost: 3 Pulse
+When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms.
+
+**Purifying Flame** — Cost: 4 Pulse
+When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining.
+
 ## Appendix P: Kessendo Realm — Full Card Set
 
 **Realm identity:** Disciplined samurai duelists — a more aggressive cousin of Luminar. Kessendo Heroes run attack-leaning stat lines (higher Attack than Luminar, moderate Health, no glass cannons) and their effects reward the destruction of enemy Heroes: they grow, draw, and generate Pulse whenever a foe falls, snowballing off every kill and trade (zanshin — follow-through).
@@ -2656,67 +2680,67 @@ When this Incantation resolves, all Heroes you control gain +20 Attack until end
 *(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
 
 **Emberwing Squire**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 90/40 | Rarity: Common
+Hero Mode — Cost: 4 Pulse | Attack/Health: 70/40 | Rarity: Common
 When Emberwing Squire enters play, an enemy Hero of your choice gets -20 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Scaleguard Vael**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 80/50 | Rarity: Common
+Hero Mode — Cost: 4 Pulse | Attack/Health: 60/50 | Rarity: Common
 When Scaleguard Vael enters play, destroy an enemy Auxiliary card.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Attack.
 
 **Cinderclaw Drake**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 110/40 | Rarity: Common
+Hero Mode — Cost: 5 Pulse | Attack/Health: 90/40 | Rarity: Common
 Whenever Cinderclaw Drake deals combat damage to an enemy Hero, that Hero gets -20 Attack permanently.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +40 Attack. At the start of each of your turns, that Hero takes 10 damage.
 
 **Wyrmrider Kass**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 100/50 | Rarity: Common
+Hero Mode — Cost: 5 Pulse | Attack/Health: 80/50 | Rarity: Common
 When Wyrmrider Kass destroys an enemy Hero in combat, she deals 20 damage to the enemy Hero in a lane neighboring the one she attacked, if any.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Pyrelord Draeven**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 140/50 | Rarity: Uncommon
+Hero Mode — Cost: 6 Pulse | Attack/Health: 110/50 | Rarity: Uncommon
 When Pyrelord Draeven enters play, destroy an enemy Relic or enemy Auxiliary card.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
 
 **Stormscale Myrrha**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 130/60 | Rarity: Uncommon
+Hero Mode — Cost: 6 Pulse | Attack/Health: 100/60 | Rarity: Uncommon
 When Stormscale Myrrha enters play, an enemy Hero of your choice gets -40 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +40 Attack.
 
 **Ashmaw the Devourer**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 160/60 | Rarity: Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 130/60 | Rarity: Rare
 When Ashmaw the Devourer enters play, destroy an enemy Hero with 60 or less Health remaining.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
 
 **Volcanic Warden Rax**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 150/70 | Rarity: Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 120/70 | Rarity: Rare
 When Volcanic Warden Rax destroys an enemy Hero in combat, he deals 30 damage to the enemy Hero in a lane neighboring the one he attacked, if any.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +50 Attack.
 
 **Nyxaraxi, the Obsidian Wyrm**
-Hero Mode — Cost: 9 Pulse | Attack/Health: 200/70 | Rarity: Ultra-Rare
+Hero Mode — Cost: 9 Pulse | Attack/Health: 160/70 | Rarity: Ultra-Rare
 When Nyxaraxi, the Obsidian Wyrm enters play, destroy an enemy Auxiliary card and an enemy Hero of your choice gets -40 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +60 Attack. At the start of each of your turns, that Hero takes 20 damage.
 
 **Ignathor, Breath of Ruin**
-Hero Mode — Cost: 9 Pulse | Attack/Health: 220/60 | Rarity: Ultra-Rare
+Hero Mode — Cost: 9 Pulse | Attack/Health: 180/60 | Rarity: Ultra-Rare
 When Ignathor, Breath of Ruin enters play, destroy an enemy Hero with 80 or less Health remaining.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 40 damage to an enemy Hero of your choice.
 
 **Vorthalyx, the World-Ender**
-Hero Mode — Cost: 10 Pulse | Attack/Health: 240/90 | Rarity: Eternal
+Hero Mode — Cost: 10 Pulse | Attack/Health: 190/90 | Rarity: Eternal
 When Vorthalyx, the World-Ender enters play, destroy an enemy Hero with 100 or less Health remaining and destroy an enemy Auxiliary card.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 40 damage to an enemy Hero of your choice.
@@ -2945,6 +2969,12 @@ When this Incantation resolves, a Hero you control heals 40 Health and gains a w
 
 **Bastion's Call** — Cost: 3 Pulse
 When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms.
+
+**Rallying Bulwark** — Cost: 3 Pulse
+When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms.
+
+**Crushing Blow** — Cost: 4 Pulse
+When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining.
 
 ## Appendix S: Heliaxos Realm — Full Card Set
 
@@ -3240,6 +3270,12 @@ When this Incantation resolves, deal 40 damage to a Hero of your choice.
 **Mob Rush** — Cost: 3 Pulse
 When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms.
 
+**Warband Frenzy** — Cost: 3 Pulse
+When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms.
+
+**Backstab** — Cost: 4 Pulse
+When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining.
+
 ## Appendix U: Vhorrath Realm — Full Card Set
 
 **Realm identity:** Grave-cults and reanimators — an attrition realm that wins from the discard pile. Vhorrath Heroes carry modest stat lines; their power is recursion, raising fallen Heroes back to the battlefield again and again. Reanimated Heroes return **weakened** (reduced Attack) — unless they are raised by one of the realm's Ultra-Rare or Eternal necromancers, who bring the dead back at full strength.
@@ -3385,3 +3421,10 @@ When this Incantation resolves, deal 40 damage to a Hero of your choice.
 
 **Grave Chill** — Cost: 3 Pulse
 When this Incantation resolves, an enemy Hero of your choice gets -40 Attack until the end of your next turn.
+
+**Rally the Dead** — Cost: 3 Pulse
+When this Incantation resolves, all Heroes you control gain +30 Attack until end of turn — or +50 Attack if you control Heroes from 3 or more different Realms.
+
+**Soul Reaping** — Cost: 4 Pulse
+When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining.
+
