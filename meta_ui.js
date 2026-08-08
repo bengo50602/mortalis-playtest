@@ -242,8 +242,25 @@
   /* --------------------------- fog-of-war map --------------------------- */
   // The hero follows a winding path. Only cleared chapters, the current one, and
   // a single shrouded "next" node are shown — everything beyond stays a mystery.
+  // the call-to-adventure premise, shown once on first entry (replayable via "Story")
+  MetaUI.showPrologue = function (onDone) {
+    var el = $("screen-campaign"); if (!el) return;
+    el.innerHTML = "<div class='ci' style='background:radial-gradient(130% 95% at 50% 12%,#2a0d0dEE 0%,#05070c 82%)'>"
+      + "<div class='chn' style='color:#e0a45c'>THE CALL TO ADVENTURE</div>"
+      + "<div class='ctt' style='color:#e24b4a;font-size:clamp(26px,6vw,52px)'>A Village of Ash</div>"
+      + "<div class='cbl' style='max-width:640px'>" + esc(Campaign.prologue) + "</div>"
+      + "<button class='cgo'>Begin your quest</button>"
+      + "<div class='cx'>Skip</div></div>";
+    revealCampaign();
+    var done = function () { Campaign.markPrologueSeen(); if (onDone) onDone(); };
+    el.querySelector(".cgo").onclick = done;
+    el.querySelector(".cx").onclick = done;
+  };
+
   function renderCampaign() {
     var el = $("screen-campaign"); if (!el) return;
+    // first-time players get the story premise before the map
+    if (!Campaign.seenPrologue()) { MetaUI.showPrologue(function () { renderCampaign(); }); return; }
     var cur = Campaign.unlockedChapter();
     var reveal = Math.min(Campaign.TOTAL, cur + 1);   // show one shrouded node ahead
     var cs = Meta.collectionStats();
@@ -278,11 +295,12 @@
         + "<span style='font-size:11px;color:" + m.color + "'>" + label + " &#8250;</span></div>"
         + "</div>";
     }
-    html += "</div><div style='margin-top:6px;text-align:center'><button class='mbtn' id='cmp-back'>Back to menu</button> <button class='mbtn' id='cmp-store'>Store</button></div></div>";
+    html += "</div><div style='margin-top:6px;text-align:center'><button class='mbtn' id='cmp-story'>Story</button> <button class='mbtn' id='cmp-back'>Back to menu</button> <button class='mbtn' id='cmp-store'>Store</button></div></div>";
     el.innerHTML = html;
     el.querySelectorAll("[data-ch]").forEach(function (b) { b.onclick = function () { openChapter(+b.getAttribute("data-ch")); }; });
     var back = $("cmp-back"); if (back) back.onclick = function () { backToSplash(); };
     var st = $("cmp-store"); if (st) st.onclick = function () { UI.show("store"); };
+    var story = $("cmp-story"); if (story) story.onclick = function () { MetaUI.showPrologue(function () { renderCampaign(); }); };
   }
 
   /* ---------------------------- chapter intro --------------------------- */
@@ -295,10 +313,12 @@
     var el = $("screen-campaign");
     var duelsLeft = Campaign.DUELS - Campaign.duelsCleared(i);
     var sub = isBoss ? "The champion awaits." : (Campaign.duelsCleared(i) + " of " + Campaign.DUELS + " duels won — " + duelsLeft + " to go.");
+    var actLine = ch.act ? "<div class='chn' style='color:" + m.color + ";letter-spacing:6px'>" + esc(ch.act.act) + " &mdash; " + esc(ch.act.title) + "</div>" : "";
     el.innerHTML = "<div class='ci' style='background:radial-gradient(120% 90% at 50% 20%," + m.sky + "cc 0%,#05070c 80%)'>"
+      + actLine
       + "<div class='chn'>CHAPTER " + i + " &nbsp;&#183;&nbsp; " + esc(ch.realm).toUpperCase() + "</div>"
       + "<div class='ctt' style='color:" + m.color + "'>" + esc(ch.title) + "</div>"
-      + "<div class='cbl'>" + esc(ch.blurb) + "</div>"
+      + "<div class='cbl'>" + esc(ch.story) + "</div>"
       + "<div class='cbs' style='color:#cbd6e6'>" + esc(sub) + "</div>"
       + "<button class='cgo'>" + (isBoss ? "FACE THE CHAMPION" : "NEXT DUEL") + "</button>"
       + "<div class='cx'>Back to the map</div></div>";

@@ -236,6 +236,32 @@
     Balemaw: { name: "Azhûl the Ash-Crowned", title: "the tyrant who burned your village" },
   };
 
+  // The campaign story (from the storyboard): a prologue call-to-adventure, an
+  // act intro at the start of each act, and a scene for every chapter.
+  var PROLOGUE = "You are the last soul to walk out of your village alive. At dusk, Azhûl the Ash-Crowned came with fire and left only ash and silence. You are no chosen one — just a survivor with a grudge and a handful of cards left behind by travellers who once passed through your home. It is enough to begin. Azhûl's power reaches into all fifteen realms through his lieutenants; cross every realm, cut them down, and reach the Red Gate where he waits.";
+  var ACT_INTRO = {
+    1: { act: "Act I", title: "Finding Your Feet", blurb: "You have nothing but a starter band of Dawn-knights, storm-wolves, and clerics. Earn allies and your footing among the realms nearest home." },
+    4: { act: "Act II", title: "The Long Road", blurb: "The journey widens. Each realm answers to one of Azhûl's lieutenants, the stakes climb, and you grow from survivor into a force the realms fear." },
+    13: { act: "Act III", title: "The Red Gate", blurb: "The darkest realms and Azhûl's inner circle. Every road now bends toward the Red Gate — and the tyrant who started it all." },
+  };
+  var CHAPTER_STORY = {
+    1: "You climb to the Dawnspire to beg the Paladins' aid, but fear of Azhûl has made them wary of every stranger. Lord-Commander Valecrest bars the gate — prove your resolve, and the Dawn marches with you.",
+    2: "The Howling Steppe respects only strength, and its packs have begun bowing to the Ash-Crowned. Beat Warchief Skarl, and the storm-wolves run at your side.",
+    3: "In the Cathedral of First Light, Inquisitor-General Mordane preaches that your village burned because the gods willed it. Break his holy fire and claim your first great weapon.",
+    4: "The Overgrown Ruin has swallowed a fallen empire in thorn and root. Warden-Queen Sylphrene will let no grieving trespasser pass.",
+    5: "At the Gilded Docks you learn the truth: Guildmaster Vane sold your village's location to Azhûl for coin. Make him pay.",
+    6: "The magisters of the Fractured Spire have read fate and declare you cannot win. Archmagister Vesh means to prove it — rewrite the ending.",
+    7: "Under Azhûl's banner, Khan Baltuzhin's riders sweep the Thunder Plains like a storm. Outlast them, and the horde follows the stronger will — yours.",
+    8: "In the Silent Necropolis the dead never rest. Vizier-King Sethemun offers you a tomb with your name already carved.",
+    9: "Azhûl commissioned your ending, and Forge-Lord Durgan hammered it out in the Molten Halls. Shatter it on the anvil.",
+    10: "Behind the Open Door, High Almoner Vess counsels you to lay down your grudge before it kills you. He will not step aside easily.",
+    11: "High King Aldemar is bound by oath to Azhûl and keeps every vow. Only defeat can release him.",
+    12: "The Undefeated Legion has never lost a war. Imperator Severan means to keep it that way. Be the first to break them.",
+    13: "Beneath the Blood-Sun Pyramids, Sun-Priest Itzucan spends lives to feed an eclipse Azhûl promised would never lift. Put out that false sun.",
+    14: "In the crimson court, Sovereign Vhastian feasts on the fallen Azhûl sends him. He would make a meal of your grief.",
+    15: "At the throne of ash beyond the Red Gate, Azhûl reveals the truth: he burned your village to draw you across all fifteen realms — to see whether a nobody could become the one thing that could end him.",
+  };
+
   function chapterData(i) { // i is 1-based (1..18)
     var realm = CHAPTER_REALMS[i - 1];
     var ultra = (i % 3 === 0);
@@ -247,6 +273,7 @@
     return {
       idx: i, realm: realm, ultra: ultra, ascendant: ascendant, mood: mood,
       title: title, blurb: blurb,
+      story: CHAPTER_STORY[i] || blurb, act: ACT_INTRO[i] || null,
       boss: boss ? { id: boss.id, name: boss.name, atk: boss.atk, hp: boss.hp } : null,
       rewardRarity: ultra ? "Ultra-Rare" : "Rare",
       coinsRegular: 25 + i * 8,
@@ -282,6 +309,9 @@
     chapters: function () { var a = []; for (var i = 1; i <= 15; i++) a.push(chapterData(i)); return a; },
     chapter: function (i) { return chapterData(i); },
     opponent: function (i, stage) { return opponentFor(i, stage); },
+    prologue: PROLOGUE,
+    seenPrologue: function () { var p = Meta.current(); return !!(p && p.campaign && p.campaign.seenPrologue); },
+    markPrologueSeen: function () { var p = Meta.current(); if (p) { p.campaign.seenPrologue = true; Meta.save(); } },
 
     /* progress reads */
     unlockedChapter: function () { var p = Meta.current(); return p ? (p.campaign.chapter | 0) || 1 : 1; },
