@@ -2570,6 +2570,84 @@ Whenever an enemy Hero dies, gain 2 Pulse. Whenever Yorimoto destroys an enemy H
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
 
+
+### Relics
+
+**Honed Katana** — 1 slot | Cost: 1 Pulse
+While equipped, this Hero continuously has +20 Attack.
+
+**Ancestral Blade** — 1 slot | Cost: 3 Pulse
+While equipped, this Hero continuously has +40 Attack.
+
+**Lacquered Armor** — 1 slot | Cost: 2 Pulse
+While equipped, this Hero continuously has +40 Health.
+
+**Twin Daisho** — 2 slots | Cost: 4 Pulse
+While equipped, this Hero continuously has +40 Attack. Whenever this Hero wins a fight (deals damage while taking none), also deal 20 damage to the Hero in the opposing lane, if one is present.
+
+**Banner of the Fallen** — 2 slots | Cost: 5 Pulse
+While equipped, this Hero continuously has +60 Attack and +30 Health.
+
+### Hexes
+*(Played face-down, trigger automatically when their condition is met)*
+
+**Iaijutsu Counter** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card.
+
+**Parrying Stance** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 30 for that combat only. After this effect triggers once, destroy this card.
+
+**Vengeance of the Blade** — Cost: 3 Pulse
+When a Hero in this lane dies, deal 50 damage to whichever Hero killed it. After this effect triggers once, destroy this card.
+
+**Falling Blossom Trap** — Cost: 2 Pulse
+When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card.
+
+**Honor Guard** — Cost: 4 Pulse
+The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns.
+
+### Rites
+*(Delayed setup/payoff)*
+
+**The Patient Strike** — Cost: 3 Pulse
+Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately.
+
+**Way of the Sword** — Cost: 2 Pulse
+Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead.
+
+**Oath of Bushido** — Cost: 4 Pulse
+This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Kessendo Hero you control +20 Attack permanently.
+
+**Reckoning of Blades** — Cost: 5 Pulse
+Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately.
+
+### Pacts
+*(Risk/reward, cost varies by card)*
+
+**Seppuku Gambit** — Cost: 2 Pulse
+When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack.
+
+**Discipline of Steel** — Cost: 2 Pulse
+When this Pact resolves, discard 2 cards from your hand, then draw 3 cards.
+
+**Honorable Sacrifice** — Cost: 1 Pulse
+When this Pact resolves, destroy a Hero you control in any lane. Gain Pulse equal to that Hero's cost, immediately and only once.
+
+**Reckless Duel** — Cost: 3 Pulse
+When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane.
+
+### Incantations
+*(Direct spells, no full board wipes, no unconditional Mortality burn)*
+
+**Crescent Slash** — Cost: 4 Pulse
+When this Incantation resolves, deal damage to an enemy Hero equal to the current Attack of your Hero in the same lane.
+
+**Whirlwind Cut** — Cost: 3 Pulse
+When this Incantation resolves, deal 40 damage to a Hero of your choice.
+
+**Rally the Ronin** — Cost: 3 Pulse
+When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms.
+
 ## Appendix Q: Drakhaan Realm — Full Card Set
 
 **Realm identity:** Dragon-riding knights and the wyrms they command — the premium beaters of the game. Drakhaan Heroes carry the highest Attack (and high Health), cost the most Pulse, and bring the flashiest removal: they destroy enemy Auxiliary cards and Relics, execute wounded Heroes outright, weaken foes with a roar, and cleave through neighboring lanes with dragon-fire.
@@ -2862,9 +2940,9 @@ When Gribrok the Underking enters play, steal 5 Pulse from your opponent. While 
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +50 Attack.
 
-## Appendix U: Vaelmort Realm — Full Card Set
+## Appendix U: Vhorrath Realm — Full Card Set
 
-**Realm identity:** Grave-cults and reanimators — an attrition realm that wins from the discard pile. Vaelmort Heroes carry modest stat lines; their power is recursion, raising fallen Heroes back to the battlefield again and again. Reanimated Heroes return **weakened** (reduced Attack) — unless they are raised by one of the realm's Ultra-Rare or Eternal necromancers, who bring the dead back at full strength.
+**Realm identity:** Grave-cults and reanimators — an attrition realm that wins from the discard pile. Vhorrath Heroes carry modest stat lines; their power is recursion, raising fallen Heroes back to the battlefield again and again. Reanimated Heroes return **weakened** (reduced Attack) — unless they are raised by one of the realm's Ultra-Rare or Eternal necromancers, who bring the dead back at full strength.
 
 ### Heroes
 *(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
@@ -2929,8 +3007,8 @@ When Countess Nyxthral enters play, play a Hero card of cost 8 or less from your
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +40 Attack.
 
-**Vaelmort, the Deathless**
+**Vhorrath, the Deathless**
 Hero Mode — Cost: 10 Pulse | Attack/Health: 120/100 | Rarity: Eternal
-When Vaelmort, the Deathless enters play, play a Hero card of cost 10 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.
+When Vhorrath, the Deathless enters play, play a Hero card of cost 10 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.

@@ -123,9 +123,9 @@ window.DEFAULT_DATA = {
    "notes": []
   },
   {
-   "name": "Vaelmort",
+   "name": "Vhorrath",
    "letter": "U",
-   "identity": "Grave-cults and reanimators — an attrition realm that wins from the discard pile. Vaelmort Heroes carry modest stat lines; their power is recursion, raising fallen Heroes back to the battlefield again and again. Reanimated Heroes return **weakened** (reduced Attack) — unless they are raised by one of the realm's Ultra-Rare or Eternal necromancers, who bring the dead back at full strength.",
+   "identity": "Grave-cults and reanimators — an attrition realm that wins from the discard pile. Vhorrath Heroes carry modest stat lines; their power is recursion, raising fallen Heroes back to the battlefield again and again. Reanimated Heroes return **weakened** (reduced Attack) — unless they are raised by one of the realm's Ultra-Rare or Eternal necromancers, who bring the dead back at full strength.",
    "notes": []
   }
  ],
@@ -5190,6 +5190,179 @@ window.DEFAULT_DATA = {
    "auxText": "While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice."
   },
   {
+   "id": "kessendo--honed-katana",
+   "realm": "Kessendo",
+   "name": "Honed Katana",
+   "type": "relic",
+   "slots": 1,
+   "cost": 1,
+   "text": "While equipped, this Hero continuously has +20 Attack."
+  },
+  {
+   "id": "kessendo--ancestral-blade",
+   "realm": "Kessendo",
+   "name": "Ancestral Blade",
+   "type": "relic",
+   "slots": 1,
+   "cost": 3,
+   "text": "While equipped, this Hero continuously has +40 Attack."
+  },
+  {
+   "id": "kessendo--lacquered-armor",
+   "realm": "Kessendo",
+   "name": "Lacquered Armor",
+   "type": "relic",
+   "slots": 1,
+   "cost": 2,
+   "text": "While equipped, this Hero continuously has +40 Health."
+  },
+  {
+   "id": "kessendo--twin-daisho",
+   "realm": "Kessendo",
+   "name": "Twin Daisho",
+   "type": "relic",
+   "slots": 2,
+   "cost": 4,
+   "text": "While equipped, this Hero continuously has +40 Attack. Whenever this Hero wins a fight (deals damage while taking none), also deal 20 damage to the Hero in the opposing lane, if one is present."
+  },
+  {
+   "id": "kessendo--banner-of-the-fallen",
+   "realm": "Kessendo",
+   "name": "Banner of the Fallen",
+   "type": "relic",
+   "slots": 2,
+   "cost": 5,
+   "text": "While equipped, this Hero continuously has +60 Attack and +30 Health."
+  },
+  {
+   "id": "kessendo--iaijutsu-counter",
+   "realm": "Kessendo",
+   "name": "Iaijutsu Counter",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, deal 30 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "kessendo--parrying-stance",
+   "realm": "Kessendo",
+   "name": "Parrying Stance",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, reduce that enemy Hero's Attack by 30 for that combat only. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "kessendo--vengeance-of-the-blade",
+   "realm": "Kessendo",
+   "name": "Vengeance of the Blade",
+   "type": "hex",
+   "cost": 3,
+   "text": "When a Hero in this lane dies, deal 50 damage to whichever Hero killed it. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "kessendo--falling-blossom-trap",
+   "realm": "Kessendo",
+   "name": "Falling Blossom Trap",
+   "type": "hex",
+   "cost": 2,
+   "text": "When an enemy Hero attacks a Hero in this lane, deal 40 damage to the attacking Hero before combat damage is calculated. After this effect triggers once, destroy this card."
+  },
+  {
+   "id": "kessendo--honor-guard",
+   "realm": "Kessendo",
+   "name": "Honor Guard",
+   "type": "hex",
+   "cost": 4,
+   "text": "The first time each turn an enemy Hero attacks this lane, that attack is blocked — no combat occurs and no damage is dealt to either side. If this lane's Hero is instead targeted by an Onslaught (multiple attacking Heroes), this effect removes one attacking Hero of your choice from the Onslaught — that Hero's Attack no longer counts toward the total, and it does not participate in the resulting combat — while the remaining attackers' Onslaught proceeds as normal. This card is not destroyed after triggering and may trigger again on future turns."
+  },
+  {
+   "id": "kessendo--the-patient-strike",
+   "realm": "Kessendo",
+   "name": "The Patient Strike",
+   "type": "rite",
+   "cost": 3,
+   "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, deal 90 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 30 damage to a Hero of your choice immediately."
+  },
+  {
+   "id": "kessendo--way-of-the-sword",
+   "realm": "Kessendo",
+   "name": "Way of the Sword",
+   "type": "rite",
+   "cost": 2,
+   "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, your Hero in this lane permanently gains +30 Attack and +30 Health, then destroy this Rite. At any point before then, you may instead end this Rite early, granting +20 Attack and +20 Health immediately instead."
+  },
+  {
+   "id": "kessendo--oath-of-bushido",
+   "realm": "Kessendo",
+   "name": "Oath of Bushido",
+   "type": "rite",
+   "cost": 4,
+   "text": "This Rite gains 1 counter at the start of each of your turns. When it reaches 3 counters, destroy this Rite and give each Kessendo Hero you control +20 Attack permanently."
+  },
+  {
+   "id": "kessendo--reckoning-of-blades",
+   "realm": "Kessendo",
+   "name": "Reckoning of Blades",
+   "type": "rite",
+   "cost": 5,
+   "text": "Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately."
+  },
+  {
+   "id": "kessendo--seppuku-gambit",
+   "realm": "Kessendo",
+   "name": "Seppuku Gambit",
+   "type": "pact",
+   "cost": 2,
+   "text": "When this Pact resolves, deal 50 damage to your own Hero in this lane. If that Hero survives, it permanently gains +40 Attack."
+  },
+  {
+   "id": "kessendo--discipline-of-steel",
+   "realm": "Kessendo",
+   "name": "Discipline of Steel",
+   "type": "pact",
+   "cost": 2,
+   "text": "When this Pact resolves, discard 2 cards from your hand, then draw 3 cards."
+  },
+  {
+   "id": "kessendo--honorable-sacrifice",
+   "realm": "Kessendo",
+   "name": "Honorable Sacrifice",
+   "type": "pact",
+   "cost": 1,
+   "text": "When this Pact resolves, destroy a Hero you control in any lane. Gain Pulse equal to that Hero's cost, immediately and only once."
+  },
+  {
+   "id": "kessendo--reckless-duel",
+   "realm": "Kessendo",
+   "name": "Reckless Duel",
+   "type": "pact",
+   "cost": 3,
+   "text": "When this Pact resolves, deal 30 damage to an enemy Hero of your choice, then deal 30 damage to your own Hero in this lane."
+  },
+  {
+   "id": "kessendo--crescent-slash",
+   "realm": "Kessendo",
+   "name": "Crescent Slash",
+   "type": "incantation",
+   "cost": 4,
+   "text": "When this Incantation resolves, deal damage to an enemy Hero equal to the current Attack of your Hero in the same lane."
+  },
+  {
+   "id": "kessendo--whirlwind-cut",
+   "realm": "Kessendo",
+   "name": "Whirlwind Cut",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, deal 40 damage to a Hero of your choice."
+  },
+  {
+   "id": "kessendo--rally-the-ronin",
+   "realm": "Kessendo",
+   "name": "Rally the Ronin",
+   "type": "incantation",
+   "cost": 3,
+   "text": "When this Incantation resolves, all Heroes you control gain +20 Attack until end of turn — or +40 Attack if you control Heroes from 3 or more different Realms."
+  },
+  {
    "id": "drakhaan--emberwing-squire",
    "realm": "Drakhaan",
    "name": "Emberwing Squire",
@@ -5806,8 +5979,8 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +50 Attack."
   },
   {
-   "id": "vaelmort--bone-acolyte",
-   "realm": "Vaelmort",
+   "id": "vhorrath--bone-acolyte",
+   "realm": "Vhorrath",
    "name": "Bone Acolyte",
    "type": "hero",
    "cost": 2,
@@ -5820,8 +5993,8 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack."
   },
   {
-   "id": "vaelmort--grave-tender",
-   "realm": "Vaelmort",
+   "id": "vhorrath--grave-tender",
+   "realm": "Vhorrath",
    "name": "Grave Tender",
    "type": "hero",
    "cost": 3,
@@ -5834,8 +6007,8 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack."
   },
   {
-   "id": "vaelmort--shambling-thrall",
-   "realm": "Vaelmort",
+   "id": "vhorrath--shambling-thrall",
+   "realm": "Vhorrath",
    "name": "Shambling Thrall",
    "type": "hero",
    "cost": 3,
@@ -5848,8 +6021,8 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
   },
   {
-   "id": "vaelmort--corpse-picker",
-   "realm": "Vaelmort",
+   "id": "vhorrath--corpse-picker",
+   "realm": "Vhorrath",
    "name": "Corpse Picker",
    "type": "hero",
    "cost": 2,
@@ -5862,8 +6035,8 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack."
   },
   {
-   "id": "vaelmort--grave-binder-morr",
-   "realm": "Vaelmort",
+   "id": "vhorrath--grave-binder-morr",
+   "realm": "Vhorrath",
    "name": "Grave-Binder Morr",
    "type": "hero",
    "cost": 4,
@@ -5876,8 +6049,8 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
   },
   {
-   "id": "vaelmort--tomb-warden-vesh",
-   "realm": "Vaelmort",
+   "id": "vhorrath--tomb-warden-vesh",
+   "realm": "Vhorrath",
    "name": "Tomb Warden Vesh",
    "type": "hero",
    "cost": 5,
@@ -5890,8 +6063,8 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
   },
   {
-   "id": "vaelmort--sepulcher-lord-kael",
-   "realm": "Vaelmort",
+   "id": "vhorrath--sepulcher-lord-kael",
+   "realm": "Vhorrath",
    "name": "Sepulcher Lord Kael",
    "type": "hero",
    "cost": 6,
@@ -5904,8 +6077,8 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
   },
   {
-   "id": "vaelmort--grim-harvester",
-   "realm": "Vaelmort",
+   "id": "vhorrath--grim-harvester",
+   "realm": "Vhorrath",
    "name": "Grim Harvester",
    "type": "hero",
    "cost": 6,
@@ -5918,8 +6091,8 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
   },
   {
-   "id": "vaelmort--lichlord-mordath",
-   "realm": "Vaelmort",
+   "id": "vhorrath--lichlord-mordath",
+   "realm": "Vhorrath",
    "name": "Lichlord Mordath",
    "type": "hero",
    "cost": 8,
@@ -5932,8 +6105,8 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
   },
   {
-   "id": "vaelmort--countess-nyxthral",
-   "realm": "Vaelmort",
+   "id": "vhorrath--countess-nyxthral",
+   "realm": "Vhorrath",
    "name": "Countess Nyxthral",
    "type": "hero",
    "cost": 8,
@@ -5946,15 +6119,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
   },
   {
-   "id": "vaelmort--vaelmort-the-deathless",
-   "realm": "Vaelmort",
-   "name": "Vaelmort, the Deathless",
+   "id": "vhorrath--vhorrath-the-deathless",
+   "realm": "Vhorrath",
+   "name": "Vhorrath, the Deathless",
    "type": "hero",
    "cost": 10,
    "atk": 120,
    "hp": 100,
    "rarity": "Eternal",
-   "text": "When Vaelmort, the Deathless enters play, play a Hero card of cost 10 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.",
+   "text": "When Vhorrath, the Deathless enters play, play a Hero card of cost 10 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.",
    "auxCost": 8,
    "auxSlots": 2,
    "auxText": "While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice."
