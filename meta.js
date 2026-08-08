@@ -322,13 +322,19 @@
     bossBeaten: function (i) { var p = Meta.current(); return !!(p && p.campaign.bosses[i]); },
     nextStage: function (i) { for (var s = 0; s < STAGES; s++) if (!this.stageDone(i, s)) return s; return -1; },
 
-    /* build a battle config for newGame(); stage 0..5 = duels, 6 = boss */
-    battleConfig: function (i, stage) {
+    // the player's default suggested realms (used when they pick "auto")
+    autoRealms: function () { return playerCampaignRealms(); },
+
+    /* build a battle config for newGame(); stage 0..5 = duels, 6 = boss.
+       opts (optional): { playerRealms:[…], playerDeck:[cardIds] } chosen by the
+       player in the pre-battle loadout screen. */
+    battleConfig: function (i, stage, opts) {
+      opts = opts || {};
       var ch = chapterData(i);
       var isBoss = stage === BOSS_STAGE;
       var opp = opponentFor(i, stage);
-      var playerRealms = playerCampaignRealms();
-      var playerDeck = buildCampaignPlayerDeck(playerRealms);
+      var playerRealms = (opts.playerRealms && opts.playerRealms.length) ? opts.playerRealms.slice(0, C().lanes) : playerCampaignRealms();
+      var playerDeck = (opts.playerDeck && opts.playerDeck.length) ? opts.playerDeck.slice() : buildCampaignPlayerDeck(playerRealms);
       var enemyDeck = buildEnemyDeck(ch.realm, stage, isBoss, i);
       return {
         playerRealms: playerRealms,

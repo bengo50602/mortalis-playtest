@@ -376,7 +376,7 @@ body.on-splash .topbar{display:none}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260807212852</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260807213708</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -10035,13 +10035,19 @@ async function aiTakeTurn() {
     bossBeaten: function (i) { var p = Meta.current(); return !!(p && p.campaign.bosses[i]); },
     nextStage: function (i) { for (var s = 0; s < STAGES; s++) if (!this.stageDone(i, s)) return s; return -1; },
 
-    /* build a battle config for newGame(); stage 0..5 = duels, 6 = boss */
-    battleConfig: function (i, stage) {
+    // the player's default suggested realms (used when they pick "auto")
+    autoRealms: function () { return playerCampaignRealms(); },
+
+    /* build a battle config for newGame(); stage 0..5 = duels, 6 = boss.
+       opts (optional): { playerRealms:[…], playerDeck:[cardIds] } chosen by the
+       player in the pre-battle loadout screen. */
+    battleConfig: function (i, stage, opts) {
+      opts = opts || {};
       var ch = chapterData(i);
       var isBoss = stage === BOSS_STAGE;
       var opp = opponentFor(i, stage);
-      var playerRealms = playerCampaignRealms();
-      var playerDeck = buildCampaignPlayerDeck(playerRealms);
+      var playerRealms = (opts.playerRealms && opts.playerRealms.length) ? opts.playerRealms.slice(0, C().lanes) : playerCampaignRealms();
+      var playerDeck = (opts.playerDeck && opts.playerDeck.length) ? opts.playerDeck.slice() : buildCampaignPlayerDeck(playerRealms);
       var enemyDeck = buildEnemyDeck(ch.realm, stage, isBoss, i);
       return {
         playerRealms: playerRealms,
@@ -12627,18 +12633,69 @@ window.addEventListener("DOMContentLoaded", () => {
       + "<button class='cgo'>" + (isBoss ? "FACE THE CHAMPION" : "NEXT DUEL") + "</button>"
       + "<div class='cx'>Back to the map</div></div>";
     revealCampaign();
-    el.querySelector(".cgo").onclick = function () { beginStage(i, stage); };
+    el.querySelector(".cgo").onclick = function () { prepBattle(i, stage); };
     el.querySelector(".cx").onclick = function () { renderCampaign(); revealCampaign(); };
   }
 
-  // pre-battle cutscene, then the duel
-  function beginStage(i, stage) {
-    var opp = Campaign.opponent(i, stage);
-    cutscene(opp, "pre", { onDone: function () { MetaUI.startBattle(i, stage); } });
+  /* -------- pre-battle loadout: pick a deck; realms suggested from it -------- */
+  var prep = { chapter: 0, stage: 0, deckId: "auto", realms: [] };
+  function playableDecks() {
+    var list = (typeof loadDecks === "function") ? loadDecks() : [];
+    return list.filter(function (d) { try { return validateDeck(d).playable; } catch (e) { return false; } });
+  }
+  function suggestRealms(deckId, decks) {
+    var lanes = C().lanes, out = [];
+    if (deckId === "auto") return Campaign.autoRealms().slice(0, lanes);
+    var d = decks.filter(function (x) { return x.id === deckId; })[0];
+    var rs = d ? deckRealms(d) : [];
+    if (!rs.length) rs = Campaign.autoRealms();
+    for (var k = 0; k < lanes; k++) out.push(rs[k % rs.length]);
+    return out;
+  }
+  function prepBattle(i, stage) {
+    prep.chapter = i; prep.stage = stage;
+    var decks = playableDecks();
+    prep.deckId = decks.length ? decks[0].id : "auto";
+    prep.realms = suggestRealms(prep.deckId, decks);
+    renderPrep(decks);
+  }
+  function renderPrep(decks) {
+    var i = prep.chapter, stage = prep.stage;
+    var ch = Campaign.chapter(i), opp = Campaign.opponent(i, stage), m = ch.mood;
+    var unlocked = (window.Meta && Meta.unlockedRealms) ? Meta.unlockedRealms() : realmNames();
+    var el = $("screen-campaign");
+    var deckOpts = "<div class='deck-opt " + (prep.deckId === "auto" ? "sel" : "") + "' data-d='auto'><span class='tick'>" + (prep.deckId === "auto" ? "&#9679;" : "&#9675;") + "</span>Auto-build from your collection<span class='sub'>a fresh legal deck for the realms below</span></div>";
+    decks.forEach(function (d) {
+      deckOpts += "<div class='deck-opt " + (prep.deckId === d.id ? "sel" : "") + "' data-d='" + d.id + "'><span class='tick'>" + (prep.deckId === d.id ? "&#9679;" : "&#9675;") + "</span>" + esc(d.name || "Untitled") + "<span class='sub'>" + esc(deckRealms(d).join(" &#183; ") || "ready") + "</span></div>";
+    });
+    var laneSel = "";
+    for (var k = 0; k < C().lanes; k++) {
+      laneSel += "<div><div style='font-size:11px;color:var(--muted);margin-bottom:3px'>Lane " + (k + 1) + "</div><select data-lane='" + k + "'>"
+        + unlocked.map(function (r) { return "<option value='" + esc(r) + "'" + (prep.realms[k] === r ? " selected" : "") + ">" + esc(r) + "</option>"; }).join("") + "</select></div>";
+    }
+    el.innerHTML = "<div class='mpanel' style='max-width:720px'>"
+      + "<div class='mhead'><h2>Prepare for battle</h2><span class='sub'>Chapter " + i + " &#183; <span style='color:" + m.color + "'>" + esc(ch.realm) + "</span> &mdash; vs " + esc(opp.name) + "</span></div>"
+      + "<div class='sub'>Choose your deck. Your realms are suggested from that deck &mdash; adjust any lane if you like.</div>"
+      + "<div class='deck-pick' style='margin:12px 0'>" + deckOpts + "</div>"
+      + "<p class='setup-label' style='margin-top:4px'>Your realms (one per lane)</p>"
+      + "<div class='lane-picks'>" + laneSel + "</div>"
+      + "<div style='display:flex;gap:8px;margin-top:4px'><button class='mbtn' id='pp-rand' style='font-size:12px;padding:6px 12px'>Randomize realms</button></div>"
+      + "<div class='row' style='justify-content:flex-start;margin-top:16px'><button class='mbtn primary' id='pp-go'>Begin</button> <button class='mbtn' id='pp-back'>Back</button></div>"
+      + "</div>";
+    revealCampaign();
+    el.querySelectorAll(".deck-opt").forEach(function (it) { it.onclick = function () { prep.deckId = it.getAttribute("data-d"); prep.realms = suggestRealms(prep.deckId, decks); renderPrep(decks); }; });
+    el.querySelectorAll("select[data-lane]").forEach(function (s) { s.onchange = function () { prep.realms[+s.getAttribute("data-lane")] = s.value; }; });
+    var rnd = $("pp-rand"); if (rnd) rnd.onclick = function () { var u = unlocked.slice(); prep.realms = []; for (var k = 0; k < C().lanes; k++) prep.realms.push(u[Math.floor(Math.random() * u.length)]); renderPrep(decks); };
+    var back = $("pp-back"); if (back) back.onclick = function () { renderCampaign(); revealCampaign(); };
+    var go = $("pp-go"); if (go) go.onclick = function () {
+      var opts = { playerRealms: prep.realms.slice(0, C().lanes) };
+      if (prep.deckId !== "auto") { var d = decks.filter(function (x) { return x.id === prep.deckId; })[0]; if (d) opts.playerDeck = expandDeck(d); }
+      cutscene(opp, "pre", { onDone: function () { MetaUI.startBattle(i, stage, opts); } });
+    };
   }
 
-  MetaUI.startBattle = function (chapter, stage) {
-    var cfg = Campaign.battleConfig(chapter, stage);
+  MetaUI.startBattle = function (chapter, stage, opts) {
+    var cfg = Campaign.battleConfig(chapter, stage, opts);
     if (UI.resetLocks) UI.resetLocks();
     Campaign.active = { chapter: chapter, stage: stage };
     newGame(cfg);
@@ -12809,7 +12866,7 @@ window.addEventListener("DOMContentLoaded", () => {
     var hook = function (id, fn) { var b = $(id); if (b) b.onclick = fn; };
     hook("br-next", function () { openChapter(chapter); });
     hook("br-nextch", function () { openChapter(Math.min(15, chapter + 1)); });
-    hook("br-retry", function () { MetaUI.startBattle(chapter, stage); });
+    hook("br-retry", function () { prepBattle(chapter, stage); });
     hook("br-map", function () { renderCampaign(); revealCampaign(); });
     hook("br-store", function () { UI.show("store"); });
     renderChip();
