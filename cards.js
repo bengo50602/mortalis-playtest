@@ -7111,7 +7111,7 @@ window.DEFAULT_DATA = {
   }
  ],
  "constants": {
-  "startingMortality": 250,
+  "startingMortality": 550,
   "pulsePerTurn": 5,
   "startingHand": 7,
   "maxHand": 8,
@@ -7134,6 +7134,7 @@ window.DEFAULT_DATA = {
   "auxDiscount": 2,
   "relicRealmLocked": true,
   "overkillCap": 30,
+  "faceDamageCap": 70,
   "laneUnlockTurns": [
    3,
    1,

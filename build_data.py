@@ -182,6 +182,7 @@ constants = {
     "auxDiscount": grab(r"fixed discount of \*\*[-−–](\d+) Pulse\*\*", 2),
     "relicRealmLocked": True,
     "overkillCap": int(overkill_m.group(1)) if overkill_m else None,
+    "faceDamageCap": grab(r"capped at \*\*(\d+) Mortality per Hero per attack\*\*", 0),
     "laneUnlockTurns": lane_unlocks,
 }
 print("Constants read from the document:")

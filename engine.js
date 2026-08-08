@@ -3566,7 +3566,8 @@ async function resolveAttack(pi, attackerLis, target) {
   for (const li of attackerLis) await fireCombat("declareAttack", pi, li, target.face ? -1 : 1 - pi, target.li);
 
   if (target.face) {
-    const total = attackerLis.reduce((s, li) => s + effAtk(pi, li), 0);
+    const fcap = C().faceDamageCap || Infinity;
+    const total = attackerLis.reduce((s, li) => s + Math.min(effAtk(pi, li), fcap), 0);
     O.mortality -= total;
     fxSignal("faceAttack", { pi, lanes: attackerLis.slice(), dpi: 1 - pi, n: total, onslaught: attackerLis.length > 1 });
     log(`${names} attack${attackerLis.length > 1 ? "" : "s"} directly: ${O.name} loses ${total} Mortality!`, P.isAI ? "ai" : "");
@@ -3911,7 +3912,8 @@ async function jointStrike(pi, lanes, target) {
   for (const li of lanes) await fireCombat("declareAttack", pi, li, target && target.face ? -1 : O, target ? target.li : -1);
 
   if (target && target.face) {
-    const total = lanes.reduce((s, li) => s + effAtk(pi, li) + bonus, 0);
+    const fcap = C().faceDamageCap || Infinity;
+    const total = lanes.reduce((s, li) => s + Math.min(effAtk(pi, li) + bonus, fcap), 0);
     G.players[O].mortality -= total;
     log(`Joint Strike — ${names} hit directly for ${total}!`, G.players[pi].isAI ? "ai" : "");
     if (total > 0) emit("loseMortality", O, {});
