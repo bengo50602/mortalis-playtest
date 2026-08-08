@@ -1397,7 +1397,7 @@ function startTurn() {
   if (P.mods) P.mods = P.mods.filter(m => m.life !== "turn");   // "this turn" next-Hero mods expire
   let basePulse;
   if (P.pulseOverrideGt === G.gt) basePulse = P.pulseOverrideAmt;
-  else if (C().pulseBase != null) basePulse = Math.min(C().pulseBase + P.turnCount - 1, C().pulseCap || 99);   // escalating economy
+  else if (C().pulseBase != null) basePulse = Math.min(C().pulseBase + Math.floor((P.turnCount - 1) / (C().pulseStepTurns || 1)), C().pulseCap || 99);   // escalating economy (+1 every pulseStepTurns turns)
   else basePulse = C().pulsePerTurn;
   // first-player fairness: reduced Pulse on the very first turn of the game
   if (G.gt === 1 && pi === G.firstPlayer && C().firstTurnPulse != null && C().firstTurnPulse < basePulse) {

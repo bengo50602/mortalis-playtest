@@ -15,7 +15,7 @@ Players build 40-card decks with total creative freedom — any card can go in a
 The universal resource used to pay for all cards. Pulse is **not colored or Realm-locked** — every card simply costs a number of Pulse, regardless of archetype.
 
 - At the start of each of your turns, gain Pulse equal to **3** on your first turn, rising by 1 each turn to a maximum of **10 Pulse** per turn (turn 1: 3, turn 2: 4, … turn 8 onward: 10). The early game belongs to cheap Heroes; the giants arrive late.
-- Unused Pulse is **lost at the end of your turn** — each turn you get exactly that turn's Pulse and spend it or lose it. There is no banking, so cheap Heroes matter every turn and no one hoards for a turn-two giant.
+- Unused Pulse **carries over** between turns as a running tally, so you can bank toward a Hex (whose cost is paid when it triggers — even on your opponent's turn) or a bigger play. There is no hard cap. In practice the early game still belongs to cheap Heroes: hoarding Pulse while your opponent develops a board is a losing line, so the giants arrive late on their own.
 - Card-based Pulse ramp effects (e.g., Kessa Windrend's Auxiliary Mode) still function and stack on top of the flat 5/turn
 
 ### Mortality
@@ -61,7 +61,7 @@ Each turn follows a simple sequence:
 - Starting hand size: **7 cards**
 - **Maximum hand size:** 8 — if you would draw a card while already holding 8, the drawn card is discarded instead (it is not added to your hand)
 - **No maximum Health:** healing first repairs a Hero's damage; any healing beyond full permanently increases that Hero's Health stat by the excess. ("Below its maximum Health" effects check for unrepaired damage.)
-- The player going first **skips their first draw** and **cannot attack on their first turn**; the player going second **gains 1 bonus Pulse** on their first turn (fairness corrections)
+- The player going first **skips their first draw** and **cannot attack on their first turn**; the player going second **gains 2 bonus Pulse** on their first turn (fairness corrections)
 
 ---
 
