@@ -2642,3 +2642,76 @@ Hero Mode — Cost: 10 Pulse | Attack/Health: 240/90 | Rarity: Eternal
 When Vorthalyx, the World-Ender enters play, destroy an enemy Hero with 100 or less Health remaining and destroy an enemy Auxiliary card.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 40 damage to an enemy Hero of your choice.
+
+## Appendix R: Golmerad Realm — Full Card Set
+
+**Realm identity:** Living stone constructs — the guardians of the game. Golmerad Heroes run the highest Health and lowest Attack (immovable walls, no glass cannons). They defend themselves and their allies: taunting enemies into attacking them, shrugging off damage, punishing attackers with retaliation, and mending the whole board each turn. They can't close a game quickly, but they let slower realms survive to their late game.
+
+### Heroes
+*(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
+
+**Boulderkin**
+Hero Mode — Cost: 3 Pulse | Attack/Health: 20/100 | Rarity: Common
+While Boulderkin is in play, enemy Heroes must attack Boulderkin's lane if able.
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +30 Health.
+
+**Graniteus**
+Hero Mode — Cost: 3 Pulse | Attack/Health: 30/110 | Rarity: Common
+While Graniteus is in play, enemy Heroes must attack Graniteus's lane if able. Graniteus takes 10 less combat damage.
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +40 Health.
+
+**Mudward Tunneler**
+Hero Mode — Cost: 4 Pulse | Attack/Health: 30/120 | Rarity: Common
+When Mudward Tunneler enters play, each other Hero you control heals 20 Health.
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +30 Health.
+
+**Ironhide**
+Hero Mode — Cost: 4 Pulse | Attack/Health: 40/110 | Rarity: Common
+While Ironhide is in play, enemy Heroes must attack Ironhide's lane if able. Enemy Heroes that attack Ironhide take 20 damage after that combat resolves.
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +40 Health.
+
+**Monolith**
+Hero Mode — Cost: 5 Pulse | Attack/Health: 40/160 | Rarity: Uncommon
+While Monolith is in play, all enemy Hero attacks must target Monolith's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane. Monolith takes 20 less combat damage.
+Auxiliary Mode — Cost: 3 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +60 Health.
+
+**Stoneheart Warden**
+Hero Mode — Cost: 5 Pulse | Attack/Health: 30/150 | Rarity: Uncommon
+At the start of each of your turns, each Hero you control heals 20 Health.
+Auxiliary Mode — Cost: 3 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +50 Health.
+
+**Colossus**
+Hero Mode — Cost: 6 Pulse | Attack/Health: 50/190 | Rarity: Rare
+While Colossus is in play, all enemy Hero attacks must target Colossus's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Colossus take 20 damage after that combat resolves. Colossus takes 20 less combat damage.
+Auxiliary Mode — Cost: 4 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +70 Health.
+
+**Bastion Everward**
+Hero Mode — Cost: 6 Pulse | Attack/Health: 40/180 | Rarity: Rare
+When Bastion Everward enters play, each other Hero you control heals 30 Health. At the start of each of your turns, each Hero you control heals 20 Health.
+Auxiliary Mode — Cost: 4 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +60 Health.
+
+**Adamantus**
+Hero Mode — Cost: 8 Pulse | Attack/Health: 60/240 | Rarity: Ultra-Rare
+While Adamantus is in play, all enemy Hero attacks must target Adamantus's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Adamantus take 30 damage after that combat resolves. Adamantus takes 30 less combat damage.
+Auxiliary Mode — Cost: 6 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +90 Health.
+
+**Aegisreach Titan**
+Hero Mode — Cost: 8 Pulse | Attack/Health: 50/230 | Rarity: Ultra-Rare
+When Aegisreach Titan enters play, each other Hero you control heals 40 Health. At the start of each of your turns, each Hero you control heals 30 Health.
+Auxiliary Mode — Cost: 6 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +80 Health.
+
+**Karngmor, the Everstone**
+Hero Mode — Cost: 10 Pulse | Attack/Health: 80/280 | Rarity: Eternal
+While Karngmor, the Everstone is in play, all enemy Hero attacks must target Karngmor's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Karngmor take 30 damage after that combat resolves. At the start of each of your turns, each Hero you control heals 30 Health.
+Auxiliary Mode — Cost: 8 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +120 Health.
