@@ -401,14 +401,39 @@
     Noctavein: { taunt: ["Azhûl feeds us the fallen. You'll do nicely.", "Stay a while. Let me drink that grief of yours."], win: ["Drained, like all the rest."], lose: ["Such spite in you… his gate is that way."] },
     Balemaw: { taunt: ["I burned your village to draw you here. And here you stand.", "You crossed fifteen realms for revenge. Was it worth it?"], win: ["You were always going to lose. I made certain of it."], lose: ["Impossible… undone by a nobody from a village of ash…"] },
   };
-  var PLAYER_LINES = ["You stand between me and Azhûl. Move, or fall.", "Your master burned my home. You're just in the way.", "I've buried everyone I loved. You don't frighten me.", "Step aside. My fight is with the Ash-Crowned."];
+  var PLAYER_LINES = ["Then get out of my way.", "I'm not turning back.", "Your master burned my home. You're just in the way.", "I've heard worse. Let's go.", "Step aside. My fight is with Azhûl."];
+  // The six duels of a chapter tell one small, escalating story: from the first
+  // wary guard to the lieutenant's right hand. Plain language, clear stakes.
+  var DUEL_ARC = [
+    { taunt: "So you're the one who walked out of that burning village. Word travels fast. You won't get past me, though.",
+      win: "Go home, survivor. There's nothing down this road but more people like me.",
+      lose: "All right… you're better than the stories said. But you'll never reach him." },
+    { taunt: "I don't want to fight you, honestly. But Azhûl's people are watching, and I'd rather it be you than me.",
+      win: "I warned you — this isn't a fight you can win.",
+      lose: "Then go. I never saw you, and you never saw me." },
+    { taunt: "You think losing everything makes you strong? I've watched a hundred angry people die on this road.",
+      win: "Just another angry ghost for the pile.",
+      lose: "…Maybe you really are different. Maybe." },
+    { taunt: "The lieutenant pays me well to keep wanderers out. It's nothing personal — you're simply in the way.",
+      win: "Should've taken the long way around, friend.",
+      lose: "Keep walking, then. And don't tell anyone I lost." },
+    { taunt: "You've come a long way. The lieutenant knows your name now — and trust me, that is not a good thing.",
+      win: "So close. That's the sad part, really.",
+      lose: "Then go and meet them. I won't stand in your way again." },
+    { taunt: "I'm the last one between you and my master. Turn back now, or you will never see the throne of ash.",
+      win: "The road ends here, survivor. It always did.",
+      lose: "Impossible… go on, then. You've earned the right to face them." },
+  ];
   function dialogueFor(opp, phase, won) {
-    var t = TONE[opp.realm] || { taunt: ["Face me."], win: ["You lose."], lose: ["Well fought."] };
     var seed = hashName(opp.name);
-    if (phase === "pre") {
-      var line = opp.isBoss ? t.taunt[0] : t.taunt[seed % t.taunt.length];
-      return [{ who: "them", text: line }, { who: "you", text: PLAYER_LINES[seed % PLAYER_LINES.length] }];
+    var youLine = PLAYER_LINES[seed % PLAYER_LINES.length];
+    if (!opp.isBoss) {
+      var arc = DUEL_ARC[Math.min(opp.stage || 0, DUEL_ARC.length - 1)];
+      if (phase === "pre") return [{ who: "them", text: arc.taunt }, { who: "you", text: youLine }];
+      return [{ who: "them", text: won ? arc.lose : arc.win }];
     }
+    var t = TONE[opp.realm] || { taunt: ["Face me."], win: ["You lose."], lose: ["Well fought."] };
+    if (phase === "pre") return [{ who: "them", text: t.taunt[0] }, { who: "you", text: youLine }];
     var arr = won ? t.lose : t.win;
     return [{ who: "them", text: arr[seed % arr.length] }];
   }
