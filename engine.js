@@ -184,6 +184,9 @@ function parseOp(cl) {
   if ((m = cl.match(new RegExp(`^(?:every|all) enemy Hero(?:es)? (?:permanently )?(?:gets?|lose[s]?) [-−–]?${NUM} (Attack|Health)(?: permanently)?$`, "i")))) return { op: "statReduce", atk: /Attack/i.test(m[2]) ? +m[1] : 0, hp: /Health/i.test(m[2]) ? +m[1] : 0, target: "allEnemy" };
   if ((m = cl.match(new RegExp(`^all enemy Hero(?:es)? permanently lose ${NUM} Health$`, "i")))) return { op: "statReduce", atk: 0, hp: +m[1], target: "allEnemy" };
   if ((m = cl.match(new RegExp(`^an enemy Hero of your choice loses ${NUM} Health$`, "i")))) return { op: "statReduce", atk: 0, hp: +m[1], target: "enemyChoice" };
+  // Gribrok (goblin) Pulse denial
+  if ((m = cl.match(new RegExp(`^your opponent loses ${NUM} Pulse$`, "i")))) return { op: "drainPulse", n: +m[1] };
+  if ((m = cl.match(new RegExp(`^steal ${NUM} Pulse from your opponent$`, "i")))) return { op: "stealPulse", n: +m[1] };
   if ((m = cl.match(new RegExp(`^give an enemy Hero of your choice [-−–]${NUM} Attack permanently$`, "i")))) return { op: "statReduce", atk: +m[1], hp: 0, target: "enemyChoice" };
   if ((m = cl.match(new RegExp(`^one enemy Hero of your choice loses ${NUM} Health$`, "i")))) return { op: "statReduce", atk: 0, hp: +m[1], target: "enemyChoice" };
   if ((m = cl.match(/^(?:a Hero you control (?:permanently )?gains the ability to attack any enemy lane|it gains the ability to attack any enemy lane)$/i))) return { op: "setFlag", flag: "grantAnyLane", target: "ownChoice", label: "may attack any enemy lane" };
@@ -663,6 +666,7 @@ function compileFlags(text, bits) {
   if (/may attack any enemy lane except (?:his|her|its) directly opposing lane/i.test(t)) { f.anyLaneNotOpp = true; bits.push("raider: any lane but opposing"); }
   else if (/may attack any enemy lane/i.test(t)) { f.attackAnyLane = true; bits.push("attacks any lane"); }
   if (/(?:all enemy Hero attacks must target|enemy Heroes must attack) \w+(?:'s)? lane/i.test(t)) { f.taunt = true; bits.push("taunt"); }
+  if (/Heroes your opponent plays cost \d+ additional Pulse/i.test(t)) { f.pulseTax = true; bits.push("pulse tax"); }   // handled in heroCostOf
   if (/When \w+ fights, the (?:opposing Hero's equipped Relics|enemy Hero's Relics)[^.]*grant it no Attack or Health for that combat/i.test(t)) { f.ignoreEnemyEquip = true; bits.push("ignores enemy equipment"); }
   if (/^While equipped, this Hero cannot be targeted by enemy card effects\.?$/i.test(t) || (/cannot be targeted by enemy card effects/i.test(t) && !/cannot be attacked/i.test(t))) { f.untargetable = true; bits.push("untargetable"); }
   if (/cannot be attacked and cannot be targeted by enemy card effects/i.test(t)) {
@@ -1525,6 +1529,8 @@ async function runOp(op, pi, ctx) {
   const nameOf = (t) => cardById(G.players[t.pi].lanes[t.li].hero.cardId).name;
   switch (op.op) {
     case "pulse": gainPulse(pi, op.n, ctx.sourceName || "effect"); break;
+    case "drainPulse": { const Od = O; const d = Math.min(Od.pulse, op.n); Od.pulse = Math.max(0, Od.pulse - op.n); log(`${P.name} drains ${d} Pulse from ${Od.name}.`); break; }
+    case "stealPulse": { const Os = O; const s = Math.min(Os.pulse, op.n); Os.pulse = Math.max(0, Os.pulse - op.n); P.pulse += s; log(`${P.name} steals ${s} Pulse from ${Os.name}.`); break; }
     case "mortality": if (op.n < 0) loseMortality(pi, -op.n, ctx.sourceName); else { P.mortality += op.n; log(`${P.name} gains ${op.n} Mortality.`); } break;
     case "draw": for (let i = 0; i < op.n; i++) drawCard(pi); break;
     case "drawPulse": {   // Seraphina: draw, and gain Pulse for each card actually drawn
@@ -2943,6 +2949,14 @@ function heroCostOf(pi, card) {
     let tax = 0;
     G.players[1 - pi].lanes.forEach(L => { const seen = new Set(); for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); if (/the first Hero your opponent plays each turn costs them 1 additional Pulse/i.test(cardById(a.cardId).auxText || "")) tax += 1; } });
     cost += tax;
+  }
+  // Gribrok (goblin): enemy Heroes/Auxes that tax every Hero you play
+  {
+    let gtax = 0;
+    const RX = /Heroes your opponent plays cost (\d+) additional Pulse/i;
+    for (const pos of heroesOf(1 - pi)) { const eh = heroAt(pos); if (eh && !isSilenced(eh)) { const mm = (cardById(eh.cardId).text || "").match(RX); if (mm) gtax += +mm[1]; } }
+    G.players[1 - pi].lanes.forEach(L => { const seen = new Set(); for (const a of L.aux) if (a && !seen.has(a.uid)) { seen.add(a.uid); const mm = (cardById(a.cardId).auxText || "").match(RX); if (mm) gtax += +mm[1]; } });
+    cost += gtax;
   }
   const mod = pendingHeroMod(pi, card);
   if (mod) cost -= mod.discount;

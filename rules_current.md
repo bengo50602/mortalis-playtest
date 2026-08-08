@@ -2788,3 +2788,76 @@ Hero Mode — Cost: 10 Pulse | Attack/Health: 230/90 | Rarity: Eternal
 When Typhon, the Titan of Storms enters play, choose an enemy Hero — it cannot attack during your opponent's next turn. Whenever Typhon takes damage, it permanently gains 20 Attack.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +70 Attack.
+
+## Appendix T: Gribrok Realm — Full Card Set
+
+**Realm identity:** Goblin cutpurses, saboteurs, and taxmen — the weakest bodies in the game, but masters of resource denial. Gribrok Heroes are cheap and low-statted; their power is starving the enemy's Pulse: stealing it, draining it, and taxing every Hero the opponent tries to play — choking the bank that Hexes and Pacts depend on.
+
+### Heroes
+*(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
+
+**Snik the Cutpurse**
+Hero Mode — Cost: 1 Pulse | Attack/Health: 20/20 | Rarity: Common
+When Snik the Cutpurse enters play, steal 2 Pulse from your opponent.
+Auxiliary Mode — Cost: 1 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +10 Attack.
+
+**Grubfingers**
+Hero Mode — Cost: 2 Pulse | Attack/Health: 30/20 | Rarity: Common
+When Grubfingers enters play, your opponent loses 2 Pulse.
+Auxiliary Mode — Cost: 1 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +10 Attack.
+
+**Pilfer Rat**
+Hero Mode — Cost: 2 Pulse | Attack/Health: 20/30 | Rarity: Common
+When Pilfer Rat enters play, steal 1 Pulse from your opponent.
+Auxiliary Mode — Cost: 1 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +10 Attack.
+
+**Muckstab Sneak**
+Hero Mode — Cost: 3 Pulse | Attack/Health: 40/20 | Rarity: Common
+When Muckstab Sneak enters play, your opponent loses 3 Pulse.
+Auxiliary Mode — Cost: 1 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +20 Attack.
+
+**Grizzle, the Taxman**
+Hero Mode — Cost: 4 Pulse | Attack/Health: 40/40 | Rarity: Uncommon
+While Grizzle, the Taxman is in play, Heroes your opponent plays cost 1 additional Pulse.
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +20 Attack.
+
+**Nabber Queen**
+Hero Mode — Cost: 4 Pulse | Attack/Health: 40/30 | Rarity: Uncommon
+When Nabber Queen enters play, steal 3 Pulse from your opponent.
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +20 Attack.
+
+**Wartlord Gribok**
+Hero Mode — Cost: 5 Pulse | Attack/Health: 60/40 | Rarity: Rare
+When Wartlord Gribok enters play, your opponent loses 3 Pulse. While Wartlord Gribok is in play, Heroes your opponent plays cost 1 additional Pulse.
+Auxiliary Mode — Cost: 3 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +30 Attack.
+
+**Skitterfang the Thief**
+Hero Mode — Cost: 5 Pulse | Attack/Health: 50/40 | Rarity: Rare
+When Skitterfang the Thief enters play, steal 4 Pulse from your opponent.
+Auxiliary Mode — Cost: 3 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +30 Attack.
+
+**Vexmaw, the Pulse-Eater**
+Hero Mode — Cost: 6 Pulse | Attack/Health: 60/50 | Rarity: Ultra-Rare
+When Vexmaw, the Pulse-Eater enters play, steal 4 Pulse from your opponent. While Vexmaw, the Pulse-Eater is in play, Heroes your opponent plays cost 1 additional Pulse.
+Auxiliary Mode — Cost: 4 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +40 Attack.
+
+**Grobbla the Swindler**
+Hero Mode — Cost: 6 Pulse | Attack/Health: 50/50 | Rarity: Ultra-Rare
+When Grobbla the Swindler enters play, your opponent loses 5 Pulse.
+Auxiliary Mode — Cost: 4 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +40 Attack.
+
+**Gribrok the Underking**
+Hero Mode — Cost: 8 Pulse | Attack/Health: 90/70 | Rarity: Eternal
+When Gribrok the Underking enters play, steal 5 Pulse from your opponent. While Gribrok the Underking is in play, Heroes your opponent plays cost 2 additional Pulse.
+Auxiliary Mode — Cost: 6 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +50 Attack.
