@@ -2496,3 +2496,76 @@ When this Incantation resolves, remove all enemy-imposed stat reductions and neg
 
 **Aegis of Dawn** — Cost: 5 Pulse
 When this Incantation resolves, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack), and you gain 1 Pulse for each Hero warded this way (maximum 3).
+
+## Appendix P: Kessendo Realm — Full Card Set
+
+**Realm identity:** Disciplined samurai duelists — a more aggressive cousin of Luminar. Kessendo Heroes run attack-leaning stat lines (higher Attack than Luminar, moderate Health, no glass cannons) and their effects reward the destruction of enemy Heroes: they grow, draw, and generate Pulse whenever a foe falls, snowballing off every kill and trade (zanshin — follow-through).
+
+### Heroes
+*(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
+
+**Kenji, the First Blade**
+Hero Mode — Cost: 2 Pulse | Attack/Health: 50/30 | Rarity: Common
+Whenever Kenji destroys an enemy Hero in combat, he gains +10 Attack permanently.
+Auxiliary Mode — Cost: 1 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +20 Attack.
+
+**Aiko Swiftcut**
+Hero Mode — Cost: 3 Pulse | Attack/Health: 60/30 | Rarity: Common
+Whenever Aiko destroys an enemy Hero in combat, draw 1 card.
+Auxiliary Mode — Cost: 1 Pulse | 1 slot
+While in this slot, the first time each turn the Hero in this lane destroys an enemy Hero in combat, the Hero in this lane gains +10 Attack permanently.
+
+**Toru Ashborn**
+Hero Mode — Cost: 3 Pulse | Attack/Health: 60/40 | Rarity: Common
+Whenever an enemy Hero dies, gain 2 Pulse.
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +20 Attack. At the start of each of your turns, that Hero takes 10 damage.
+
+**Hana of the Falling Leaf**
+Hero Mode — Cost: 4 Pulse | Attack/Health: 80/40 | Rarity: Common
+Whenever Hana destroys an enemy Hero in combat, she gains +10 Attack permanently and you gain 1 Pulse.
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
+While this card is in play, whenever any enemy Hero dies, deal 10 damage to an enemy Hero of your choice.
+
+**Rin, the Twin Fang**
+Hero Mode — Cost: 5 Pulse | Attack/Health: 100/50 | Rarity: Uncommon
+When Rin destroys an enemy Hero in combat, she deals 20 damage to the enemy Hero in a lane neighboring the one she attacked, if any.
+Auxiliary Mode — Cost: 3 Pulse | 1 slot
+While in this slot, the first time each turn the Hero in this lane destroys an enemy Hero in combat, deal 20 damage to your opponent's Mortality.
+
+**Daisuke Stormcut**
+Hero Mode — Cost: 5 Pulse | Attack/Health: 90/60 | Rarity: Uncommon
+The first time each turn Daisuke destroys an enemy Hero in combat, gain 2 Pulse and draw 1 card.
+Auxiliary Mode — Cost: 3 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +30 Attack.
+
+**Masayo, Blade of the Fallen Sun**
+Hero Mode — Cost: 6 Pulse | Attack/Health: 130/50 | Rarity: Rare
+Whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Masayo permanently gains +20 Attack.
+Auxiliary Mode — Cost: 4 Pulse | 2 slots
+While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
+
+**Genji the Unbowed**
+Hero Mode — Cost: 6 Pulse | Attack/Health: 120/60 | Rarity: Rare
+Whenever Genji destroys an enemy Hero in combat, he gains +20 Attack permanently.
+Auxiliary Mode — Cost: 4 Pulse | 2 slots
+While in this slot, the Hero in this lane deals its full Attack as damage to any enemy Hero it fights in combat, even if that enemy Hero's Attack is higher (overriding the normal "higher Attack takes no damage" rule for this lane only).
+
+**Setsuna, Widow of Blades**
+Hero Mode — Cost: 8 Pulse | Attack/Health: 180/60 | Rarity: Ultra-Rare
+Whenever Setsuna destroys an enemy Hero in combat, she gains +30 Attack permanently.
+Auxiliary Mode — Cost: 6 Pulse | 2 slots
+While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
+
+**Kaito, the Hundred Cuts**
+Hero Mode — Cost: 8 Pulse | Attack/Health: 200/50 | Rarity: Ultra-Rare
+The first time each turn Kaito destroys an enemy Hero in combat, gain 2 Pulse and draw 1 card.
+Auxiliary Mode — Cost: 6 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +50 Attack. At the start of each of your turns, that Hero takes 20 damage.
+
+**Yorimoto, the Last Shogun**
+Hero Mode — Cost: 10 Pulse | Attack/Health: 220/80 | Rarity: Eternal
+Whenever an enemy Hero dies, gain 2 Pulse. Whenever Yorimoto destroys an enemy Hero in combat, he gains +30 Attack permanently.
+Auxiliary Mode — Cost: 7 Pulse | 2 slots
+While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
