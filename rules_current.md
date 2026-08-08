@@ -2715,3 +2715,76 @@ Hero Mode — Cost: 10 Pulse | Attack/Health: 80/280 | Rarity: Eternal
 While Karngmor, the Everstone is in play, all enemy Hero attacks must target Karngmor's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Karngmor take 30 damage after that combat resolves. At the start of each of your turns, each Hero you control heals 30 Health.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +120 Health.
+
+## Appendix S: Heliaxos Realm — Full Card Set
+
+**Realm identity:** The monsters and demigods of ancient myth — a realm of a few enormous threats rather than a wide board. Heliaxos Heroes carry big Attack and Health at a premium cost, and control the battlefield: petrifying enemy Heroes so they cannot attack, executing the wounded, regenerating in combat, and growing more furious (Hydra-like) each time they are struck.
+
+### Heroes
+*(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
+
+**Harpy Skirmisher**
+Hero Mode — Cost: 3 Pulse | Attack/Health: 70/40 | Rarity: Common
+When Harpy Skirmisher enters play, choose an enemy Hero — it cannot attack during your opponent's next turn.
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +30 Attack.
+
+**Satyr Piper**
+Hero Mode — Cost: 3 Pulse | Attack/Health: 50/50 | Rarity: Common
+When Satyr Piper enters play, draw 1 card.
+Auxiliary Mode — Cost: 1 Pulse | 1 slot
+While in this slot, the first time each turn the Hero in this lane destroys an enemy Hero in combat, the Hero in this lane gains +10 Attack permanently.
+
+**Bronze Talos Shard**
+Hero Mode — Cost: 4 Pulse | Attack/Health: 60/70 | Rarity: Common
+Once per turn, when Bronze Talos Shard deals combat damage to an enemy Hero, it heals 20 Health.
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +20 Attack.
+
+**Stone-Gazer Acolyte**
+Hero Mode — Cost: 4 Pulse | Attack/Health: 60/50 | Rarity: Common
+When Stone-Gazer Acolyte enters play, choose an enemy Hero — it cannot attack during your opponent's next turn.
+Auxiliary Mode — Cost: 2 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +30 Attack.
+
+**Cyclops Boulderhurler**
+Hero Mode — Cost: 6 Pulse | Attack/Health: 130/70 | Rarity: Uncommon
+When Cyclops Boulderhurler enters play, destroy an enemy Hero with 50 or less Health remaining.
+Auxiliary Mode — Cost: 4 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +40 Attack.
+
+**Nymph of the Oracle**
+Hero Mode — Cost: 5 Pulse | Attack/Health: 80/60 | Rarity: Uncommon
+When Nymph of the Oracle enters play, draw 1 card and choose an enemy Hero — it cannot attack during your opponent's next turn.
+Auxiliary Mode — Cost: 3 Pulse | 1 slot
+While in this slot, the Hero in this lane continuously has +30 Attack.
+
+**Hydra**
+Hero Mode — Cost: 7 Pulse | Attack/Health: 120/90 | Rarity: Rare
+Whenever Hydra takes damage, it permanently gains 10 Attack. Once per turn, when Hydra deals combat damage to an enemy Hero, it heals 20 Health.
+Auxiliary Mode — Cost: 5 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +50 Attack.
+
+**Chimera**
+Hero Mode — Cost: 7 Pulse | Attack/Health: 140/70 | Rarity: Rare
+When Chimera enters play, choose an enemy Hero — it cannot attack during your opponent's next turn. When Chimera destroys an enemy Hero in combat, she deals 30 damage to the enemy Hero in a lane neighboring the one she attacked, if any.
+Auxiliary Mode — Cost: 5 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +50 Attack.
+
+**Medusa, the Gorgon Queen**
+Hero Mode — Cost: 8 Pulse | Attack/Health: 150/70 | Rarity: Ultra-Rare
+When Medusa, the Gorgon Queen enters play, destroy an enemy Hero with 60 or less Health remaining and choose an enemy Hero — it cannot attack during your opponent's next turn.
+Auxiliary Mode — Cost: 6 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +50 Attack. At the start of each of your turns, that Hero takes 20 damage.
+
+**Minotaur of the Labyrinth**
+Hero Mode — Cost: 8 Pulse | Attack/Health: 200/80 | Rarity: Ultra-Rare
+Whenever Minotaur takes damage, it permanently gains 20 Attack. Once per turn, when Minotaur deals combat damage to an enemy Hero, it heals 30 Health.
+Auxiliary Mode — Cost: 6 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +60 Attack.
+
+**Typhon, the Titan of Storms**
+Hero Mode — Cost: 10 Pulse | Attack/Health: 230/90 | Rarity: Eternal
+When Typhon, the Titan of Storms enters play, choose an enemy Hero — it cannot attack during your opponent's next turn. Whenever Typhon takes damage, it permanently gains 20 Attack.
+Auxiliary Mode — Cost: 8 Pulse | 2 slots
+While in this slot, the Hero in this lane continuously has +70 Attack.
