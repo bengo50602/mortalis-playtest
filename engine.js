@@ -365,6 +365,7 @@ function parseOp(cl) {
   if ((m = cl.match(/^choose a Hero you control — it (?:can't|cannot) attack next turn$/i))) return { op: "cantAttack", target: "ownChoice", dur: 2, storeChosen: true };
   if ((m = cl.match(/^(?:Then )?choose an enemy Hero — it cannot attack during your opponent's next turn$/i))) return { op: "cantAttack", target: "enemyChoice", dur: 2 };
   if ((m = cl.match(new RegExp(`^gain ${NUM} Pulse immediately$`, "i")))) return { op: "pulse", n: +m[1] };
+  if ((m = cl.match(/^look at one of your opponent's face-down Hexes[^]*$/i))) return { op: "peekHex" };
   if ((m = cl.match(/^destroy an enemy Auxiliary card$/i))) return { op: "destroySupport", n: 1, only: "aux" };
   if ((m = cl.match(/^destroy a Relic attached to an enemy Hero(?: in this lane(?: or a neighboring lane)?)?$/i))) return { op: "destroySupport", n: 1, only: "relic" };
   if ((m = cl.match(/^destroy one Relic attached to that Hero$/i))) return { op: "destroySupport", n: 1, only: "relic" };
@@ -604,6 +605,16 @@ function compileListen(text, out, bits) {
   if ((m = t.match(new RegExp(`[Ww]henever you sacrifice a Hero, gain ${NUM} Pulse(?! and)`, "i")))) push("sacrifice", { k: "pulse", n: +m[1] }, "Pulse on sacrifice");
   if ((m = t.match(new RegExp(`[Ww]henever you play a Relic, \\w+ gains \\+${NUM} Attack and \\+${NUM} Health permanently`, "i")))) push("playRelic", { k: "buffSelf", atk: +m[1], hp: +m[2], perm: true }, "grows on Relic play");
   if ((m = t.match(new RegExp(`whenever an enemy Hero dies from combat damage dealt by one of your Heroes, \\w+ permanently gains \\+${NUM} Attack`, "i")))) push("enemyKilledByYourHero", { k: "buffSelf", atk: +m[1], perm: true }, "grows when your Hero kills");
+  // Livia (hero): a kill reinforces the lanes flanking the victor
+  if ((m = t.match(new RegExp(`whenever a Hero you control destroys an enemy Hero in combat, all Heroes you control in lanes neighboring the victor gain \\+${NUM} Attack permanently`, "i")))) push("enemyKilledByYourHero", { k: "buffNeighbors", atk: +m[1], perm: true }, "flanks grow on your kills");
+  // Livia (aux): this lane's Hero grows on your first kill each turn
+  if ((m = t.match(new RegExp(`the first time each turn a Hero you control destroys an enemy Hero in combat, the Hero in this lane gains \\+${NUM} Attack and \\+${NUM} Health permanently`, "i")))) push("enemyKilledByYourHero", { k: "buffSelf", atk: +m[1], hp: +m[2], perm: true }, "lane grows on your first kill", 1);
+  // Zeraphel (hero): Pulse whenever an enemy card of any kind is destroyed
+  if ((m = t.match(new RegExp(`whenever any enemy card \\([^)]*\\) is destroyed, gain ${NUM} Pulse(?: \\(maximum (\\d+) Pulse per turn[^)]*\\))?`, "i")))) {
+    const zcap = m[2] ? +m[2] : 0, zn = +m[1];
+    ["enemyDied", "enemySupportDestroyed", "supportSpent"].forEach(ev => out.push({ event: ev, do: { k: "pulse", n: zn }, maxPerTurn: zcap }));
+    bits.push("Pulse when enemy cards are destroyed");
+  }
   if ((m = t.match(new RegExp(`whenever you heal a Hero with a card effect, gain ${NUM} Pulse(?: \\(maximum (\\d+) per turn\\))?`, "i")))) push("heal", { k: "pulse", n: +m[1] }, "Pulse on heal", m[2] ? +m[2] : 0);
   if ((m = t.match(new RegExp(`[Ww]henever you gain Pulse from a card effect, \\w+ heals ${NUM} Health`, "i")))) push("gainPulse", { k: "healSelfN", n: +m[1] }, "heals on Pulse gain");
   if ((m = t.match(new RegExp(`whenever a Hero you control's ward is fully consumed[^,]*, that Hero heals ${NUM} Health`, "i")))) push("wardConsumed", { k: "healEvent", n: +m[1] }, "heal on ward break");
@@ -1533,6 +1544,15 @@ async function runOp(op, pi, ctx) {
     case "pulse": gainPulse(pi, op.n, ctx.sourceName || "effect"); break;
     case "drainPulse": { const Od = O; const d = Math.min(Od.pulse, op.n); Od.pulse = Math.max(0, Od.pulse - op.n); log(`${P.name} drains ${d} Pulse from ${Od.name}.`); break; }
     case "stealPulse": { const Os = O; const s = Math.min(Os.pulse, op.n); Os.pulse = Math.max(0, Os.pulse - op.n); P.pulse += s; log(`${P.name} steals ${s} Pulse from ${Os.name}.`); break; }
+    case "peekHex": {
+      const hexes = (O.slots || []).filter(s => s && s.kind === "hex");
+      if (!hexes.length) { log(`${P.name} looks, but the opponent has no face-down Hex.`); break; }
+      if (P.isAI) break;   // the AI already sees the whole board
+      const names = hexes.map(s => cardById(s.cardId).name);
+      if (window.UI && typeof UI.pickOption === "function") await UI.pickOption("Opponent's face-down Hex" + (names.length > 1 ? "es" : "") + " (peek):", names);
+      log(`${P.name} peeks at the opponent's face-down Hex.`);
+      break;
+    }
     case "mortality": if (op.n < 0) loseMortality(pi, -op.n, ctx.sourceName); else { P.mortality += op.n; log(`${P.name} gains ${op.n} Mortality.`); } break;
     case "draw": for (let i = 0; i < op.n; i++) drawCard(pi); break;
     case "drawPulse": {   // Seraphina: draw, and gain Pulse for each card actually drawn
@@ -2603,6 +2623,12 @@ function applyListen(dd, pi, pos, h, data) {
     log(`${nm}: your${dd.realmFilter ? " " + dd.realmFilter : ""} Heroes gain +${dd.atk || 0}/+${dd.hp || 0}.`);
   } else if (dd.k === "healAll") { for (const t of heroesOf(pi)) { if (dd.other && t.li === pos.li) continue; const hh = heroAt(t); applyHeal(hh, dd.n); } log(`${nm}: your Heroes heal ${dd.n}.`); }
   else if (dd.k === "reduceAll") { for (const t of heroesOf(1 - pi)) { const hh = heroAt(t); hh.redAtk += dd.atk || 0; hh.redHp += dd.hp || 0; if (effMaxHp(t.pi, t.li) <= 0) destroyHero(t.pi, t.li, null, { noOverkill: true }); } log(`${nm}: enemy Heroes lose ${dd.atk || 0} Attack / ${dd.hp || 0} Health.`); }
+  else if (dd.k === "buffNeighbors") {
+    const li0 = (data && data.at) ? data.at.li : pos.li;
+    let any = false;
+    [li0 - 1, li0 + 1].forEach(li2 => { const tg = heroAt({ pi, li: li2 }); if (tg) { tg.permAtk += dd.atk || 0; tg.permHp += dd.hp || 0; any = true; } });
+    if (any) log(`${nm}: Heroes flanking the victor gain +${dd.atk || 0}/+${dd.hp || 0} permanently.`);
+  }
 }
 
 // Event-counter Rites gain a counter (max 1 per turn) when their event fires.
@@ -3381,7 +3407,7 @@ async function fireCombat(event, actorPi, actorLi, targetPi, targetLi) {
     log(`${cardById(actor.cardId).name} is victorious — +${r.atk}/+${r.hp} permanently!`);
   }
   if (event === "kill") {
-    emit("enemyKilledByYourHero", actorPi, {}); tickRites(actorPi, "kill");
+    emit("enemyKilledByYourHero", actorPi, { at: { pi: actorPi, li: actorLi } }); tickRites(actorPi, "kill");
     await fireHexes(actorPi, "friendlyKill", { laneIdx: actorLi, victor: { pi: actorPi, li: actorLi } });
     // Gunnhild aux: first kill by this lane's Hero each turn hits enemy Mortality
     { const L2 = G.players[actorPi].lanes[actorLi]; if (L2) { const seenG = new Set(); for (const a of L2.aux) if (a && !seenG.has(a.uid)) { seenG.add(a.uid); const gm = (cardById(a.cardId).auxText || "").match(/the first time each turn the Hero in this lane destroys an enemy Hero in combat, deal (\d+) damage to your opponent's Mortality/i); if (gm && a.gGt !== G.gt) { a.gGt = G.gt; loseMortality(1 - actorPi, +gm[1], cardById(a.cardId).name); } } } }

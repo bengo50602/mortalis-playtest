@@ -1711,9 +1711,17 @@ const Decks = {
   renderFilters() {
     const el = $("db-filt");
     const fs = ["all"].concat(TYPE_ORDER);
+    if (Decks.realmFilter == null) Decks.realmFilter = "all";
+    const realms = (typeof realmNames === "function") ? realmNames() : [];
+    const realmSel = `<select id="db-realmsel" title="Filter by realm" style="margin-left:8px;font-family:inherit;font-size:12px;padding:4px 8px;border:1px solid var(--border,#3a4152);border-radius:8px;background:#12151c;color:#cfd3de">`
+      + `<option value="all"${Decks.realmFilter === "all" ? " selected" : ""}>All realms</option>`
+      + realms.map(r => `<option value="${r}"${Decks.realmFilter === r ? " selected" : ""}>${r}</option>`).join("")
+      + `</select>`;
     el.innerHTML = fs.map(f => `<button class="${f === Decks.filter ? "on" : ""}" data-f="${f}">${f === "all" ? "All" : f[0].toUpperCase() + f.slice(1)}</button>`).join("")
+      + realmSel
       + `<span class="grow"></span><span class="db-hint">Click to add · right-click to remove · hover for details</span>`;
     el.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { Decks.filter = b.dataset.f; Decks.renderFilters(); Decks.renderCollection(); });
+    const rs = $("db-realmsel"); if (rs) rs.onchange = () => { Decks.realmFilter = rs.value; Decks.renderCollection(); };
   },
 
   renderCollection() {
@@ -1724,11 +1732,16 @@ const Decks = {
     // only cards the signed-in player has unlocked (heroes owned individually;
     // a realm's support cards unlock with its first hero). No account = no gate.
     const gated = window.Meta && Meta.current && Meta.current();
+    const rf = Decks.realmFilter || "all";
+    const rOrder = (typeof realmNames === "function") ? realmNames() : [];
+    const ri = r => { const i = rOrder.indexOf(r); return i < 0 ? 99 : i; };
     let cards = DB.cards
       .filter(c => !gated || Meta.owns(c.id))
       .filter(c => !capped || used.includes(c.realm))
+      .filter(c => rf === "all" || c.realm === rf)
       .filter(c => Decks.filter === "all" || c.type === Decks.filter)
-      .sort((a, b) => (a.cost - b.cost) || a.name.localeCompare(b.name));
+      // group by realm (so the collection reads realm-by-realm), then cost, then name
+      .sort((a, b) => (ri(a.realm) - ri(b.realm)) || (a.cost - b.cost) || a.name.localeCompare(b.name));
 
     el.className = "db-collgrid";
     el.innerHTML = cards.map(c => dbGridCard(c, Decks.qtyOf(c.id))).join("") || `<div class="db-empty">No cards match.</div>`;
