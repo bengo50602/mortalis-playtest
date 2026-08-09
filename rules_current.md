@@ -101,7 +101,7 @@ When Heroes fight (same-lane by default):
 If a Hero attacks but the opponent's matching lane is empty:
 - The Hero may **redirect** to attack a Hero in a different occupied lane
 - If the opponent's entire board is empty, the attack goes directly to their **Mortality**
-- Direct damage to Mortality is capped at **70 Mortality per Hero per attack** — a single Hero (or each Hero in an Onslaught) can deal at most this much straight to the face in one attack, so no board can one-shot an opponent from full. This cap applies only to direct Mortality damage; Hero-versus-Hero combat is unaffected.
+- Direct damage to Mortality is **not capped** — a Hero attacking into an open lane (or an Onslaught with no defender) deals its full Attack straight to the opponent's Mortality.
 
 ### Onslaught (Gang-Ups)
 Multiple Heroes can redirect onto the same single defending Hero — this is called an **Onslaught**. An Onslaught resolves like basic combat, except the attackers' Attack values are summed and treated as one collective Attack value, which is then compared against the **defending Hero's Attack**:

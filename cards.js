@@ -7135,7 +7135,7 @@ window.DEFAULT_DATA = {
   "auxDiscount": 2,
   "relicRealmLocked": true,
   "overkillCap": 30,
-  "faceDamageCap": 70,
+  "faceDamageCap": 0,
   "laneUnlockTurns": [
    3,
    1,
