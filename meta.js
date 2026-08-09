@@ -81,16 +81,29 @@
     seals: function () { var p = this.current(); return p ? (p.seals | 0) : 0; },
     addCoins: function (n) { var p = this.current(); if (!p) return; p.coins = Math.max(0, (p.coins | 0) + n); this.save(); },
     addSeals: function (n) { var p = this.current(); if (!p) return; p.seals = Math.max(0, (p.seals | 0) + n); this.save(); },
-    /* TESTING CHEAT: grant every card (max copies) + stock currency, so the whole
-       collection is playable in the deckbuilder. Triggered by Ctrl+Shift+U. */
+    /* TESTING CHEAT (toggle, Ctrl+Shift+U): first press backs up your earned
+       collection + currency and grants every card at max copies; second press
+       restores exactly what you had earned before. */
     grantAllCards: function () {
       var p = this.current(); if (!p) return { err: "Sign in to a profile first." };
+      if (p.__cheat) {
+        // revert to the earned collection
+        p.collection = p.__cheat.collection || {};
+        p.coins = p.__cheat.coins | 0;
+        p.seals = p.__cheat.seals | 0;
+        delete p.__cheat;
+        this.save();
+        var owned = 0; for (var k in p.collection) if ((p.collection[k] | 0) > 0) owned++;
+        return { ok: true, reverted: true, count: owned };
+      }
+      // back up, then unlock everything
+      p.__cheat = { collection: JSON.parse(JSON.stringify(p.collection || {})), coins: p.coins | 0, seals: p.seals | 0 };
       var lim = (C().copyLimit | 0) || 3, n = 0;
       DB.cards.forEach(function (c) { p.collection[c.id] = lim; n++; });
       p.coins = Math.max(p.coins | 0, 99999);
       p.seals = Math.max(p.seals | 0, 9999);
       this.save();
-      return { ok: true, count: n };
+      return { ok: true, reverted: false, count: n };
     },
     spendCoins: function (n) { var p = this.current(); if (!p || (p.coins | 0) < n) return false; p.coins -= n; this.save(); return true; },
     spendSeals: function (n) { var p = this.current(); if (!p || (p.seals | 0) < n) return false; p.seals -= n; this.save(); return true; },

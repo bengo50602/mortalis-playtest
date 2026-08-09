@@ -6,7 +6,7 @@
 (function () {
   "use strict";
   var $ = function (id) { return document.getElementById(id); };
-  var RC = { Common: "#9aa4b2", Uncommon: "#7fb069", Rare: "#5b8fd6", "Ultra-Rare": "#c78bd6", Eternal: "#e0a45c" };
+  var RC = { Common: "#9aa4b2", Uncommon: "#7fb069", Rare: "#5b8fd6", "Ultra-Rare": "#c78bd6", Eternal: "#e0a45c", Support: "#6fae8f" };
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (m) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]; }); }
 
   var MetaUI = window.MetaUI = {};
@@ -575,7 +575,7 @@
     var el = $("screen-store"); if (!el) return;
     var html = "<div class='mpanel'><div class='mhead'><h2>Store</h2>"
       + "<span class='sub'><span style='color:var(--warn)'>&#9679; " + Meta.coins() + "</span> coins &nbsp; <span style='color:var(--warn)'>&#9670; " + Meta.seals() + "</span> Seals</span></div>"
-      + "<div class='sub'>Every pack gives 3 hero cards. Duplicates convert back to coins. Earn Seals by beating campaign bosses.</div>"
+      + "<div class='sub'>Every pack gives 3 cards — heroes plus a chance at realm support cards. Duplicates convert back to coins. Earn Seals by beating campaign bosses.</div>"
       + "<div class='pack-grid'>";
     Store.packs.forEach(function (p) {
       var afford = Store.canAfford(p.id);
@@ -683,7 +683,8 @@
       try { if (window.MetaUI && MetaUI.refresh) MetaUI.refresh(); } catch (x) {}
       try { if (typeof Decks !== "undefined" && Decks.renderCollection) { Decks.renderRealms && Decks.renderRealms(); Decks.renderCollection(); } } catch (x) {}
       try { if (typeof renderCampaign === "function") renderCampaign(); } catch (x) {}
-      alert("Cheat activated — unlocked all " + r.count + " cards (and stocked coins/seals).");
+      if (r.reverted) alert("Cheat OFF — restored your earned collection (" + r.count + " cards).");
+      else alert("Cheat ON — unlocked all " + r.count + " cards (and stocked coins/seals). Press Ctrl+Shift+U again to revert.");
     } else { alert((r && r.err) || "Could not unlock cards."); }
   });
 })();
