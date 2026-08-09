@@ -22,6 +22,13 @@
   p.pagesub { font-family: 'Barlow', sans-serif; font-size: 13px; color: #55534b; margin: 6px 24px 0; max-width: 860px; }
   .artbox { position: relative; flex-shrink: 0; border-radius: 8px; overflow: hidden; cursor: pointer; }
   .artbox img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .artctl { position: absolute; top: 6px; right: 6px; display: flex; gap: 6px; opacity: 0; transition: opacity .12s; }
+  .artbox:hover .artctl { opacity: 1; }
+  .artctl button { font-family: 'Barlow', sans-serif; font-size: 12px; line-height: 1; padding: 5px 9px; border: none; border-radius: 6px; background: rgba(15,17,23,0.82); color: #eae6da; cursor: pointer; backdrop-filter: blur(2px); }
+  .artctl button.rm { background: rgba(150,40,40,0.9); font-weight: 700; }
+  .artctl button:hover { background: rgba(0,0,0,0.95); }
+  .artctl button.rm:hover { background: rgba(180,50,50,1); }
+  @media print { .artctl { display: none !important; } }
   .blankart { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: #14161c; border: 2px dashed #5d6478; border-radius: 6px; box-sizing: border-box; font-family: 'JetBrains Mono', monospace; color: #8a90a0; text-align: center; }
   .artbox.dragover .blankart { border-color: #c8b27a; color: #c8b27a; }
   .fnhint { font-size: 9px !important; color: #6b7280; word-break: break-all; padding: 0 12px; }
@@ -98,6 +105,7 @@ artOpen.onsuccess = e => { artDB = e.target.result; render(); };
 artOpen.onerror = () => render();
 function artGet(id) { return new Promise(res => { if (!artDB) return res(null); const r = artDB.transaction('art').objectStore('art').get(id); r.onsuccess = () => res(r.result || null); r.onerror = () => res(null); }); }
 function artPut(id, blob) { if (!artDB) return; artDB.transaction('art', 'readwrite').objectStore('art').put(blob, id); }
+function artDel(id) { if (!artDB) return; artDB.transaction('art', 'readwrite').objectStore('art').delete(id); }
 
 /* ---------- helpers ---------- */
 const esc = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;');
@@ -199,6 +207,15 @@ function otherCard(c) {
 
 /* ---------- render + filters ---------- */
 const DATA = window.DEFAULT_DATA;
+if (!DATA || !DATA.realms || !DATA.cards) {
+  document.getElementById('cards').innerHTML =
+    `<div style="max-width:640px;margin:40px auto;padding:24px 28px;background:#fff;border:1px solid #d8d4c8;border-radius:12px;font-family:'Barlow',sans-serif;color:#3a352c;line-height:1.5;">
+      <div style="font-family:'Cinzel',serif;font-size:18px;margin-bottom:8px;">Card data didn't load</div>
+      <p style="margin:0 0 10px;">Card Studio reads every card from <b>cards.js</b>, which must sit in the <b>same folder</b> as this file. It looks like that file wasn't found.</p>
+      <p style="margin:0 0 6px;"><b>Fix:</b> open <b>Card Studio.html</b> directly from your <i>Mortalis-Realms Playtest Program</i> folder (double-click it in Finder), not from a copy or a preview. The whole folder — including <code>cards.js</code> and the <code>art/</code> folder — needs to stay together.</p>
+    </div>`;
+  throw new Error('Card Studio: window.DEFAULT_DATA not found — cards.js failed to load (open the file from its project folder).');
+}
 const realmSel = document.getElementById('f-realm');
 DATA.realms.forEach(r => { const o = document.createElement('option'); o.value = o.textContent = r.name; realmSel.appendChild(o); });
 ['f-realm','f-type','f-search'].forEach(id => document.getElementById(id).addEventListener('input', render));
@@ -213,17 +230,28 @@ async function render() {
   for (const box of document.querySelectorAll('.artbox')) hydrateArt(box);
 }
 
+const ctlBar = `<div class="artctl"><button data-act="replace" title="Choose a different image">Replace</button><button class="rm" data-act="remove" title="Remove this image">✕</button></div>`;
+function showImg(box, src) { box.innerHTML = `<img src="${src}" alt="">` + ctlBar; }
+
 async function hydrateArt(box) {
   const id = box.dataset.cid;
   const saved = await artGet(id);
-  if (saved) { box.innerHTML = `<img src="${URL.createObjectURL(saved)}" alt="">`; return; }
+  if (saved) { showImg(box, URL.createObjectURL(saved)); return; }
+  // no browser-saved override — reset to blank, then try the permanent art/ file
+  box.innerHTML = blankArt(box.dataset.tall === '1', id);
   const img = new Image();
-  img.onload = () => { box.innerHTML = ''; box.appendChild(img); };
-  img.src = 'art/' + id + '.png?v=' + Date.now();   // cache-buster: deleted art disappears immediately
-  img.alt = '';
+  img.onload = () => showImg(box, img.src);
+  img.onerror = () => {};   // stays blank if no file exists
+  img.src = 'art/' + id + '.png?v=' + Date.now();
 }
 
-/* drag-drop + click-to-browse art */
+function openPicker(box) {
+  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
+  inp.onchange = () => { if (inp.files[0]) setArt(box, inp.files[0]); };
+  inp.click();
+}
+
+/* drag-drop always replaces; click a blank box to browse; Replace/Remove controls on filled boxes */
 document.addEventListener('dragover', e => { const b = e.target.closest('.artbox'); if (b) { e.preventDefault(); b.classList.add('dragover'); } });
 document.addEventListener('dragleave', e => { const b = e.target.closest('.artbox'); if (b) b.classList.remove('dragover'); });
 document.addEventListener('drop', e => {
@@ -233,14 +261,20 @@ document.addEventListener('drop', e => {
   if (f && f.type.startsWith('image/')) setArt(b, f);
 });
 document.addEventListener('click', e => {
+  const btn = e.target.closest('.artctl button');
+  if (btn) {
+    e.stopPropagation();
+    const box = btn.closest('.artbox');
+    if (btn.dataset.act === 'remove') { artDel(box.dataset.cid); hydrateArt(box); }
+    else openPicker(box);
+    return;
+  }
   const b = e.target.closest('.artbox'); if (!b || b.querySelector('img')) return;
-  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
-  inp.onchange = () => { if (inp.files[0]) setArt(b, inp.files[0]); };
-  inp.click();
+  openPicker(b);
 });
 function setArt(box, file) {
   artPut(box.dataset.cid, file);
-  box.innerHTML = `<img src="${URL.createObjectURL(file)}" alt="">`;
+  showImg(box, URL.createObjectURL(file));
 }
 </script>
 </body>
