@@ -89,6 +89,37 @@ const UI = {
       UI.render();
     });
   },
+  /* visual list picker (e.g. choose a Hero from your discard pile). Returns the
+     chosen index, or null if cancelled. Self-contained modal overlay. */
+  pickOption(msg, options) {
+    return new Promise(res => {
+      const ov = document.createElement("div");
+      ov.style.cssText = "position:fixed;inset:0;z-index:99999;background:rgba(6,8,12,.66);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)";
+      const box = document.createElement("div");
+      box.style.cssText = "background:#12151c;border:1px solid #3a4152;border-radius:14px;padding:20px 22px;max-width:440px;width:90%;max-height:82vh;overflow:auto;box-shadow:0 24px 70px rgba(0,0,0,.55)";
+      const h = document.createElement("div");
+      h.textContent = msg;
+      h.style.cssText = "font-family:'Cinzel',serif;color:#e8e4d8;font-size:16px;margin-bottom:14px";
+      box.appendChild(h);
+      const done = (v) => { try { document.body.removeChild(ov); } catch (e) {} res(v); };
+      options.forEach((o, i) => {
+        const b = document.createElement("button");
+        b.textContent = o;
+        b.style.cssText = "display:block;width:100%;text-align:left;margin:7px 0;padding:11px 13px;background:#1b1f28;border:1px solid #3a4152;border-radius:9px;color:#cfd3de;cursor:pointer;font-size:14px;font-family:inherit";
+        b.onmouseenter = () => b.style.background = "#232b38";
+        b.onmouseleave = () => b.style.background = "#1b1f28";
+        b.onclick = () => done(i);
+        box.appendChild(b);
+      });
+      const c = document.createElement("button");
+      c.textContent = "Cancel";
+      c.style.cssText = "display:block;margin:14px auto 0;padding:8px 18px;background:transparent;border:1px solid #55606f;border-radius:8px;color:#9aa4b6;cursor:pointer;font-family:inherit";
+      c.onclick = () => done(null);
+      box.appendChild(c);
+      ov.appendChild(box);
+      document.body.appendChild(ov);
+    });
+  },
   settlePending(val) {
     if (!UI.pending) return;
     const r = UI.pending.resolve;
@@ -884,7 +915,7 @@ const REALM_LOGOS = {
   Golmerad:(L,D)=>`<rect x="8" y="19" width="18" height="15" rx="2.5" fill="${D}"/><rect x="8.5" y="13" width="3.6" height="9" rx="1.2" fill="${L}"/><rect x="12.7" y="11" width="3.6" height="11" rx="1.2" fill="${L}"/><rect x="16.9" y="11" width="3.6" height="11" rx="1.2" fill="${L}"/><rect x="21.1" y="13" width="3.6" height="9" rx="1.2" fill="${L}"/><rect x="4.5" y="22" width="4.5" height="6" rx="1.4" fill="${L}"/>`,
   Heliaxos:(L,D)=>`<g fill="${D}"><rect x="8" y="8" width="18" height="3.6"/><rect x="8" y="33" width="18" height="3.6"/></g><g fill="${L}"><rect x="10.5" y="12" width="3" height="20.5"/><rect x="15.5" y="12" width="3" height="20.5"/><rect x="20.5" y="12" width="3" height="20.5"/></g>`,
   Gribrok:(L,D)=>`<circle cx="17" cy="27" r="7.5" fill="${D}"/><circle cx="17" cy="27" r="4.4" fill="none" stroke="${L}" stroke-width="1.4"/><polygon points="17,4 20,20 14,20" fill="${L}"/><rect x="13.5" y="20" width="7" height="2.6" fill="${L}"/>`,
-  Vhorrath:(L,D)=>`<path d="M17 7 Q27 7 27 19 Q27 26 22 29 L22 35 L12 35 L12 29 Q7 26 7 19 Q7 7 17 7 Z" fill="${L}"/><circle cx="13" cy="19" r="2.5" fill="${D}"/><circle cx="21" cy="19" r="2.5" fill="${D}"/><polygon points="17,22 19,26 15,26" fill="${D}"/><g fill="${D}"><rect x="14" y="31" width="1.5" height="4"/><rect x="16.5" y="31" width="1.5" height="4"/><rect x="19" y="31" width="1.5" height="4"/></g>`,
+  Vhorrath:(L,D)=>`<path d="M17 5 C25 5 29 11 29 18 C29 23 27 26 25 28 C25 31 24 32 24 33 L10 33 C10 32 9 31 9 28 C7 26 5 23 5 18 C5 11 9 5 17 5 Z" fill="${L}"/><ellipse cx="12.5" cy="18.5" rx="3.4" ry="4" fill="${D}" transform="rotate(-12 12.5 18.5)"/><ellipse cx="21.5" cy="18.5" rx="3.4" ry="4" fill="${D}" transform="rotate(12 21.5 18.5)"/><path d="M17 22 L19 27 L15 27 Z" fill="${D}"/><rect x="10.5" y="33" width="13" height="5" rx="1" fill="${L}"/><g fill="${D}"><rect x="12" y="33" width="0.9" height="5"/><rect x="14.5" y="33" width="0.9" height="5"/><rect x="17" y="33" width="0.9" height="5"/><rect x="19.5" y="33" width="0.9" height="5"/><rect x="22" y="33" width="0.9" height="5"/></g>`,
 };
 function realmColor(r) { return REALM_COLORS[r] || "#8fa0c0"; }
 function realmCrest(realm, w, main, dark, bg) {

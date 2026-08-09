@@ -14,7 +14,7 @@ Players build 40-card decks with total creative freedom — any card can go in a
 ### Pulse
 The universal resource used to pay for all cards. Pulse is **not colored or Realm-locked** — every card simply costs a number of Pulse, regardless of archetype.
 
-- At the start of each of your turns, gain Pulse equal to **3** on your first turn, rising by 1 each turn to a maximum of **10 Pulse** per turn (turn 1: 3, turn 2: 4, … turn 8 onward: 10). The early game belongs to cheap Heroes; the giants arrive late.
+- At the start of each of your turns, gain Pulse equal to **3** on your first turn, rising by 1 every 2 turns to a maximum of **8 Pulse** per turn (turns 1–2: 3, turns 3–4: 4, turns 5–6: 5, … turn 11 onward: 8). The early game belongs to cheap Heroes; the giants arrive late.
 - Unused Pulse **carries over** between turns as a running tally, so you can bank toward a Hex (whose cost is paid when it triggers — even on your opponent's turn) or a bigger play. There is no hard cap. In practice the early game still belongs to cheap Heroes: hoarding Pulse while your opponent develops a board is a losing line, so the giants arrive late on their own.
 - Card-based Pulse ramp effects (e.g., Kessa Windrend's Auxiliary Mode) still function and stack on top of the flat 5/turn
 

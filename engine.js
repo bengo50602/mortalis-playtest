@@ -2353,6 +2353,7 @@ async function activateAbility(pi, li, holder, sourceName, ab, idx, relicInst) {
 // that; solo play falls straight through to the local prompt.
 async function promptPick(title, options) {
   if (window.PVP_PICK) return await PVP_PICK(title, options);
+  if (window.UI && typeof UI.pickOption === "function") return await UI.pickOption(title, options);
   return localPromptPick(title, options);
 }
 function localPromptPick(title, options) {
