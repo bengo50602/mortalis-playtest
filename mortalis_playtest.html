@@ -376,7 +376,7 @@ body.on-splash .topbar{display:none}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260809103851</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260809104733</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -11951,16 +11951,29 @@ async function aiTakeTurn() {
     seals: function () { var p = this.current(); return p ? (p.seals | 0) : 0; },
     addCoins: function (n) { var p = this.current(); if (!p) return; p.coins = Math.max(0, (p.coins | 0) + n); this.save(); },
     addSeals: function (n) { var p = this.current(); if (!p) return; p.seals = Math.max(0, (p.seals | 0) + n); this.save(); },
-    /* TESTING CHEAT: grant every card (max copies) + stock currency, so the whole
-       collection is playable in the deckbuilder. Triggered by Ctrl+Shift+U. */
+    /* TESTING CHEAT (toggle, Ctrl+Shift+U): first press backs up your earned
+       collection + currency and grants every card at max copies; second press
+       restores exactly what you had earned before. */
     grantAllCards: function () {
       var p = this.current(); if (!p) return { err: "Sign in to a profile first." };
+      if (p.__cheat) {
+        // revert to the earned collection
+        p.collection = p.__cheat.collection || {};
+        p.coins = p.__cheat.coins | 0;
+        p.seals = p.__cheat.seals | 0;
+        delete p.__cheat;
+        this.save();
+        var owned = 0; for (var k in p.collection) if ((p.collection[k] | 0) > 0) owned++;
+        return { ok: true, reverted: true, count: owned };
+      }
+      // back up, then unlock everything
+      p.__cheat = { collection: JSON.parse(JSON.stringify(p.collection || {})), coins: p.coins | 0, seals: p.seals | 0 };
       var lim = (C().copyLimit | 0) || 3, n = 0;
       DB.cards.forEach(function (c) { p.collection[c.id] = lim; n++; });
       p.coins = Math.max(p.coins | 0, 99999);
       p.seals = Math.max(p.seals | 0, 9999);
       this.save();
-      return { ok: true, count: n };
+      return { ok: true, reverted: false, count: n };
     },
     spendCoins: function (n) { var p = this.current(); if (!p || (p.coins | 0) < n) return false; p.coins -= n; this.save(); return true; },
     spendSeals: function (n) { var p = this.current(); if (!p || (p.seals | 0) < n) return false; p.seals -= n; this.save(); return true; },
@@ -14504,7 +14517,7 @@ window.addEventListener("DOMContentLoaded", () => {
 (function () {
   "use strict";
   var $ = function (id) { return document.getElementById(id); };
-  var RC = { Common: "#9aa4b2", Uncommon: "#7fb069", Rare: "#5b8fd6", "Ultra-Rare": "#c78bd6", Eternal: "#e0a45c" };
+  var RC = { Common: "#9aa4b2", Uncommon: "#7fb069", Rare: "#5b8fd6", "Ultra-Rare": "#c78bd6", Eternal: "#e0a45c", Support: "#6fae8f" };
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (m) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]; }); }
 
   var MetaUI = window.MetaUI = {};
@@ -15073,7 +15086,7 @@ window.addEventListener("DOMContentLoaded", () => {
     var el = $("screen-store"); if (!el) return;
     var html = "<div class='mpanel'><div class='mhead'><h2>Store</h2>"
       + "<span class='sub'><span style='color:var(--warn)'>&#9679; " + Meta.coins() + "</span> coins &nbsp; <span style='color:var(--warn)'>&#9670; " + Meta.seals() + "</span> Seals</span></div>"
-      + "<div class='sub'>Every pack gives 3 hero cards. Duplicates convert back to coins. Earn Seals by beating campaign bosses.</div>"
+      + "<div class='sub'>Every pack gives 3 cards — heroes plus a chance at realm support cards. Duplicates convert back to coins. Earn Seals by beating campaign bosses.</div>"
       + "<div class='pack-grid'>";
     Store.packs.forEach(function (p) {
       var afford = Store.canAfford(p.id);
@@ -15181,7 +15194,8 @@ window.addEventListener("DOMContentLoaded", () => {
       try { if (window.MetaUI && MetaUI.refresh) MetaUI.refresh(); } catch (x) {}
       try { if (typeof Decks !== "undefined" && Decks.renderCollection) { Decks.renderRealms && Decks.renderRealms(); Decks.renderCollection(); } } catch (x) {}
       try { if (typeof renderCampaign === "function") renderCampaign(); } catch (x) {}
-      alert("Cheat activated — unlocked all " + r.count + " cards (and stocked coins/seals).");
+      if (r.reverted) alert("Cheat OFF — restored your earned collection (" + r.count + " cards).");
+      else alert("Cheat ON — unlocked all " + r.count + " cards (and stocked coins/seals). Press Ctrl+Shift+U again to revert.");
     } else { alert((r && r.err) || "Could not unlock cards."); }
   });
 })();
