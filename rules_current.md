@@ -389,31 +389,31 @@ Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, neighboring Heroes gain +10 Attack and +10 Health.
 
 **Thalia Oathkeeper**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 120/90 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 110/90 | Rarity: Rare
 Whenever you play a Hero from a Realm other than Luminar, gain 1 Pulse.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 Once per turn, when you play a Hero from a Realm other than Luminar, gain 1 Pulse.
 
 **Garrick Dawnshield**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 110/100 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 100/100 | Rarity: Rare
 Once per turn, you may destroy a Relic or Auxiliary card affecting an enemy Hero.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 Once per turn, you may destroy a Relic attached to an enemy Hero in this lane.
 
 **Seraphina Dawnbringer**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 160/120 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 150/120 | Rarity: Ultra-Rare
 At the start of each of your turns, draw a card. Whenever you draw a card this way, also gain 1 Pulse.
 Auxiliary Mode — Cost: 6 Pulse | 1 slot
 While in this slot, the first time each turn an enemy targets a Hero in this lane or a neighboring lane with a Hex, you may pay 2 Pulse to negate and destroy that card.
 
 **Aldric the Unwavering**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 150/130 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 140/130 | Rarity: Ultra-Rare
 While Aldric is in play, all other Heroes you control continuously have +20 Attack and +30 Health. Once per turn, you may destroy an enemy Hex, Rite, or Pact.
 Auxiliary Mode — Cost: 6 Pulse | 1 slot
 At the start of each of your turns, gain 1 Pulse for each neighboring lane with a Hero (max 2).
 
 **Elyndra, Herald of Dawn**
-Hero Mode — Cost: 10 Pulse | Attack/Health: 200/150 | Rarity: Eternal
+Hero Mode — Cost: 10 Pulse | Attack/Health: 190/150 | Rarity: Eternal
 While Elyndra is in play, Heroes you control in neighboring lanes continuously have +50 Attack. At the start of each of your turns, gain 2 Pulse.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While this card is in play, all Heroes you control continuously have +10 Attack and +10 Health. Whenever any battle occurs anywhere on the board, gain 1 Pulse. When this card enters play, draw 2 cards.
@@ -517,55 +517,55 @@ Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, whenever a Hero you control dies, gain 1 Pulse.
 
 **Corvus Hexwright**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 60/30 | Rarity: Common
+Hero Mode — Cost: 3 Pulse | Attack/Health: 70/30 | Rarity: Common
 The first time each turn Corvus declares an attack, gain 1 Pulse.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 Once per turn, you may pay 1 Pulse to look at one of your opponent's face-down Hexes. (You do not reveal it to anyone else, and it stays face-down.)
 
 **Maelis the Unraveler**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 70/50 | Rarity: Common
+Hero Mode — Cost: 4 Pulse | Attack/Health: 80/50 | Rarity: Common
 Once per turn, you may pay 2 Pulse to destroy a Relic attached to an enemy Hero in this lane or a neighboring lane.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 When this card enters play, destroy one enemy Relic or enemy Auxiliary card of your choice, then destroy this card.
 
 **Archivist Denna Vail**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 70/50 | Rarity: Uncommon
+Hero Mode — Cost: 4 Pulse | Attack/Health: 80/50 | Rarity: Uncommon
 While Denna is in play, whenever an enemy Hex, Rite, or Pact is destroyed or fizzles, gain 1 Pulse and Denna gains +10 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 2 Pulse | 2 slots
 Once per turn, you may pay 3 Pulse to destroy an enemy Rite or Pact.
 
 **Sylvara Emberquill**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 90/60 | Rarity: Uncommon
+Hero Mode — Cost: 5 Pulse | Attack/Health: 100/60 | Rarity: Uncommon
 While Sylvara is in play, whenever a Hero you control destroys an enemy Hero in combat, gain 2 Pulse.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the first time each turn the Hero in this lane declares an attack, gain 1 Pulse.
 
 **Thane Orrick Spellbreaker**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 100/80 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 110/90 | Rarity: Rare
 While Orrick is in play, whenever an enemy Relic or enemy Auxiliary card is destroyed by any means, gain 2 Pulse. Once per turn, you may pay 2 Pulse to destroy an enemy Auxiliary card.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 Once per turn, when an enemy Relic or enemy Auxiliary card enters play, you may pay 2 Pulse to destroy it immediately.
 
 **Miriel of the Drowned Library**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 110/70 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 120/80 | Rarity: Rare
 Once per turn, you may pay any amount of Pulse (maximum 5): deal 10 damage to an enemy Hero in this lane or a neighboring lane for each 1 Pulse paid this way.
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 At the start of each of your turns, if an enemy Hero died since the start of your previous turn, gain 2 Pulse.
 
 **Zeraphel, Ninth Circle Ascendant**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 140/100 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 150/110 | Rarity: Ultra-Rare
 While Zeraphel is in play, whenever any enemy card (Hero, Relic, Auxiliary, Hex, Rite, or Pact) is destroyed, gain 1 Pulse (maximum 3 Pulse per turn from this effect). Once per turn, you may pay 4 Pulse to destroy an enemy Auxiliary card.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, whenever you gain Pulse from a card effect, the Hero in this lane gains +10 Attack and +10 Health permanently.
 
 **Grand Magus Ostrellan**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 150/90 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 160/100 | Rarity: Ultra-Rare
 While Ostrellan is in play, whenever you cast an Incantation, you may pay 2 Pulse to resolve that Incantation's effect a second time (choosing new targets if needed). Once per turn only.
 Auxiliary Mode — Cost: 6 Pulse | 1 slot
 While in this slot, your Incantations cost 1 less Pulse (minimum 1).
 
 **Vhessune, the Living Sigil**
-Hero Mode — Cost: 10 Pulse | Attack/Health: 170/130 | Rarity: Eternal
+Hero Mode — Cost: 10 Pulse | Attack/Health: 190/140 | Rarity: Eternal
 While Vhessune is in play, whenever any player declares an attack, gain 1 Pulse (maximum 3 Pulse per round from this effect). Once per turn, you may pay 5 Pulse to destroy any one enemy Relic, Auxiliary card, Hex, Rite, or Pact.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 When this card enters play, destroy up to 2 enemy Relic and/or enemy Auxiliary cards. While in this slot, whenever an enemy Hero is destroyed, gain 3 Pulse.
@@ -681,7 +681,7 @@ Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the enemy Hero in the lane opposing this one cannot be healed.
 
 **Nharessa, Bride of Ash**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 100/70 | Rarity: Uncommon
+Hero Mode — Cost: 5 Pulse | Attack/Health: 90/70 | Rarity: Uncommon
 While Nharessa is in play, whenever your opponent plays a Hero, all enemy Heroes get −10 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the first Hero your opponent plays each turn costs them 1 additional Pulse.
@@ -693,31 +693,31 @@ Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, enemy Heroes cannot redirect attacks into this lane (they may only attack it from the directly opposing lane).
 
 **Ozzhûl, Eater of Names**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 110/90 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 100/90 | Rarity: Rare
 Once per turn, you may pay 3 Pulse to choose an enemy Hero: its ability text is blank (has no effect) until the start of your next turn.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While in this slot, enemy Auxiliary cards in the lane opposing this one have no effect.
 
 **Draveth, Broker of Agonies**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 120/80 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 110/80 | Rarity: Rare
 Once per turn, you may pay 2 Pulse: an enemy Hero of your choice gets −20 Attack until end of turn, and Draveth gains +20 Attack until end of turn.
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 While in this slot, whenever an enemy Hero's Attack or Health is reduced by one of your card effects, gain 1 Pulse (maximum 2 Pulse per turn from this effect).
 
 **Kravvax, Warden of the Red Gate**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 140/120 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 130/120 | Rarity: Ultra-Rare
 When Kravvax enters play, choose one of your opponent's lanes: while Kravvax remains in play, your opponent cannot play Relics or Auxiliary cards into that lane. Whenever an enemy Hero attacks Kravvax, that Hero has −30 Attack for that combat.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, at the start of each of your turns, all enemy Heroes get −10 Attack until end of turn.
 
 **Mother Vhûl, the Hollow Choir**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 160/110 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 150/110 | Rarity: Ultra-Rare
 When Mother Vhûl enters play, all enemy Heroes permanently lose 20 Health (stat reduction, not damage). While she is in play, whenever an enemy Hero dies, all remaining enemy Heroes get −10 Attack permanently.
 Auxiliary Mode — Cost: 6 Pulse | 1 slot
 While in this slot, your opponent's Hexes cost 1 additional Pulse to pay for when they trigger (if they cannot pay, the Hex fizzles as normal).
 
 **Azhmordai, the Final Bargain**
-Hero Mode — Cost: 10 Pulse | Attack/Health: 180/150 | Rarity: Eternal
+Hero Mode — Cost: 10 Pulse | Attack/Health: 170/150 | Rarity: Eternal
 When Azhmordai enters play, choose one card type (Relic, Hex, Rite, Pact, or Incantation): while Azhmordai remains in play, your opponent cannot play cards of that type. While Azhmordai is in play, all enemy Heroes continuously have −20 Attack.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 When this card enters play, your opponent discards 1 card of their choice. While this card is in play, all enemy Heroes continuously have −30 Attack and −30 Health, and whenever your opponent plays a Hero, that Hero enters play with −20 Attack permanently.
@@ -809,67 +809,67 @@ When this Incantation resolves, all enemy Heroes permanently lose 20 Health (sta
 *(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
 
 **Dockhand Petro**
-Hero Mode — Cost: 1 Pulse | Attack/Health: 20/60 | Rarity: Common
+Hero Mode — Cost: 1 Pulse | Attack/Health: 20/70 | Rarity: Common
 At the start of each of your turns, gain 2 Pulse.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Health.
 
 **Old Bassam, Ledger-Keeper**
-Hero Mode — Cost: 1 Pulse | Attack/Health: 20/60 | Rarity: Common
+Hero Mode — Cost: 1 Pulse | Attack/Health: 20/70 | Rarity: Common
 Once per turn, you may pay 2 Pulse to give a Hero you control +20 Health permanently.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 The next time you gain Pulse from another card effect, gain 2 additional Pulse, then destroy this card.
 
 **Mira the Coinwright**
-Hero Mode — Cost: 2 Pulse | Attack/Health: 30/80 | Rarity: Common
+Hero Mode — Cost: 2 Pulse | Attack/Health: 30/90 | Rarity: Common
 While Mira is in play, whenever you gain Pulse from a card effect, Mira gains +10 Health permanently (maximum +20 Health per turn from this effect).
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 At the start of each of your turns, gain 2 Pulse.
 
 **Harbor-Guard Tessio**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 40/110 | Rarity: Common
+Hero Mode — Cost: 3 Pulse | Attack/Health: 40/120 | Rarity: Common
 While Tessio is in play, when an enemy Hero attacks a Hero you control in a neighboring lane, you may redirect that attack to Tessio instead.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the first time each turn the Hero in this lane would take combat damage, prevent 10 of that damage.
 
 **Sindar the Toll-Master**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 40/110 | Rarity: Uncommon
+Hero Mode — Cost: 3 Pulse | Attack/Health: 40/120 | Rarity: Uncommon
 While Sindar is in play, whenever an enemy Hero declares an attack, gain 2 Pulse.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Health and heals 10 Health at the start of each of your turns.
 
 **Captain Zarah of the Amber Fleet**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 50/140 | Rarity: Uncommon
+Hero Mode — Cost: 4 Pulse | Attack/Health: 60/150 | Rarity: Uncommon
 At the start of each of your turns, gain 2 Pulse. Whenever you gain Pulse from a card effect, Zarah heals 10 Health.
 Auxiliary Mode — Cost: 2 Pulse | 2 slots
 At the start of each of your turns, gain 3 Pulse.
 
 **Guildmother Ottavia**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 60/170 | Rarity: Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 70/190 | Rarity: Rare
 At the start of each of your turns, gain 3 Pulse.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, all Heroes you control continuously have +20 Health.
 
 **Benedar, Broker of Shields**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 70/150 | Rarity: Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 80/160 | Rarity: Rare
 Once per turn, you may pay 2 Pulse: the first attack declared against any Hero you control during your opponent's next turn is blocked — no combat occurs and no damage is dealt to either side.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 Once per turn, when a Hero you control is attacked, you may pay 2 Pulse to redirect that attack to the Hero in this lane instead.
 
 **Nassrin, the Gilded Tide**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 90/210 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 100/230 | Rarity: Ultra-Rare
 At the start of each of your turns, gain 3 Pulse. Once per turn, you may pay 4 Pulse to give a Hero you control +40 Health permanently.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 At the start of each of your turns, gain 2 Pulse for every full 10 Pulse you have banked (maximum 3 Pulse per turn from this effect).
 
 **Admiral Corvazzo Ten-Fleets**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 100/200 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 110/220 | Rarity: Ultra-Rare
 While Corvazzo is in play, whenever an enemy Hero attacks any other Hero you control, you may pay 2 Pulse to redirect that attack to Corvazzo instead (once per enemy attack).
 Auxiliary Mode — Cost: 5 Pulse | 1 slot
 While in this slot, whenever an enemy attack is blocked, prevented, or redirected by one of your card effects, gain 3 Pulse.
 
 **Qeth-Amun, the Everflowing Purse**
-Hero Mode — Cost: 9 Pulse | Attack/Health: 100/280 | Rarity: Eternal
+Hero Mode — Cost: 9 Pulse | Attack/Health: 110/310 | Rarity: Eternal
 At the start of each of your turns, gain 4 Pulse. While Qeth-Amun is in play, all Heroes you control continuously have +50 Health, and each Hero you control heals 10 Health at the start of each of your turns.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 At the start of each of your turns, gain 3 Pulse. Whenever you gain Pulse from any card effect, all Heroes you control heal 10 Health.
@@ -1454,43 +1454,43 @@ Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane takes 10 less combat damage while a Hero you control occupies a neighboring lane.
 
 **Tribune Livia Sorel**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 100/70 | Rarity: Uncommon
+Hero Mode — Cost: 5 Pulse | Attack/Health: 90/70 | Rarity: Uncommon
 While Livia is in play, whenever a Hero you control destroys an enemy Hero in combat, all Heroes you control in lanes neighboring the victor gain +10 Attack permanently.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the first time each turn a Hero you control destroys an enemy Hero in combat, the Hero in this lane gains +10 Attack and +10 Health permanently.
 
 **Praefect Gaius Mund**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 90/80 | Rarity: Uncommon
+Hero Mode — Cost: 5 Pulse | Attack/Health: 80/80 | Rarity: Uncommon
 While Gaius is in play, when you declare an Onslaught, each participating Hero that has an allied Hero in a neighboring lane gains +10 Attack and takes 10 less combat damage for that combat.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, Heroes you control in neighboring lanes continuously have +10 Attack and +10 Health.
 
 **Legatus Octavia Ferrix**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 110/90 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 100/90 | Rarity: Rare
 The first time each turn Octavia destroys an enemy Hero in combat, gain 2 Pulse and draw 1 card.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While in this slot, whenever any Hero you control destroys an enemy Hero in combat, gain 1 Pulse (maximum 2 Pulse per turn from this effect).
 
 **Aquilifer Titus Crow**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 110/90 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 100/90 | Rarity: Rare
 While Titus is in play, Heroes you control in neighboring lanes continuously have +20 Attack.
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 While in this slot, neighboring Heroes have +10 Attack.
 
 **Consul Aurelia Vanth**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 150/120 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 140/120 | Rarity: Ultra-Rare
 When Aurelia enters play, each Hero you control with an allied Hero in a neighboring lane gains +20 Attack and +20 Health permanently.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, when any Hero you control would take combat damage, if a Hero you control occupies a lane neighboring it, prevent 10 of that damage.
 
 **Praetorian Kaeso the Wall**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 150/120 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 140/120 | Rarity: Ultra-Rare
 When any Hero you control would take combat damage, you may have Kaeso take half of that damage instead (rounded to the nearest 10), regardless of lane. Enemy Heroes attacking Kaeso have −20 Attack for that combat.
 Auxiliary Mode — Cost: 6 Pulse | 1 slot
 While in this slot, the Hero in this lane and Heroes you control in neighboring lanes take 10 less combat damage.
 
 **Imperator Severan Ashmark, the Undefeated**
-Hero Mode — Cost: 10 Pulse | Attack/Health: 190/150 | Rarity: Eternal
+Hero Mode — Cost: 10 Pulse | Attack/Health: 180/150 | Rarity: Eternal
 While Severan is in play, every Hero you control that has an allied Hero in a neighboring lane continuously has +20 Attack and +20 Health. Whenever a Hero you control destroys an enemy Hero in combat, gain 1 Pulse.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While in this slot, when you declare an Onslaught, each participating Hero gains +20 Attack for that combat and takes 20 less combat damage in it.
@@ -1628,25 +1628,25 @@ Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, once per turn, you may pay 4 Pulse: a Hero you control in a lane neighboring this one may attack twice this turn.
 
 **Warden Elsbeth of the Twin Banners**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 90/130 | Rarity: Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 100/130 | Rarity: Rare
 Once per turn, Elsbeth and a Hero you control in a lane neighboring her may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike).
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, when two Heroes you control attack together as a single combat (a Joint Strike), each gains +10 Attack for that combat.
 
 **Lord Commander Ravenshold**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 110/180 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 120/180 | Rarity: Ultra-Rare
 Once per turn, you may pay 2 Pulse: two Heroes you control in neighboring lanes may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike) this turn. While Ravenshold is in play, Heroes you control gain +10 Attack during Joint Strikes.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, once per turn, when a Hero you control is attacked, another Hero you control in a lane neighboring the defender may add half its Attack (rounded to the nearest 10) to the defender's Attack for that combat.
 
 **Queen Isolde the Unifier**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 110/180 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 120/180 | Rarity: Ultra-Rare
 While Isolde is in play, all Heroes you control continuously have +10 Attack and +10 Health for each different Realm among the Heroes you control (maximum +20 Attack and +20 Health).
 Auxiliary Mode — Cost: 5 Pulse | 1 slot
 While in this slot, at the start of each of your turns, gain 1 Pulse; if you control Heroes from 3 or more different Realms, also draw 1 card.
 
 **High King Aldemar Oathenkeeper**
-Hero Mode — Cost: 9 Pulse | Attack/Health: 140/220 | Rarity: Eternal
+Hero Mode — Cost: 9 Pulse | Attack/Health: 150/220 | Rarity: Eternal
 When Aldemar enters play, Knight a Hero you control — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old). While Aldemar is in play, your Champion continuously has +30 Attack and +30 Health, and once per turn you may pay 2 Pulse for your Champion to attack a second time that turn. At the start of each of your turns, gain 1 Pulse and draw 1 card.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While in this slot, once per turn, two Heroes you control in neighboring lanes may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike), and Heroes you control gain +10 Attack during Joint Strikes.
@@ -1764,49 +1764,49 @@ Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, whenever you sacrifice a Hero, gain 1 Pulse.
 
 **Acamapi, Tlaloc's Chosen**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 80/50 | Rarity: Common
+Hero Mode — Cost: 4 Pulse | Attack/Health: 90/50 | Rarity: Common
 Once per turn, you may pay 1 Pulse and sacrifice another Hero you control: Acamapi gains +30 Attack and +30 Health permanently.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, whenever you sacrifice a Hero, the Hero in this lane heals 20 Health.
 
 **Yaotl, Keeper of the Skull Rack**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 100/70 | Rarity: Uncommon
+Hero Mode — Cost: 5 Pulse | Attack/Health: 110/70 | Rarity: Uncommon
 Yaotl gains 1 blood counter whenever you sacrifice a Hero. He continuously has +10 Attack and +10 Health for each blood counter on him. Once per turn, you may sacrifice another Hero you control.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, whenever you sacrifice a Hero, draw 1 card (maximum 1 per turn).
 
 **Citlali, Star-Reader**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 100/70 | Rarity: Uncommon
+Hero Mode — Cost: 5 Pulse | Attack/Health: 110/70 | Rarity: Uncommon
 When Citlali is destroyed (by any means), gain 3 Pulse and draw 2 cards.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, whenever you sacrifice a Hero, gain 1 Pulse and the Hero in this lane gains +10 Attack permanently.
 
 **Huemac, Voice of the Sun**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 120/80 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 130/80 | Rarity: Rare
 Once per turn, you may sacrifice another Hero you control: a Hero you control gains permanent Attack equal to 10 × the sacrificed Hero's printed cost.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While in this slot, whenever you sacrifice a Hero, all other Heroes you control gain +10 Attack and +10 Health permanently (maximum once per turn).
 
 **Tecuani, the Jaguar Ascendant**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 130/70 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 140/70 | Rarity: Rare
 When Tecuani enters play, you may sacrifice up to 2 other Heroes you control: for each Hero sacrificed, Tecuani gains +40 Attack and +30 Health permanently and you draw 1 card.
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 When this card enters play, you may sacrifice a Hero you control: deal damage equal to half that Hero's printed Attack (rounded to the nearest 10) to an enemy Hero of your choice. Then destroy this card.
 
 **High Priest Tlacaelel**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 160/110 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 170/110 | Rarity: Ultra-Rare
 Tlacaelel gains 1 blood counter whenever you sacrifice a Hero. Once per turn, you may sacrifice another Hero you control. Once per turn, you may remove 2 blood counters from him: choose one — a Hero you control gains +40 Attack permanently, or deal 40 damage to an enemy Hero of your choice.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, whenever you sacrifice a Hero, gain 2 Pulse.
 
 **Malinal, Bride of the Fifth Sun**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 160/110 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 170/110 | Rarity: Ultra-Rare
 When Malinal enters play, you may sacrifice another Hero you control: all Heroes you control (of any Realm) gain +30 Attack and +30 Health permanently.
 Auxiliary Mode — Cost: 6 Pulse | 1 slot
 While in this slot, the first time each turn a Hero you control is sacrificed, return a Hero card of cost 3 or less from your discard pile to your hand.
 
 **Huitzilat, the Unsetting Sun**
-Hero Mode — Cost: 10 Pulse | Attack/Health: 200/130 | Rarity: Eternal
+Hero Mode — Cost: 10 Pulse | Attack/Health: 220/130 | Rarity: Eternal
 Once per turn, you may sacrifice another Hero you control: Huitzilat gains permanent Attack and Health equal to half the sacrificed Hero's printed Attack and printed Health respectively (rounded to the nearest 10). Whenever you sacrifice a Hero, gain 1 Pulse.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While in this slot, whenever you sacrifice a Hero, all Heroes you control gain +20 Attack and +10 Health permanently (maximum once per turn), and you gain 1 Pulse.
@@ -1900,67 +1900,67 @@ When this Incantation resolves, sacrifice a Hero you control: another Hero you c
 *(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
 
 **Brother Pell**
-Hero Mode — Cost: 1 Pulse | Attack/Health: 20/60 | Rarity: Common
+Hero Mode — Cost: 1 Pulse | Attack/Health: 20/70 | Rarity: Common
 When Brother Pell dies, each other Hero you control heals 20 Health.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, at the start of each of your turns, the Hero in this lane heals 10 Health.
 
 **Friar Odo the Loud**
-Hero Mode — Cost: 1 Pulse | Attack/Health: 20/60 | Rarity: Common
+Hero Mode — Cost: 1 Pulse | Attack/Health: 20/70 | Rarity: Common
 While Odo is in play, enemy Heroes must attack Odo's lane if able.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Health.
 
 **Sister Maren of the Bowl**
-Hero Mode — Cost: 2 Pulse | Attack/Health: 30/80 | Rarity: Common
+Hero Mode — Cost: 2 Pulse | Attack/Health: 30/90 | Rarity: Common
 Once per turn, you may pay 1 Pulse: a Hero you control heals 20 Health.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 When this card enters play, a Hero you control heals 30 Health. Then destroy this card.
 
 **Brother Anselm the Giving**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 40/110 | Rarity: Common
+Hero Mode — Cost: 3 Pulse | Attack/Health: 40/120 | Rarity: Common
 Once per turn, you may move 20 Health from Anselm to another Hero you control (Anselm's current and maximum Health drop by 20; the target's current and maximum Health rise by 20, permanently). If this reduces Anselm to 0 Health, he dies.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, when the Hero in this lane dies, draw 1 card and gain 1 Pulse.
 
 **Prior Benedic**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 40/110 | Rarity: Uncommon
+Hero Mode — Cost: 3 Pulse | Attack/Health: 40/120 | Rarity: Uncommon
 When Benedic dies, draw 2 cards.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, whenever a Hero you control dies, each remaining Hero you control heals 10 Health.
 
 **Sister Ottoline the Shield**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 50/140 | Rarity: Uncommon
+Hero Mode — Cost: 4 Pulse | Attack/Health: 60/150 | Rarity: Uncommon
 While Ottoline is in play, enemy Heroes must attack Ottoline's lane if able. When Ottoline dies, each other Hero you control gains +10 Attack and +20 Health permanently.
 Auxiliary Mode — Cost: 2 Pulse | 2 slots
 While in this slot, enemy Heroes must attack this lane if able.
 
 **Abbot Cuthwin of the Long Vigil**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 70/150 | Rarity: Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 80/160 | Rarity: Rare
 When Cuthwin dies, gain 3 Pulse, draw 2 cards, and each Hero you control heals 30 Health.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, at the start of each of your turns, each Hero you control heals 10 Health.
 
 **Friar Gislebert the Unbroken Bell**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 70/150 | Rarity: Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 80/160 | Rarity: Rare
 While Gislebert is in play, whenever a Hero you control dies, all remaining Heroes you control gain +10 Attack and +10 Health permanently.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, when the Hero in this lane dies, all Heroes you control heal 40 Health and you draw 1 card.
 
 **Mother Superior Aldith**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 90/210 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 100/230 | Rarity: Ultra-Rare
 While Aldith is in play, all enemy Hero attacks must target Aldith's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane. Aldith takes 10 less combat damage, and enemy Heroes that attack Aldith take 20 damage after that combat resolves. When Aldith dies, each other Hero you control gains +20 Attack and +30 Health permanently, and you draw 2 cards.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, whenever any Hero you control dies, gain 2 Pulse and each remaining Hero you control heals 20 Health.
 
 **Pilgrim-Saint Wendreth**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 90/210 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 100/230 | Rarity: Ultra-Rare
 Once per turn, you may move up to 30 Health from Wendreth to another Hero you control (as a permanent transfer of current and maximum Health). While Wendreth is in play, all enemy Hero attacks must target Wendreth's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane, and enemy Heroes that attack Wendreth take 20 damage after that combat resolves.
 Auxiliary Mode — Cost: 5 Pulse | 1 slot
 While in this slot, once per turn, when a Hero you control would take lethal combat damage, prevent 20 of that damage.
 
 **Saint Alberic the Ever-Open Door**
-Hero Mode — Cost: 9 Pulse | Attack/Health: 110/270 | Rarity: Eternal
+Hero Mode — Cost: 9 Pulse | Attack/Health: 120/300 | Rarity: Eternal
 While Alberic is in play, all enemy Hero attacks must target Alberic's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Alberic take 20 damage after that combat resolves, and at the start of each of your turns, each Hero you control heals 20 Health. When Alberic dies, each other Hero you control gains +30 Attack and +30 Health permanently, you gain 3 Pulse, and you draw 2 cards.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While in this slot, whenever a Hero you control dies, each remaining Hero you control gains +10 Attack and +10 Health permanently and heals 20 Health.
@@ -2254,31 +2254,31 @@ Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, once per turn, you may pay 3 Pulse to destroy an enemy Hero with 20 or less Health remaining.
 
 **Count Vesparian Thirst-Eternal**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 100/80 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 110/80 | Rarity: Rare
 When Vesparian fights, before combat damage is calculated: the opposing Hero loses 20 Health (stat reduction), and Vesparian gains +20 Attack for that combat and heals 20 Health.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While in this slot, when the Hero in this lane fights, before combat the opposing Hero loses 10 Health (stat reduction) and the Hero in this lane gains +10 Attack for that combat.
 
 **Sanguine Choir-Mother Ellisette**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 100/80 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 110/80 | Rarity: Rare
 At the start of each of your turns, the enemy Hero in Ellisette's opposing lane (if any) loses 10 Health (stat reduction), and Ellisette gains +10 Attack permanently and heals 10 Health.
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 While in this slot, at the start of each of your turns, if the enemy Hero in the opposing lane is below its maximum Health, it loses 10 Health (stat reduction).
 
 **Duke Marrowfane the Unquenched**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 130/110 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 140/110 | Rarity: Ultra-Rare
 When Marrowfane enters play, every enemy Hero loses 10 Health (stat reduction), and Marrowfane gains +10 Attack permanently and heals 10 Health for each enemy Hero affected.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, whenever an enemy Hero takes combat damage from your Heroes, the Hero in this lane gains +10 Attack permanently (maximum once per turn).
 
 **Nyxara, the Velvet Famine**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 130/110 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 140/110 | Rarity: Ultra-Rare
 Enemy Heroes that are below their maximum Health have −20 Attack while fighting Nyxara. Once per turn, you may pay 2 Pulse: destroy an enemy Hero in Nyxara's opposing lane with 40 or less Health remaining.
 Auxiliary Mode — Cost: 6 Pulse | 1 slot
 While in this slot, whenever one of your card effects makes an enemy Hero lose Health while granting a Hero you control Attack, both amounts increase by 10.
 
 **Vhastrix, the Crimson Sovereign**
-Hero Mode — Cost: 10 Pulse | Attack/Health: 160/140 | Rarity: Eternal
+Hero Mode — Cost: 10 Pulse | Attack/Health: 170/140 | Rarity: Eternal
 At the start of each of your turns, every enemy Hero below its maximum Health loses 10 Health (stat reduction); Vhastrix gains +10 Attack permanently for each Hero affected, and heals 20 Health. Once per turn, you may pay 3 Pulse: destroy an enemy Hero with 30 or less Health remaining.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While in this slot, whenever any enemy Hero's Health is reduced (by damage or stat reduction), the Hero in this lane gains +10 Attack permanently and heals 10 Health (maximum twice per turn).
@@ -2374,67 +2374,67 @@ When this Incantation resolves, every enemy Hero loses 10 Health (stat reduction
 *(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
 
 **Acolyte Serelle**
-Hero Mode — Cost: 1 Pulse | Attack/Health: 20/60 | Rarity: Common
+Hero Mode — Cost: 1 Pulse | Attack/Health: 20/70 | Rarity: Common
 When Serelle enters play, a Hero you control gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health).
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, at the start of each of your turns, the Hero in this lane gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health).
 
 **Brother Lumen**
-Hero Mode — Cost: 1 Pulse | Attack/Health: 20/60 | Rarity: Common
+Hero Mode — Cost: 1 Pulse | Attack/Health: 20/70 | Rarity: Common
 Once per turn, you may pay 1 Pulse: a Hero you control heals 20 Health.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 1 per turn).
 
 **Sister Cantrelle of the Dawn Chorus**
-Hero Mode — Cost: 2 Pulse | Attack/Health: 40/70 | Rarity: Common
+Hero Mode — Cost: 2 Pulse | Attack/Health: 50/80 | Rarity: Common
 When Cantrelle enters play, remove all enemy-imposed stat reductions and negative effects (silences, attack restrictions, and similar) from a Hero you control, restoring the stats it would have without them.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 When this card enters play, remove all enemy-imposed stat reductions and negative effects from a Hero you control (restoring the stats it would have without them), and it heals 20 Health. Then destroy this card.
 
 **Vicar Tobias Whitewell**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 50/100 | Rarity: Common
+Hero Mode — Cost: 3 Pulse | Attack/Health: 60/110 | Rarity: Common
 Once per turn, you may pay 2 Pulse: a Hero you control gains a ward that prevents the next 30 damage it would take (wards stack and absorb damage before Health).
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the first time each turn the Hero in this lane takes damage, it gains a ward that prevents the next 10 damage it would take (wards stack).
 
 **Exorcist Danior Vey**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 50/100 | Rarity: Uncommon
+Hero Mode — Cost: 3 Pulse | Attack/Health: 60/110 | Rarity: Uncommon
 Once per turn, you may pay 1 Pulse: remove all enemy-imposed stat reductions and negative effects from a Hero you control, restoring the stats it would have without them. While Danior is in play, Heroes you control cannot be silenced (their ability text cannot be blanked).
 Auxiliary Mode — Cost: 1 Pulse | 2 slots
 While in this slot, at the start of each of your turns, remove all enemy-imposed stat reductions and negative effects from one Hero you control, restoring the stats it would have without them.
 
 **Canoness Elspet the Kind**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 60/130 | Rarity: Uncommon
+Hero Mode — Cost: 4 Pulse | Attack/Health: 80/150 | Rarity: Uncommon
 While Elspet is in play, whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn).
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, your healing card effects heal an additional 10 Health.
 
 **Prelate Miriabel of the White Flame**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 70/150 | Rarity: Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 90/170 | Rarity: Rare
 Once per turn, you may pay 2 Pulse: a Hero you control heals 40 Health and gains a ward that prevents the next 20 damage it would take (wards stack).
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, whenever a Hero you control is healed by a card effect, it also gains a ward that prevents the next 10 damage it would take (wards stack; maximum twice per turn).
 
 **Warden-Cleric Osgood Bright**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 70/150 | Rarity: Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 90/170 | Rarity: Rare
 While Osgood is in play, whenever a Hero you control's ward is fully consumed (reduced to 0 by damage), that Hero heals 30 Health.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack).
 
 **High Oracle Vessamine**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 100/200 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 120/230 | Rarity: Ultra-Rare
 At the start of each of your turns, gain 1 Pulse and each Hero you control heals 10 Health. Once per turn, you may pay 3 Pulse: remove all enemy-imposed stat reductions and negative effects from all Heroes you control, restoring the stats they would have without them.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn).
 
 **Saint-Aspirant Corwin Dawnhand**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 100/200 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 120/230 | Rarity: Ultra-Rare
 When Corwin enters play, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack and absorb damage before Health).
 Auxiliary Mode — Cost: 5 Pulse | 1 slot
 While in this slot, once per turn, when a Hero you control would take lethal combat damage, it first gains a ward that prevents the next 20 damage it would take (if the ward absorbs enough of the damage, it survives).
 
 **Solivane Sanctavere, Voice of the First Light**
-Hero Mode — Cost: 9 Pulse | Attack/Health: 120/250 | Rarity: Eternal
+Hero Mode — Cost: 9 Pulse | Attack/Health: 150/290 | Rarity: Eternal
 At the start of each of your turns, gain 2 Pulse, each Hero you control heals 20 Health, and one Hero you control of your choice gains a ward that prevents the next 20 damage it would take (wards stack). Once per turn, you may pay 2 Pulse: remove all enemy-imposed stat reductions and negative effects from a Hero you control, restoring the stats it would have without them.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While in this slot, at the start of each of your turns, each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack) and heals 10 Health. Whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn).
@@ -2548,49 +2548,49 @@ Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Attack. At the start of each of your turns, that Hero takes 10 damage.
 
 **Hana of the Falling Leaf**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 80/40 | Rarity: Common
+Hero Mode — Cost: 4 Pulse | Attack/Health: 70/40 | Rarity: Common
 Whenever Hana destroys an enemy Hero in combat, she gains +10 Attack permanently and you gain 1 Pulse.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While this card is in play, whenever any enemy Hero dies, deal 10 damage to an enemy Hero of your choice.
 
 **Rin, the Twin Fang**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 100/50 | Rarity: Uncommon
+Hero Mode — Cost: 5 Pulse | Attack/Health: 90/50 | Rarity: Uncommon
 When Rin destroys an enemy Hero in combat, she deals 20 damage to the enemy Hero in a lane neighboring the one she attacked, if any.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the first time each turn the Hero in this lane destroys an enemy Hero in combat, deal 20 damage to your opponent's Mortality.
 
 **Daisuke Stormcut**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 90/60 | Rarity: Uncommon
+Hero Mode — Cost: 5 Pulse | Attack/Health: 80/60 | Rarity: Uncommon
 The first time each turn Daisuke destroys an enemy Hero in combat, gain 2 Pulse and draw 1 card.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Masayo, Blade of the Fallen Sun**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 130/50 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 120/50 | Rarity: Rare
 Whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Masayo permanently gains +10 Attack.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 15 damage to an enemy Hero of your choice.
 
 **Genji the Unbowed**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 120/60 | Rarity: Rare
+Hero Mode — Cost: 6 Pulse | Attack/Health: 110/60 | Rarity: Rare
 Whenever Genji destroys an enemy Hero in combat, he gains +10 Attack permanently.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While in this slot, the Hero in this lane deals its full Attack as damage to any enemy Hero it fights in combat, even if that enemy Hero's Attack is higher (overriding the normal "higher Attack takes no damage" rule for this lane only).
 
 **Setsuna, Widow of Blades**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 180/60 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 170/60 | Rarity: Ultra-Rare
 Whenever Setsuna destroys an enemy Hero in combat, she gains +20 Attack permanently.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 15 damage to an enemy Hero of your choice.
 
 **Kaito, the Hundred Cuts**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 200/50 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 190/50 | Rarity: Ultra-Rare
 The first time each turn Kaito destroys an enemy Hero in combat, gain 2 Pulse and draw 1 card.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +50 Attack. At the start of each of your turns, that Hero takes 20 damage.
 
 **Yorimoto, the Last Shogun**
-Hero Mode — Cost: 10 Pulse | Attack/Health: 220/80 | Rarity: Eternal
+Hero Mode — Cost: 10 Pulse | Attack/Health: 200/80 | Rarity: Eternal
 Whenever an enemy Hero dies, gain 2 Pulse. Whenever Yorimoto destroys an enemy Hero in combat, he gains +20 Attack permanently.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 15 damage to an enemy Hero of your choice.
@@ -2681,67 +2681,67 @@ When this Incantation resolves, all Heroes you control gain +20 Attack until end
 *(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
 
 **Emberwing Squire**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 70/40 | Rarity: Common
+Hero Mode — Cost: 4 Pulse | Attack/Health: 60/40 | Rarity: Common
 When Emberwing Squire enters play, an enemy Hero of your choice gets -20 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Scaleguard Vael**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 60/50 | Rarity: Common
+Hero Mode — Cost: 4 Pulse | Attack/Health: 50/50 | Rarity: Common
 When Scaleguard Vael enters play, destroy an enemy Auxiliary card.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Attack.
 
 **Cinderclaw Drake**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 90/40 | Rarity: Common
+Hero Mode — Cost: 5 Pulse | Attack/Health: 80/40 | Rarity: Common
 Whenever Cinderclaw Drake deals combat damage to an enemy Hero, that Hero gets -20 Attack permanently.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +40 Attack. At the start of each of your turns, that Hero takes 10 damage.
 
 **Wyrmrider Kass**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 80/50 | Rarity: Common
+Hero Mode — Cost: 5 Pulse | Attack/Health: 70/50 | Rarity: Common
 When Wyrmrider Kass destroys an enemy Hero in combat, she deals 20 damage to the enemy Hero in a lane neighboring the one she attacked, if any.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Pyrelord Draeven**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 110/50 | Rarity: Uncommon
+Hero Mode — Cost: 6 Pulse | Attack/Health: 100/50 | Rarity: Uncommon
 When Pyrelord Draeven enters play, destroy an enemy Relic or enemy Auxiliary card.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
 
 **Stormscale Myrrha**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 100/60 | Rarity: Uncommon
+Hero Mode — Cost: 6 Pulse | Attack/Health: 90/60 | Rarity: Uncommon
 When Stormscale Myrrha enters play, an enemy Hero of your choice gets -40 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +40 Attack.
 
 **Ashmaw the Devourer**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 130/60 | Rarity: Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 120/60 | Rarity: Rare
 When Ashmaw the Devourer enters play, destroy an enemy Hero with 60 or less Health remaining.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
 
 **Volcanic Warden Rax**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 120/70 | Rarity: Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 110/70 | Rarity: Rare
 When Volcanic Warden Rax destroys an enemy Hero in combat, he deals 30 damage to the enemy Hero in a lane neighboring the one he attacked, if any.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +50 Attack.
 
 **Nyxaraxi, the Obsidian Wyrm**
-Hero Mode — Cost: 9 Pulse | Attack/Health: 160/70 | Rarity: Ultra-Rare
+Hero Mode — Cost: 9 Pulse | Attack/Health: 140/70 | Rarity: Ultra-Rare
 When Nyxaraxi, the Obsidian Wyrm enters play, destroy an enemy Auxiliary card and an enemy Hero of your choice gets -40 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +60 Attack. At the start of each of your turns, that Hero takes 20 damage.
 
 **Ignathor, Breath of Ruin**
-Hero Mode — Cost: 9 Pulse | Attack/Health: 180/60 | Rarity: Ultra-Rare
+Hero Mode — Cost: 9 Pulse | Attack/Health: 160/60 | Rarity: Ultra-Rare
 When Ignathor, Breath of Ruin enters play, destroy an enemy Hero with 80 or less Health remaining.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 40 damage to an enemy Hero of your choice.
 
 **Vorthalyx, the World-Ender**
-Hero Mode — Cost: 10 Pulse | Attack/Health: 190/90 | Rarity: Eternal
+Hero Mode — Cost: 10 Pulse | Attack/Health: 170/90 | Rarity: Eternal
 When Vorthalyx, the World-Ender enters play, destroy an enemy Hero with 100 or less Health remaining and destroy an enemy Auxiliary card.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 40 damage to an enemy Hero of your choice.
@@ -2832,67 +2832,67 @@ When this Incantation resolves, all Heroes you control gain +20 Attack until end
 *(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
 
 **Boulderkin**
-Hero Mode — Cost: 2 Pulse | Attack/Health: 20/140 | Rarity: Common
+Hero Mode — Cost: 2 Pulse | Attack/Health: 20/160 | Rarity: Common
 While Boulderkin is in play, enemy Heroes must attack Boulderkin's lane if able.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Health.
 
 **Graniteus**
-Hero Mode — Cost: 2 Pulse | Attack/Health: 30/150 | Rarity: Common
+Hero Mode — Cost: 2 Pulse | Attack/Health: 30/170 | Rarity: Common
 While Graniteus is in play, enemy Heroes must attack Graniteus's lane if able. Graniteus takes 10 less combat damage.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +40 Health.
 
 **Mudward Tunneler**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 30/170 | Rarity: Common
+Hero Mode — Cost: 3 Pulse | Attack/Health: 30/190 | Rarity: Common
 When Mudward Tunneler enters play, each other Hero you control heals 20 Health.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Health.
 
 **Ironhide**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 40/150 | Rarity: Common
+Hero Mode — Cost: 3 Pulse | Attack/Health: 50/170 | Rarity: Common
 While Ironhide is in play, enemy Heroes must attack Ironhide's lane if able. Enemy Heroes that attack Ironhide take 20 damage after that combat resolves.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +40 Health.
 
 **Monolith**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 40/220 | Rarity: Uncommon
+Hero Mode — Cost: 4 Pulse | Attack/Health: 50/250 | Rarity: Uncommon
 While Monolith is in play, all enemy Hero attacks must target Monolith's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane. Monolith takes 20 less combat damage.
 Auxiliary Mode — Cost: 2 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +60 Health.
 
 **Stoneheart Warden**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 30/210 | Rarity: Uncommon
+Hero Mode — Cost: 4 Pulse | Attack/Health: 30/240 | Rarity: Uncommon
 At the start of each of your turns, each Hero you control heals 20 Health.
 Auxiliary Mode — Cost: 2 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +50 Health.
 
 **Colossus**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 50/270 | Rarity: Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 60/300 | Rarity: Rare
 While Colossus is in play, all enemy Hero attacks must target Colossus's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Colossus take 20 damage after that combat resolves. Colossus takes 20 less combat damage.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +70 Health.
 
 **Bastion Everward**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 40/250 | Rarity: Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 50/280 | Rarity: Rare
 When Bastion Everward enters play, each other Hero you control heals 30 Health. At the start of each of your turns, each Hero you control heals 20 Health.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +60 Health.
 
 **Adamantus**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 60/340 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 70/380 | Rarity: Ultra-Rare
 While Adamantus is in play, all enemy Hero attacks must target Adamantus's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Adamantus take 30 damage after that combat resolves. Adamantus takes 30 less combat damage.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +90 Health.
 
 **Aegisreach Titan**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 50/320 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 60/360 | Rarity: Ultra-Rare
 When Aegisreach Titan enters play, each other Hero you control heals 40 Health. At the start of each of your turns, each Hero you control heals 30 Health.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +80 Health.
 
 **Karngmor, the Everstone**
-Hero Mode — Cost: 9 Pulse | Attack/Health: 80/390 | Rarity: Eternal
+Hero Mode — Cost: 9 Pulse | Attack/Health: 90/440 | Rarity: Eternal
 While Karngmor, the Everstone is in play, all enemy Hero attacks must target Karngmor's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Karngmor take 30 damage after that combat resolves. At the start of each of your turns, each Hero you control heals 30 Health.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +120 Health.
@@ -2985,68 +2985,68 @@ When this Incantation resolves, destroy an enemy Hero with 70 or less Health rem
 *(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
 
 **Harpy Skirmisher**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 70/40 | Rarity: Common
+Hero Mode — Cost: 3 Pulse | Attack/Health: 60/40 | Rarity: Common
 When Harpy Skirmisher enters play, deal 20 damage to an enemy Hero of your choice.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Satyr Piper**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 50/50 | Rarity: Common
+Hero Mode — Cost: 3 Pulse | Attack/Health: 40/50 | Rarity: Common
 When Satyr Piper enters play, draw 1 card.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the first time each turn the Hero in this lane destroys an enemy Hero in combat, the Hero in this lane gains +10 Attack permanently.
 
 **Bronze Talos Shard**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 60/70 | Rarity: Common
+Hero Mode — Cost: 4 Pulse | Attack/Health: 50/70 | Rarity: Common
 Once per turn, when Bronze Talos Shard deals combat damage to an enemy Hero, it heals 20 Health.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Attack.
 
 **Stone-Gazer Acolyte**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 60/50 | Rarity: Common
+Hero Mode — Cost: 4 Pulse | Attack/Health: 50/50 | Rarity: Common
 When Stone-Gazer Acolyte enters play, an enemy Hero of your choice gets −20 Attack permanently.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Cyclops Boulderhurler**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 130/70 | Rarity: Uncommon
+Hero Mode — Cost: 6 Pulse | Attack/Health: 110/70 | Rarity: Uncommon
 When Cyclops Boulderhurler enters play, destroy an enemy Hero with 40 or less Health remaining.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +40 Attack.
 
 **Nymph of the Oracle**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 80/60 | Rarity: Uncommon
-When Nymph of the Oracle enters play, draw 1 card and choose an enemy Hero — it cannot attack during your opponent's next turn.
+Hero Mode — Cost: 5 Pulse | Attack/Health: 70/60 | Rarity: Uncommon
+When Nymph of the Oracle enters play, draw 1 card.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Hydra**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 120/90 | Rarity: Rare
-Whenever Hydra takes damage, it permanently gains 10 Attack. Once per turn, when Hydra deals combat damage to an enemy Hero, it heals 20 Health.
+Hero Mode — Cost: 7 Pulse | Attack/Health: 100/90 | Rarity: Rare
+Whenever Hydra takes damage, it permanently gains 5 Attack. Once per turn, when Hydra deals combat damage to an enemy Hero, it heals 20 Health.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +50 Attack.
 
 **Chimera**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 140/70 | Rarity: Rare
-When Chimera enters play, choose an enemy Hero — it cannot attack during your opponent's next turn. When Chimera destroys an enemy Hero in combat, she deals 30 damage to the enemy Hero in a lane neighboring the one she attacked, if any.
+Hero Mode — Cost: 7 Pulse | Attack/Health: 120/70 | Rarity: Rare
+When Chimera destroys an enemy Hero in combat, she deals 30 damage to the enemy Hero in a lane neighboring the one she attacked, if any.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +50 Attack.
 
 **Medusa, the Gorgon Queen**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 150/70 | Rarity: Ultra-Rare
+Hero Mode — Cost: 8 Pulse | Attack/Health: 130/70 | Rarity: Ultra-Rare
 When Medusa, the Gorgon Queen enters play, destroy an enemy Hero with 40 or less Health remaining and choose an enemy Hero — it cannot attack during your opponent's next turn.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +50 Attack. At the start of each of your turns, that Hero takes 20 damage.
 
 **Minotaur of the Labyrinth**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 200/80 | Rarity: Ultra-Rare
-Whenever Minotaur takes damage, it permanently gains 20 Attack. Once per turn, when Minotaur deals combat damage to an enemy Hero, it heals 30 Health.
+Hero Mode — Cost: 8 Pulse | Attack/Health: 170/80 | Rarity: Ultra-Rare
+Whenever Minotaur takes damage, it permanently gains 10 Attack. Once per turn, when Minotaur deals combat damage to an enemy Hero, it heals 30 Health.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +60 Attack.
 
 **Typhon, the Titan of Storms**
-Hero Mode — Cost: 10 Pulse | Attack/Health: 230/90 | Rarity: Eternal
-When Typhon, the Titan of Storms enters play, choose an enemy Hero — it cannot attack during your opponent's next turn. Whenever Typhon takes damage, it permanently gains 20 Attack.
+Hero Mode — Cost: 10 Pulse | Attack/Health: 190/90 | Rarity: Eternal
+When Typhon, the Titan of Storms enters play, choose an enemy Hero — it cannot attack during your opponent's next turn. Whenever Typhon takes damage, it permanently gains 10 Attack.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +70 Attack.
 
@@ -3132,67 +3132,67 @@ When this Incantation resolves, all Heroes you control gain +20 Attack until end
 *(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
 
 **Snik the Cutpurse**
-Hero Mode — Cost: 1 Pulse | Attack/Health: 20/30 | Rarity: Common
+Hero Mode — Cost: 1 Pulse | Attack/Health: 30/30 | Rarity: Common
 When Snik the Cutpurse enters play, steal 2 Pulse from your opponent.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +10 Attack.
 
 **Grubfingers**
-Hero Mode — Cost: 1 Pulse | Attack/Health: 30/30 | Rarity: Common
+Hero Mode — Cost: 1 Pulse | Attack/Health: 40/30 | Rarity: Common
 When Grubfingers enters play, your opponent loses 2 Pulse.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +10 Attack.
 
 **Pilfer Rat**
-Hero Mode — Cost: 1 Pulse | Attack/Health: 20/40 | Rarity: Common
+Hero Mode — Cost: 1 Pulse | Attack/Health: 30/50 | Rarity: Common
 When Pilfer Rat enters play, steal 1 Pulse from your opponent.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +10 Attack.
 
 **Muckstab Sneak**
-Hero Mode — Cost: 2 Pulse | Attack/Health: 40/30 | Rarity: Common
+Hero Mode — Cost: 2 Pulse | Attack/Health: 50/30 | Rarity: Common
 When Muckstab Sneak enters play, your opponent loses 3 Pulse.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Attack.
 
 **Grizzle, the Taxman**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 40/60 | Rarity: Uncommon
+Hero Mode — Cost: 3 Pulse | Attack/Health: 50/70 | Rarity: Uncommon
 While Grizzle, the Taxman is in play, Heroes your opponent plays cost 1 additional Pulse.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Attack.
 
 **Nabber Queen**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 40/40 | Rarity: Uncommon
+Hero Mode — Cost: 3 Pulse | Attack/Health: 50/50 | Rarity: Uncommon
 When Nabber Queen enters play, steal 3 Pulse from your opponent.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Attack.
 
 **Wartlord Gribok**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 60/60 | Rarity: Rare
+Hero Mode — Cost: 4 Pulse | Attack/Health: 80/70 | Rarity: Rare
 When Wartlord Gribok enters play, your opponent loses 3 Pulse. While Wartlord Gribok is in play, Heroes your opponent plays cost 1 additional Pulse.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Skitterfang the Thief**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 50/60 | Rarity: Rare
+Hero Mode — Cost: 4 Pulse | Attack/Health: 60/70 | Rarity: Rare
 When Skitterfang the Thief enters play, steal 4 Pulse from your opponent.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Vexmaw, the Pulse-Eater**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 60/70 | Rarity: Ultra-Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 80/80 | Rarity: Ultra-Rare
 When Vexmaw, the Pulse-Eater enters play, steal 4 Pulse from your opponent. While Vexmaw, the Pulse-Eater is in play, Heroes your opponent plays cost 1 additional Pulse.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +40 Attack.
 
 **Grobbla the Swindler**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 50/70 | Rarity: Ultra-Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 60/80 | Rarity: Ultra-Rare
 When Grobbla the Swindler enters play, your opponent loses 5 Pulse.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +40 Attack.
 
 **Gribrok the Underking**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 90/100 | Rarity: Eternal
+Hero Mode — Cost: 7 Pulse | Attack/Health: 120/110 | Rarity: Eternal
 When Gribrok the Underking enters play, steal 5 Pulse from your opponent. While Gribrok the Underking is in play, Heroes your opponent plays cost 2 additional Pulse.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +50 Attack.
@@ -3291,61 +3291,61 @@ Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +10 Attack.
 
 **Grave Tender**
-Hero Mode — Cost: 2 Pulse | Attack/Health: 30/70 | Rarity: Common
+Hero Mode — Cost: 2 Pulse | Attack/Health: 30/80 | Rarity: Common
 When Grave Tender enters play, return a Hero card from your discard pile to your hand.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +10 Attack.
 
 **Shambling Thrall**
-Hero Mode — Cost: 2 Pulse | Attack/Health: 50/60 | Rarity: Common
+Hero Mode — Cost: 2 Pulse | Attack/Health: 60/70 | Rarity: Common
 When Shambling Thrall enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Attack.
 
 **Corpse Picker**
-Hero Mode — Cost: 1 Pulse | Attack/Health: 20/60 | Rarity: Common
+Hero Mode — Cost: 1 Pulse | Attack/Health: 20/70 | Rarity: Common
 When Corpse Picker enters play, return a Hero card from your discard pile to your hand.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +10 Attack.
 
 **Grave-Binder Morr**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 40/70 | Rarity: Uncommon
+Hero Mode — Cost: 3 Pulse | Attack/Health: 50/80 | Rarity: Uncommon
 When Grave-Binder Morr enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Attack.
 
 **Tomb Warden Vesh**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 50/80 | Rarity: Uncommon
+Hero Mode — Cost: 4 Pulse | Attack/Health: 60/90 | Rarity: Uncommon
 When Tomb Warden Vesh enters play, return a Hero card from your discard pile to your hand. Whenever an enemy Hero dies, gain 2 Pulse.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Sepulcher Lord Kael**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 60/80 | Rarity: Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 70/90 | Rarity: Rare
 When Sepulcher Lord Kael enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Grim Harvester**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 50/100 | Rarity: Rare
+Hero Mode — Cost: 5 Pulse | Attack/Health: 60/110 | Rarity: Rare
 When Grim Harvester enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack. Whenever an enemy Hero dies, gain 3 Pulse.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Lichlord Mordath**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 80/100 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 90/110 | Rarity: Ultra-Rare
 When Lichlord Mordath enters play, play a Hero card of cost 8 or less from your discard pile into an empty lane without paying its cost.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +40 Attack.
 
 **Countess Nyxthral**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 70/110 | Rarity: Ultra-Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 80/120 | Rarity: Ultra-Rare
 When Countess Nyxthral enters play, play a Hero card of cost 8 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +40 Attack.
 
 **Vhorrath, the Deathless**
-Hero Mode — Cost: 9 Pulse | Attack/Health: 120/140 | Rarity: Eternal
+Hero Mode — Cost: 9 Pulse | Attack/Health: 140/150 | Rarity: Eternal
 When Vhorrath, the Deathless enters play, play a Hero card of cost 10 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
