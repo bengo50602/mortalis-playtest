@@ -1566,7 +1566,6 @@ async function runOp(op, pi, ctx) {
         if (op.permHp) h.permHp += op.permHp;
         log(`${nameOf(t)} heals ${healed}${op.permHp ? ` and gains +${op.permHp} Health` : ""}.`);
         any = true;
-        emit("heal", pi, { at: t });
       }
       if (any) { tickRites(pi, "heal"); }
       break;
@@ -2370,11 +2369,23 @@ function localPromptPick(title, options) {
 
 
 // No maximum Health: healing repairs damage first; any excess becomes permanent Health.
+let _healEmitDepth = 0;
 function applyHeal(h, n) {
   if (!h || n <= 0) return 0;
   const rep = Math.min(h.dmg, n);
   h.dmg -= rep;
   if (n > rep) h.permHp += n - rep;
+  // Every card-effect heal fires the "heal" event once, for the healed Hero's
+  // controller, so "gain Pulse when you heal" / "when healed" listeners trigger
+  // on ALL heals (recurring, activated, combat, enter-play), not just a few paths.
+  // Guarded so listener-driven heals don't recurse or double-count.
+  if (_healEmitDepth === 0 && G) {
+    let owner = -1, oli = -1;
+    for (let p = 0; p < 2 && owner < 0; p++) for (let li = 0; li < G.players[p].lanes.length; li++) {
+      if (G.players[p].lanes[li].hero === h) { owner = p; oli = li; break; }
+    }
+    if (owner >= 0) { _healEmitDepth++; try { emit("heal", owner, { at: { pi: owner, li: oli } }); } finally { _healEmitDepth--; } }
+  }
   return n;
 }
 
@@ -3331,7 +3342,7 @@ async function fireCombat(event, actorPi, actorLi, targetPi, targetLi) {
     const op = tr.op, PA = G.players[actorPi];
     if (op.kind === "pulse") { gainPulse(actorPi, op.n, src); }
     else if (op.kind === "draw") { for (let i = 0; i < op.n; i++) drawCard(actorPi); }
-    else if (op.kind === "healSelf" && actor) { const healed = applyHeal(actor, op.n); if (healed) { log(`${src} heals ${healed}.`); emit("heal", actorPi, {}); } }
+    else if (op.kind === "healSelf" && actor) { const healed = applyHeal(actor, op.n); if (healed) { log(`${src} heals ${healed}.`); } }
     else if (op.kind === "buffSelf" && actor) { actor.permAtk += op.atk || 0; actor.permHp += op.hp || 0; log(`${src} permanently gains +${op.atk || 0}/+${op.hp || 0}.`); }
     else if (op.kind === "reduceTarget") { const tg = heroAt({ pi: targetPi, li: targetLi }); if (tg) { tg.redAtk += op.atk || 0; log(`${cardById(tg.cardId).name} gets -${op.atk} Attack permanently (${src}).`); } }
     else if (op.kind === "pulseDraw") { gainPulse(actorPi, op.p, src); for (let i = 0; i < op.d; i++) drawCard(actorPi); }
@@ -3710,7 +3721,7 @@ async function resolveAttack(pi, attackerLis, target) {
         if (curHp(tgtPos.pi, tgtPos.li) <= 0) destroyHero(tgtPos.pi, tgtPos.li, null, { noOverkill: true });
       }
       const sh2 = heroAt(srcPos);
-      if (sh2 && pf3.heal) { const healed = applyHeal(sh2, pf3.heal); if (healed) { log(`${srcName2} heals ${healed}.`); emit("heal", srcPos.pi, {}); } }
+      if (sh2 && pf3.heal) { const healed = applyHeal(sh2, pf3.heal); if (healed) { log(`${srcName2} heals ${healed}.`); } }
       return pf3.atk || 0;
     };
     for (const ali of attackerLis) {

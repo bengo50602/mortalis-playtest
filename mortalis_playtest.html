@@ -376,7 +376,7 @@ body.on-splash .topbar{display:none}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260809000122</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260809103851</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -9282,7 +9282,6 @@ async function runOp(op, pi, ctx) {
         if (op.permHp) h.permHp += op.permHp;
         log(`${nameOf(t)} heals ${healed}${op.permHp ? ` and gains +${op.permHp} Health` : ""}.`);
         any = true;
-        emit("heal", pi, { at: t });
       }
       if (any) { tickRites(pi, "heal"); }
       break;
@@ -10086,11 +10085,23 @@ function localPromptPick(title, options) {
 
 
 // No maximum Health: healing repairs damage first; any excess becomes permanent Health.
+let _healEmitDepth = 0;
 function applyHeal(h, n) {
   if (!h || n <= 0) return 0;
   const rep = Math.min(h.dmg, n);
   h.dmg -= rep;
   if (n > rep) h.permHp += n - rep;
+  // Every card-effect heal fires the "heal" event once, for the healed Hero's
+  // controller, so "gain Pulse when you heal" / "when healed" listeners trigger
+  // on ALL heals (recurring, activated, combat, enter-play), not just a few paths.
+  // Guarded so listener-driven heals don't recurse or double-count.
+  if (_healEmitDepth === 0 && G) {
+    let owner = -1, oli = -1;
+    for (let p = 0; p < 2 && owner < 0; p++) for (let li = 0; li < G.players[p].lanes.length; li++) {
+      if (G.players[p].lanes[li].hero === h) { owner = p; oli = li; break; }
+    }
+    if (owner >= 0) { _healEmitDepth++; try { emit("heal", owner, { at: { pi: owner, li: oli } }); } finally { _healEmitDepth--; } }
+  }
   return n;
 }
 
@@ -11047,7 +11058,7 @@ async function fireCombat(event, actorPi, actorLi, targetPi, targetLi) {
     const op = tr.op, PA = G.players[actorPi];
     if (op.kind === "pulse") { gainPulse(actorPi, op.n, src); }
     else if (op.kind === "draw") { for (let i = 0; i < op.n; i++) drawCard(actorPi); }
-    else if (op.kind === "healSelf" && actor) { const healed = applyHeal(actor, op.n); if (healed) { log(`${src} heals ${healed}.`); emit("heal", actorPi, {}); } }
+    else if (op.kind === "healSelf" && actor) { const healed = applyHeal(actor, op.n); if (healed) { log(`${src} heals ${healed}.`); } }
     else if (op.kind === "buffSelf" && actor) { actor.permAtk += op.atk || 0; actor.permHp += op.hp || 0; log(`${src} permanently gains +${op.atk || 0}/+${op.hp || 0}.`); }
     else if (op.kind === "reduceTarget") { const tg = heroAt({ pi: targetPi, li: targetLi }); if (tg) { tg.redAtk += op.atk || 0; log(`${cardById(tg.cardId).name} gets -${op.atk} Attack permanently (${src}).`); } }
     else if (op.kind === "pulseDraw") { gainPulse(actorPi, op.p, src); for (let i = 0; i < op.d; i++) drawCard(actorPi); }
@@ -11426,7 +11437,7 @@ async function resolveAttack(pi, attackerLis, target) {
         if (curHp(tgtPos.pi, tgtPos.li) <= 0) destroyHero(tgtPos.pi, tgtPos.li, null, { noOverkill: true });
       }
       const sh2 = heroAt(srcPos);
-      if (sh2 && pf3.heal) { const healed = applyHeal(sh2, pf3.heal); if (healed) { log(`${srcName2} heals ${healed}.`); emit("heal", srcPos.pi, {}); } }
+      if (sh2 && pf3.heal) { const healed = applyHeal(sh2, pf3.heal); if (healed) { log(`${srcName2} heals ${healed}.`); } }
       return pf3.atk || 0;
     };
     for (const ali of attackerLis) {
@@ -11940,6 +11951,17 @@ async function aiTakeTurn() {
     seals: function () { var p = this.current(); return p ? (p.seals | 0) : 0; },
     addCoins: function (n) { var p = this.current(); if (!p) return; p.coins = Math.max(0, (p.coins | 0) + n); this.save(); },
     addSeals: function (n) { var p = this.current(); if (!p) return; p.seals = Math.max(0, (p.seals | 0) + n); this.save(); },
+    /* TESTING CHEAT: grant every card (max copies) + stock currency, so the whole
+       collection is playable in the deckbuilder. Triggered by Ctrl+Shift+U. */
+    grantAllCards: function () {
+      var p = this.current(); if (!p) return { err: "Sign in to a profile first." };
+      var lim = (C().copyLimit | 0) || 3, n = 0;
+      DB.cards.forEach(function (c) { p.collection[c.id] = lim; n++; });
+      p.coins = Math.max(p.coins | 0, 99999);
+      p.seals = Math.max(p.seals | 0, 9999);
+      this.save();
+      return { ok: true, count: n };
+    },
     spendCoins: function (n) { var p = this.current(); if (!p || (p.coins | 0) < n) return false; p.coins -= n; this.save(); return true; },
     spendSeals: function (n) { var p = this.current(); if (!p || (p.seals | 0) < n) return false; p.seals -= n; this.save(); return true; },
 
@@ -11954,9 +11976,9 @@ async function aiTakeTurn() {
       this.save();
       return { newCard: before === 0, added: after - before };
     },
-    /* deck legality: which cards a player may put in a deck. Heroes are owned
-       individually; a realm's support cards (relic/hex/rite/pact/incantation)
-       unlock as soon as you own any hero of that realm. Not logged in = no gate. */
+    /* deck legality: which cards a player may put in a deck. EVERY card — heroes
+       and support (relic/hex/rite/pact/incantation) — is owned individually and
+       must be collected. Not logged in = no gate. */
     realmUnlocked: function (realm) {
       var p = this.current(); if (!p) return true;
       for (var id in p.collection) { if ((p.collection[id] | 0) > 0) { var c = cardById(id); if (c && c.realm === realm) return true; } }
@@ -11965,8 +11987,7 @@ async function aiTakeTurn() {
     owns: function (id) {
       var c = cardById(id); if (!c) return false;
       var p = this.current(); if (!p) return true;
-      if (c.type === "hero") return (p.collection[id] | 0) > 0;
-      return this.realmUnlocked(c.realm);
+      return (p.collection[id] | 0) > 0;
     },
     unlockedRealms: function () {
       var self = this; return realmList().filter(function (r) { return self.realmUnlocked(r); });
@@ -11992,6 +12013,9 @@ async function aiTakeTurn() {
       ["Common", "Uncommon"].forEach(function (rar) {
         heroesByRealmRarity(realm, rar).forEach(function (c) { p.collection[c.id] = lim; });
       });
+      // support cards are now individually collected too — grant the starter
+      // realms' full support sets so a 40-card deck is buildable from day one.
+      allCards().forEach(function (c) { if (c.realm === realm && c.type !== "hero") p.collection[c.id] = lim; });
     });
   }
 
@@ -12373,9 +12397,19 @@ async function aiTakeTurn() {
       var results = [];
       var totalRefund = 0;
       for (var n = 0; n < pack.cards; n++) {
-        var rarity = rollRarity(pack.odds);
-        var pool = allCards().filter(function (c) { return c.type === "hero" && c.rarity === rarity; });
-        var card = pool[Math.floor(Math.random() * pool.length)];
+        var card, rarity, pool;
+        // ~30% of pulls are a support card (relic/hex/rite/pact/incantation),
+        // which have no rarity tier — these are the "Common"-value slots. The rest
+        // are Heroes rolled on the pack's rarity odds.
+        if (Math.random() < 0.30) {
+          pool = allCards().filter(function (c) { return c.type !== "hero"; });
+          card = pool[Math.floor(Math.random() * pool.length)];
+          rarity = "Support";
+        } else {
+          rarity = rollRarity(pack.odds);
+          pool = allCards().filter(function (c) { return c.type === "hero" && c.rarity === rarity; });
+          card = pool[Math.floor(Math.random() * pool.length)];
+        }
         if (!card) continue;
         var g = Meta.grant(card.id, 1);
         var dup = !g.newCard && g.added === 0;
@@ -13262,6 +13296,8 @@ const REALM_COLORS = {
   Gildharbor:"#6fb3c4", Ankhara:"#d9a441", Karakhorde:"#b5915e", Deepforge:"#9aa6b5",
   Aurelium:"#c05a4a", Oathenhall:"#6f8fd0", Zolthec:"#4fae86", Almsgard:"#cfc6b0",
   Thornveil:"#7ba396", Noctavein:"#a3556b", Brightmantle:"#f0e2a8",
+  Kessendo:"#d9534a", Drakhaan:"#e07b32", Golmerad:"#6f7a8a",
+  Heliaxos:"#bfa14f", Gribrok:"#6fae52", Vhorrath:"#9b86c4",
 };
 const REALM_LOGOS = {
   Fangrend:(L,D)=>`<polygon points="6,6 18,6 12,36" fill="${L}"/><polygon points="20,6 32,6 26,28" fill="${D}"/>`,
@@ -13279,6 +13315,12 @@ const REALM_LOGOS = {
   Thornveil:(L,D)=>`<circle cx="17" cy="23" r="12" fill="none" stroke="${D}" stroke-width="3.5"/><g fill="${L}"><polygon points="17,7 21,2 19,9"/><polygon points="29,17 34,15 30,21"/><polygon points="27,33 32,37 25,36"/><polygon points="7,33 2,37 9,36"/><polygon points="5,17 0,15 4,21"/></g><polygon points="17,17 20,23 17,29 14,23" fill="${L}"/>`,
   Noctavein:(L,D)=>`<path d="M26 6 a15 15 0 1 0 6 22 a12 12 0 1 1 -6 -22 z" fill="${D}"/><path d="M20 16 q6 8 0 14 q-6 -6 0 -14 z" fill="${L}"/>`,
   Brightmantle:(L,D,BG)=>`<path d="M17 8 q-13 4 -13 22 l6 -3 q-1 -12 7 -15 q8 3 7 15 l6 3 q0 -18 -13 -22 z" fill="${D}"/><circle cx="17" cy="10" r="5" fill="${L}"/><circle cx="17" cy="10" r="2" fill="${BG}"/><rect x="15.5" y="26" width="3" height="14" fill="${L}"/><rect x="11" y="30" width="12" height="3" fill="${L}"/>`,
+  Kessendo:(L,D)=>`<circle cx="17" cy="19" r="8" fill="${D}"/><rect x="15.6" y="5" width="2.8" height="31" rx="1.2" fill="${L}"/><rect x="11.5" y="29" width="11" height="2.6" rx="1" fill="${L}"/>`,
+  Drakhaan:(L)=>`<path fill-rule="evenodd" fill="${L}" d="M17.8,32.3 16.9,32.2 16.1,32.2 16.0,32.7 15.6,33.4 15.1,33.9 14.7,34.1 14.5,34.2 14.5,34.3 14.7,34.4 15.2,34.4 15.1,34.8 14.6,35.2 14.6,35.3 15.1,35.3 15.4,35.2 15.7,35.0 15.9,34.8 16.0,34.7 16.3,34.3 16.5,33.7 16.8,33.1 17.2,32.7 17.7,32.4Z M0.0,32.0 1.8,33.2 3.0,33.7 3.6,33.9 3.4,33.4 3.4,33.3 3.8,33.4 5.1,33.4 6.8,33.1 8.4,32.4 11.9,30.5 13.8,29.6 14.6,29.3 15.8,29.1 16.4,29.0 17.1,29.0 17.2,29.2 16.9,29.7 16.5,30.3 15.8,30.6 15.2,30.8 14.5,30.8 14.1,31.0 13.8,31.8 13.4,32.3 12.5,33.1 12.0,33.3 11.8,33.3 11.8,33.4 12.0,33.5 12.4,33.6 12.4,33.7 12.1,34.1 11.6,34.4 11.6,34.4 12.3,34.5 12.9,34.3 13.4,34.0 13.8,33.6 14.3,32.7 14.7,32.3 15.1,32.1 15.6,31.8 16.1,31.7 17.1,31.7 17.8,31.8 18.3,31.8 18.9,31.7 19.6,31.3 20.1,30.8 20.4,30.2 21.0,29.7 21.5,29.5 23.1,29.1 23.1,29.2 22.5,29.6 22.6,29.7 23.1,29.8 23.5,29.8 25.3,29.3 26.0,29.3 26.2,29.7 26.7,30.0 26.7,30.5 26.3,31.1 26.7,31.0 27.0,30.7 27.3,30.1 27.4,30.2 27.5,30.5 27.6,30.5 27.8,29.9 27.7,29.3 26.3,28.4 26.0,28.3 25.1,28.4 25.1,28.3 25.9,27.8 26.8,26.7 27.9,25.7 29.0,25.1 29.5,24.9 30.1,24.8 30.4,24.8 30.4,24.9 30.2,25.0 30.2,25.1 30.6,25.3 30.9,25.4 31.9,25.4 32.4,25.6 32.8,25.9 33.0,26.3 33.3,26.1 33.6,25.9 33.8,25.9 34.0,25.7 34.0,24.8 33.7,24.7 33.1,24.4 32.7,24.0 32.7,23.6 32.1,23.1 31.4,22.7 31.3,22.7 31.4,22.9 31.3,22.9 30.1,22.4 29.5,22.0 29.1,21.6 29.1,21.5 29.2,21.5 30.5,22.0 30.1,21.1 30.1,20.1 30.2,19.7 31.3,17.7 31.5,17.0 31.5,17.0 31.2,17.3 30.6,17.9 29.6,18.6 28.8,19.2 28.1,19.9 27.0,21.4 26.1,22.0 25.1,22.5 25.1,22.6 25.6,22.6 25.9,22.8 26.0,22.9 25.7,23.4 25.2,23.9 24.5,24.4 24.1,24.6 24.1,24.7 24.8,24.7 25.7,24.5 26.8,24.1 28.2,23.4 28.8,23.2 29.5,23.1 30.1,23.1 30.3,23.3 30.3,23.5 29.6,23.5 29.0,23.6 28.1,24.0 26.5,24.7 25.4,25.0 24.5,25.1 23.4,25.0 22.5,24.7 21.8,24.2 21.0,23.5 20.5,22.8 20.3,22.3 20.1,21.6 20.0,20.9 20.1,20.6 20.3,20.2 20.6,19.9 21.0,19.7 21.6,19.8 21.6,19.7 21.2,19.0 20.2,17.7 18.9,16.5 18.0,15.8 16.5,14.7 14.9,13.6 13.2,12.7 12.1,12.3 10.4,11.6 8.5,11.1 7.1,10.9 5.5,10.7 5.5,10.8 6.0,11.1 7.0,11.7 7.9,12.6 8.5,13.4 8.9,14.4 8.9,15.3 8.5,16.2 8.2,16.6 7.5,17.3 7.0,17.6 7.0,17.7 8.3,17.7 9.1,17.9 10.0,18.2 10.9,18.9 11.5,19.4 11.9,20.1 12.0,20.9 12.0,21.6 11.6,22.5 11.1,23.2 11.1,23.3 12.1,23.0 13.3,22.8 14.6,22.8 15.7,23.1 16.7,23.5 17.6,24.2 18.5,25.2 18.9,25.7 19.0,26.1 19.8,26.4 20.2,26.6 20.2,26.7 18.7,26.7 17.6,26.9 15.9,27.3 14.1,28.0 11.5,29.3 7.3,31.9 6.4,32.4 5.4,32.7 4.6,32.9 3.7,33.0 3.7,32.9 4.0,32.6 4.0,32.6 3.3,32.6 2.2,32.4 1.3,32.3 0.1,31.9 0.0,31.9Z M19.2,19.6 19.1,19.7 18.5,19.8 17.3,20.2 15.7,20.8 13.8,21.6 12.2,22.6 12.1,22.5 12.1,22.5 12.4,22.2 13.7,21.2 15.5,20.3 16.6,19.9 17.3,19.8 18.2,19.6Z M8.5,17.3 9.8,17.0 11.3,16.8 13.2,16.8 14.5,16.9 16.0,17.2 17.0,17.5 18.2,17.9 19.1,18.4 19.2,18.5 19.0,18.5 17.7,18.1 16.1,17.7 13.9,17.3 12.6,17.2 10.2,17.2 8.6,17.4Z"/>`,
+  Golmerad:(L,D)=>`<rect x="8" y="19" width="18" height="15" rx="2.5" fill="${D}"/><rect x="8.5" y="13" width="3.6" height="9" rx="1.2" fill="${L}"/><rect x="12.7" y="11" width="3.6" height="11" rx="1.2" fill="${L}"/><rect x="16.9" y="11" width="3.6" height="11" rx="1.2" fill="${L}"/><rect x="21.1" y="13" width="3.6" height="9" rx="1.2" fill="${L}"/><rect x="4.5" y="22" width="4.5" height="6" rx="1.4" fill="${L}"/>`,
+  Heliaxos:(L,D)=>`<g fill="${D}"><rect x="8" y="8" width="18" height="3.6"/><rect x="8" y="33" width="18" height="3.6"/></g><g fill="${L}"><rect x="10.5" y="12" width="3" height="20.5"/><rect x="15.5" y="12" width="3" height="20.5"/><rect x="20.5" y="12" width="3" height="20.5"/></g>`,
+  Gribrok:(L,D)=>`<circle cx="17" cy="27" r="7.5" fill="${D}"/><circle cx="17" cy="27" r="4.4" fill="none" stroke="${L}" stroke-width="1.4"/><polygon points="17,4 20,20 14,20" fill="${L}"/><rect x="13.5" y="20" width="7" height="2.6" fill="${L}"/>`,
+  Vhorrath:(L,D)=>`<path d="M17 7 Q27 7 27 19 Q27 26 22 29 L22 35 L12 35 L12 29 Q7 26 7 19 Q7 7 17 7 Z" fill="${L}"/><circle cx="13" cy="19" r="2.5" fill="${D}"/><circle cx="21" cy="19" r="2.5" fill="${D}"/><polygon points="17,22 19,26 15,26" fill="${D}"/><g fill="${D}"><rect x="14" y="31" width="1.5" height="4"/><rect x="16.5" y="31" width="1.5" height="4"/><rect x="19" y="31" width="1.5" height="4"/></g>`,
 };
 function realmColor(r) { return REALM_COLORS[r] || "#8fa0c0"; }
 function realmCrest(realm, w, main, dark, bg) {
@@ -14809,6 +14851,12 @@ window.addEventListener("DOMContentLoaded", () => {
     var i = prep.chapter, stage = prep.stage;
     var ch = Campaign.chapter(i), opp = Campaign.opponent(i, stage), m = ch.mood;
     var unlocked = (window.Meta && Meta.unlockedRealms) ? Meta.unlockedRealms() : realmNames();
+    if (!unlocked.length) unlocked = realmNames();
+    // Keep the stored realms in lockstep with what the dropdowns can show: a
+    // suggested realm you haven't unlocked isn't a valid <option>, so the select
+    // would silently display a different realm than prep.realms holds — and the
+    // battle would then use the hidden one. Clamp every lane to an unlocked realm.
+    prep.realms = prep.realms.map(function (r) { return unlocked.indexOf(r) >= 0 ? r : unlocked[0]; });
     var el = $("screen-campaign");
     var deckOpts = "<div class='deck-opt " + (prep.deckId === "auto" ? "sel" : "") + "' data-d='auto'><span class='tick'>" + (prep.deckId === "auto" ? "&#9679;" : "&#9675;") + "</span>Auto-build from your collection<span class='sub'>a fresh legal deck for the realms below</span></div>";
     decks.forEach(function (d) {
@@ -15122,6 +15170,20 @@ window.addEventListener("DOMContentLoaded", () => {
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { setTimeout(init, 0); });
   else setTimeout(init, 0);
+
+  /* TESTING CHEAT — Ctrl+Shift+U unlocks every card for the signed-in profile. */
+  document.addEventListener("keydown", function (e) {
+    if (!(e.shiftKey && (e.ctrlKey || e.metaKey) && (e.key === "U" || e.key === "u"))) return;
+    e.preventDefault();
+    if (!(window.Meta && Meta.current && Meta.current())) { alert("Sign in to a profile first, then press Ctrl+Shift+U."); return; }
+    var r = Meta.grantAllCards();
+    if (r && r.ok) {
+      try { if (window.MetaUI && MetaUI.refresh) MetaUI.refresh(); } catch (x) {}
+      try { if (typeof Decks !== "undefined" && Decks.renderCollection) { Decks.renderRealms && Decks.renderRealms(); Decks.renderCollection(); } } catch (x) {}
+      try { if (typeof renderCampaign === "function") renderCampaign(); } catch (x) {}
+      alert("Cheat activated — unlocked all " + r.count + " cards (and stocked coins/seals).");
+    } else { alert((r && r.err) || "Could not unlock cards."); }
+  });
 })();
 
 </script>

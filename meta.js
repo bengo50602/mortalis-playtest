@@ -81,6 +81,17 @@
     seals: function () { var p = this.current(); return p ? (p.seals | 0) : 0; },
     addCoins: function (n) { var p = this.current(); if (!p) return; p.coins = Math.max(0, (p.coins | 0) + n); this.save(); },
     addSeals: function (n) { var p = this.current(); if (!p) return; p.seals = Math.max(0, (p.seals | 0) + n); this.save(); },
+    /* TESTING CHEAT: grant every card (max copies) + stock currency, so the whole
+       collection is playable in the deckbuilder. Triggered by Ctrl+Shift+U. */
+    grantAllCards: function () {
+      var p = this.current(); if (!p) return { err: "Sign in to a profile first." };
+      var lim = (C().copyLimit | 0) || 3, n = 0;
+      DB.cards.forEach(function (c) { p.collection[c.id] = lim; n++; });
+      p.coins = Math.max(p.coins | 0, 99999);
+      p.seals = Math.max(p.seals | 0, 9999);
+      this.save();
+      return { ok: true, count: n };
+    },
     spendCoins: function (n) { var p = this.current(); if (!p || (p.coins | 0) < n) return false; p.coins -= n; this.save(); return true; },
     spendSeals: function (n) { var p = this.current(); if (!p || (p.seals | 0) < n) return false; p.seals -= n; this.save(); return true; },
 
@@ -95,9 +106,9 @@
       this.save();
       return { newCard: before === 0, added: after - before };
     },
-    /* deck legality: which cards a player may put in a deck. Heroes are owned
-       individually; a realm's support cards (relic/hex/rite/pact/incantation)
-       unlock as soon as you own any hero of that realm. Not logged in = no gate. */
+    /* deck legality: which cards a player may put in a deck. EVERY card — heroes
+       and support (relic/hex/rite/pact/incantation) — is owned individually and
+       must be collected. Not logged in = no gate. */
     realmUnlocked: function (realm) {
       var p = this.current(); if (!p) return true;
       for (var id in p.collection) { if ((p.collection[id] | 0) > 0) { var c = cardById(id); if (c && c.realm === realm) return true; } }
@@ -106,8 +117,7 @@
     owns: function (id) {
       var c = cardById(id); if (!c) return false;
       var p = this.current(); if (!p) return true;
-      if (c.type === "hero") return (p.collection[id] | 0) > 0;
-      return this.realmUnlocked(c.realm);
+      return (p.collection[id] | 0) > 0;
     },
     unlockedRealms: function () {
       var self = this; return realmList().filter(function (r) { return self.realmUnlocked(r); });
@@ -133,6 +143,9 @@
       ["Common", "Uncommon"].forEach(function (rar) {
         heroesByRealmRarity(realm, rar).forEach(function (c) { p.collection[c.id] = lim; });
       });
+      // support cards are now individually collected too — grant the starter
+      // realms' full support sets so a 40-card deck is buildable from day one.
+      allCards().forEach(function (c) { if (c.realm === realm && c.type !== "hero") p.collection[c.id] = lim; });
     });
   }
 
@@ -514,9 +527,19 @@
       var results = [];
       var totalRefund = 0;
       for (var n = 0; n < pack.cards; n++) {
-        var rarity = rollRarity(pack.odds);
-        var pool = allCards().filter(function (c) { return c.type === "hero" && c.rarity === rarity; });
-        var card = pool[Math.floor(Math.random() * pool.length)];
+        var card, rarity, pool;
+        // ~30% of pulls are a support card (relic/hex/rite/pact/incantation),
+        // which have no rarity tier — these are the "Common"-value slots. The rest
+        // are Heroes rolled on the pack's rarity odds.
+        if (Math.random() < 0.30) {
+          pool = allCards().filter(function (c) { return c.type !== "hero"; });
+          card = pool[Math.floor(Math.random() * pool.length)];
+          rarity = "Support";
+        } else {
+          rarity = rollRarity(pack.odds);
+          pool = allCards().filter(function (c) { return c.type === "hero" && c.rarity === rarity; });
+          card = pool[Math.floor(Math.random() * pool.length)];
+        }
         if (!card) continue;
         var g = Meta.grant(card.id, 1);
         var dup = !g.newCard && g.added === 0;

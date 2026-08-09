@@ -353,6 +353,12 @@
     var i = prep.chapter, stage = prep.stage;
     var ch = Campaign.chapter(i), opp = Campaign.opponent(i, stage), m = ch.mood;
     var unlocked = (window.Meta && Meta.unlockedRealms) ? Meta.unlockedRealms() : realmNames();
+    if (!unlocked.length) unlocked = realmNames();
+    // Keep the stored realms in lockstep with what the dropdowns can show: a
+    // suggested realm you haven't unlocked isn't a valid <option>, so the select
+    // would silently display a different realm than prep.realms holds — and the
+    // battle would then use the hidden one. Clamp every lane to an unlocked realm.
+    prep.realms = prep.realms.map(function (r) { return unlocked.indexOf(r) >= 0 ? r : unlocked[0]; });
     var el = $("screen-campaign");
     var deckOpts = "<div class='deck-opt " + (prep.deckId === "auto" ? "sel" : "") + "' data-d='auto'><span class='tick'>" + (prep.deckId === "auto" ? "&#9679;" : "&#9675;") + "</span>Auto-build from your collection<span class='sub'>a fresh legal deck for the realms below</span></div>";
     decks.forEach(function (d) {
@@ -666,4 +672,18 @@
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { setTimeout(init, 0); });
   else setTimeout(init, 0);
+
+  /* TESTING CHEAT — Ctrl+Shift+U unlocks every card for the signed-in profile. */
+  document.addEventListener("keydown", function (e) {
+    if (!(e.shiftKey && (e.ctrlKey || e.metaKey) && (e.key === "U" || e.key === "u"))) return;
+    e.preventDefault();
+    if (!(window.Meta && Meta.current && Meta.current())) { alert("Sign in to a profile first, then press Ctrl+Shift+U."); return; }
+    var r = Meta.grantAllCards();
+    if (r && r.ok) {
+      try { if (window.MetaUI && MetaUI.refresh) MetaUI.refresh(); } catch (x) {}
+      try { if (typeof Decks !== "undefined" && Decks.renderCollection) { Decks.renderRealms && Decks.renderRealms(); Decks.renderCollection(); } } catch (x) {}
+      try { if (typeof renderCampaign === "function") renderCampaign(); } catch (x) {}
+      alert("Cheat activated — unlocked all " + r.count + " cards (and stocked coins/seals).");
+    } else { alert((r && r.err) || "Could not unlock cards."); }
+  });
 })();
