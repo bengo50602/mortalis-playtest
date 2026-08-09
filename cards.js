@@ -1790,10 +1790,10 @@ window.DEFAULT_DATA = {
    "atk": 30,
    "hp": 30,
    "rarity": "Common",
-   "text": "When Senb declares an attack, the defending Hero gets −10 Attack and Senb gains +10 Attack, for that combat only.",
+   "text": "When Senb declares an attack, the defending Hero gets −20 Attack and Senb gains +20 Attack, for that combat only.",
    "auxCost": 1,
    "auxSlots": 1,
-   "auxText": "While in this slot, when the Hero in this lane is attacked, the attacker gets −10 Attack and the Hero in this lane gains +10 Attack, for that combat only."
+   "auxText": "While in this slot, when the Hero in this lane is attacked, the attacker gets −20 Attack and the Hero in this lane gains +20 Attack, for that combat only."
   },
   {
    "id": "ankhara--nefiri-handmaiden-of-dusk",
@@ -1804,7 +1804,7 @@ window.DEFAULT_DATA = {
    "atk": 30,
    "hp": 30,
    "rarity": "Common",
-   "text": "While Nefiri is in play, whenever your opponent plays a Hero, that Hero enters play with −10 Health permanently.",
+   "text": "While Nefiri is in play, whenever your opponent plays a Hero, that Hero enters play with −20 Health permanently.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack and +10 Health."
@@ -1815,7 +1815,7 @@ window.DEFAULT_DATA = {
    "name": "Khaftep the Embalmer",
    "type": "hero",
    "cost": 3,
-   "atk": 60,
+   "atk": 50,
    "hp": 40,
    "rarity": "Common",
    "text": "Once per turn, you may pay 2 Pulse to destroy a Relic attached to an enemy Hero in this lane or a neighboring lane.",
@@ -1829,10 +1829,10 @@ window.DEFAULT_DATA = {
    "name": "Userhet, Oath-Sworn Blade",
    "type": "hero",
    "cost": 4,
-   "atk": 70,
+   "atk": 60,
    "hp": 60,
    "rarity": "Common",
-   "text": "When Userhet attacks or is attacked, the enemy Hero in that combat gets −20 Attack and Userhet gains +20 Attack, for that combat only.",
+   "text": "When Userhet attacks or is attacked, the enemy Hero in that combat gets −30 Attack and Userhet gains +30 Attack, for that combat only.",
    "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
@@ -1843,13 +1843,13 @@ window.DEFAULT_DATA = {
    "name": "Priestess Amunet of the Veil",
    "type": "hero",
    "cost": 5,
-   "atk": 90,
+   "atk": 80,
    "hp": 70,
    "rarity": "Uncommon",
-   "text": "While Amunet is in play, whenever your opponent plays a Hero, that Hero enters play with −10 Attack permanently, and Amunet gains +10 Attack permanently.",
+   "text": "While Amunet is in play, whenever your opponent plays a Hero, that Hero enters play with −20 Attack permanently, and Amunet gains +20 Attack permanently.",
    "auxCost": 3,
    "auxSlots": 1,
-   "auxText": "While in this slot, whenever an enemy Hero attacks this lane, the Hero in this lane gains +10 Attack permanently after that combat resolves."
+   "auxText": "While in this slot, whenever an enemy Hero attacks this lane, the Hero in this lane gains +20 Attack permanently after that combat resolves."
   },
   {
    "id": "ankhara--sethnakh-warden-of-jackals",
@@ -1857,13 +1857,13 @@ window.DEFAULT_DATA = {
    "name": "Sethnakh, Warden of Jackals",
    "type": "hero",
    "cost": 5,
-   "atk": 80,
-   "hp": 80,
+   "atk": 70,
+   "hp": 70,
    "rarity": "Uncommon",
-   "text": "Once per turn, you may pay 3 Pulse: an enemy Hero of your choice gets −10 Attack permanently and Sethnakh gains +10 Attack permanently.",
+   "text": "Once per turn, you may pay 3 Pulse: an enemy Hero of your choice gets −20 Attack permanently and Sethnakh gains +20 Attack permanently.",
    "auxCost": 3,
    "auxSlots": 2,
-   "auxText": "While in this slot, when an enemy Hero attacks this lane, the attacker gets −10 Attack and the Hero in this lane gains +10 Attack, for that combat only."
+   "auxText": "While in this slot, when an enemy Hero attacks this lane, the attacker gets −20 Attack and the Hero in this lane gains +20 Attack, for that combat only."
   },
   {
    "id": "ankhara--rahotep-sun-crowned-general",
@@ -1871,13 +1871,13 @@ window.DEFAULT_DATA = {
    "name": "Rahotep, Sun-Crowned General",
    "type": "hero",
    "cost": 6,
-   "atk": 100,
-   "hp": 90,
+   "atk": 90,
+   "hp": 80,
    "rarity": "Rare",
-   "text": "When Rahotep declares an attack, the defending Hero gets −20 Attack and Rahotep gains +20 Attack, for that combat only. If Rahotep destroys that Hero in the combat, both changes become permanent instead.",
+   "text": "When Rahotep declares an attack, the defending Hero gets −30 Attack and Rahotep gains +30 Attack, for that combat only. If Rahotep destroys that Hero in the combat, both changes become permanent instead.",
    "auxCost": 4,
    "auxSlots": 2,
-   "auxText": "While in this slot, when the Hero in this lane declares an attack, the defending Hero gets −10 Attack and the Hero in this lane gains +10 Attack, for that combat only."
+   "auxText": "While in this slot, when the Hero in this lane declares an attack, the defending Hero gets −20 Attack and the Hero in this lane gains +20 Attack, for that combat only."
   },
   {
    "id": "ankhara--ithara-mistress-of-a-thousand-names",
@@ -1885,10 +1885,10 @@ window.DEFAULT_DATA = {
    "name": "Ithara, Mistress of a Thousand Names",
    "type": "hero",
    "cost": 6,
-   "atk": 100,
-   "hp": 90,
+   "atk": 90,
+   "hp": 80,
    "rarity": "Rare",
-   "text": "While Ithara is in play, whenever your opponent plays a Hero, all Ankhara Heroes you control gain +10 Attack until the end of your next turn.",
+   "text": "While Ithara is in play, whenever your opponent plays a Hero, all Ankhara Heroes you control gain +20 Attack until the end of your next turn.",
    "auxCost": 4,
    "auxSlots": 1,
    "auxText": "Once per turn, you may pay 2 Pulse to destroy an enemy Relic or enemy Auxiliary card."
@@ -1899,13 +1899,13 @@ window.DEFAULT_DATA = {
    "name": "Pharaoh Neferkha the Undying",
    "type": "hero",
    "cost": 8,
-   "atk": 140,
-   "hp": 120,
+   "atk": 120,
+   "hp": 110,
    "rarity": "Ultra-Rare",
-   "text": "When Neferkha enters play, every enemy Hero gets −10 Attack permanently, and Neferkha gains +10 Attack permanently for each Hero affected this way.",
+   "text": "When Neferkha enters play, every enemy Hero gets −20 Attack permanently, and Neferkha gains +20 Attack permanently for each Hero affected this way.",
    "auxCost": 6,
    "auxSlots": 2,
-   "auxText": "While in this slot, whenever your opponent plays a Hero, that Hero enters play with −10 Attack and −10 Health permanently."
+   "auxText": "While in this slot, whenever your opponent plays a Hero, that Hero enters play with −20 Attack and −20 Health permanently."
   },
   {
    "id": "ankhara--khonsahr-the-devouring-moon",
@@ -1913,13 +1913,13 @@ window.DEFAULT_DATA = {
    "name": "Khonsahr, the Devouring Moon",
    "type": "hero",
    "cost": 8,
-   "atk": 140,
-   "hp": 120,
+   "atk": 120,
+   "hp": 110,
    "rarity": "Ultra-Rare",
-   "text": "Once per turn, you may pay 3 Pulse: an enemy Hero of your choice gets −10 Attack and Khonsahr gains +10 Attack, until the end of your next turn.",
+   "text": "Once per turn, you may pay 3 Pulse: an enemy Hero of your choice gets −20 Attack and Khonsahr gains +20 Attack, until the end of your next turn.",
    "auxCost": 6,
    "auxSlots": 1,
-   "auxText": "While in this slot, the first time each turn a Hero you control destroys an enemy Hero in combat, the Hero in this lane gains +20 Attack permanently."
+   "auxText": "While in this slot, the first time each turn a Hero you control destroys an enemy Hero in combat, the Hero in this lane gains +30 Attack permanently."
   },
   {
    "id": "ankhara--osiraket-god-king-of-the-silent-river",
@@ -1927,13 +1927,13 @@ window.DEFAULT_DATA = {
    "name": "Osiraket, God-King of the Silent River",
    "type": "hero",
    "cost": 10,
-   "atk": 170,
-   "hp": 150,
+   "atk": 150,
+   "hp": 140,
    "rarity": "Eternal",
-   "text": "At the start of each of your turns, every enemy Hero gets −10 Attack and Osiraket gains +10 Attack for each enemy Hero affected, all until the start of your next turn.",
+   "text": "At the start of each of your turns, every enemy Hero gets −20 Attack and Osiraket gains +20 Attack for each enemy Hero affected, all until the start of your next turn.",
    "auxCost": 8,
    "auxSlots": 2,
-   "auxText": "While in this slot, whenever any enemy Hero declares an attack, it gets −20 Attack and the defending Hero you control gains +20 Attack, for that combat only."
+   "auxText": "While in this slot, whenever any enemy Hero declares an attack, it gets −30 Attack and the defending Hero you control gains +30 Attack, for that combat only."
   },
   {
    "id": "ankhara--scarab-amulet",
@@ -1951,7 +1951,7 @@ window.DEFAULT_DATA = {
    "type": "relic",
    "slots": 1,
    "cost": 2,
-   "text": "While equipped, when this Hero declares an attack, the defending Hero gets −10 Attack and this Hero gains +10 Attack, for that combat only."
+   "text": "While equipped, when this Hero declares an attack, the defending Hero gets −20 Attack and this Hero gains +20 Attack, for that combat only."
   },
   {
    "id": "ankhara--death-mask-of-kings",
@@ -1960,7 +1960,7 @@ window.DEFAULT_DATA = {
    "type": "relic",
    "slots": 1,
    "cost": 3,
-   "text": "While equipped, whenever this Hero destroys an enemy Hero in combat, this Hero gains +10 Attack and +10 Health permanently."
+   "text": "While equipped, whenever this Hero destroys an enemy Hero in combat, this Hero gains +20 Attack and +20 Health permanently."
   },
   {
    "id": "ankhara--sarcophagus-plate",
@@ -1978,7 +1978,7 @@ window.DEFAULT_DATA = {
    "type": "relic",
    "slots": 2,
    "cost": 5,
-   "text": "While equipped, this Hero continuously has +40 Attack and +40 Health. Whenever your opponent plays a Hero, this Hero gains +10 Attack permanently."
+   "text": "While equipped, this Hero continuously has +40 Attack and +40 Health. Whenever your opponent plays a Hero, this Hero gains +20 Attack permanently."
   },
   {
    "id": "ankhara--jackal-s-toll",
@@ -1986,7 +1986,7 @@ window.DEFAULT_DATA = {
    "name": "Jackal's Toll",
    "type": "hex",
    "cost": 2,
-   "text": "When your opponent plays a Hero, that Hero enters play with −10 Attack permanently, and the Hero in this lane gains +10 Attack permanently. After this effect triggers once, destroy this card."
+   "text": "When your opponent plays a Hero, that Hero enters play with −20 Attack permanently, and the Hero in this lane gains +20 Attack permanently. After this effect triggers once, destroy this card."
   },
   {
    "id": "ankhara--curse-of-the-defiler",
@@ -1994,7 +1994,7 @@ window.DEFAULT_DATA = {
    "name": "Curse of the Defiler",
    "type": "hex",
    "cost": 2,
-   "text": "When an enemy Hero attacks a Hero in this lane, the attacker gets −20 Attack and the defending Hero gains +20 Attack, for that combat only. After this effect triggers once, destroy this card."
+   "text": "When an enemy Hero attacks a Hero in this lane, the attacker gets −30 Attack and the defending Hero gains +30 Attack, for that combat only. After this effect triggers once, destroy this card."
   },
   {
    "id": "ankhara--mirror-of-thoth",
@@ -2010,7 +2010,7 @@ window.DEFAULT_DATA = {
    "name": "The Weighing of Hearts",
    "type": "hex",
    "cost": 3,
-   "text": "When an enemy Hero attacks a Hero in this lane and fails to destroy it, that enemy Hero gets −30 Attack permanently. After this effect triggers once, destroy this card."
+   "text": "When an enemy Hero attacks a Hero in this lane and fails to destroy it, that enemy Hero gets −40 Attack permanently. After this effect triggers once, destroy this card."
   },
   {
    "id": "ankhara--plague-of-locusts",
@@ -2018,7 +2018,7 @@ window.DEFAULT_DATA = {
    "name": "Plague of Locusts",
    "type": "hex",
    "cost": 4,
-   "text": "When your opponent plays a Hero, all enemy Heroes get −10 Attack until the end of your next turn. After this effect triggers once, destroy this card."
+   "text": "When your opponent plays a Hero, all enemy Heroes get −20 Attack until the end of your next turn. After this effect triggers once, destroy this card."
   },
   {
    "id": "ankhara--raising-of-the-obelisk",
@@ -2042,7 +2042,7 @@ window.DEFAULT_DATA = {
    "name": "Oath of the Dynasty",
    "type": "rite",
    "cost": 4,
-   "text": "This Rite gains 1 counter whenever one of your card effects reduces an enemy Hero's Attack while granting a Hero you control Attack (maximum 1 counter per turn). When it reaches 3 counters, destroy this Rite and give all Ankhara Heroes you control +10 Attack permanently."
+   "text": "This Rite gains 1 counter whenever one of your card effects reduces an enemy Hero's Attack while granting a Hero you control Attack (maximum 1 counter per turn). When it reaches 3 counters, destroy this Rite and give all Ankhara Heroes you control +20 Attack permanently."
   },
   {
    "id": "ankhara--reckoning-of-the-silent-river",
@@ -2066,7 +2066,7 @@ window.DEFAULT_DATA = {
    "name": "Tribute of Blood",
    "type": "pact",
    "cost": 2,
-   "text": "When this Pact resolves, lose 20 Mortality. An enemy Hero of your choice gets −20 Attack permanently, and a Hero you control gains +20 Attack permanently."
+   "text": "When this Pact resolves, lose 20 Mortality. An enemy Hero of your choice gets −30 Attack permanently, and a Hero you control gains +30 Attack permanently."
   },
   {
    "id": "ankhara--unsealing-the-vault",
@@ -2074,7 +2074,7 @@ window.DEFAULT_DATA = {
    "name": "Unsealing the Vault",
    "type": "pact",
    "cost": 2,
-   "text": "When this Pact resolves, discard 1 card. Destroy one enemy Relic or enemy Auxiliary card, and a Hero you control gains +10 Attack permanently."
+   "text": "When this Pact resolves, discard 1 card. Destroy one enemy Relic or enemy Auxiliary card, and a Hero you control gains +20 Attack permanently."
   },
   {
    "id": "ankhara--bargain-with-eternity",
@@ -2090,7 +2090,7 @@ window.DEFAULT_DATA = {
    "name": "Gaze of the Sphinx",
    "type": "incantation",
    "cost": 3,
-   "text": "When this Incantation resolves, an enemy Hero of your choice gets −30 Attack and a Hero you control of your choice gains +30 Attack, until the start of your next turn."
+   "text": "When this Incantation resolves, an enemy Hero of your choice gets −40 Attack and a Hero you control of your choice gains +40 Attack, until the start of your next turn."
   },
   {
    "id": "ankhara--sands-of-ruin",
@@ -2098,7 +2098,7 @@ window.DEFAULT_DATA = {
    "name": "Sands of Ruin",
    "type": "incantation",
    "cost": 4,
-   "text": "When this Incantation resolves, destroy one enemy Relic or enemy Auxiliary card, and an enemy Hero of your choice gets −20 Attack until the end of your next turn."
+   "text": "When this Incantation resolves, destroy one enemy Relic or enemy Auxiliary card, and an enemy Hero of your choice gets −30 Attack until the end of your next turn."
   },
   {
    "id": "ankhara--hand-of-the-devourer",
@@ -2106,7 +2106,7 @@ window.DEFAULT_DATA = {
    "name": "Hand of the Devourer",
    "type": "incantation",
    "cost": 5,
-   "text": "When this Incantation resolves, every enemy Hero gets −10 Attack permanently, and a Hero you control of your choice gains +10 Attack permanently for each Hero affected this way."
+   "text": "When this Incantation resolves, every enemy Hero gets −20 Attack permanently, and a Hero you control of your choice gains +20 Attack permanently for each Hero affected this way."
   },
   {
    "id": "karakhorde--temu-steppe-scout",

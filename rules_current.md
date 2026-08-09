@@ -970,69 +970,69 @@ When this Incantation resolves, destroy an enemy Hero with 70 or less Health rem
 
 **Senb, Tomb-Sweeper**
 Hero Mode — Cost: 2 Pulse | Attack/Health: 30/30 | Rarity: Common
-When Senb declares an attack, the defending Hero gets −10 Attack and Senb gains +10 Attack, for that combat only.
+When Senb declares an attack, the defending Hero gets −20 Attack and Senb gains +20 Attack, for that combat only.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
-While in this slot, when the Hero in this lane is attacked, the attacker gets −10 Attack and the Hero in this lane gains +10 Attack, for that combat only.
+While in this slot, when the Hero in this lane is attacked, the attacker gets −20 Attack and the Hero in this lane gains +20 Attack, for that combat only.
 
 **Nefiri, Handmaiden of Dusk**
 Hero Mode — Cost: 2 Pulse | Attack/Health: 30/30 | Rarity: Common
-While Nefiri is in play, whenever your opponent plays a Hero, that Hero enters play with −10 Health permanently.
+While Nefiri is in play, whenever your opponent plays a Hero, that Hero enters play with −20 Health permanently.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +10 Attack and +10 Health.
 
 **Khaftep the Embalmer**
-Hero Mode — Cost: 3 Pulse | Attack/Health: 60/40 | Rarity: Common
+Hero Mode — Cost: 3 Pulse | Attack/Health: 50/40 | Rarity: Common
 Once per turn, you may pay 2 Pulse to destroy a Relic attached to an enemy Hero in this lane or a neighboring lane.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 When this card enters play, a Hero you control gains +10 Attack and +10 Health permanently, then destroy this card.
 
 **Userhet, Oath-Sworn Blade**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 70/60 | Rarity: Common
-When Userhet attacks or is attacked, the enemy Hero in that combat gets −20 Attack and Userhet gains +20 Attack, for that combat only.
+Hero Mode — Cost: 4 Pulse | Attack/Health: 60/60 | Rarity: Common
+When Userhet attacks or is attacked, the enemy Hero in that combat gets −30 Attack and Userhet gains +30 Attack, for that combat only.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Attack.
 
 **Priestess Amunet of the Veil**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 90/70 | Rarity: Uncommon
-While Amunet is in play, whenever your opponent plays a Hero, that Hero enters play with −10 Attack permanently, and Amunet gains +10 Attack permanently.
+Hero Mode — Cost: 5 Pulse | Attack/Health: 80/70 | Rarity: Uncommon
+While Amunet is in play, whenever your opponent plays a Hero, that Hero enters play with −20 Attack permanently, and Amunet gains +20 Attack permanently.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
-While in this slot, whenever an enemy Hero attacks this lane, the Hero in this lane gains +10 Attack permanently after that combat resolves.
+While in this slot, whenever an enemy Hero attacks this lane, the Hero in this lane gains +20 Attack permanently after that combat resolves.
 
 **Sethnakh, Warden of Jackals**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 80/80 | Rarity: Uncommon
-Once per turn, you may pay 3 Pulse: an enemy Hero of your choice gets −10 Attack permanently and Sethnakh gains +10 Attack permanently.
+Hero Mode — Cost: 5 Pulse | Attack/Health: 70/70 | Rarity: Uncommon
+Once per turn, you may pay 3 Pulse: an enemy Hero of your choice gets −20 Attack permanently and Sethnakh gains +20 Attack permanently.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
-While in this slot, when an enemy Hero attacks this lane, the attacker gets −10 Attack and the Hero in this lane gains +10 Attack, for that combat only.
+While in this slot, when an enemy Hero attacks this lane, the attacker gets −20 Attack and the Hero in this lane gains +20 Attack, for that combat only.
 
 **Rahotep, Sun-Crowned General**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 100/90 | Rarity: Rare
-When Rahotep declares an attack, the defending Hero gets −20 Attack and Rahotep gains +20 Attack, for that combat only. If Rahotep destroys that Hero in the combat, both changes become permanent instead.
+Hero Mode — Cost: 6 Pulse | Attack/Health: 90/80 | Rarity: Rare
+When Rahotep declares an attack, the defending Hero gets −30 Attack and Rahotep gains +30 Attack, for that combat only. If Rahotep destroys that Hero in the combat, both changes become permanent instead.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
-While in this slot, when the Hero in this lane declares an attack, the defending Hero gets −10 Attack and the Hero in this lane gains +10 Attack, for that combat only.
+While in this slot, when the Hero in this lane declares an attack, the defending Hero gets −20 Attack and the Hero in this lane gains +20 Attack, for that combat only.
 
 **Ithara, Mistress of a Thousand Names**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 100/90 | Rarity: Rare
-While Ithara is in play, whenever your opponent plays a Hero, all Ankhara Heroes you control gain +10 Attack until the end of your next turn.
+Hero Mode — Cost: 6 Pulse | Attack/Health: 90/80 | Rarity: Rare
+While Ithara is in play, whenever your opponent plays a Hero, all Ankhara Heroes you control gain +20 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 Once per turn, you may pay 2 Pulse to destroy an enemy Relic or enemy Auxiliary card.
 
 **Pharaoh Neferkha the Undying**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 140/120 | Rarity: Ultra-Rare
-When Neferkha enters play, every enemy Hero gets −10 Attack permanently, and Neferkha gains +10 Attack permanently for each Hero affected this way.
+Hero Mode — Cost: 8 Pulse | Attack/Health: 120/110 | Rarity: Ultra-Rare
+When Neferkha enters play, every enemy Hero gets −20 Attack permanently, and Neferkha gains +20 Attack permanently for each Hero affected this way.
 Auxiliary Mode — Cost: 6 Pulse | 2 slots
-While in this slot, whenever your opponent plays a Hero, that Hero enters play with −10 Attack and −10 Health permanently.
+While in this slot, whenever your opponent plays a Hero, that Hero enters play with −20 Attack and −20 Health permanently.
 
 **Khonsahr, the Devouring Moon**
-Hero Mode — Cost: 8 Pulse | Attack/Health: 140/120 | Rarity: Ultra-Rare
-Once per turn, you may pay 3 Pulse: an enemy Hero of your choice gets −10 Attack and Khonsahr gains +10 Attack, until the end of your next turn.
+Hero Mode — Cost: 8 Pulse | Attack/Health: 120/110 | Rarity: Ultra-Rare
+Once per turn, you may pay 3 Pulse: an enemy Hero of your choice gets −20 Attack and Khonsahr gains +20 Attack, until the end of your next turn.
 Auxiliary Mode — Cost: 6 Pulse | 1 slot
-While in this slot, the first time each turn a Hero you control destroys an enemy Hero in combat, the Hero in this lane gains +20 Attack permanently.
+While in this slot, the first time each turn a Hero you control destroys an enemy Hero in combat, the Hero in this lane gains +30 Attack permanently.
 
 **Osiraket, God-King of the Silent River**
-Hero Mode — Cost: 10 Pulse | Attack/Health: 170/150 | Rarity: Eternal
-At the start of each of your turns, every enemy Hero gets −10 Attack and Osiraket gains +10 Attack for each enemy Hero affected, all until the start of your next turn.
+Hero Mode — Cost: 10 Pulse | Attack/Health: 150/140 | Rarity: Eternal
+At the start of each of your turns, every enemy Hero gets −20 Attack and Osiraket gains +20 Attack for each enemy Hero affected, all until the start of your next turn.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
-While in this slot, whenever any enemy Hero declares an attack, it gets −20 Attack and the defending Hero you control gains +20 Attack, for that combat only.
+While in this slot, whenever any enemy Hero declares an attack, it gets −30 Attack and the defending Hero you control gains +30 Attack, for that combat only.
 
 ### Relics
 
@@ -1040,34 +1040,34 @@ While in this slot, whenever any enemy Hero declares an attack, it gets −20 At
 While equipped, this Hero continuously has +10 Attack and +10 Health.
 
 **Khopesh of the Drinker** — 1 slot | Cost: 2 Pulse
-While equipped, when this Hero declares an attack, the defending Hero gets −10 Attack and this Hero gains +10 Attack, for that combat only.
+While equipped, when this Hero declares an attack, the defending Hero gets −20 Attack and this Hero gains +20 Attack, for that combat only.
 
 **Death Mask of Kings** — 1 slot | Cost: 3 Pulse
-While equipped, whenever this Hero destroys an enemy Hero in combat, this Hero gains +10 Attack and +10 Health permanently.
+While equipped, whenever this Hero destroys an enemy Hero in combat, this Hero gains +20 Attack and +20 Health permanently.
 
 **Sarcophagus Plate** — 2 slots | Cost: 4 Pulse
 While equipped, this Hero continuously has +30 Attack and +30 Health. The first time this Hero would die, it instead survives with 10 Health, then destroy this Relic.
 
 **Crown of the Two Rivers** — 2 slots | Cost: 5 Pulse
-While equipped, this Hero continuously has +40 Attack and +40 Health. Whenever your opponent plays a Hero, this Hero gains +10 Attack permanently.
+While equipped, this Hero continuously has +40 Attack and +40 Health. Whenever your opponent plays a Hero, this Hero gains +20 Attack permanently.
 
 ### Hexes
 *(Played face-down, cost paid at the moment they trigger, may be paid for during either player's turn)*
 
 **Jackal's Toll** — Cost: 2 Pulse
-When your opponent plays a Hero, that Hero enters play with −10 Attack permanently, and the Hero in this lane gains +10 Attack permanently. After this effect triggers once, destroy this card.
+When your opponent plays a Hero, that Hero enters play with −20 Attack permanently, and the Hero in this lane gains +20 Attack permanently. After this effect triggers once, destroy this card.
 
 **Curse of the Defiler** — Cost: 2 Pulse
-When an enemy Hero attacks a Hero in this lane, the attacker gets −20 Attack and the defending Hero gains +20 Attack, for that combat only. After this effect triggers once, destroy this card.
+When an enemy Hero attacks a Hero in this lane, the attacker gets −30 Attack and the defending Hero gains +30 Attack, for that combat only. After this effect triggers once, destroy this card.
 
 **Mirror of Thoth** — Cost: 3 Pulse
 When an enemy Hero attacks a Hero in this lane, the defending Hero's Attack becomes equal to the attacker's Attack for that combat only. After this effect triggers once, destroy this card.
 
 **The Weighing of Hearts** — Cost: 3 Pulse
-When an enemy Hero attacks a Hero in this lane and fails to destroy it, that enemy Hero gets −30 Attack permanently. After this effect triggers once, destroy this card.
+When an enemy Hero attacks a Hero in this lane and fails to destroy it, that enemy Hero gets −40 Attack permanently. After this effect triggers once, destroy this card.
 
 **Plague of Locusts** — Cost: 4 Pulse
-When your opponent plays a Hero, all enemy Heroes get −10 Attack until the end of your next turn. After this effect triggers once, destroy this card.
+When your opponent plays a Hero, all enemy Heroes get −20 Attack until the end of your next turn. After this effect triggers once, destroy this card.
 
 ### Rites
 *(Delayed setup/payoff)*
@@ -1079,7 +1079,7 @@ Starting the turn after this Rite is played, count 2 of your turns. At the end o
 Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, play a Hero card of cost 6 or less from your discard pile into an empty lane without paying its cost, then destroy this Rite. At any point before then, you may instead end this Rite early to return a Hero card from your discard pile to your hand.
 
 **Oath of the Dynasty** — Cost: 4 Pulse
-This Rite gains 1 counter whenever one of your card effects reduces an enemy Hero's Attack while granting a Hero you control Attack (maximum 1 counter per turn). When it reaches 3 counters, destroy this Rite and give all Ankhara Heroes you control +10 Attack permanently.
+This Rite gains 1 counter whenever one of your card effects reduces an enemy Hero's Attack while granting a Hero you control Attack (maximum 1 counter per turn). When it reaches 3 counters, destroy this Rite and give all Ankhara Heroes you control +20 Attack permanently.
 
 **Reckoning of the Silent River** — Cost: 5 Pulse
 Starting the turn after this Rite is played, count 4 of your turns. At the end of the 4th counted turn, deal 120 damage to a Hero of your choice, then destroy this Rite. At any point before then, you may instead end this Rite early to deal 50 damage to a Hero of your choice immediately.
@@ -1091,10 +1091,10 @@ Starting the turn after this Rite is played, count 4 of your turns. At the end o
 When this Pact resolves, destroy a Hero you control. Another Hero you control permanently gains Attack equal to half the destroyed Hero's printed Attack (rounded to the nearest 10).
 
 **Tribute of Blood** — Cost: 2 Pulse
-When this Pact resolves, lose 20 Mortality. An enemy Hero of your choice gets −20 Attack permanently, and a Hero you control gains +20 Attack permanently.
+When this Pact resolves, lose 20 Mortality. An enemy Hero of your choice gets −30 Attack permanently, and a Hero you control gains +30 Attack permanently.
 
 **Unsealing the Vault** — Cost: 2 Pulse
-When this Pact resolves, discard 1 card. Destroy one enemy Relic or enemy Auxiliary card, and a Hero you control gains +10 Attack permanently.
+When this Pact resolves, discard 1 card. Destroy one enemy Relic or enemy Auxiliary card, and a Hero you control gains +20 Attack permanently.
 
 **Bargain with Eternity** — Cost: 3 Pulse
 When this Pact resolves, choose a Hero you control — it cannot attack next turn. It gains +30 Attack and +30 Health permanently.
@@ -1103,13 +1103,13 @@ When this Pact resolves, choose a Hero you control — it cannot attack next tur
 *(Direct spells, no full board wipes, no unconditional Mortality burn)*
 
 **Gaze of the Sphinx** — Cost: 3 Pulse
-When this Incantation resolves, an enemy Hero of your choice gets −30 Attack and a Hero you control of your choice gains +30 Attack, until the start of your next turn.
+When this Incantation resolves, an enemy Hero of your choice gets −40 Attack and a Hero you control of your choice gains +40 Attack, until the start of your next turn.
 
 **Sands of Ruin** — Cost: 4 Pulse
-When this Incantation resolves, destroy one enemy Relic or enemy Auxiliary card, and an enemy Hero of your choice gets −20 Attack until the end of your next turn.
+When this Incantation resolves, destroy one enemy Relic or enemy Auxiliary card, and an enemy Hero of your choice gets −30 Attack until the end of your next turn.
 
 **Hand of the Devourer** — Cost: 5 Pulse
-When this Incantation resolves, every enemy Hero gets −10 Attack permanently, and a Hero you control of your choice gains +10 Attack permanently for each Hero affected this way.
+When this Incantation resolves, every enemy Hero gets −20 Attack permanently, and a Hero you control of your choice gains +20 Attack permanently for each Hero affected this way.
 
 ---
 
