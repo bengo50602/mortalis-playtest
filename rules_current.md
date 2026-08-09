@@ -2681,67 +2681,67 @@ When this Incantation resolves, all Heroes you control gain +20 Attack until end
 *(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
 
 **Emberwing Squire**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 60/40 | Rarity: Common
+Hero Mode — Cost: 4 Pulse | Attack/Health: 70/40 | Rarity: Common
 When Emberwing Squire enters play, an enemy Hero of your choice gets -20 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Scaleguard Vael**
-Hero Mode — Cost: 4 Pulse | Attack/Health: 50/50 | Rarity: Common
+Hero Mode — Cost: 4 Pulse | Attack/Health: 60/50 | Rarity: Common
 When Scaleguard Vael enters play, destroy an enemy Auxiliary card.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +20 Attack.
 
 **Cinderclaw Drake**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 80/40 | Rarity: Common
+Hero Mode — Cost: 5 Pulse | Attack/Health: 90/40 | Rarity: Common
 Whenever Cinderclaw Drake deals combat damage to an enemy Hero, that Hero gets -20 Attack permanently.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +40 Attack. At the start of each of your turns, that Hero takes 10 damage.
 
 **Wyrmrider Kass**
-Hero Mode — Cost: 5 Pulse | Attack/Health: 70/50 | Rarity: Common
+Hero Mode — Cost: 5 Pulse | Attack/Health: 80/50 | Rarity: Common
 When Wyrmrider Kass destroys an enemy Hero in combat, she deals 20 damage to the enemy Hero in a lane neighboring the one she attacked, if any.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
 **Pyrelord Draeven**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 100/50 | Rarity: Uncommon
+Hero Mode — Cost: 6 Pulse | Attack/Health: 110/50 | Rarity: Uncommon
 When Pyrelord Draeven enters play, destroy an enemy Relic or enemy Auxiliary card.
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
 
 **Stormscale Myrrha**
-Hero Mode — Cost: 6 Pulse | Attack/Health: 90/60 | Rarity: Uncommon
+Hero Mode — Cost: 6 Pulse | Attack/Health: 100/60 | Rarity: Uncommon
 When Stormscale Myrrha enters play, an enemy Hero of your choice gets -40 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +40 Attack.
 
 **Ashmaw the Devourer**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 120/60 | Rarity: Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 130/60 | Rarity: Rare
 When Ashmaw the Devourer enters play, destroy an enemy Hero with 60 or less Health remaining.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 30 damage to an enemy Hero of your choice.
 
 **Volcanic Warden Rax**
-Hero Mode — Cost: 7 Pulse | Attack/Health: 110/70 | Rarity: Rare
+Hero Mode — Cost: 7 Pulse | Attack/Health: 120/70 | Rarity: Rare
 When Volcanic Warden Rax destroys an enemy Hero in combat, he deals 30 damage to the enemy Hero in a lane neighboring the one he attacked, if any.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +50 Attack.
 
 **Nyxaraxi, the Obsidian Wyrm**
-Hero Mode — Cost: 9 Pulse | Attack/Health: 140/70 | Rarity: Ultra-Rare
+Hero Mode — Cost: 9 Pulse | Attack/Health: 160/70 | Rarity: Ultra-Rare
 When Nyxaraxi, the Obsidian Wyrm enters play, destroy an enemy Auxiliary card and an enemy Hero of your choice gets -40 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +60 Attack. At the start of each of your turns, that Hero takes 20 damage.
 
 **Ignathor, Breath of Ruin**
-Hero Mode — Cost: 9 Pulse | Attack/Health: 160/60 | Rarity: Ultra-Rare
+Hero Mode — Cost: 9 Pulse | Attack/Health: 180/60 | Rarity: Ultra-Rare
 When Ignathor, Breath of Ruin enters play, destroy an enemy Hero with 80 or less Health remaining.
 Auxiliary Mode — Cost: 7 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 40 damage to an enemy Hero of your choice.
 
 **Vorthalyx, the World-Ender**
-Hero Mode — Cost: 10 Pulse | Attack/Health: 170/90 | Rarity: Eternal
+Hero Mode — Cost: 10 Pulse | Attack/Health: 190/90 | Rarity: Eternal
 When Vorthalyx, the World-Ender enters play, destroy an enemy Hero with 100 or less Health remaining and destroy an enemy Auxiliary card.
 Auxiliary Mode — Cost: 8 Pulse | 2 slots
 While this card is in play, whenever any enemy Hero dies, deal 40 damage to an enemy Hero of your choice.
