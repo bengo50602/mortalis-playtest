@@ -155,6 +155,18 @@ const UI = {
     $("my-mort").textContent = you.mortality;
     $("my-pulse").textContent = you.pulse;
     $("my-deck").textContent = you.deck.length;
+    const dn = (you.discard || []).length;
+    const db = $("my-discard"); if (db) db.textContent = dn;
+    const dbtn = $("my-discard-btn");
+    if (dbtn && !dbtn._wired) {
+      dbtn._wired = true;
+      dbtn.onclick = () => {
+        const disc = (G.players[0].discard || []);
+        if (!disc.length) { UI.pickOption("Your discard pile is empty.", []); return; }
+        const names = disc.map(id => { const c = cardById(id); return c ? c.name + (c.type === "hero" ? ` (${c.realm} Hero)` : ` (${c.realm} ${c.type})`) : id; });
+        UI.pickOption("Your discard pile (" + disc.length + " card" + (disc.length > 1 ? "s" : "") + "):", names);
+      };
+    }
 
     // face targeting highlight
     const faceTarget = UI.sel.length && legalTargetsFor(0, UI.sel).face;

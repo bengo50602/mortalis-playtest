@@ -3288,61 +3288,61 @@ When this Incantation resolves, destroy an enemy Hero with 70 or less Health rem
 Hero Mode — Cost: 1 Pulse | Attack/Health: 30/40 | Rarity: Common
 When Bone Acolyte enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
-While in this slot, the Hero in this lane continuously has +10 Attack.
+While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, that Hero gains +20 Attack permanently.
 
 **Grave Tender**
 Hero Mode — Cost: 2 Pulse | Attack/Health: 30/80 | Rarity: Common
 When Grave Tender enters play, return a Hero card from your discard pile to your hand.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
-While in this slot, the Hero in this lane continuously has +10 Attack.
+While in this slot, the first time each turn a Hero you control is reanimated or raised from the discard pile, draw a card.
 
 **Shambling Thrall**
 Hero Mode — Cost: 2 Pulse | Attack/Health: 60/70 | Rarity: Common
 When Shambling Thrall enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
-While in this slot, the Hero in this lane continuously has +20 Attack.
+While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, deal 20 damage to an enemy Hero of your choice.
 
 **Corpse Picker**
 Hero Mode — Cost: 1 Pulse | Attack/Health: 20/70 | Rarity: Common
 When Corpse Picker enters play, return a Hero card from your discard pile to your hand.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
-While in this slot, the Hero in this lane continuously has +10 Attack.
+While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, gain 2 Pulse.
 
 **Grave-Binder Morr**
 Hero Mode — Cost: 3 Pulse | Attack/Health: 50/80 | Rarity: Uncommon
 When Grave-Binder Morr enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
-While in this slot, the Hero in this lane continuously has +20 Attack.
+While in this slot, Heroes reanimated or raised into this lane enter at full Attack, ignoring the reanimation penalty.
 
 **Tomb Warden Vesh**
 Hero Mode — Cost: 4 Pulse | Attack/Health: 60/90 | Rarity: Uncommon
 When Tomb Warden Vesh enters play, return a Hero card from your discard pile to your hand. Whenever an enemy Hero dies, gain 2 Pulse.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
-While in this slot, the Hero in this lane continuously has +30 Attack.
+While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, that Hero gains +20 Attack and +20 Health permanently.
 
 **Sepulcher Lord Kael**
 Hero Mode — Cost: 5 Pulse | Attack/Health: 70/90 | Rarity: Rare
 When Sepulcher Lord Kael enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
-While in this slot, the Hero in this lane continuously has +30 Attack.
+While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, that Hero gains +30 Attack permanently.
 
 **Grim Harvester**
 Hero Mode — Cost: 5 Pulse | Attack/Health: 60/110 | Rarity: Rare
 When Grim Harvester enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack. Whenever an enemy Hero dies, gain 3 Pulse.
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
-While in this slot, the Hero in this lane continuously has +30 Attack.
+While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, deal 30 damage to an enemy Hero of your choice.
 
 **Lichlord Mordath**
 Hero Mode — Cost: 7 Pulse | Attack/Health: 90/110 | Rarity: Ultra-Rare
 When Lichlord Mordath enters play, play a Hero card of cost 8 or less from your discard pile into an empty lane without paying its cost.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
-While in this slot, the Hero in this lane continuously has +40 Attack.
+While in this slot, Heroes reanimated or raised into this lane enter at full strength (no reanimation penalty) and with +30 Health.
 
 **Countess Nyxthral**
 Hero Mode — Cost: 7 Pulse | Attack/Health: 80/120 | Rarity: Ultra-Rare
 When Countess Nyxthral enters play, play a Hero card of cost 8 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
-While in this slot, the Hero in this lane continuously has +40 Attack.
+While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, gain 3 Pulse and that Hero gains +20 Attack permanently.
 
 **Vhorrath, the Deathless**
 Hero Mode — Cost: 9 Pulse | Attack/Health: 140/150 | Rarity: Eternal

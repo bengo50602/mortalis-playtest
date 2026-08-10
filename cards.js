@@ -6778,7 +6778,7 @@ window.DEFAULT_DATA = {
    "text": "When Bone Acolyte enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack.",
    "auxCost": 1,
    "auxSlots": 1,
-   "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack."
+   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, that Hero gains +20 Attack permanently."
   },
   {
    "id": "vhorrath--grave-tender",
@@ -6792,7 +6792,7 @@ window.DEFAULT_DATA = {
    "text": "When Grave Tender enters play, return a Hero card from your discard pile to your hand.",
    "auxCost": 1,
    "auxSlots": 1,
-   "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack."
+   "auxText": "While in this slot, the first time each turn a Hero you control is reanimated or raised from the discard pile, draw a card."
   },
   {
    "id": "vhorrath--shambling-thrall",
@@ -6806,7 +6806,7 @@ window.DEFAULT_DATA = {
    "text": "When Shambling Thrall enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack.",
    "auxCost": 1,
    "auxSlots": 1,
-   "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
+   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, deal 20 damage to an enemy Hero of your choice."
   },
   {
    "id": "vhorrath--corpse-picker",
@@ -6820,7 +6820,7 @@ window.DEFAULT_DATA = {
    "text": "When Corpse Picker enters play, return a Hero card from your discard pile to your hand.",
    "auxCost": 1,
    "auxSlots": 1,
-   "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack."
+   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, gain 2 Pulse."
   },
   {
    "id": "vhorrath--grave-binder-morr",
@@ -6834,7 +6834,7 @@ window.DEFAULT_DATA = {
    "text": "When Grave-Binder Morr enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack.",
    "auxCost": 1,
    "auxSlots": 1,
-   "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
+   "auxText": "While in this slot, Heroes reanimated or raised into this lane enter at full Attack, ignoring the reanimation penalty."
   },
   {
    "id": "vhorrath--tomb-warden-vesh",
@@ -6848,7 +6848,7 @@ window.DEFAULT_DATA = {
    "text": "When Tomb Warden Vesh enters play, return a Hero card from your discard pile to your hand. Whenever an enemy Hero dies, gain 2 Pulse.",
    "auxCost": 2,
    "auxSlots": 1,
-   "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
+   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, that Hero gains +20 Attack and +20 Health permanently."
   },
   {
    "id": "vhorrath--sepulcher-lord-kael",
@@ -6862,7 +6862,7 @@ window.DEFAULT_DATA = {
    "text": "When Sepulcher Lord Kael enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack.",
    "auxCost": 3,
    "auxSlots": 2,
-   "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
+   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, that Hero gains +30 Attack permanently."
   },
   {
    "id": "vhorrath--grim-harvester",
@@ -6876,7 +6876,7 @@ window.DEFAULT_DATA = {
    "text": "When Grim Harvester enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack. Whenever an enemy Hero dies, gain 3 Pulse.",
    "auxCost": 3,
    "auxSlots": 2,
-   "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
+   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, deal 30 damage to an enemy Hero of your choice."
   },
   {
    "id": "vhorrath--lichlord-mordath",
@@ -6890,7 +6890,7 @@ window.DEFAULT_DATA = {
    "text": "When Lichlord Mordath enters play, play a Hero card of cost 8 or less from your discard pile into an empty lane without paying its cost.",
    "auxCost": 5,
    "auxSlots": 2,
-   "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
+   "auxText": "While in this slot, Heroes reanimated or raised into this lane enter at full strength (no reanimation penalty) and with +30 Health."
   },
   {
    "id": "vhorrath--countess-nyxthral",
@@ -6904,7 +6904,7 @@ window.DEFAULT_DATA = {
    "text": "When Countess Nyxthral enters play, play a Hero card of cost 8 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.",
    "auxCost": 5,
    "auxSlots": 2,
-   "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
+   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, gain 3 Pulse and that Hero gains +20 Attack permanently."
   },
   {
    "id": "vhorrath--vhorrath-the-deathless",

@@ -616,6 +616,12 @@ function compileListen(text, out, bits) {
     bits.push("Pulse when enemy cards are destroyed");
   }
   if ((m = t.match(new RegExp(`whenever you heal a Hero with a card effect, gain ${NUM} Pulse(?: \\(maximum (\\d+) per turn\\))?`, "i")))) push("heal", { k: "pulse", n: +m[1] }, "Pulse on heal", m[2] ? +m[2] : 0);
+  // Vhorrath reanimation payoffs — aux listeners on the "reanimate" event
+  if ((m = t.match(new RegExp(`reanimated or raised from the discard pile, gain ${NUM} Pulse and that Hero gains \\+${NUM} Attack permanently`, "i")))) { push("reanimate", { k: "pulse", n: +m[1] }, "ramp on reanimation"); out.push({ event: "reanimate", do: { k: "buffAt", atk: +m[2], perm: true } }); }
+  else if ((m = t.match(new RegExp(`reanimated or raised from the discard pile, gain ${NUM} Pulse`, "i")))) push("reanimate", { k: "pulse", n: +m[1] }, "Pulse on reanimation");
+  if ((m = t.match(new RegExp(`reanimated or raised from the discard pile, that Hero gains \\+${NUM} Attack(?: and \\+${NUM} Health)? permanently`, "i")))) push("reanimate", { k: "buffAt", atk: +m[1], hp: m[2] ? +m[2] : 0, perm: true }, "empowers the risen");
+  if ((m = t.match(new RegExp(`reanimated or raised from the discard pile, deal ${NUM} damage to an enemy Hero of your choice`, "i")))) push("reanimate", { k: "ops", ops: [{ op: "damage", n: +m[1], target: "enemyChoice" }] }, "necrotic burst on reanimation");
+  if ((m = t.match(/reanimated or raised from the discard pile, draw (a|\d+) cards?/i))) push("reanimate", { k: "ops", ops: [{ op: "draw", n: m[1] === "a" ? 1 : +m[1] }] }, "draw on reanimation", 1);
   if ((m = t.match(new RegExp(`[Ww]henever you gain Pulse from a card effect, \\w+ heals ${NUM} Health`, "i")))) push("gainPulse", { k: "healSelfN", n: +m[1] }, "heals on Pulse gain");
   if ((m = t.match(new RegExp(`whenever a Hero you control's ward is fully consumed[^,]*, that Hero heals ${NUM} Health`, "i")))) push("wardConsumed", { k: "healEvent", n: +m[1] }, "heal on ward break");
   if ((m = t.match(new RegExp(`whenever a Hero you control dies, all remaining Heroes you control gain \\+${NUM} Attack and \\+${NUM} Health permanently`, "i")))) push("friendlyDied", { k: "buffAll", atk: +m[1], hp: +m[2], perm: true }, "team grows on death");
@@ -1084,6 +1090,8 @@ function compileCard(card) {
       compileOnDeath(card.text, out, out.autoBits);
       out.flags = compileFlags(card.text, out.autoBits);
       out.auxFlags = compileFlags(card.auxText, out.auxAutoBits);
+      // Vhorrath: raise Heroes into this lane at full strength (+ optional bonus Health)
+      if (/Heroes reanimated or raised into this lane enter at full (?:Attack|strength)/i.test(norm(card.auxText))) { out.auxReviveFull = true; out.auxAutoBits.push("raises at full strength"); const rhpm = norm(card.auxText).match(/and with \+(\d+) Health/i); if (rhpm) out.auxReviveHp = +rhpm[1]; }
       const hRed = parseRedirect(card.text); if (hRed) { out.redirect = Object.assign({ protector: "self" }, hRed); out.autoBits.push("attack redirect"); }
       const hBg = parseBodyguard(card.text); if (hBg) { out.bodyguard = Object.assign({ protector: "self" }, hBg); out.autoBits.push("bodyguard"); }
       const aRed = parseRedirect(card.auxText); if (aRed) { out.auxRedirect = Object.assign({ protector: "laneHero" }, aRed); out.auxAutoBits.push("attack redirect"); }
@@ -1924,8 +1932,13 @@ async function runOp(op, pi, ctx) {
       if (!chosen) break;
       const lane = lanes.find(l => l.L.realm === cardById(chosen.id).realm);
       P.discard.splice(chosen.ix, 1);
-      G.players[pi].lanes[lane.li].hero = heroInst(chosen.id);
+      const rmP = laneReviveMods(pi, lane.li);
+      const instP = heroInst(chosen.id);
+      instP.revived = true;
+      if (rmP.hp) instP.permHp = (instP.permHp || 0) + rmP.hp;
+      G.players[pi].lanes[lane.li].hero = instP;
       log(`${P.name} raises ${cardById(chosen.id).name} from the discard pile into lane ${lane.li + 1}!`, P.isAI ? "ai" : "");
+      emit("reanimate", pi, { at: { pi, li: lane.li } });
       break;
     }
     case "reanimate": {
@@ -1939,10 +1952,14 @@ async function runOp(op, pi, ctx) {
       if (!chosen) break;
       const lane = lanes.find(l => l.L.realm === cardById(chosen.id).realm);
       P.discard.splice(chosen.ix, 1);
+      const rm = laneReviveMods(pi, lane.li);
       const inst = heroInst(chosen.id);
-      inst.permAtk = (inst.permAtk || 0) - op.weaken;   // returns weakened
+      inst.revived = true;
+      if (!rm.full) inst.permAtk = (inst.permAtk || 0) - op.weaken;   // returns weakened unless the lane raises at full strength
+      if (rm.hp) inst.permHp = (inst.permHp || 0) + rm.hp;
       G.players[pi].lanes[lane.li].hero = inst;
-      log(`${P.name} reanimates ${cardById(chosen.id).name} from the discard pile into lane ${lane.li + 1} (-${op.weaken} Attack).`, P.isAI ? "ai" : "");
+      log(`${P.name} reanimates ${cardById(chosen.id).name} from the discard pile into lane ${lane.li + 1}${rm.full ? " at full strength" : ` (-${op.weaken} Attack)`}${rm.hp ? ` (+${rm.hp} Health)` : ""}.`, P.isAI ? "ai" : "");
+      emit("reanimate", pi, { at: { pi, li: lane.li } });
       break;
     }
     case "armyRide": P.armyAnyLaneUntil = G.gt + 2; P.armyInitBonus = op.atk; P.armyInitUntil = G.gt + 2; log(`${P.name}'s Heroes may attack any lane (+${op.atk} when attacking) until the end of next turn!`); break;
@@ -2597,9 +2614,20 @@ function emit(event, pi, data) {
   }
 }
 
+// Vhorrath: some auxes make Heroes reanimated/raised INTO their lane come back
+// at full strength and/or with bonus Health.
+function laneReviveMods(pi, li) {
+  let full = false, hp = 0;
+  const L = G.players[pi] && G.players[pi].lanes[li];
+  if (!L) return { full, hp };
+  for (const a of L.aux) { if (!a) continue; const f = fx(a.cardId); if (f.auxReviveFull) full = true; if (f.auxReviveHp) hp = Math.max(hp, f.auxReviveHp); }
+  return { full, hp };
+}
+
 function applyListen(dd, pi, pos, h, data) {
   const nm = cardById(h.cardId).name;
   if (dd.k === "pulse") { G.players[pi].pulse += dd.n; log(`${G.players[pi].name} gains ${dd.n} Pulse (${nm}).`, G.players[pi].isAI ? "ai" : ""); }
+  else if (dd.k === "buffAt") { const tg = heroAt(data && data.at); if (tg) { if (dd.perm) { tg.permAtk += dd.atk || 0; tg.permHp += dd.hp || 0; } else { tg.temp.push({ atk: dd.atk || 0, hp: dd.hp || 0, until: G.gt + (dd.dur || 0) }); } log(`${cardById(tg.cardId).name} gains +${dd.atk || 0}/+${dd.hp || 0}${dd.perm ? " permanently" : ""} (${nm}).`); } }
   else if (dd.k === "buffSelf") {
     if (dd.perm) { h.permAtk += dd.atk || 0; h.permHp += dd.hp || 0; }
     else h.temp.push({ atk: dd.atk || 0, hp: dd.hp || 0, until: G.gt + (dd.dur || 0) });
