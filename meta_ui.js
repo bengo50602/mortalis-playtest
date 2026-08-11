@@ -565,8 +565,9 @@
         : "";
       var moreStages = Campaign.nextStage(chapter) >= 0;
       var title = res.boss ? "Champion defeated!" : "Victory";
+      var subtext = res.boss ? "The champion falls. " + (chapter < 15 ? "Chapter " + (chapter + 1) + " lies ahead." : "The campaign is won — every realm has fallen to you.") : "";
       body = "<h2 style='color:var(--good)'>" + title + "</h2>"
-        + "<div style='color:var(--muted)'>" + (res.boss ? "The champion falls. " + (chapter < 15 ? "Chapter " + (chapter + 1) + " lies ahead." : "The campaign is won — every realm has fallen to you.") : "Duel won.") + "</div>"
+        + (subtext ? "<div style='color:var(--muted)'>" + subtext + "</div>" : "")
         + lines + newCards
         + "<div class='row'>"
         + (moreStages ? "<button class='mbtn primary' id='br-next'>Continue</button>" : (chapter < 15 ? "<button class='mbtn primary' id='br-nextch'>Next chapter</button>" : ""))

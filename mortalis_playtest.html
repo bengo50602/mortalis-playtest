@@ -377,7 +377,7 @@ body.on-splash .topbar{display:none}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260811133431</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260811185909</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -8266,7 +8266,8 @@ function compileContinuous(text, sourceKind, out) {
 function compileRecurring(text, out) {
   let m;
   for (let s of sentences(text)) {
-    s = s.replace(/^While (?:equipped|in this slot), /i, "");
+    s = s.replace(/^While (?:equipped|in this slot|this card is in play), /i, "");
+    if ((m = s.match(/^At the start of your turn, you may discard 1 card in your hand to give a Hero you control \+(\d+) Attack until end of turn/i))) { out.sot.push({ op: "discardBuff", atk: +m[1] }); out.autoBits.push("discard to empower"); continue; }
     if ((m = s.match(new RegExp(`^At the start of each of your turns, gain ${NUM} Pulse`, "i")))) { out.sot.push({ op: "pulse", n: +m[1] }); out.autoBits.push("start-of-turn pulse"); }
     else if (/^At the start of each of your turns, draw a card/i.test(s)) {
       const rider = norm(text).match(/Whenever you draw a card this way,(?: you)?(?: also)? gain (\d+) Pulse/i);
@@ -9802,6 +9803,27 @@ async function runOp(op, pi, ctx) {
       P.pulse += (ctx.lastCost || 0) * (op.mult || 1);
       log(`${P.name} gains ${(ctx.lastCost || 0) * (op.mult || 1)} Pulse.`);
       break;
+    case "discardBuff": {
+      if (!P.hand.length || !heroesOf(pi).length) break;
+      if (P.isAI) {
+        if (P.hand.length < 4) break;   // AI only spends spare cards
+        const worst = P.hand.map((id, ix) => ({ id, ix })).sort((a, b) => cardById(a.id).cost - cardById(b.id).cost)[0];
+        const best = heroesOf(pi).sort((a, b) => effAtk(pi, b.li) - effAtk(pi, a.li))[0];
+        (P.discard || (P.discard = [])).push(P.hand.splice(worst.ix, 1)[0]);
+        heroAt(best).temp.push({ atk: op.atk, hp: 0, until: G.gt });
+        log(`${ctx.sourceName}: discards a card — ${nameOf(best)} gains +${op.atk} Attack this turn.`, true);
+      } else {
+        let yes = 0;
+        if (window.UI && UI.pickOption) yes = await UI.pickOption(`${ctx.sourceName}: discard a card to give one of your Heroes +${op.atk} Attack this turn?`, ["Yes — discard a card", "No"]);
+        if (yes !== 0) break;
+        const hi = await UI.pickHandCard("Discard which card?");
+        if (hi == null) break;
+        (P.discard || (P.discard = [])).push(P.hand.splice(hi, 1)[0]);
+        const t = await UI.pickHero(`Give +${op.atk} Attack to which Hero?`, heroesOf(pi));
+        if (t && heroAt(t)) { heroAt(t).temp.push({ atk: op.atk, hp: 0, until: G.gt }); log(`${ctx.sourceName}: ${nameOf(t)} gains +${op.atk} Attack this turn.`); }
+      }
+      break;
+    }
     case "furyDamage": {
       const enemies = heroesOf(1 - pi).filter(t => heroAt({ pi, li: t.li }));
       if (!enemies.length) { log(`No valid target (needs your Hero in the same lane) — fizzles.`); break; }
@@ -9847,7 +9869,7 @@ async function runOp(op, pi, ctx) {
       const slots = [];
       for (let p = 0; p < 2; p++) G.players[p].slots.forEach((s, si) => {
         if (op.enemyOnly && p === pi) return;
-        if (s && s.kind !== "pact") slots.push({ p, si, label: `${G.players[p].name}'s ${s.kind}${s.faceDown && p !== pi ? " (face-down)" : ": " + cardById(s.cardId).name}` });
+        if (s && s.kind !== "pact") { const hidden = s.faceDown && p !== pi; const kindCap = s.kind.charAt(0).toUpperCase() + s.kind.slice(1); slots.push({ p, si, hidden, label: hidden ? `Face-down ${kindCap}` : `${cardById(s.cardId).name} (${s.kind})` }); }
       });
       if (!slots.length) { log(`No Hex/Rite/Pact to destroy — fizzles.`); break; }
       let pick = slots.find(s => s.p !== pi) || slots[0];
@@ -9856,7 +9878,7 @@ async function runOp(op, pi, ctx) {
         if (idx == null) break;
         pick = slots[idx];
       }
-      log(`${P.name} destroys ${cardById(G.players[pick.p].slots[pick.si].cardId).name} (${G.players[pick.p].slots[pick.si].kind}).`);
+      { const ps = G.players[pick.p].slots[pick.si]; log(`${P.name} destroys ${pick.hidden ? "a face-down " + ps.kind : cardById(ps.cardId).name + " (" + ps.kind + ")"}.`); }
       G.players[pick.p].slots[pick.si] = null;
       break;
     }
@@ -10009,7 +10031,7 @@ async function runOp(op, pi, ctx) {
     case "ward": {
       let targets = await resolveTargets(op, pi, ctx);
       let warded = 0;
-      for (const t of targets) if (heroAt(t)) { heroAt(t).ward += op.n; warded++; log(`${nameOf(t)} gains a ${op.n}-damage ward.`); }
+      for (const t of targets) if (heroAt(t)) { heroAt(t).ward += op.n; heroAt(t).wardCount = (heroAt(t).wardCount || 0) + 1; warded++; log(`${nameOf(t)} gains a ${op.n}-damage ward.`); }
       if (op.pulsePerWard && warded) { const g = Math.min(warded * op.pulsePerWard, op.pulseMax || 99); P.pulse += g; log(`${P.name} gains ${g} Pulse.`); }
       break;
     }
@@ -10353,7 +10375,7 @@ function applyListen(dd, pi, pos, h, data) {
     log(`${nm} gains +${dd.atk || 0}/+${dd.hp || 0}${dd.perm ? " permanently" : ""}.`);
   } else if (dd.k === "healEvent") { const tg = heroAt(data.at); if (tg) { const hd = applyHeal(tg, dd.n); if (hd) log(`${cardById(tg.cardId).name} heals ${hd} (${nm}).`); } }
   else if (dd.k === "healSelfN") { const hd = applyHeal(h, dd.n); if (hd) log(`${nm} heals ${hd}.`); }
-  else if (dd.k === "wardAt") { const tg = heroAt(data.at); if (tg) { tg.ward = (tg.ward || 0) + dd.n; log(`${cardById(tg.cardId).name} gains a ward (${dd.n}) — ${nm}.`); } }
+  else if (dd.k === "wardAt") { const tg = heroAt(data.at); if (tg) { tg.ward = (tg.ward || 0) + dd.n; tg.wardCount = (tg.wardCount || 0) + 1; log(`${cardById(tg.cardId).name} gains a ward (${dd.n}) — ${nm}.`); } }
   else if (dd.k === "ops") {
     (async () => {
       const c2 = { laneIdx: pos.li, sourceName: nm };
@@ -10454,7 +10476,7 @@ function dealDamage(t, amount, opts) {
     outer: for (const L2 of G.players[t.pi].lanes) for (const a of L2.aux) if (a && !seenCW.has(a.uid)) {
       seenCW.add(a.uid);
       const cm3 = norm(cardById(a.cardId).auxText || "").match(/once per turn, when a Hero you control would take lethal combat damage, it first gains a ward that prevents the next (\d+) damage/i);
-      if (cm3 && a.cwGt !== G.gt) { a.cwGt = G.gt; h.ward = (h.ward || 0) + +cm3[1]; log(`${cardById(a.cardId).name}: ${c.name} gains a ward (${cm3[1]}).`); break outer; }
+      if (cm3 && a.cwGt !== G.gt) { a.cwGt = G.gt; h.ward = (h.ward || 0) + +cm3[1]; h.wardCount = (h.wardCount || 0) + 1; log(`${cardById(a.cardId).name}: ${c.name} gains a ward (${cm3[1]}).`); break outer; }
     }
   }
   // wards absorb damage before it reaches Health
@@ -10463,7 +10485,7 @@ function dealDamage(t, amount, opts) {
     h.ward -= absorbed;
     amount -= absorbed;
     log(`${c.name}'s ward absorbs ${absorbed}.`);
-    if (h.ward === 0) emit("wardConsumed", t.pi, { at: t });
+    if (h.ward === 0) { h.wardCount = 0; emit("wardConsumed", t.pi, { at: t }); }
     if (amount <= 0) return 0;
   }
   const before = curHp(t.pi, t.li);
@@ -12792,8 +12814,9 @@ const UI = {
         const wardPill = (P.blockAtkGt >= G.gt && !P.blockAtkUsed && P.blockAtkLane === li)
           ? `<span class="pill ward" title="The first attack declared against your Heroes on your opponent's next turn is blocked.">ward armed</span>` : "";
         // absorb-ward badge: a shield showing how much damage the ward will soak
+        const wardCount = L.hero.wardCount || 0;
         const wardShield = (L.hero.ward > 0)
-          ? `<span class="pill wardshield" title="Ward — the next ${L.hero.ward} damage to this Hero is absorbed before its Health.">&#128737;&#65039; ${L.hero.ward}</span>` : "";
+          ? `<span class="pill wardshield" title="Ward${wardCount > 1 ? "s (×" + wardCount + ")" : ""} — the next ${L.hero.ward} damage to this Hero is absorbed before its Health.">&#128737;&#65039; ${L.hero.ward}${wardCount > 1 ? " &times;" + wardCount : ""}</span>` : "";
         const relicPills = wardPill + wardShield + L.hero.relics.map(r => `<span class="pill relic" data-ruid="${r.uid}" title="${(cardById(r.cardId).text || "").replace(/"/g, "&quot;")}">${cardById(r.cardId).name}${r.counters ? " ⚒" + r.counters : ""}</span>`).join(" ");
         const freeRelic = C().relicSlotsPerHero - L.hero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0);
         div.innerHTML = `<div class="cost-orb">${c.cost}</div>
@@ -13065,7 +13088,7 @@ const UI = {
       if (r2 && ctx.pi === 0 && G.active === 0 && !G.over) {
         fx(r2.cardId).activated.forEach((ab, i) => {
           const used = r2.usedAb && r2.usedAb[i];
-          UI.addAction((used ? "Used this turn — " : "Activate: ") + ab.raw.slice(0, 60) + (ab.ops ? "" : " (manual)"),
+          UI.addAction((used ? "Used this turn" : "Activate effect" + (ab.cost ? " (" + ab.cost + " Pulse)" : "")) + (ab.ops ? "" : " (manual)"),
             async () => { pushUndo(); await activateAbility(0, ctx.li, r2, cardById(r2.cardId).name, ab, i, r2); }, !used && !!ab.ops);
         });
       }
@@ -13134,14 +13157,14 @@ const UI = {
       if (ctx.pi === 0 && G.active === 0 && !G.over && !UI.busy) {
         fx(c.id).activated.forEach((ab, i) => {
           const used = h.usedAb && h.usedAb[i];
-          UI.addAction((used ? "Used this turn — " : "Activate: ") + ab.raw.slice(0, 70) + (ab.ops ? "" : " (manual)"),
+          UI.addAction((used ? "Used this turn" : "Activate effect" + (ab.cost ? " (" + ab.cost + " Pulse)" : "")) + (ab.ops ? "" : " (manual)"),
             async () => { pushUndo(); await activateAbility(0, ctx.li, h, c.name, ab, i); }, !used && !!ab.ops);
         });
         h.relics.forEach(r => {
           const rc = cardById(r.cardId);
           fx(r.cardId).activated.forEach((ab, i) => {
             const used = r.usedAb && r.usedAb[i];
-            UI.addAction((used ? "Used this turn — " : "Activate ") + rc.name + ": " + ab.raw.slice(0, 50) + (ab.ops ? "" : " (manual)"),
+            UI.addAction((used ? "Used this turn" : "Activate " + rc.name + (ab.cost ? " (" + ab.cost + " Pulse)" : "")) + (ab.ops ? "" : " (manual)"),
               async () => { pushUndo(); await activateAbility(0, ctx.li, r, rc.name, ab, i, r); });
           });
         });
@@ -15207,8 +15230,9 @@ window.addEventListener("DOMContentLoaded", () => {
         : "";
       var moreStages = Campaign.nextStage(chapter) >= 0;
       var title = res.boss ? "Champion defeated!" : "Victory";
+      var subtext = res.boss ? "The champion falls. " + (chapter < 15 ? "Chapter " + (chapter + 1) + " lies ahead." : "The campaign is won — every realm has fallen to you.") : "";
       body = "<h2 style='color:var(--good)'>" + title + "</h2>"
-        + "<div style='color:var(--muted)'>" + (res.boss ? "The champion falls. " + (chapter < 15 ? "Chapter " + (chapter + 1) + " lies ahead." : "The campaign is won — every realm has fallen to you.") : "Duel won.") + "</div>"
+        + (subtext ? "<div style='color:var(--muted)'>" + subtext + "</div>" : "")
         + lines + newCards
         + "<div class='row'>"
         + (moreStages ? "<button class='mbtn primary' id='br-next'>Continue</button>" : (chapter < 15 ? "<button class='mbtn primary' id='br-nextch'>Next chapter</button>" : ""))

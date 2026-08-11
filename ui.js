@@ -285,8 +285,9 @@ const UI = {
         const wardPill = (P.blockAtkGt >= G.gt && !P.blockAtkUsed && P.blockAtkLane === li)
           ? `<span class="pill ward" title="The first attack declared against your Heroes on your opponent's next turn is blocked.">ward armed</span>` : "";
         // absorb-ward badge: a shield showing how much damage the ward will soak
+        const wardCount = L.hero.wardCount || 0;
         const wardShield = (L.hero.ward > 0)
-          ? `<span class="pill wardshield" title="Ward — the next ${L.hero.ward} damage to this Hero is absorbed before its Health.">&#128737;&#65039; ${L.hero.ward}</span>` : "";
+          ? `<span class="pill wardshield" title="Ward${wardCount > 1 ? "s (×" + wardCount + ")" : ""} — the next ${L.hero.ward} damage to this Hero is absorbed before its Health.">&#128737;&#65039; ${L.hero.ward}${wardCount > 1 ? " &times;" + wardCount : ""}</span>` : "";
         const relicPills = wardPill + wardShield + L.hero.relics.map(r => `<span class="pill relic" data-ruid="${r.uid}" title="${(cardById(r.cardId).text || "").replace(/"/g, "&quot;")}">${cardById(r.cardId).name}${r.counters ? " ⚒" + r.counters : ""}</span>`).join(" ");
         const freeRelic = C().relicSlotsPerHero - L.hero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0);
         div.innerHTML = `<div class="cost-orb">${c.cost}</div>
@@ -558,7 +559,7 @@ const UI = {
       if (r2 && ctx.pi === 0 && G.active === 0 && !G.over) {
         fx(r2.cardId).activated.forEach((ab, i) => {
           const used = r2.usedAb && r2.usedAb[i];
-          UI.addAction((used ? "Used this turn — " : "Activate: ") + ab.raw.slice(0, 60) + (ab.ops ? "" : " (manual)"),
+          UI.addAction((used ? "Used this turn" : "Activate effect" + (ab.cost ? " (" + ab.cost + " Pulse)" : "")) + (ab.ops ? "" : " (manual)"),
             async () => { pushUndo(); await activateAbility(0, ctx.li, r2, cardById(r2.cardId).name, ab, i, r2); }, !used && !!ab.ops);
         });
       }
@@ -627,14 +628,14 @@ const UI = {
       if (ctx.pi === 0 && G.active === 0 && !G.over && !UI.busy) {
         fx(c.id).activated.forEach((ab, i) => {
           const used = h.usedAb && h.usedAb[i];
-          UI.addAction((used ? "Used this turn — " : "Activate: ") + ab.raw.slice(0, 70) + (ab.ops ? "" : " (manual)"),
+          UI.addAction((used ? "Used this turn" : "Activate effect" + (ab.cost ? " (" + ab.cost + " Pulse)" : "")) + (ab.ops ? "" : " (manual)"),
             async () => { pushUndo(); await activateAbility(0, ctx.li, h, c.name, ab, i); }, !used && !!ab.ops);
         });
         h.relics.forEach(r => {
           const rc = cardById(r.cardId);
           fx(r.cardId).activated.forEach((ab, i) => {
             const used = r.usedAb && r.usedAb[i];
-            UI.addAction((used ? "Used this turn — " : "Activate ") + rc.name + ": " + ab.raw.slice(0, 50) + (ab.ops ? "" : " (manual)"),
+            UI.addAction((used ? "Used this turn" : "Activate " + rc.name + (ab.cost ? " (" + ab.cost + " Pulse)" : "")) + (ab.ops ? "" : " (manual)"),
               async () => { pushUndo(); await activateAbility(0, ctx.li, r, rc.name, ab, i, r); });
           });
         });
