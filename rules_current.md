@@ -2984,9 +2984,9 @@ When this Incantation resolves, destroy an enemy Hero with 70 or less Health rem
 ### Heroes
 *(Each Hero card lists both its Hero Mode and Auxiliary Mode)*
 
-**Gargoyle Skirmisher**
+**Harpy Skirmisher**
 Hero Mode — Cost: 3 Pulse | Attack/Health: 60/40 | Rarity: Common
-When Gargoyle Skirmisher enters play, deal 20 damage to an enemy Hero of your choice.
+When Harpy Skirmisher enters play, deal 20 damage to an enemy Hero of your choice.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 
@@ -3014,9 +3014,9 @@ When Cyclops Boulderhurler enters play, destroy an enemy Hero with 40 or less He
 Auxiliary Mode — Cost: 4 Pulse | 2 slots
 While in this slot, the Hero in this lane continuously has +40 Attack.
 
-**Faun of the Oracle**
+**Nymph of the Oracle**
 Hero Mode — Cost: 5 Pulse | Attack/Health: 70/60 | Rarity: Uncommon
-When Faun of the Oracle enters play, draw 1 card.
+When Nymph of the Oracle enters play, draw 1 card.
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the Hero in this lane continuously has +30 Attack.
 

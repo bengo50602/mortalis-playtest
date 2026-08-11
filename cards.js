@@ -6097,15 +6097,15 @@ window.DEFAULT_DATA = {
    "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
   },
   {
-   "id": "heliaxos--gargoyle-skirmisher",
+   "id": "heliaxos--harpy-skirmisher",
    "realm": "Heliaxos",
-   "name": "Gargoyle Skirmisher",
+   "name": "Harpy Skirmisher",
    "type": "hero",
    "cost": 3,
    "atk": 60,
    "hp": 40,
    "rarity": "Common",
-   "text": "When Gargoyle Skirmisher enters play, deal 20 damage to an enemy Hero of your choice.",
+   "text": "When Harpy Skirmisher enters play, deal 20 damage to an enemy Hero of your choice.",
    "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
@@ -6167,15 +6167,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
   },
   {
-   "id": "heliaxos--faun-of-the-oracle",
+   "id": "heliaxos--nymph-of-the-oracle",
    "realm": "Heliaxos",
-   "name": "Faun of the Oracle",
+   "name": "Nymph of the Oracle",
    "type": "hero",
    "cost": 5,
    "atk": 70,
    "hp": 60,
    "rarity": "Uncommon",
-   "text": "When Faun of the Oracle enters play, draw 1 card.",
+   "text": "When Nymph of the Oracle enters play, draw 1 card.",
    "auxCost": 3,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
