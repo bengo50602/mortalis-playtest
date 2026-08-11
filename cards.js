@@ -458,15 +458,15 @@ window.DEFAULT_DATA = {
    "text": "When this Incantation resolves, choose up to 2 Heroes (any Heroes in play, yours or your opponent's). Deal 30 damage to each chosen Hero."
   },
   {
-   "id": "luminar--squire-elenya",
+   "id": "luminar--squire-aldwin",
    "realm": "Luminar",
-   "name": "Squire Elenya",
+   "name": "Squire Aldwin",
    "type": "hero",
    "cost": 2,
    "atk": 40,
    "hp": 30,
    "rarity": "Common",
-   "text": "When Elenya enters play, draw a card if you control a Hero from a Realm other than Luminar.",
+   "text": "When Aldwin enters play, draw a card if you control a Hero from a Realm other than Luminar.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "At the start of each of your turns, if you control a Hero from another Realm, gain 1 Pulse."
@@ -486,15 +486,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane has +20 Health."
   },
   {
-   "id": "luminar--dame-ysolde",
+   "id": "luminar--sir-cedric",
    "realm": "Luminar",
-   "name": "Dame Ysolde",
+   "name": "Sir Cedric",
    "type": "hero",
    "cost": 3,
    "atk": 50,
    "hp": 50,
    "rarity": "Common",
-   "text": "While Ysolde is in play, whenever you play a Hero from a Realm other than Luminar, that Hero gains +10 Health permanently.",
+   "text": "While Cedric is in play, whenever you play a Hero from a Realm other than Luminar, that Hero gains +10 Health permanently.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Health."
@@ -528,23 +528,23 @@ window.DEFAULT_DATA = {
    "auxText": "When this card enters play, give the Hero in this lane +20 Health. Draw 1 card."
   },
   {
-   "id": "luminar--elowen-lightward",
+   "id": "luminar--rowan-lightward",
    "realm": "Luminar",
-   "name": "Elowen Lightward",
+   "name": "Rowan Lightward",
    "type": "hero",
    "cost": 5,
    "atk": 90,
    "hp": 80,
    "rarity": "Uncommon",
-   "text": "While Elowen is in play, all Heroes you control from Realms other than Luminar have +10 Attack and +10 Health.",
+   "text": "While Rowan is in play, all Heroes you control from Realms other than Luminar have +10 Attack and +10 Health.",
    "auxCost": 3,
    "auxSlots": 1,
    "auxText": "While in this slot, neighboring Heroes gain +10 Attack and +10 Health."
   },
   {
-   "id": "luminar--thalia-oathkeeper",
+   "id": "luminar--tristan-oathkeeper",
    "realm": "Luminar",
-   "name": "Thalia Oathkeeper",
+   "name": "Tristan Oathkeeper",
    "type": "hero",
    "cost": 6,
    "atk": 110,
@@ -598,15 +598,15 @@ window.DEFAULT_DATA = {
    "auxText": "At the start of each of your turns, gain 1 Pulse for each neighboring lane with a Hero (max 2)."
   },
   {
-   "id": "luminar--elyndra-herald-of-dawn",
+   "id": "luminar--lucan-herald-of-dawn",
    "realm": "Luminar",
-   "name": "Elyndra, Herald of Dawn",
+   "name": "Lucan, Herald of Dawn",
    "type": "hero",
    "cost": 10,
    "atk": 190,
    "hp": 150,
    "rarity": "Eternal",
-   "text": "While Elyndra is in play, Heroes you control in neighboring lanes continuously have +50 Attack. At the start of each of your turns, gain 2 Pulse.",
+   "text": "While Lucan is in play, Heroes you control in neighboring lanes continuously have +50 Attack. At the start of each of your turns, gain 2 Pulse.",
    "auxCost": 8,
    "auxSlots": 2,
    "auxText": "While this card is in play, all Heroes you control continuously have +10 Attack and +10 Health. Whenever any battle occurs anywhere on the board, gain 1 Pulse. When this card enters play, draw 2 cards."
@@ -785,15 +785,15 @@ window.DEFAULT_DATA = {
    "text": "When this Incantation resolves, choose up to 2 Heroes you control — each permanently gains +30 Attack."
   },
   {
-   "id": "runespire--ilsette-novice-of-the-ninth-circle",
+   "id": "runespire--ilric-novice-of-the-ninth-circle",
    "realm": "Runespire",
-   "name": "Ilsette, Novice of the Ninth Circle",
+   "name": "Ilric, Novice of the Ninth Circle",
    "type": "hero",
    "cost": 2,
    "atk": 40,
    "hp": 20,
    "rarity": "Common",
-   "text": "While Ilsette is in play, whenever an enemy Hero dies, gain 1 Pulse.",
+   "text": "While Ilric is in play, whenever an enemy Hero dies, gain 1 Pulse.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, whenever an enemy Relic or enemy Auxiliary card is destroyed, gain 1 Pulse."
@@ -841,15 +841,15 @@ window.DEFAULT_DATA = {
    "auxText": "When this card enters play, destroy one enemy Relic or enemy Auxiliary card of your choice, then destroy this card."
   },
   {
-   "id": "runespire--archivist-denna-vail",
+   "id": "runespire--archivist-doran-vail",
    "realm": "Runespire",
-   "name": "Archivist Denna Vail",
+   "name": "Archivist Doran Vail",
    "type": "hero",
    "cost": 4,
    "atk": 80,
    "hp": 50,
    "rarity": "Uncommon",
-   "text": "While Denna is in play, whenever an enemy Hex, Rite, or Pact is destroyed or fizzles, gain 1 Pulse and Denna gains +10 Attack until the end of your next turn.",
+   "text": "While Doran is in play, whenever an enemy Hex, Rite, or Pact is destroyed or fizzles, gain 1 Pulse and Doran gains +10 Attack until the end of your next turn.",
    "auxCost": 2,
    "auxSlots": 2,
    "auxText": "Once per turn, you may pay 3 Pulse to destroy an enemy Rite or Pact."
@@ -883,9 +883,9 @@ window.DEFAULT_DATA = {
    "auxText": "Once per turn, when an enemy Relic or enemy Auxiliary card enters play, you may pay 2 Pulse to destroy it immediately."
   },
   {
-   "id": "runespire--miriel-of-the-drowned-library",
+   "id": "runespire--maldrek-of-the-drowned-library",
    "realm": "Runespire",
-   "name": "Miriel of the Drowned Library",
+   "name": "Maldrek of the Drowned Library",
    "type": "hero",
    "cost": 6,
    "atk": 120,
@@ -1140,15 +1140,15 @@ window.DEFAULT_DATA = {
    "auxText": "When this card enters play, an enemy Hero of your choice loses 20 Health (stat reduction), then destroy this card."
   },
   {
-   "id": "balemaw--vessa-the-whisper-tongue",
+   "id": "balemaw--vorreth-the-whisper-tongue",
    "realm": "Balemaw",
-   "name": "Vessa the Whisper-Tongue",
+   "name": "Vorreth the Whisper-Tongue",
    "type": "hero",
    "cost": 3,
    "atk": 60,
    "hp": 40,
    "rarity": "Common",
-   "text": "While Vessa is in play, whenever your opponent plays a Hero, that Hero enters play with −10 Attack permanently.",
+   "text": "While Vorreth is in play, whenever your opponent plays a Hero, that Hero enters play with −10 Attack permanently.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, enemy Heroes attacking this lane have −10 Attack during that combat."
@@ -1238,15 +1238,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, at the start of each of your turns, all enemy Heroes get −10 Attack until end of turn."
   },
   {
-   "id": "balemaw--mother-vh-l-the-hollow-choir",
+   "id": "balemaw--father-vh-l-the-hollow-choir",
    "realm": "Balemaw",
-   "name": "Mother Vhûl, the Hollow Choir",
+   "name": "Father Vhûl, the Hollow Choir",
    "type": "hero",
    "cost": 8,
    "atk": 150,
    "hp": 110,
    "rarity": "Ultra-Rare",
-   "text": "When Mother Vhûl enters play, all enemy Heroes permanently lose 20 Health (stat reduction, not damage). While she is in play, whenever an enemy Hero dies, all remaining enemy Heroes get −10 Attack permanently.",
+   "text": "When Father Vhûl enters play, all enemy Heroes permanently lose 20 Health (stat reduction, not damage). While he is in play, whenever an enemy Hero dies, all remaining enemy Heroes get −10 Attack permanently.",
    "auxCost": 6,
    "auxSlots": 1,
    "auxText": "While in this slot, your opponent's Hexes cost 1 additional Pulse to pay for when they trigger (if they cannot pay, the Hex fizzles as normal)."
@@ -1467,15 +1467,15 @@ window.DEFAULT_DATA = {
    "auxText": "The next time you gain Pulse from another card effect, gain 2 additional Pulse, then destroy this card."
   },
   {
-   "id": "gildharbor--mira-the-coinwright",
+   "id": "gildharbor--milo-the-coinwright",
    "realm": "Gildharbor",
-   "name": "Mira the Coinwright",
+   "name": "Milo the Coinwright",
    "type": "hero",
    "cost": 2,
    "atk": 30,
    "hp": 90,
    "rarity": "Common",
-   "text": "While Mira is in play, whenever you gain Pulse from a card effect, Mira gains +10 Health permanently (maximum +20 Health per turn from this effect).",
+   "text": "While Milo is in play, whenever you gain Pulse from a card effect, Milo gains +10 Health permanently (maximum +20 Health per turn from this effect).",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "At the start of each of your turns, gain 2 Pulse."
@@ -1509,23 +1509,23 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Health and heals 10 Health at the start of each of your turns."
   },
   {
-   "id": "gildharbor--captain-zarah-of-the-amber-fleet",
+   "id": "gildharbor--captain-zoran-of-the-amber-fleet",
    "realm": "Gildharbor",
-   "name": "Captain Zarah of the Amber Fleet",
+   "name": "Captain Zoran of the Amber Fleet",
    "type": "hero",
    "cost": 4,
    "atk": 60,
    "hp": 150,
    "rarity": "Uncommon",
-   "text": "At the start of each of your turns, gain 2 Pulse. Whenever you gain Pulse from a card effect, Zarah heals 10 Health.",
+   "text": "At the start of each of your turns, gain 2 Pulse. Whenever you gain Pulse from a card effect, Zoran heals 10 Health.",
    "auxCost": 2,
    "auxSlots": 2,
    "auxText": "At the start of each of your turns, gain 3 Pulse."
   },
   {
-   "id": "gildharbor--guildmother-ottavia",
+   "id": "gildharbor--guildmaster-otho",
    "realm": "Gildharbor",
-   "name": "Guildmother Ottavia",
+   "name": "Guildmaster Otho",
    "type": "hero",
    "cost": 5,
    "atk": 70,
@@ -1796,15 +1796,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, when the Hero in this lane is attacked, the attacker gets −20 Attack and the Hero in this lane gains +20 Attack, for that combat only."
   },
   {
-   "id": "ankhara--nefiri-handmaiden-of-dusk",
+   "id": "ankhara--nakhti-servant-of-dusk",
    "realm": "Ankhara",
-   "name": "Nefiri, Handmaiden of Dusk",
+   "name": "Nakhti, Servant of Dusk",
    "type": "hero",
    "cost": 2,
    "atk": 30,
    "hp": 30,
    "rarity": "Common",
-   "text": "While Nefiri is in play, whenever your opponent plays a Hero, that Hero enters play with −20 Health permanently.",
+   "text": "While Nakhti is in play, whenever your opponent plays a Hero, that Hero enters play with −20 Health permanently.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack and +10 Health."
@@ -1880,15 +1880,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, when the Hero in this lane declares an attack, the defending Hero gets −20 Attack and the Hero in this lane gains +20 Attack, for that combat only."
   },
   {
-   "id": "ankhara--ithara-mistress-of-a-thousand-names",
+   "id": "ankhara--ithamun-master-of-a-thousand-names",
    "realm": "Ankhara",
-   "name": "Ithara, Mistress of a Thousand Names",
+   "name": "Ithamun, Master of a Thousand Names",
    "type": "hero",
    "cost": 6,
    "atk": 90,
    "hp": 80,
    "rarity": "Rare",
-   "text": "While Ithara is in play, whenever your opponent plays a Hero, all Ankhara Heroes you control gain +20 Attack until the end of your next turn.",
+   "text": "While Ithamun is in play, whenever your opponent plays a Hero, all Ankhara Heroes you control gain +20 Attack until the end of your next turn.",
    "auxCost": 4,
    "auxSlots": 1,
    "auxText": "Once per turn, you may pay 2 Pulse to destroy an enemy Relic or enemy Auxiliary card."
@@ -2137,15 +2137,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, whenever the Hero in this lane declares an attack, it gains +10 Attack until the end of your next turn."
   },
   {
-   "id": "karakhorde--khulan-swift-bow",
+   "id": "karakhorde--kadan-swift-bow",
    "realm": "Karakhorde",
-   "name": "Khulan Swift-Bow",
+   "name": "Kadan Swift-Bow",
    "type": "hero",
    "cost": 3,
    "atk": 60,
    "hp": 30,
    "rarity": "Common",
-   "text": "Khulan may attack any enemy lane. When she attacks a lane other than her directly opposing lane, she takes 10 less combat damage from that combat.",
+   "text": "Kadan may attack any enemy lane. When he attacks a lane other than his directly opposing lane, he takes 10 less combat damage from that combat.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, when the Hero in this lane attacks a lane other than its directly opposing lane, it takes 10 less combat damage from that combat."
@@ -2179,15 +2179,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, whenever a Hero you control destroys an enemy Hero in combat, the Hero in this lane gains +10 Attack permanently."
   },
   {
-   "id": "karakhorde--yesugen-horde-mother",
+   "id": "karakhorde--yesukai-horde-father",
    "realm": "Karakhorde",
-   "name": "Yesugen, Horde-Mother",
+   "name": "Yesukai, Horde-Father",
    "type": "hero",
    "cost": 5,
    "atk": 90,
    "hp": 60,
    "rarity": "Uncommon",
-   "text": "While Yesugen is in play, when you declare an Onslaught, each participating Hero gains +10 Attack for that combat.",
+   "text": "While Yesukai is in play, when you declare an Onslaught, each participating Hero gains +10 Attack for that combat.",
    "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, all Heroes you control may attack any enemy lane."
@@ -2450,15 +2450,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, Relics you play cost 1 less Pulse (minimum 1)."
   },
   {
-   "id": "deepforge--nissa-coalbraid",
+   "id": "deepforge--nabbi-coalbraid",
    "realm": "Deepforge",
-   "name": "Nissa Coalbraid",
+   "name": "Nabbi Coalbraid",
    "type": "hero",
    "cost": 2,
    "atk": 20,
    "hp": 40,
    "rarity": "Common",
-   "text": "When Nissa enters play, you may search your deck for a Relic card, reveal it, and put it into your hand, then shuffle your deck.",
+   "text": "When Nabbi enters play, you may search your deck for a Relic card, reveal it, and put it into your hand, then shuffle your deck.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "When this card enters play, search your deck for a Relic card costing 2 or less, reveal it, and put it into your hand, then shuffle your deck. Then destroy this card."
@@ -2478,15 +2478,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, once per turn, when a Hero you control dies, you may return one of its equipped Relics to your hand instead of destroying it."
   },
   {
-   "id": "deepforge--hegga-shieldwright",
+   "id": "deepforge--hakon-shieldwright",
    "realm": "Deepforge",
-   "name": "Hegga Shieldwright",
+   "name": "Hakon Shieldwright",
    "type": "hero",
    "cost": 4,
    "atk": 60,
    "hp": 70,
    "rarity": "Common",
-   "text": "While Hegga has a Relic equipped, enemy Heroes attacking her have −10 Attack for that combat.",
+   "text": "While Hakon has a Relic equipped, enemy Heroes attacking his have −10 Attack for that combat.",
    "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, each Relic equipped to the Hero in this lane grants an additional +10 Health."
@@ -2520,9 +2520,9 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, whenever you play a Relic, gain 1 Pulse."
   },
   {
-   "id": "deepforge--forgemaster-dvalna",
+   "id": "deepforge--forgemaster-dvalin",
    "realm": "Deepforge",
-   "name": "Forgemaster Dvalna",
+   "name": "Forgemaster Dvalin",
    "type": "hero",
    "cost": 6,
    "atk": 100,
@@ -2548,15 +2548,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the first time each turn you play a Relic, draw 1 card."
   },
   {
-   "id": "deepforge--queen-mardis-ironroot",
+   "id": "deepforge--king-mardin-ironroot",
    "realm": "Deepforge",
-   "name": "Queen Mardis Ironroot",
+   "name": "King Mardin Ironroot",
    "type": "hero",
    "cost": 8,
    "atk": 140,
    "hp": 130,
    "rarity": "Ultra-Rare",
-   "text": "When Mardis enters play, search your deck for up to 2 Relic cards, reveal them, and put them into your hand, then shuffle your deck. While Mardis is in play, your Relics cost 1 less Pulse to play (minimum 1).",
+   "text": "When Mardin enters play, search your deck for up to 2 Relic cards, reveal them, and put them into your hand, then shuffle your deck. While Mardin is in play, your Relics cost 1 less Pulse to play (minimum 1).",
    "auxCost": 6,
    "auxSlots": 2,
    "auxText": "While in this slot, all Relics equipped to Heroes you control grant an additional +10 Attack and +10 Health."
@@ -2777,15 +2777,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, Heroes you control in neighboring lanes continuously have +10 Health."
   },
   {
-   "id": "aurelium--standard-bearer-quinta",
+   "id": "aurelium--standard-bearer-quintus",
    "realm": "Aurelium",
-   "name": "Standard-Bearer Quinta",
+   "name": "Standard-Bearer Quintus",
    "type": "hero",
    "cost": 2,
    "atk": 40,
    "hp": 30,
    "rarity": "Common",
-   "text": "While Quinta is in play, Heroes you control in lanes neighboring hers continuously have +10 Attack.",
+   "text": "While Quintus is in play, Heroes you control in lanes neighboring hers continuously have +10 Attack.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack and +10 Health."
@@ -2819,15 +2819,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane takes 10 less combat damage while a Hero you control occupies a neighboring lane."
   },
   {
-   "id": "aurelium--tribune-livia-sorel",
+   "id": "aurelium--tribune-livius-sorel",
    "realm": "Aurelium",
-   "name": "Tribune Livia Sorel",
+   "name": "Tribune Livius Sorel",
    "type": "hero",
    "cost": 5,
    "atk": 90,
    "hp": 70,
    "rarity": "Uncommon",
-   "text": "While Livia is in play, whenever a Hero you control destroys an enemy Hero in combat, all Heroes you control in lanes neighboring the victor gain +10 Attack permanently.",
+   "text": "While Livius is in play, whenever a Hero you control destroys an enemy Hero in combat, all Heroes you control in lanes neighboring the victor gain +10 Attack permanently.",
    "auxCost": 3,
    "auxSlots": 1,
    "auxText": "While in this slot, the first time each turn a Hero you control destroys an enemy Hero in combat, the Hero in this lane gains +10 Attack and +10 Health permanently."
@@ -2847,15 +2847,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, Heroes you control in neighboring lanes continuously have +10 Attack and +10 Health."
   },
   {
-   "id": "aurelium--legatus-octavia-ferrix",
+   "id": "aurelium--legatus-octavius-ferrix",
    "realm": "Aurelium",
-   "name": "Legatus Octavia Ferrix",
+   "name": "Legatus Octavius Ferrix",
    "type": "hero",
    "cost": 6,
    "atk": 100,
    "hp": 90,
    "rarity": "Rare",
-   "text": "The first time each turn Octavia destroys an enemy Hero in combat, gain 2 Pulse and draw 1 card.",
+   "text": "The first time each turn Octavius destroys an enemy Hero in combat, gain 2 Pulse and draw 1 card.",
    "auxCost": 4,
    "auxSlots": 2,
    "auxText": "While in this slot, whenever any Hero you control destroys an enemy Hero in combat, gain 1 Pulse (maximum 2 Pulse per turn from this effect)."
@@ -3160,15 +3160,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, at the start of each of your turns, if you control Heroes from 3 or more different Realms, draw 1 card."
   },
   {
-   "id": "oathenhall--dame-rosalind-of-the-vale",
+   "id": "oathenhall--sir-roland-of-the-vale",
    "realm": "Oathenhall",
-   "name": "Dame Rosalind of the Vale",
+   "name": "Sir Roland of the Vale",
    "type": "hero",
    "cost": 4,
    "atk": 70,
    "hp": 110,
    "rarity": "Uncommon",
-   "text": "Once per turn, you may pay 3 Pulse to Knight a Hero you control — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old). While Rosalind is in play, your Champion continuously has +20 Attack and +20 Health.",
+   "text": "Once per turn, you may pay 3 Pulse to Knight a Hero you control — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old). While Roland is in play, your Champion continuously has +20 Attack and +20 Health.",
    "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, your Champion continuously has +10 Attack and +10 Health, and heals 10 Health at the start of each of your turns."
@@ -3188,15 +3188,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, once per turn, you may pay 4 Pulse: a Hero you control in a lane neighboring this one may attack twice this turn."
   },
   {
-   "id": "oathenhall--warden-elsbeth-of-the-twin-banners",
+   "id": "oathenhall--warden-elric-of-the-twin-banners",
    "realm": "Oathenhall",
-   "name": "Warden Elsbeth of the Twin Banners",
+   "name": "Warden Elric of the Twin Banners",
    "type": "hero",
    "cost": 5,
    "atk": 100,
    "hp": 130,
    "rarity": "Rare",
-   "text": "Once per turn, Elsbeth and a Hero you control in a lane neighboring her may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike).",
+   "text": "Once per turn, Elric and a Hero you control in a lane neighboring his may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike).",
    "auxCost": 3,
    "auxSlots": 1,
    "auxText": "While in this slot, when two Heroes you control attack together as a single combat (a Joint Strike), each gains +10 Attack for that combat."
@@ -3461,9 +3461,9 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, whenever you sacrifice a Hero, the Hero in this lane gains +10 Attack permanently."
   },
   {
-   "id": "zolthec--xilonen-maize-priestess",
+   "id": "zolthec--xilotl-maize-priest",
    "realm": "Zolthec",
-   "name": "Xilonen, Maize-Priestess",
+   "name": "Xilotl, Maize-Priest",
    "type": "hero",
    "cost": 3,
    "atk": 60,
@@ -3503,15 +3503,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, whenever you sacrifice a Hero, draw 1 card (maximum 1 per turn)."
   },
   {
-   "id": "zolthec--citlali-star-reader",
+   "id": "zolthec--citlalo-star-reader",
    "realm": "Zolthec",
-   "name": "Citlali, Star-Reader",
+   "name": "Citlalo, Star-Reader",
    "type": "hero",
    "cost": 5,
    "atk": 110,
    "hp": 70,
    "rarity": "Uncommon",
-   "text": "When Citlali is destroyed (by any means), gain 3 Pulse and draw 2 cards.",
+   "text": "When Citlalo is destroyed (by any means), gain 3 Pulse and draw 2 cards.",
    "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, whenever you sacrifice a Hero, gain 1 Pulse and the Hero in this lane gains +10 Attack permanently."
@@ -3788,9 +3788,9 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Health."
   },
   {
-   "id": "almsgard--sister-maren-of-the-bowl",
+   "id": "almsgard--brother-marek-of-the-bowl",
    "realm": "Almsgard",
-   "name": "Sister Maren of the Bowl",
+   "name": "Brother Marek of the Bowl",
    "type": "hero",
    "cost": 2,
    "atk": 30,
@@ -3830,15 +3830,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, whenever a Hero you control dies, each remaining Hero you control heals 10 Health."
   },
   {
-   "id": "almsgard--sister-ottoline-the-shield",
+   "id": "almsgard--brother-ottbert-the-shield",
    "realm": "Almsgard",
-   "name": "Sister Ottoline the Shield",
+   "name": "Brother Ottbert the Shield",
    "type": "hero",
    "cost": 4,
    "atk": 60,
    "hp": 150,
    "rarity": "Uncommon",
-   "text": "While Ottoline is in play, enemy Heroes must attack Ottoline's lane if able. When Ottoline dies, each other Hero you control gains +10 Attack and +20 Health permanently.",
+   "text": "While Ottbert is in play, enemy Heroes must attack Ottbert's lane if able. When Ottbert dies, each other Hero you control gains +10 Attack and +20 Health permanently.",
    "auxCost": 2,
    "auxSlots": 2,
    "auxText": "While in this slot, enemy Heroes must attack this lane if able."
@@ -3886,15 +3886,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, whenever any Hero you control dies, gain 2 Pulse and each remaining Hero you control heals 20 Health."
   },
   {
-   "id": "almsgard--pilgrim-saint-wendreth",
+   "id": "almsgard--pilgrim-saint-wendel",
    "realm": "Almsgard",
-   "name": "Pilgrim-Saint Wendreth",
+   "name": "Pilgrim-Saint Wendel",
    "type": "hero",
    "cost": 7,
    "atk": 100,
    "hp": 230,
    "rarity": "Ultra-Rare",
-   "text": "Once per turn, you may move up to 30 Health from Wendreth to another Hero you control (as a permanent transfer of current and maximum Health). While Wendreth is in play, all enemy Hero attacks must target Wendreth's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane, and enemy Heroes that attack Wendreth take 20 damage after that combat resolves.",
+   "text": "Once per turn, you may move up to 30 Health from Wendel to another Hero you control (as a permanent transfer of current and maximum Health). While Wendel is in play, all enemy Hero attacks must target Wendel's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane, and enemy Heroes that attack Wendel take 20 damage after that combat resolves.",
    "auxCost": 5,
    "auxSlots": 1,
    "auxText": "While in this slot, once per turn, when a Hero you control would take lethal combat damage, prevent 20 of that damage."
@@ -4103,15 +4103,15 @@ window.DEFAULT_DATA = {
    "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
   },
   {
-   "id": "thornveil--lirael-swiftfletch",
+   "id": "thornveil--elrian-swiftfletch",
    "realm": "Thornveil",
-   "name": "Lirael Swiftfletch",
+   "name": "Elrian Swiftfletch",
    "type": "hero",
    "cost": 2,
    "atk": 40,
    "hp": 20,
    "rarity": "Common",
-   "text": "When Lirael fights, the opposing Hero's equipped Relics and any Auxiliary cards in its lane grant it no Attack or Health for that combat — it fights on its base stats plus its permanent gains.",
+   "text": "When Elrian fights, the opposing Hero's equipped Relics and any Auxiliary cards in its lane grant it no Attack or Health for that combat — it fights on its base stats plus its permanent gains.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, when the Hero in this lane fights, the enemy Hero's Relics grant it no Attack or Health for that combat."
@@ -4131,15 +4131,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane cannot be targeted by enemy card effects (it can still be attacked)."
   },
   {
-   "id": "thornveil--sylvane-thistledown",
+   "id": "thornveil--sylvan-thistledown",
    "realm": "Thornveil",
-   "name": "Sylvane Thistledown",
+   "name": "Sylvan Thistledown",
    "type": "hero",
    "cost": 3,
    "atk": 50,
    "hp": 40,
    "rarity": "Common",
-   "text": "Instead of attacking the enemy Hero, Sylvane may declare her attack against an enemy Relic or enemy Auxiliary card in her opposing lane: it is destroyed, no combat occurs, and Sylvane takes no damage.",
+   "text": "Instead of attacking the enemy Hero, Sylvan may declare his attack against an enemy Relic or enemy Auxiliary card in his opposing lane: it is destroyed, no combat occurs, and Sylvan takes no damage.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane gains +10 Attack during combats it initiates."
@@ -4159,15 +4159,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, when the Hero in this lane fights, the enemy Hero's Relics and Auxiliary cards grant it no Attack or Health for that combat."
   },
   {
-   "id": "thornveil--wrenna-of-the-hidden-path",
+   "id": "thornveil--wren-of-the-hidden-path",
    "realm": "Thornveil",
-   "name": "Wrenna of the Hidden Path",
+   "name": "Wren of the Hidden Path",
    "type": "hero",
    "cost": 5,
    "atk": 90,
    "hp": 60,
    "rarity": "Uncommon",
-   "text": "Until the first time she attacks, Wrenna cannot be attacked and cannot be targeted by enemy card effects.",
+   "text": "Until the first time he attacks, Wren cannot be attacked and cannot be targeted by enemy card effects.",
    "auxCost": 3,
    "auxSlots": 1,
    "auxText": "While in this slot and while the Hero in this lane has full Health, it cannot be attacked and cannot be targeted by enemy card effects."
@@ -4187,15 +4187,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, when Heroes you control in neighboring lanes fight, the enemy Hero's Relics and Auxiliary cards grant it no Attack or Health for that combat."
   },
   {
-   "id": "thornveil--blade-dancer-ilyveth",
+   "id": "thornveil--blade-dancer-ilythar",
    "realm": "Thornveil",
-   "name": "Blade-Dancer Ilyveth",
+   "name": "Blade-Dancer Ilythar",
    "type": "hero",
    "cost": 6,
    "atk": 110,
    "hp": 70,
    "rarity": "Rare",
-   "text": "When Ilyveth fights, the enemy Hero's Relics and Auxiliary cards grant it no Attack or Health for that combat. When she fights an enemy Hero whose printed cost is higher than hers, she gains +20 Attack for that combat.",
+   "text": "When Ilythar fights, the enemy Hero's Relics and Auxiliary cards grant it no Attack or Health for that combat. When he fights an enemy Hero whose printed cost is higher than hers, he gains +20 Attack for that combat.",
    "auxCost": 4,
    "auxSlots": 1,
    "auxText": "While in this slot, when the Hero in this lane fights, enemy Hexes cannot trigger during that combat."
@@ -4215,15 +4215,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot and while another Hero you control occupies a neighboring lane, the Hero in this lane cannot be attacked and cannot be targeted by enemy card effects."
   },
   {
-   "id": "thornveil--warden-queen-aethreliel",
+   "id": "thornveil--warden-king-aethelred",
    "realm": "Thornveil",
-   "name": "Warden-Queen Aethreliel",
+   "name": "Warden-King Aethelred",
    "type": "hero",
    "cost": 8,
    "atk": 140,
    "hp": 100,
    "rarity": "Ultra-Rare",
-   "text": "When Aethreliel fights, the enemy Hero's Relics and Auxiliary cards grant it no Attack or Health for that combat. Whenever she destroys an enemy Hero in combat, gain 2 Pulse and draw 1 card.",
+   "text": "When Aethelred fights, the enemy Hero's Relics and Auxiliary cards grant it no Attack or Health for that combat. Whenever he destroys an enemy Hero in combat, gain 2 Pulse and draw 1 card.",
    "auxCost": 6,
    "auxSlots": 2,
    "auxText": "While in this slot, when any Hero you control fights, the enemy Hero's Relics and Auxiliary cards grant it no Attack or Health for that combat."
@@ -4444,15 +4444,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the first time each turn an enemy Hero takes damage, the Hero in this lane heals 10 Health."
   },
   {
-   "id": "noctavein--mirelle-of-the-red-kiss",
+   "id": "noctavein--mirek-of-the-red-kiss",
    "realm": "Noctavein",
-   "name": "Mirelle of the Red Kiss",
+   "name": "Mirek of the Red Kiss",
    "type": "hero",
    "cost": 2,
    "atk": 40,
    "hp": 20,
    "rarity": "Common",
-   "text": "When Mirelle enters play, an enemy Hero of your choice loses 10 Health (stat reduction) and Mirelle gains +10 Attack permanently.",
+   "text": "When Mirek enters play, an enemy Hero of your choice loses 10 Health (stat reduction) and Mirek gains +10 Attack permanently.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "When this card enters play, an enemy Hero of your choice loses 10 Health (stat reduction) and the Hero in this lane gains +10 Attack permanently. Then destroy this card."
@@ -4486,9 +4486,9 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, whenever an enemy Hero's Health is reduced by one of your card effects, the Hero in this lane heals 10 Health (maximum once per turn)."
   },
   {
-   "id": "noctavein--marquessa-ilvane",
+   "id": "noctavein--marquis-ilvane",
    "realm": "Noctavein",
-   "name": "Marquessa Ilvane",
+   "name": "Marquis Ilvane",
    "type": "hero",
    "cost": 5,
    "atk": 80,
@@ -4500,15 +4500,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, Heroes you control have +10 Attack while fighting enemy Heroes below their maximum Health."
   },
   {
-   "id": "noctavein--dreysha-mistress-of-hounds",
+   "id": "noctavein--draygan-master-of-hounds",
    "realm": "Noctavein",
-   "name": "Dreysha, Mistress of Hounds",
+   "name": "Draygan, Master of Hounds",
    "type": "hero",
    "cost": 5,
    "atk": 80,
    "hp": 70,
    "rarity": "Uncommon",
-   "text": "Once per turn, you may pay 1 Pulse: destroy an enemy Hero in Dreysha's opposing lane that has 30 or less Health remaining.",
+   "text": "Once per turn, you may pay 1 Pulse: destroy an enemy Hero in Draygan's opposing lane that has 30 or less Health remaining.",
    "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, once per turn, you may pay 3 Pulse to destroy an enemy Hero with 20 or less Health remaining."
@@ -4528,15 +4528,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, when the Hero in this lane fights, before combat the opposing Hero loses 10 Health (stat reduction) and the Hero in this lane gains +10 Attack for that combat."
   },
   {
-   "id": "noctavein--sanguine-choir-mother-ellisette",
+   "id": "noctavein--sanguine-choir-master-ellisar",
    "realm": "Noctavein",
-   "name": "Sanguine Choir-Mother Ellisette",
+   "name": "Sanguine Choir-Master Ellisar",
    "type": "hero",
    "cost": 6,
    "atk": 110,
    "hp": 80,
    "rarity": "Rare",
-   "text": "At the start of each of your turns, the enemy Hero in Ellisette's opposing lane (if any) loses 10 Health (stat reduction), and Ellisette gains +10 Attack permanently and heals 10 Health.",
+   "text": "At the start of each of your turns, the enemy Hero in Ellisar's opposing lane (if any) loses 10 Health (stat reduction), and Ellisar gains +10 Attack permanently and heals 10 Health.",
    "auxCost": 4,
    "auxSlots": 1,
    "auxText": "While in this slot, at the start of each of your turns, if the enemy Hero in the opposing lane is below its maximum Health, it loses 10 Health (stat reduction)."
@@ -4757,15 +4757,15 @@ window.DEFAULT_DATA = {
    "text": "When this Incantation resolves, every enemy Hero loses 10 Health (stat reduction); a Hero you control of your choice gains +10 Attack permanently and heals 10 Health for each enemy Hero affected."
   },
   {
-   "id": "brightmantle--acolyte-serelle",
+   "id": "brightmantle--acolyte-seryn",
    "realm": "Brightmantle",
-   "name": "Acolyte Serelle",
+   "name": "Acolyte Seryn",
    "type": "hero",
    "cost": 1,
    "atk": 20,
    "hp": 70,
    "rarity": "Common",
-   "text": "When Serelle enters play, a Hero you control gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health).",
+   "text": "When Seryn enters play, a Hero you control gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health).",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, at the start of each of your turns, the Hero in this lane gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health)."
@@ -4785,15 +4785,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 1 per turn)."
   },
   {
-   "id": "brightmantle--sister-cantrelle-of-the-dawn-chorus",
+   "id": "brightmantle--brother-cantrel-of-the-dawn-chorus",
    "realm": "Brightmantle",
-   "name": "Sister Cantrelle of the Dawn Chorus",
+   "name": "Brother Cantrel of the Dawn Chorus",
    "type": "hero",
    "cost": 2,
    "atk": 50,
    "hp": 80,
    "rarity": "Common",
-   "text": "When Cantrelle enters play, remove all enemy-imposed stat reductions and negative effects (silences, attack restrictions, and similar) from a Hero you control, restoring the stats it would have without them.",
+   "text": "When Cantrel enters play, remove all enemy-imposed stat reductions and negative effects (silences, attack restrictions, and similar) from a Hero you control, restoring the stats it would have without them.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "When this card enters play, remove all enemy-imposed stat reductions and negative effects from a Hero you control (restoring the stats it would have without them), and it heals 20 Health. Then destroy this card."
@@ -4827,23 +4827,23 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, at the start of each of your turns, remove all enemy-imposed stat reductions and negative effects from one Hero you control, restoring the stats it would have without them."
   },
   {
-   "id": "brightmantle--canoness-elspet-the-kind",
+   "id": "brightmantle--canon-cuthbert-the-kind",
    "realm": "Brightmantle",
-   "name": "Canoness Elspet the Kind",
+   "name": "Canon Cuthbert the Kind",
    "type": "hero",
    "cost": 4,
    "atk": 80,
    "hp": 150,
    "rarity": "Uncommon",
-   "text": "While Elspet is in play, whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn).",
+   "text": "While Cuthbert is in play, whenever you heal a Hero with a card effect, gain 1 Pulse (maximum 2 per turn).",
    "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, your healing card effects heal an additional 10 Health."
   },
   {
-   "id": "brightmantle--prelate-miriabel-of-the-white-flame",
+   "id": "brightmantle--prelate-miron-of-the-white-flame",
    "realm": "Brightmantle",
-   "name": "Prelate Miriabel of the White Flame",
+   "name": "Prelate Miron of the White Flame",
    "type": "hero",
    "cost": 5,
    "atk": 90,
@@ -5114,15 +5114,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
   },
   {
-   "id": "kessendo--aiko-swiftcut",
+   "id": "kessendo--akio-swiftcut",
    "realm": "Kessendo",
-   "name": "Aiko Swiftcut",
+   "name": "Akio Swiftcut",
    "type": "hero",
    "cost": 3,
    "atk": 60,
    "hp": 30,
    "rarity": "Common",
-   "text": "Whenever Aiko destroys an enemy Hero in combat, draw 1 card.",
+   "text": "Whenever Akio destroys an enemy Hero in combat, draw 1 card.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the first time each turn the Hero in this lane destroys an enemy Hero in combat, the Hero in this lane gains +10 Attack permanently."
@@ -5156,15 +5156,15 @@ window.DEFAULT_DATA = {
    "auxText": "While this card is in play, whenever any enemy Hero dies, deal 10 damage to an enemy Hero of your choice."
   },
   {
-   "id": "kessendo--rin-the-twin-fang",
+   "id": "kessendo--ryo-the-twin-fang",
    "realm": "Kessendo",
-   "name": "Rin, the Twin Fang",
+   "name": "Ryo, the Twin Fang",
    "type": "hero",
    "cost": 5,
    "atk": 90,
    "hp": 50,
    "rarity": "Uncommon",
-   "text": "When Rin destroys an enemy Hero in combat, she deals 20 damage to the enemy Hero in a lane neighboring the one she attacked, if any.",
+   "text": "When Ryo destroys an enemy Hero in combat, he deals 20 damage to the enemy Hero in a lane neighboring the one he attacked, if any.",
    "auxCost": 3,
    "auxSlots": 1,
    "auxText": "While in this slot, the first time each turn the Hero in this lane destroys an enemy Hero in combat, deal 20 damage to your opponent's Mortality."
@@ -5184,15 +5184,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
   },
   {
-   "id": "kessendo--masayo-blade-of-the-fallen-sun",
+   "id": "kessendo--masato-blade-of-the-fallen-sun",
    "realm": "Kessendo",
-   "name": "Masayo, Blade of the Fallen Sun",
+   "name": "Masato, Blade of the Fallen Sun",
    "type": "hero",
    "cost": 6,
    "atk": 120,
    "hp": 50,
    "rarity": "Rare",
-   "text": "Whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Masayo permanently gains +10 Attack.",
+   "text": "Whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Masato permanently gains +10 Attack.",
    "auxCost": 4,
    "auxSlots": 2,
    "auxText": "While this card is in play, whenever any enemy Hero dies, deal 15 damage to an enemy Hero of your choice."
@@ -5212,15 +5212,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane deals its full Attack as damage to any enemy Hero it fights in combat, even if that enemy Hero's Attack is higher (overriding the normal \"higher Attack takes no damage\" rule for this lane only)."
   },
   {
-   "id": "kessendo--setsuna-widow-of-blades",
+   "id": "kessendo--sojiro-widower-of-blades",
    "realm": "Kessendo",
-   "name": "Setsuna, Widow of Blades",
+   "name": "Sojiro, Widower of Blades",
    "type": "hero",
    "cost": 8,
    "atk": 170,
    "hp": 60,
    "rarity": "Ultra-Rare",
-   "text": "Whenever Setsuna destroys an enemy Hero in combat, she gains +20 Attack permanently.",
+   "text": "Whenever Sojiro destroys an enemy Hero in combat, he gains +20 Attack permanently.",
    "auxCost": 6,
    "auxSlots": 2,
    "auxText": "While this card is in play, whenever any enemy Hero dies, deal 15 damage to an enemy Hero of your choice."
@@ -5469,15 +5469,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack. At the start of each of your turns, that Hero takes 10 damage."
   },
   {
-   "id": "drakhaan--wyrmrider-kass",
+   "id": "drakhaan--wyrmrider-korr",
    "realm": "Drakhaan",
-   "name": "Wyrmrider Kass",
+   "name": "Wyrmrider Korr",
    "type": "hero",
    "cost": 5,
    "atk": 80,
    "hp": 50,
    "rarity": "Common",
-   "text": "When Wyrmrider Kass destroys an enemy Hero in combat, she deals 20 damage to the enemy Hero in a lane neighboring the one she attacked, if any.",
+   "text": "When Wyrmrider Korr destroys an enemy Hero in combat, he deals 20 damage to the enemy Hero in a lane neighboring the one he attacked, if any.",
    "auxCost": 3,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
@@ -6097,15 +6097,15 @@ window.DEFAULT_DATA = {
    "text": "When this Incantation resolves, destroy an enemy Hero with 70 or less Health remaining."
   },
   {
-   "id": "heliaxos--harpy-skirmisher",
+   "id": "heliaxos--gargoyle-skirmisher",
    "realm": "Heliaxos",
-   "name": "Harpy Skirmisher",
+   "name": "Gargoyle Skirmisher",
    "type": "hero",
    "cost": 3,
    "atk": 60,
    "hp": 40,
    "rarity": "Common",
-   "text": "When Harpy Skirmisher enters play, deal 20 damage to an enemy Hero of your choice.",
+   "text": "When Gargoyle Skirmisher enters play, deal 20 damage to an enemy Hero of your choice.",
    "auxCost": 2,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
@@ -6167,15 +6167,15 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
   },
   {
-   "id": "heliaxos--nymph-of-the-oracle",
+   "id": "heliaxos--faun-of-the-oracle",
    "realm": "Heliaxos",
-   "name": "Nymph of the Oracle",
+   "name": "Faun of the Oracle",
    "type": "hero",
    "cost": 5,
    "atk": 70,
    "hp": 60,
    "rarity": "Uncommon",
-   "text": "When Nymph of the Oracle enters play, draw 1 card.",
+   "text": "When Faun of the Oracle enters play, draw 1 card.",
    "auxCost": 3,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
@@ -6203,7 +6203,7 @@ window.DEFAULT_DATA = {
    "atk": 120,
    "hp": 70,
    "rarity": "Rare",
-   "text": "When Chimera destroys an enemy Hero in combat, she deals 30 damage to the enemy Hero in a lane neighboring the one she attacked, if any.",
+   "text": "When Chimera destroys an enemy Hero in combat, it deals 30 damage to the enemy Hero in a lane neighboring the one it attacked, if any.",
    "auxCost": 5,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +50 Attack."
