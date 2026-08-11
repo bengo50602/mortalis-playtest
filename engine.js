@@ -206,7 +206,7 @@ function parseOp(cl) {
   if ((m = cl.match(/^return a Relic card from your discard pile to your hand$/i))) return { op: "returnRelicDiscard" };
   if ((m = cl.match(new RegExp(`^destroy up to (\\d+) Relics attached to enemy Heroes$`, "i")))) return { op: "shatterRelics", n: +m[1], dmg: 0 };
   // may attack twice / any lane (targeted at a chosen own hero)
-  if ((m = cl.match(/^(?:choose a Hero you control: )?it may attack twice this turn$/i))) return { op: "attackTwice", target: "self" };
+  if ((m = cl.match(/^(choose a Hero you control: )?it may attack twice this turn$/i))) return { op: "attackTwice", target: m[1] ? "ownChoice" : "self" };
   // forge counters (N) on a chosen relic
   if ((m = cl.match(/^[Pp]lace (\d+) forge counters? on a Relic you control$/i))) { const ops = []; for (let i = 0; i < +m[1]; i++) ops.push({ op: "forgeCounterChoice" }); return ops; }
   // ---- final sweep clauses ----

@@ -220,7 +220,7 @@ When this card enters play, deal 20 damage to the Hero in this lane.
 
 **Gunnhild Stormscar**
 Hero Mode — Cost: 5 Pulse | Attack/Health: 90/60 | Rarity: Uncommon
-When Gunnhild destroys an enemy Hero in combat, she deals 20 damage to the enemy Hero in a lane neighboring the one she attacked, if any. (Her fury carries through the line.)
+When Gunnhild destroys an enemy Hero in combat, he deals 20 damage to the enemy Hero in a lane neighboring the one he attacked, if any. (His fury carries through the line.)
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, the first time each turn the Hero in this lane destroys an enemy Hero in combat, deal 20 damage to your opponent's Mortality.
 
@@ -250,7 +250,7 @@ While in this slot, at the end of each of your turns, the Hero in this lane take
 
 **Ragna, the Undying Fang**
 Hero Mode — Cost: 6 Pulse | Attack/Health: 130/50 | Rarity: Rare
-Whenever Ragna takes damage, she permanently gains Attack equal to the damage taken (maximum +30 Attack per turn from this effect). The first time Ragna would die from damage each game, instead reduce her Health to 10 and she survives — when this happens, she only gains Attack equal to the amount of damage that was needed to reduce her Health to 0, not the full amount dealt (any excess/overkill damage grants no bonus Attack).
+Whenever Ragna takes damage, he permanently gains Attack equal to the damage taken (maximum +30 Attack per turn from this effect). The first time Ragna would die from damage each game, instead reduce his Health to 10 and he survives — when this happens, he only gains Attack equal to the amount of damage that was needed to reduce his Health to 0, not the full amount dealt (any excess/overkill damage grants no bonus Attack).
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 While in this slot, once per turn you may pay 2 Pulse to give the Hero in this lane +20 Attack until the end of the current turn.
 

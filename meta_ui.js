@@ -528,7 +528,28 @@
       cutscene(opp, "post", { won: won, onDone: function () { showBattleResult(info.chapter, info.stage, won); } });
     }, delay);
   };
+  function playResultBanner(won) {
+    if (!document.getElementById("br-anim-style")) {
+      var st = document.createElement("style"); st.id = "br-anim-style";
+      st.textContent = "@keyframes brFade{from{opacity:0}to{opacity:1}}@keyframes brFadeOut{from{opacity:1}to{opacity:0}}"
+        + "@keyframes brPop{0%{opacity:0;transform:scale(.5) rotate(-4deg)}60%{opacity:1;transform:scale(1.08) rotate(1deg)}100%{opacity:1;transform:scale(1) rotate(0)}}"
+        + "@keyframes brRay{from{transform:rotate(0)}to{transform:rotate(360deg)}}";
+      document.head.appendChild(st);
+    }
+    var ov = document.createElement("div");
+    ov.style.cssText = "position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;animation:brFade .35s ease forwards;"
+      + "background:radial-gradient(circle at 50% 45%," + (won ? "rgba(34,74,46,.6)" : "rgba(78,28,28,.6)") + " 0%,rgba(6,8,12,.86) 68%)";
+    var col = won ? "#8fe0a0" : "#e79089";
+    var glow = won ? "rgba(120,220,150,.55)" : "rgba(220,110,110,.5)";
+    ov.innerHTML = "<div style='position:relative;text-align:center'>"
+      + (won ? "<div style='position:absolute;left:50%;top:50%;width:520px;height:520px;margin:-260px 0 0 -260px;background:repeating-conic-gradient(from 0deg," + glow + " 0deg 6deg,transparent 6deg 18deg);border-radius:50%;opacity:.18;animation:brRay 14s linear infinite'></div>" : "")
+      + "<div style='position:relative;font-family:Cinzel,serif;font-size:62px;font-weight:800;letter-spacing:7px;color:" + col + ";text-shadow:0 0 34px " + glow + ";opacity:0;animation:brPop .6s cubic-bezier(.2,1.3,.4,1) .1s forwards'>"
+      + (won ? "VICTORY" : "DEFEAT") + "</div></div>";
+    document.body.appendChild(ov);
+    setTimeout(function () { ov.style.animation = "brFadeOut .45s ease forwards"; setTimeout(function () { try { document.body.removeChild(ov); } catch (e) {} }, 440); }, 1450);
+  }
   function showBattleResult(chapter, stage, won) {
+    playResultBanner(won);
     var ch = Campaign.chapter(chapter);
     var el = $("screen-campaign");
     var body;
