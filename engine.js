@@ -2639,7 +2639,7 @@ function applyListen(dd, pi, pos, h, data) {
     (async () => {
       const c2 = { laneIdx: pos.li, sourceName: nm };
       for (const o2 of dd.ops) { if (c2.abort) break; await runOp(o2, pi, c2); }
-    })();
+    })().catch(function () {});
   }
   else if (dd.k === "buffAll") {
     for (const t of heroesOf(pi)) {

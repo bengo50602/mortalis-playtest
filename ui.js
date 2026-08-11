@@ -3,6 +3,20 @@
 
 const $ = (id) => document.getElementById(id);
 
+// Safety net: media/animation interruptions (screen switches, quick nav) reject
+// their promises with a benign "AbortError: The operation was aborted". Swallow
+// those so they never surface as an app crash; real errors still propagate.
+if (typeof window !== "undefined") {
+  window.addEventListener("unhandledrejection", function (e) {
+    const r = e && e.reason;
+    const name = r && (r.name || "");
+    const msg = (r && (r.message || String(r))) || "";
+    if (name === "AbortError" || /operation was aborted|play\(\) request was interrupted/i.test(msg)) {
+      e.preventDefault();
+    }
+  });
+}
+
 // Authoring tools are for maintaining the game, not for playing it. They stay
 // hidden unless the page is opened with ?dev=1, which also survives a reload
 // via localStorage so the flag only has to be typed once.
@@ -50,7 +64,7 @@ const UI = {
     const setup = $("screen-setup"), vid = $("title-video");
     const splashOn = screen === "setup" && setup && setup.classList.contains("title-mode");
     if (document.body) document.body.classList.toggle("on-splash", !!splashOn);
-    if (vid) { try { screen === "setup" ? vid.play() : vid.pause(); } catch (e) {} }
+    if (vid) { try { if (screen === "setup") { const pp = vid.play(); if (pp && pp.catch) pp.catch(function () {}); } else vid.pause(); } catch (e) {} }
   },
   // Start button: leave the splash and reveal the New game options.
   exitTitle() {
