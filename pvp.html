@@ -279,7 +279,7 @@ a{color:var(--accent)}
   <span class="netstate" id="netstate"></span>
   <a href="index.html" style="text-decoration:none"><button>Main menu</button></a>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good)">How to play</button></a>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260814124332</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260814125202</span>
   <div class="spacer"></div>
   <button id="tab-play" class="active-tab" style="display:none">Play</button>
   <button id="tab-cards">Edit cards</button>
@@ -428,11 +428,11 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="cards.js?v=20260814124332"></script>
-<script src="rules.js?v=20260814124332"></script>
-<script src="engine.js?v=20260814124332"></script>
-<script src="meta.js?v=20260814124332"></script>
-<script src="ui.js?v=20260814124332"></script>
+<script src="cards.js?v=20260814125202"></script>
+<script src="rules.js?v=20260814125202"></script>
+<script src="engine.js?v=20260814125202"></script>
+<script src="meta.js?v=20260814125202"></script>
+<script src="ui.js?v=20260814125202"></script>
 <script>
 /* ================= Mortalis PvP layer (host-authoritative, PeerJS) ================= */
 (function () {
@@ -468,6 +468,15 @@ a{color:var(--accent)}
     return true;
   }
   const peerId = code => "mortalis-realms-pvp-" + code.toLowerCase();
+  // ICE config: STUN alone can't punch through many NATs/firewalls (the cause of
+  // "negotiation-failed"), so include free TURN relays as a fallback path.
+  const PEER_CFG = { config: { iceServers: [
+    { urls: "stun:stun.l.google.com:19302" },
+    { urls: "stun:stun1.l.google.com:19302" },
+    { urls: "turn:openrelay.metered.ca:80", username: "openrelayproject", credential: "openrelayproject" },
+    { urls: "turn:openrelay.metered.ca:443", username: "openrelayproject", credential: "openrelayproject" },
+    { urls: "turn:openrelay.metered.ca:443?transport=tcp", username: "openrelayproject", credential: "openrelayproject" },
+  ] } };
 
   function buildRealmPicks() {
     const wrap = $$("pvp-realms");
@@ -514,7 +523,7 @@ a{color:var(--accent)}
     NET.myName = $$("pvp-name").value.trim() || "Host";
     NET.role = "host";
     const code = mkCode();
-    NET.peer = new Peer(peerId(code));
+    NET.peer = new Peer(peerId(code), PEER_CFG);
     NET.peer.on("open", () => {
       $$("lobby-choose").style.display = "none";
       $$("lobby-wait").style.display = "";
@@ -534,7 +543,7 @@ a{color:var(--accent)}
     NET.role = "guest";
     const code = ($$("join-code").value || "").trim().toUpperCase();
     if (code.length < 4) { UI.toast("Enter the 4-letter code."); return; }
-    NET.peer = new Peer();
+    NET.peer = new Peer(undefined, PEER_CFG);
     NET.peer.on("error", e => { setNet("Connection error: " + e.type); UI.toast("Could not join: " + e.type); });
     NET.peer.on("open", () => {
       const conn = NET.peer.connect(peerId(code), { reliable: true });
