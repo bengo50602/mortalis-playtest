@@ -279,7 +279,7 @@ a{color:var(--accent)}
   <span class="netstate" id="netstate"></span>
   <a href="index.html" style="text-decoration:none"><button>Main menu</button></a>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good)">How to play</button></a>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260811190137</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260814124026</span>
   <div class="spacer"></div>
   <button id="tab-play" class="active-tab" style="display:none">Play</button>
   <button id="tab-cards">Edit cards</button>
@@ -428,11 +428,11 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="cards.js?v=20260811190137"></script>
-<script src="rules.js?v=20260811190137"></script>
-<script src="engine.js?v=20260811190137"></script>
-<script src="meta.js?v=20260811190137"></script>
-<script src="ui.js?v=20260811190137"></script>
+<script src="cards.js?v=20260814124026"></script>
+<script src="rules.js?v=20260814124026"></script>
+<script src="engine.js?v=20260814124026"></script>
+<script src="meta.js?v=20260814124026"></script>
+<script src="ui.js?v=20260814124026"></script>
 <script>
 /* ================= Mortalis PvP layer (host-authoritative, PeerJS) ================= */
 (function () {
@@ -713,7 +713,7 @@ a{color:var(--accent)}
   window.PVP_PICK = function (title, options) {
     if (NET.role === "host" && NET.started && decider() === 1)
       return remoteAsk("pick", { msg: title, options });
-    return Promise.resolve(localPromptPick(title, options));   // host's own pick, or guest-local
+    return (window.UI && typeof UI.pickOption === "function") ? UI.pickOption(title, options) : Promise.resolve(localPromptPick(title, options));   // host's own pick, or guest-local — use the visual picker (window.prompt is often blocked)
   };
 
   async function hostHandleAction(a) {
