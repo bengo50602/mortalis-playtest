@@ -279,7 +279,7 @@ a{color:var(--accent)}
   <span class="netstate" id="netstate"></span>
   <a href="index.html" style="text-decoration:none"><button>Main menu</button></a>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good)">How to play</button></a>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260814124026</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260814124226</span>
   <div class="spacer"></div>
   <button id="tab-play" class="active-tab" style="display:none">Play</button>
   <button id="tab-cards">Edit cards</button>
@@ -428,11 +428,11 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="cards.js?v=20260814124026"></script>
-<script src="rules.js?v=20260814124026"></script>
-<script src="engine.js?v=20260814124026"></script>
-<script src="meta.js?v=20260814124026"></script>
-<script src="ui.js?v=20260814124026"></script>
+<script src="cards.js?v=20260814124226"></script>
+<script src="rules.js?v=20260814124226"></script>
+<script src="engine.js?v=20260814124226"></script>
+<script src="meta.js?v=20260814124226"></script>
+<script src="ui.js?v=20260814124226"></script>
 <script>
 /* ================= Mortalis PvP layer (host-authoritative, PeerJS) ================= */
 (function () {
@@ -453,6 +453,20 @@ a{color:var(--accent)}
   /* ---------- lobby ---------- */
   const CODE_CHARS = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
   const mkCode = () => Array.from({ length: 4 }, () => CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]).join("");
+  // Preflight: the two most common reasons hosting/joining silently fails.
+  function pvpPreflight() {
+    if (typeof Peer === "undefined") {
+      setNet("Peer-to-peer library failed to load.");
+      alert("The peer-to-peer library didn't load (it's fetched from unpkg.com). Check your internet connection, then reload this page and try again.");
+      return false;
+    }
+    if (!window.isSecureContext) {
+      setNet("PvP needs a secure (https) page.");
+      alert("Online PvP needs a secure page. Open the published link (your https GitHub Pages URL) instead of a local file, then try again.");
+      return false;
+    }
+    return true;
+  }
   const peerId = code => "mortalis-realms-pvp-" + code.toLowerCase();
 
   function buildRealmPicks() {
@@ -496,6 +510,7 @@ a{color:var(--accent)}
   }
 
   $$("btn-host").onclick = () => {
+    if (!pvpPreflight()) return;
     NET.myName = $$("pvp-name").value.trim() || "Host";
     NET.role = "host";
     const code = mkCode();
@@ -514,6 +529,7 @@ a{color:var(--accent)}
   };
 
   $$("btn-join").onclick = () => {
+    if (!pvpPreflight()) return;
     NET.myName = $$("pvp-name").value.trim() || "Guest";
     NET.role = "guest";
     const code = ($$("join-code").value || "").trim().toUpperCase();
