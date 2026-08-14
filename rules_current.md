@@ -360,7 +360,7 @@ At the start of each of your turns, if you control a Hero from another Realm, ga
 
 **Brother Tomas**
 Hero Mode — Cost: 2 Pulse | Attack/Health: 30/40 | Rarity: Common
-While this card is in play, at the start of your turn, you may discard 1 card in your hand to give a Hero you control +20 Attack until end of turn.
+Once per turn, you may discard 1 card in your hand to give a Hero you control +20 Attack until end of turn.
 Auxiliary Mode — Cost: 1 Pulse | 1 slot
 While in this slot, the Hero in this lane has +20 Health.
 

@@ -207,6 +207,7 @@ function parseOp(cl) {
   if ((m = cl.match(new RegExp(`^destroy up to (\\d+) Relics attached to enemy Heroes$`, "i")))) return { op: "shatterRelics", n: +m[1], dmg: 0 };
   // may attack twice / any lane (targeted at a chosen own hero)
   if ((m = cl.match(/^(choose a Hero you control: )?it may attack twice this turn$/i))) return { op: "attackTwice", target: m[1] ? "ownChoice" : "self" };
+  if ((m = cl.match(new RegExp(`^discard 1 card in your hand to give a Hero you control \\+${NUM} Attack until end of turn$`, "i")))) return { op: "discardBuff", atk: +m[1] };
   // forge counters (N) on a chosen relic
   if ((m = cl.match(/^[Pp]lace (\d+) forge counters? on a Relic you control$/i))) { const ops = []; for (let i = 0; i < +m[1]; i++) ops.push({ op: "forgeCounterChoice" }); return ops; }
   // ---- final sweep clauses ----
@@ -2094,10 +2095,8 @@ async function runOp(op, pi, ctx) {
         heroAt(best).temp.push({ atk: op.atk, hp: 0, until: G.gt });
         log(`${ctx.sourceName}: discards a card — ${nameOf(best)} gains +${op.atk} Attack this turn.`, true);
       } else {
-        let yes = 0;
-        if (window.UI && UI.pickOption) yes = await UI.pickOption(`${ctx.sourceName}: discard a card to give one of your Heroes +${op.atk} Attack this turn?`, ["Yes — discard a card", "No"]);
-        if (yes !== 0) break;
-        const hi = await UI.pickHandCard("Discard which card?");
+        // activated (opt-in by clicking) — choose a card to discard, then a Hero
+        const hi = await UI.pickHandCard("Discard a card — a Hero then gains +" + op.atk + " Attack this turn.");
         if (hi == null) break;
         (P.discard || (P.discard = [])).push(P.hand.splice(hi, 1)[0]);
         const t = await UI.pickHero(`Give +${op.atk} Attack to which Hero?`, heroesOf(pi));
@@ -2832,6 +2831,8 @@ function dealDamage(t, amount, opts) {
     fireHexes(t.pi, "tookDamage", { laneIdx: t.li, defender: t });
     // Vesk aux: first enemy damage each turn heals the lane Hero
     G.players[1 - t.pi].lanes.forEach((L, li) => { const seen4 = new Set(); for (const a of L.aux) if (a && !seen4.has(a.uid)) { seen4.add(a.uid); const mm = (cardById(a.cardId).auxText || "").match(/the first time each turn an enemy Hero takes damage, the Hero in this lane heals (\d+) Health/i); if (mm && L.hero && a.vGt !== G.gt) { a.vGt = G.gt; const hd = applyHeal(L.hero, +mm[1]); if (hd) log(`${cardById(L.hero.cardId).name} heals ${hd} (${cardById(a.cardId).name}).`); } } });
+    // Vicar Tobias aux: first time this lane's Hero takes damage each turn, it gains a ward
+    { const L5 = G.players[t.pi].lanes[t.li]; if (L5 && L5.hero) { const seen5 = new Set(); for (const a of L5.aux) if (a && !seen5.has(a.uid)) { seen5.add(a.uid); const wm = (cardById(a.cardId).auxText || "").match(/the first time each turn the Hero in this lane takes damage, it gains a ward that prevents the next (\d+) damage/i); if (wm && a.wdGt !== G.gt) { a.wdGt = G.gt; L5.hero.ward = (L5.hero.ward || 0) + (+wm[1]); L5.hero.wardCount = (L5.hero.wardCount || 0) + 1; log(`${cardById(L5.hero.cardId).name} gains a ward (${wm[1]}) — ${cardById(a.cardId).name}.`); } } } }
   }
   return amount;
 }

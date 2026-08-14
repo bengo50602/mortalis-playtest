@@ -480,7 +480,7 @@ window.DEFAULT_DATA = {
    "atk": 30,
    "hp": 40,
    "rarity": "Common",
-   "text": "While this card is in play, at the start of your turn, you may discard 1 card in your hand to give a Hero you control +20 Attack until end of turn.",
+   "text": "Once per turn, you may discard 1 card in your hand to give a Hero you control +20 Attack until end of turn.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane has +20 Health."
