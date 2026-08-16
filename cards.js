@@ -150,7 +150,7 @@ window.DEFAULT_DATA = {
    "name": "Skarn, the Unbound",
    "type": "hero",
    "cost": 6,
-   "atk": 140,
+   "atk": 150,
    "hp": 40,
    "rarity": "Rare",
    "text": "While Skarn is in play, whenever he deals damage directly to an opponent's Mortality, draw 1 card.",
@@ -192,7 +192,7 @@ window.DEFAULT_DATA = {
    "name": "Threnn, Widow of the Gale",
    "type": "hero",
    "cost": 8,
-   "atk": 180,
+   "atk": 190,
    "hp": 60,
    "rarity": "Ultra-Rare",
    "text": "While Threnn is in play, whenever an enemy Hero dies from combat damage dealt by one of your Heroes, Threnn permanently gains +20 Attack.",
@@ -248,7 +248,7 @@ window.DEFAULT_DATA = {
    "name": "Ragna, the Undying Fang",
    "type": "hero",
    "cost": 6,
-   "atk": 130,
+   "atk": 140,
    "hp": 50,
    "rarity": "Rare",
    "text": "Whenever Ragna takes damage, he permanently gains Attack equal to the damage taken (maximum +30 Attack per turn from this effect). The first time Ragna would die from damage each game, instead reduce his Health to 10 and he survives — when this happens, he only gains Attack equal to the amount of damage that was needed to reduce his Health to 0, not the full amount dealt (any excess/overkill damage grants no bonus Attack).",
@@ -262,8 +262,8 @@ window.DEFAULT_DATA = {
    "name": "Vrist, Harbinger of Wounds",
    "type": "hero",
    "cost": 8,
-   "atk": 160,
-   "hp": 80,
+   "atk": 170,
+   "hp": 90,
    "rarity": "Ultra-Rare",
    "text": "Whenever Vrist takes damage, he permanently gains Attack equal to the damage taken (maximum +30 Attack per turn from this effect). While Vrist is in play, whenever another Fangrend Hero you control takes damage, that Hero also permanently gains Attack equal to half the damage taken, rounded down to the nearest 10 (maximum +20 Attack per turn per Hero from this effect).",
    "auxCost": 6,
@@ -276,8 +276,8 @@ window.DEFAULT_DATA = {
    "name": "Skoldir, the Last Howl",
    "type": "hero",
    "cost": 10,
-   "atk": 220,
-   "hp": 80,
+   "atk": 230,
+   "hp": 90,
    "rarity": "Eternal",
    "text": "Whenever Skoldir takes damage, he permanently gains Attack equal to half the damage taken, rounded down to the nearest 10 (maximum +30 Attack per turn from this effect). When Skoldir dies, deal damage equal to half his current Attack (rounded down to the nearest 10, maximum 60) to up to 2 enemy Heroes of your choice.",
    "auxCost": 8,
@@ -547,7 +547,7 @@ window.DEFAULT_DATA = {
    "name": "Tristan Oathkeeper",
    "type": "hero",
    "cost": 6,
-   "atk": 110,
+   "atk": 120,
    "hp": 90,
    "rarity": "Rare",
    "text": "Whenever you play a Hero from a Realm other than Luminar, gain 1 Pulse.",
@@ -575,8 +575,8 @@ window.DEFAULT_DATA = {
    "name": "Seraphina Dawnbringer",
    "type": "hero",
    "cost": 8,
-   "atk": 150,
-   "hp": 120,
+   "atk": 160,
+   "hp": 130,
    "rarity": "Ultra-Rare",
    "text": "At the start of each of your turns, draw a card. Whenever you draw a card this way, also gain 1 Pulse.",
    "auxCost": 6,
@@ -589,8 +589,8 @@ window.DEFAULT_DATA = {
    "name": "Aldric the Unwavering",
    "type": "hero",
    "cost": 8,
-   "atk": 140,
-   "hp": 130,
+   "atk": 150,
+   "hp": 140,
    "rarity": "Ultra-Rare",
    "text": "While Aldric is in play, all other Heroes you control continuously have +20 Attack and +30 Health. Once per turn, you may destroy an enemy Hex, Rite, or Pact.",
    "auxCost": 6,
@@ -603,8 +603,8 @@ window.DEFAULT_DATA = {
    "name": "Lucan, Herald of Dawn",
    "type": "hero",
    "cost": 10,
-   "atk": 190,
-   "hp": 150,
+   "atk": 200,
+   "hp": 160,
    "rarity": "Eternal",
    "text": "While Lucan is in play, Heroes you control in neighboring lanes continuously have +50 Attack. At the start of each of your turns, gain 2 Pulse.",
    "auxCost": 8,
@@ -1215,7 +1215,7 @@ window.DEFAULT_DATA = {
    "name": "Draveth, Broker of Agonies",
    "type": "hero",
    "cost": 6,
-   "atk": 110,
+   "atk": 120,
    "hp": 80,
    "rarity": "Rare",
    "text": "Once per turn, you may pay 2 Pulse: an enemy Hero of your choice gets −20 Attack until end of turn, and Draveth gains +20 Attack until end of turn.",
@@ -1229,8 +1229,8 @@ window.DEFAULT_DATA = {
    "name": "Kravvax, Warden of the Red Gate",
    "type": "hero",
    "cost": 8,
-   "atk": 130,
-   "hp": 120,
+   "atk": 140,
+   "hp": 130,
    "rarity": "Ultra-Rare",
    "text": "When Kravvax enters play, choose one of your opponent's lanes: while Kravvax remains in play, your opponent cannot play Relics or Auxiliary cards into that lane. Whenever an enemy Hero attacks Kravvax, that Hero has −30 Attack for that combat.",
    "auxCost": 6,
@@ -1243,8 +1243,8 @@ window.DEFAULT_DATA = {
    "name": "Father Vhûl, the Hollow Choir",
    "type": "hero",
    "cost": 8,
-   "atk": 150,
-   "hp": 110,
+   "atk": 160,
+   "hp": 120,
    "rarity": "Ultra-Rare",
    "text": "When Father Vhûl enters play, all enemy Heroes permanently lose 20 Health (stat reduction, not damage). While he is in play, whenever an enemy Hero dies, all remaining enemy Heroes get −10 Attack permanently.",
    "auxCost": 6,
@@ -1257,8 +1257,8 @@ window.DEFAULT_DATA = {
    "name": "Azhmordai, the Final Bargain",
    "type": "hero",
    "cost": 10,
-   "atk": 170,
-   "hp": 150,
+   "atk": 180,
+   "hp": 160,
    "rarity": "Eternal",
    "text": "When Azhmordai enters play, choose one card type (Relic, Hex, Rite, Pact, or Incantation): while Azhmordai remains in play, your opponent cannot play cards of that type. While Azhmordai is in play, all enemy Heroes continuously have −20 Attack.",
    "auxCost": 8,
@@ -1447,7 +1447,7 @@ window.DEFAULT_DATA = {
    "atk": 20,
    "hp": 70,
    "rarity": "Common",
-   "text": "At the start of each of your turns, gain 2 Pulse.",
+   "text": "At the start of each of your turns, gain 1 Pulse.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Health."
@@ -1478,7 +1478,7 @@ window.DEFAULT_DATA = {
    "text": "While Milo is in play, whenever you gain Pulse from a card effect, Milo gains +10 Health permanently (maximum +20 Health per turn from this effect).",
    "auxCost": 1,
    "auxSlots": 1,
-   "auxText": "At the start of each of your turns, gain 2 Pulse."
+   "auxText": "At the start of each of your turns, gain 1 Pulse."
   },
   {
    "id": "gildharbor--harbor-guard-tessio",
@@ -1503,7 +1503,7 @@ window.DEFAULT_DATA = {
    "atk": 40,
    "hp": 120,
    "rarity": "Uncommon",
-   "text": "While Sindar is in play, whenever an enemy Hero declares an attack, gain 2 Pulse.",
+   "text": "While Sindar is in play, whenever an enemy Hero declares an attack, gain 1 Pulse.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +20 Health and heals 10 Health at the start of each of your turns."
@@ -1517,10 +1517,10 @@ window.DEFAULT_DATA = {
    "atk": 60,
    "hp": 150,
    "rarity": "Uncommon",
-   "text": "At the start of each of your turns, gain 2 Pulse. Whenever you gain Pulse from a card effect, Zoran heals 10 Health.",
+   "text": "At the start of each of your turns, gain 1 Pulse. Whenever you gain Pulse from a card effect, Zoran heals 10 Health.",
    "auxCost": 2,
    "auxSlots": 2,
-   "auxText": "At the start of each of your turns, gain 3 Pulse."
+   "auxText": "At the start of each of your turns, gain 2 Pulse."
   },
   {
    "id": "gildharbor--guildmaster-otho",
@@ -1531,7 +1531,7 @@ window.DEFAULT_DATA = {
    "atk": 70,
    "hp": 190,
    "rarity": "Rare",
-   "text": "At the start of each of your turns, gain 3 Pulse.",
+   "text": "At the start of each of your turns, gain 2 Pulse.",
    "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, all Heroes you control continuously have +20 Health."
@@ -1559,10 +1559,10 @@ window.DEFAULT_DATA = {
    "atk": 100,
    "hp": 230,
    "rarity": "Ultra-Rare",
-   "text": "At the start of each of your turns, gain 3 Pulse. Once per turn, you may pay 4 Pulse to give a Hero you control +40 Health permanently.",
+   "text": "At the start of each of your turns, gain 2 Pulse. Once per turn, you may pay 4 Pulse to give a Hero you control +40 Health permanently.",
    "auxCost": 5,
    "auxSlots": 2,
-   "auxText": "At the start of each of your turns, gain 2 Pulse for every full 10 Pulse you have banked (maximum 3 Pulse per turn from this effect)."
+   "auxText": "At the start of each of your turns, gain 1 Pulse for every full 10 Pulse you have banked (maximum 3 Pulse per turn from this effect)."
   },
   {
    "id": "gildharbor--admiral-corvazzo-ten-fleets",
@@ -1576,7 +1576,7 @@ window.DEFAULT_DATA = {
    "text": "While Corvazzo is in play, whenever an enemy Hero attacks any other Hero you control, you may pay 2 Pulse to redirect that attack to Corvazzo instead (once per enemy attack).",
    "auxCost": 5,
    "auxSlots": 1,
-   "auxText": "While in this slot, whenever an enemy attack is blocked, prevented, or redirected by one of your card effects, gain 3 Pulse."
+   "auxText": "While in this slot, whenever an enemy attack is blocked, prevented, or redirected by one of your card effects, gain 2 Pulse."
   },
   {
    "id": "gildharbor--qeth-amun-the-everflowing-purse",
@@ -1587,10 +1587,10 @@ window.DEFAULT_DATA = {
    "atk": 110,
    "hp": 310,
    "rarity": "Eternal",
-   "text": "At the start of each of your turns, gain 4 Pulse. While Qeth-Amun is in play, all Heroes you control continuously have +50 Health, and each Hero you control heals 10 Health at the start of each of your turns.",
+   "text": "At the start of each of your turns, gain 3 Pulse. While Qeth-Amun is in play, all Heroes you control continuously have +50 Health, and each Hero you control heals 10 Health at the start of each of your turns.",
    "auxCost": 7,
    "auxSlots": 2,
-   "auxText": "At the start of each of your turns, gain 3 Pulse. Whenever you gain Pulse from any card effect, all Heroes you control heal 10 Health."
+   "auxText": "At the start of each of your turns, gain 2 Pulse. Whenever you gain Pulse from any card effect, all Heroes you control heal 10 Health."
   },
   {
    "id": "gildharbor--coinmail-vest",
@@ -1608,7 +1608,7 @@ window.DEFAULT_DATA = {
    "type": "relic",
    "slots": 1,
    "cost": 1,
-   "text": "While equipped, at the start of each of your turns, gain 2 Pulse."
+   "text": "While equipped, at the start of each of your turns, gain 1 Pulse."
   },
   {
    "id": "gildharbor--banner-of-safe-passage",
@@ -1626,7 +1626,7 @@ window.DEFAULT_DATA = {
    "type": "relic",
    "slots": 2,
    "cost": 3,
-   "text": "While equipped, this Hero continuously has +20 Attack and +40 Health. At the start of each of your turns, gain 2 Pulse."
+   "text": "While equipped, this Hero continuously has +20 Attack and +40 Health. At the start of each of your turns, gain 1 Pulse."
   },
   {
    "id": "gildharbor--colossus-of-the-harbor-gate",
@@ -1643,7 +1643,7 @@ window.DEFAULT_DATA = {
    "name": "Toll Gate",
    "type": "hex",
    "cost": 1,
-   "text": "When an enemy Hero attacks a Hero in this lane, gain 3 Pulse and prevent 10 of the combat damage dealt to your Hero. After this effect triggers once, destroy this card."
+   "text": "When an enemy Hero attacks a Hero in this lane, gain 2 Pulse and prevent 10 of the combat damage dealt to your Hero. After this effect triggers once, destroy this card."
   },
   {
    "id": "gildharbor--hired-blades",
@@ -1691,7 +1691,7 @@ window.DEFAULT_DATA = {
    "name": "The Long Voyage",
    "type": "rite",
    "cost": 2,
-   "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, gain 8 Pulse and draw 1 card, then destroy this Rite. At any point before then, you may instead end this Rite early to gain 4 Pulse immediately."
+   "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, gain 7 Pulse and draw 1 card, then destroy this Rite. At any point before then, you may instead end this Rite early to gain 3 Pulse immediately."
   },
   {
    "id": "gildharbor--oath-of-the-guild-compact",
@@ -1715,7 +1715,7 @@ window.DEFAULT_DATA = {
    "name": "Loan Against the Tide",
    "type": "pact",
    "cost": 1,
-   "text": "When this Pact resolves, gain 5 Pulse immediately. At the start of your next turn, your flat base Pulse gain is 2 instead of 5."
+   "text": "When this Pact resolves, gain 4 Pulse immediately. At the start of your next turn, your flat base Pulse gain is 2 instead of 5."
   },
   {
    "id": "gildharbor--cargo-manifest",
@@ -1731,7 +1731,7 @@ window.DEFAULT_DATA = {
    "name": "Protection Money",
    "type": "pact",
    "cost": 1,
-   "text": "When this Pact resolves, choose a Hero you control — it cannot attack next turn. That Hero gains +30 Health permanently and you gain 3 Pulse."
+   "text": "When this Pact resolves, choose a Hero you control — it cannot attack next turn. That Hero gains +30 Health permanently and you gain 2 Pulse."
   },
   {
    "id": "gildharbor--buyout",
@@ -1755,7 +1755,7 @@ window.DEFAULT_DATA = {
    "name": "Flood the Market",
    "type": "incantation",
    "cost": 3,
-   "text": "When this Incantation resolves, draw 2 cards, then gain 2 Pulse for each different Realm among the Heroes you control."
+   "text": "When this Incantation resolves, draw 2 cards, then gain 1 Pulse for each different Realm among the Heroes you control."
   },
   {
    "id": "gildharbor--hold-the-line",
@@ -2198,7 +2198,7 @@ window.DEFAULT_DATA = {
    "name": "Subotai the Far-Striker",
    "type": "hero",
    "cost": 6,
-   "atk": 110,
+   "atk": 120,
    "hp": 70,
    "rarity": "Rare",
    "text": "Subotai may attack any enemy lane. Whenever Subotai attacks a lane other than his directly opposing lane, he permanently gains +10 Attack.",
@@ -2212,7 +2212,7 @@ window.DEFAULT_DATA = {
    "name": "Khatun Erdene of the White Banner",
    "type": "hero",
    "cost": 6,
-   "atk": 100,
+   "atk": 110,
    "hp": 80,
    "rarity": "Rare",
    "text": "At the start of each of your turns, if Erdene attacked last turn, she gains +20 Attack permanently.",
@@ -2226,7 +2226,7 @@ window.DEFAULT_DATA = {
    "name": "Jebe, Arrow of the Endless Sky",
    "type": "hero",
    "cost": 8,
-   "atk": 150,
+   "atk": 160,
    "hp": 90,
    "rarity": "Ultra-Rare",
    "text": "Jebe may attack any enemy lane. Jebe has +10 Attack for each different Realm among the Heroes you control. Whenever Jebe destroys an enemy Hero in combat, gain 2 Pulse.",
@@ -2240,8 +2240,8 @@ window.DEFAULT_DATA = {
    "name": "Tolui Stormhoof",
    "type": "hero",
    "cost": 8,
-   "atk": 140,
-   "hp": 100,
+   "atk": 150,
+   "hp": 110,
    "rarity": "Ultra-Rare",
    "text": "When Tolui participates in an Onslaught, all participating Heroes gain +20 Attack for that combat, and the defending Hero's controller cannot prevent, block, or redirect damage during that combat.",
    "auxCost": 6,
@@ -2254,8 +2254,8 @@ window.DEFAULT_DATA = {
    "name": "Khagan Temurzhin, Sky-Chosen",
    "type": "hero",
    "cost": 10,
-   "atk": 180,
-   "hp": 120,
+   "atk": 190,
+   "hp": 130,
    "rarity": "Eternal",
    "text": "Temurzhin may attack any enemy lane. Whenever any Hero you control declares an attack, Temurzhin gains +10 Attack until end of turn. Whenever Temurzhin destroys an enemy Hero in combat, he gains +20 Attack permanently and you gain 1 Pulse.",
    "auxCost": 8,
@@ -2553,8 +2553,8 @@ window.DEFAULT_DATA = {
    "name": "King Mardin Ironroot",
    "type": "hero",
    "cost": 8,
-   "atk": 140,
-   "hp": 130,
+   "atk": 150,
+   "hp": 140,
    "rarity": "Ultra-Rare",
    "text": "When Mardin enters play, search your deck for up to 2 Relic cards, reveal them, and put them into your hand, then shuffle your deck. While Mardin is in play, your Relics cost 1 less Pulse to play (minimum 1).",
    "auxCost": 6,
@@ -2567,8 +2567,8 @@ window.DEFAULT_DATA = {
    "name": "Thraindor, the Anvil Ascendant",
    "type": "hero",
    "cost": 8,
-   "atk": 140,
-   "hp": 130,
+   "atk": 150,
+   "hp": 140,
    "rarity": "Ultra-Rare",
    "text": "Relics of any Realm may be attached to Thraindor. While Thraindor has at least one Relic equipped, he continuously has +20 Attack and +20 Health, and his Relics cannot be destroyed by enemy card effects.",
    "auxCost": 6,
@@ -2581,8 +2581,8 @@ window.DEFAULT_DATA = {
    "name": "Durgan Worldshaper, First of the Forge",
    "type": "hero",
    "cost": 10,
-   "atk": 160,
-   "hp": 170,
+   "atk": 170,
+   "hp": 180,
    "rarity": "Eternal",
    "text": "While Durgan is in play, all Relics equipped to Heroes you control grant double their printed Attack and Health bonuses (other Relic effects are not doubled).",
    "auxCost": 8,
@@ -2810,7 +2810,7 @@ window.DEFAULT_DATA = {
    "name": "Shield-Brother Varro",
    "type": "hero",
    "cost": 4,
-   "atk": 80,
+   "atk": 90,
    "hp": 60,
    "rarity": "Common",
    "text": "When a Hero you control in a lane neighboring Varro would take combat damage, you may have Varro take half of that damage instead (rounded to the nearest 10).",
@@ -2824,7 +2824,7 @@ window.DEFAULT_DATA = {
    "name": "Tribune Livius Sorel",
    "type": "hero",
    "cost": 5,
-   "atk": 90,
+   "atk": 100,
    "hp": 70,
    "rarity": "Uncommon",
    "text": "While Livius is in play, whenever a Hero you control destroys an enemy Hero in combat, all Heroes you control in lanes neighboring the victor gain +10 Attack permanently.",
@@ -2838,8 +2838,8 @@ window.DEFAULT_DATA = {
    "name": "Praefect Gaius Mund",
    "type": "hero",
    "cost": 5,
-   "atk": 80,
-   "hp": 80,
+   "atk": 90,
+   "hp": 90,
    "rarity": "Uncommon",
    "text": "While Gaius is in play, when you declare an Onslaught, each participating Hero that has an allied Hero in a neighboring lane gains +10 Attack and takes 10 less combat damage for that combat.",
    "auxCost": 3,
@@ -2852,8 +2852,8 @@ window.DEFAULT_DATA = {
    "name": "Legatus Octavius Ferrix",
    "type": "hero",
    "cost": 6,
-   "atk": 100,
-   "hp": 90,
+   "atk": 110,
+   "hp": 100,
    "rarity": "Rare",
    "text": "The first time each turn Octavius destroys an enemy Hero in combat, gain 2 Pulse and draw 1 card.",
    "auxCost": 4,
@@ -2866,8 +2866,8 @@ window.DEFAULT_DATA = {
    "name": "Aquilifer Titus Crow",
    "type": "hero",
    "cost": 6,
-   "atk": 100,
-   "hp": 90,
+   "atk": 110,
+   "hp": 100,
    "rarity": "Rare",
    "text": "While Titus is in play, Heroes you control in neighboring lanes continuously have +20 Attack.",
    "auxCost": 4,
@@ -2880,8 +2880,8 @@ window.DEFAULT_DATA = {
    "name": "Consul Aurelia Vanth",
    "type": "hero",
    "cost": 8,
-   "atk": 140,
-   "hp": 120,
+   "atk": 150,
+   "hp": 130,
    "rarity": "Ultra-Rare",
    "text": "When Aurelia enters play, each Hero you control with an allied Hero in a neighboring lane gains +20 Attack and +20 Health permanently.",
    "auxCost": 6,
@@ -2894,8 +2894,8 @@ window.DEFAULT_DATA = {
    "name": "Praetorian Kaeso the Wall",
    "type": "hero",
    "cost": 8,
-   "atk": 140,
-   "hp": 120,
+   "atk": 150,
+   "hp": 130,
    "rarity": "Ultra-Rare",
    "text": "When any Hero you control would take combat damage, you may have Kaeso take half of that damage instead (rounded to the nearest 10), regardless of lane. Enemy Heroes attacking Kaeso have −20 Attack for that combat.",
    "auxCost": 6,
@@ -2908,8 +2908,8 @@ window.DEFAULT_DATA = {
    "name": "Imperator Severan Ashmark, the Undefeated",
    "type": "hero",
    "cost": 10,
-   "atk": 180,
-   "hp": 150,
+   "atk": 190,
+   "hp": 160,
    "rarity": "Eternal",
    "text": "While Severan is in play, every Hero you control that has an allied Hero in a neighboring lane continuously has +20 Attack and +20 Health. Whenever a Hero you control destroys an enemy Hero in combat, gain 1 Pulse.",
    "auxCost": 8,
@@ -3578,7 +3578,7 @@ window.DEFAULT_DATA = {
    "name": "Huitzilat, the Unsetting Sun",
    "type": "hero",
    "cost": 10,
-   "atk": 220,
+   "atk": 210,
    "hp": 130,
    "rarity": "Eternal",
    "text": "Once per turn, you may sacrifice another Hero you control: Huitzilat gains permanent Attack and Health equal to half the sacrificed Hero's printed Attack and printed Health respectively (rounded to the nearest 10). Whenever you sacrifice a Hero, gain 1 Pulse.",
@@ -3794,7 +3794,7 @@ window.DEFAULT_DATA = {
    "type": "hero",
    "cost": 2,
    "atk": 30,
-   "hp": 90,
+   "hp": 100,
    "rarity": "Common",
    "text": "Once per turn, you may pay 1 Pulse: a Hero you control heals 20 Health.",
    "auxCost": 1,
@@ -3808,7 +3808,7 @@ window.DEFAULT_DATA = {
    "type": "hero",
    "cost": 3,
    "atk": 40,
-   "hp": 120,
+   "hp": 130,
    "rarity": "Common",
    "text": "Once per turn, you may move 20 Health from Anselm to another Hero you control (Anselm's current and maximum Health drop by 20; the target's current and maximum Health rise by 20, permanently). If this reduces Anselm to 0 Health, he dies.",
    "auxCost": 1,
@@ -3822,7 +3822,7 @@ window.DEFAULT_DATA = {
    "type": "hero",
    "cost": 3,
    "atk": 40,
-   "hp": 120,
+   "hp": 130,
    "rarity": "Uncommon",
    "text": "When Benedic dies, draw 2 cards.",
    "auxCost": 1,
@@ -3836,7 +3836,7 @@ window.DEFAULT_DATA = {
    "type": "hero",
    "cost": 4,
    "atk": 60,
-   "hp": 150,
+   "hp": 160,
    "rarity": "Uncommon",
    "text": "While Ottbert is in play, enemy Heroes must attack Ottbert's lane if able. When Ottbert dies, each other Hero you control gains +10 Attack and +20 Health permanently.",
    "auxCost": 2,
@@ -3850,7 +3850,7 @@ window.DEFAULT_DATA = {
    "type": "hero",
    "cost": 5,
    "atk": 80,
-   "hp": 160,
+   "hp": 170,
    "rarity": "Rare",
    "text": "When Cuthwin dies, gain 3 Pulse, draw 2 cards, and each Hero you control heals 30 Health.",
    "auxCost": 3,
@@ -3864,7 +3864,7 @@ window.DEFAULT_DATA = {
    "type": "hero",
    "cost": 5,
    "atk": 80,
-   "hp": 160,
+   "hp": 170,
    "rarity": "Rare",
    "text": "While Gislebert is in play, whenever a Hero you control dies, all remaining Heroes you control gain +10 Attack and +10 Health permanently.",
    "auxCost": 3,
@@ -3877,8 +3877,8 @@ window.DEFAULT_DATA = {
    "name": "Mother Superior Aldith",
    "type": "hero",
    "cost": 7,
-   "atk": 100,
-   "hp": 230,
+   "atk": 110,
+   "hp": 240,
    "rarity": "Ultra-Rare",
    "text": "While Aldith is in play, all enemy Hero attacks must target Aldith's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane. Aldith takes 10 less combat damage, and enemy Heroes that attack Aldith take 20 damage after that combat resolves. When Aldith dies, each other Hero you control gains +20 Attack and +30 Health permanently, and you draw 2 cards.",
    "auxCost": 5,
@@ -3891,8 +3891,8 @@ window.DEFAULT_DATA = {
    "name": "Pilgrim-Saint Wendel",
    "type": "hero",
    "cost": 7,
-   "atk": 100,
-   "hp": 230,
+   "atk": 110,
+   "hp": 240,
    "rarity": "Ultra-Rare",
    "text": "Once per turn, you may move up to 30 Health from Wendel to another Hero you control (as a permanent transfer of current and maximum Health). While Wendel is in play, all enemy Hero attacks must target Wendel's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane, and enemy Heroes that attack Wendel take 20 damage after that combat resolves.",
    "auxCost": 5,
@@ -3905,8 +3905,8 @@ window.DEFAULT_DATA = {
    "name": "Saint Alberic the Ever-Open Door",
    "type": "hero",
    "cost": 9,
-   "atk": 120,
-   "hp": 300,
+   "atk": 130,
+   "hp": 320,
    "rarity": "Eternal",
    "text": "While Alberic is in play, all enemy Hero attacks must target Alberic's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Alberic take 20 damage after that combat resolves, and at the start of each of your turns, each Hero you control heals 20 Health. When Alberic dies, each other Hero you control gains +30 Attack and +30 Health permanently, you gain 3 Pulse, and you draw 2 cards.",
    "auxCost": 7,
@@ -4137,7 +4137,7 @@ window.DEFAULT_DATA = {
    "type": "hero",
    "cost": 3,
    "atk": 50,
-   "hp": 40,
+   "hp": 50,
    "rarity": "Common",
    "text": "Instead of attacking the enemy Hero, Sylvan may declare his attack against an enemy Relic or enemy Auxiliary card in his opposing lane: it is destroyed, no combat occurs, and Sylvan takes no damage.",
    "auxCost": 1,
@@ -4151,7 +4151,7 @@ window.DEFAULT_DATA = {
    "type": "hero",
    "cost": 4,
    "atk": 70,
-   "hp": 50,
+   "hp": 60,
    "rarity": "Common",
    "text": "When Kaelthorn fights, the enemy Hero's Relics and Auxiliary cards grant it no Attack or Health for that combat. Whenever he destroys an enemy Hero in combat, he gains +10 Attack permanently.",
    "auxCost": 2,
@@ -4165,7 +4165,7 @@ window.DEFAULT_DATA = {
    "type": "hero",
    "cost": 5,
    "atk": 90,
-   "hp": 60,
+   "hp": 80,
    "rarity": "Uncommon",
    "text": "Until the first time he attacks, Wren cannot be attacked and cannot be targeted by enemy card effects.",
    "auxCost": 3,
@@ -4179,7 +4179,7 @@ window.DEFAULT_DATA = {
    "type": "hero",
    "cost": 5,
    "atk": 90,
-   "hp": 60,
+   "hp": 80,
    "rarity": "Uncommon",
    "text": "Instead of attacking the enemy Hero, Thalorin may declare his attack against an enemy Relic or enemy Auxiliary card in his opposing lane: it is destroyed, no combat occurs, and he takes no damage. Whenever an enemy Relic or enemy Auxiliary card is destroyed, Thalorin gains +10 Attack until the end of your next turn.",
    "auxCost": 3,
@@ -4192,8 +4192,8 @@ window.DEFAULT_DATA = {
    "name": "Blade-Dancer Ilythar",
    "type": "hero",
    "cost": 6,
-   "atk": 110,
-   "hp": 70,
+   "atk": 120,
+   "hp": 90,
    "rarity": "Rare",
    "text": "When Ilythar fights, the enemy Hero's Relics and Auxiliary cards grant it no Attack or Health for that combat. When he fights an enemy Hero whose printed cost is higher than hers, he gains +20 Attack for that combat.",
    "auxCost": 4,
@@ -4206,8 +4206,8 @@ window.DEFAULT_DATA = {
    "name": "Sentinel Varyndra of the Canopy",
    "type": "hero",
    "cost": 6,
-   "atk": 110,
-   "hp": 70,
+   "atk": 120,
+   "hp": 90,
    "rarity": "Rare",
    "text": "Enemy Heroes attacking Varyndra's lane or a lane neighboring it have −20 Attack for that combat.",
    "auxCost": 4,
@@ -4220,8 +4220,8 @@ window.DEFAULT_DATA = {
    "name": "Warden-King Aethelred",
    "type": "hero",
    "cost": 8,
-   "atk": 140,
-   "hp": 100,
+   "atk": 150,
+   "hp": 120,
    "rarity": "Ultra-Rare",
    "text": "When Aethelred fights, the enemy Hero's Relics and Auxiliary cards grant it no Attack or Health for that combat. Whenever he destroys an enemy Hero in combat, gain 2 Pulse and draw 1 card.",
    "auxCost": 6,
@@ -4234,8 +4234,8 @@ window.DEFAULT_DATA = {
    "name": "Shadowfletcher Corvyn",
    "type": "hero",
    "cost": 8,
-   "atk": 140,
-   "hp": 100,
+   "atk": 150,
+   "hp": 120,
    "rarity": "Ultra-Rare",
    "text": "Instead of attacking the enemy Hero, Corvyn may declare his attack against an enemy Relic or enemy Auxiliary card in his opposing lane: it is destroyed, no combat occurs, and he takes no damage. When Corvyn destroys an enemy card this way, he may then immediately attack the enemy Hero in that lane as well (one additional combat).",
    "auxCost": 6,
@@ -4248,8 +4248,8 @@ window.DEFAULT_DATA = {
    "name": "Eldrianthe, the Thorn Eternal",
    "type": "hero",
    "cost": 10,
-   "atk": 180,
-   "hp": 120,
+   "atk": 190,
+   "hp": 150,
    "rarity": "Eternal",
    "text": "When Eldrianthe fights, the enemy Hero's Relics and Auxiliary cards grant it no Attack or Health for that combat. While any other Hero you control is in play, Eldrianthe cannot be attacked and cannot be targeted by enemy card effects. Whenever she destroys an enemy Hero in combat, she gains +10 Attack permanently.",
    "auxCost": 8,
@@ -4519,7 +4519,7 @@ window.DEFAULT_DATA = {
    "name": "Count Vesparian Thirst-Eternal",
    "type": "hero",
    "cost": 6,
-   "atk": 110,
+   "atk": 120,
    "hp": 80,
    "rarity": "Rare",
    "text": "When Vesparian fights, before combat damage is calculated: the opposing Hero loses 20 Health (stat reduction), and Vesparian gains +20 Attack for that combat and heals 20 Health.",
@@ -4533,7 +4533,7 @@ window.DEFAULT_DATA = {
    "name": "Sanguine Choir-Master Ellisar",
    "type": "hero",
    "cost": 6,
-   "atk": 110,
+   "atk": 120,
    "hp": 80,
    "rarity": "Rare",
    "text": "At the start of each of your turns, the enemy Hero in Ellisar's opposing lane (if any) loses 10 Health (stat reduction), and Ellisar gains +10 Attack permanently and heals 10 Health.",
@@ -4547,8 +4547,8 @@ window.DEFAULT_DATA = {
    "name": "Duke Marrowfane the Unquenched",
    "type": "hero",
    "cost": 8,
-   "atk": 140,
-   "hp": 110,
+   "atk": 150,
+   "hp": 120,
    "rarity": "Ultra-Rare",
    "text": "When Marrowfane enters play, every enemy Hero loses 10 Health (stat reduction), and Marrowfane gains +10 Attack permanently and heals 10 Health for each enemy Hero affected.",
    "auxCost": 6,
@@ -4561,8 +4561,8 @@ window.DEFAULT_DATA = {
    "name": "Nyxara, the Velvet Famine",
    "type": "hero",
    "cost": 8,
-   "atk": 140,
-   "hp": 110,
+   "atk": 150,
+   "hp": 120,
    "rarity": "Ultra-Rare",
    "text": "Enemy Heroes that are below their maximum Health have −20 Attack while fighting Nyxara. Once per turn, you may pay 2 Pulse: destroy an enemy Hero in Nyxara's opposing lane with 40 or less Health remaining.",
    "auxCost": 6,
@@ -4575,8 +4575,8 @@ window.DEFAULT_DATA = {
    "name": "Vhastrix, the Crimson Sovereign",
    "type": "hero",
    "cost": 10,
-   "atk": 170,
-   "hp": 140,
+   "atk": 180,
+   "hp": 150,
    "rarity": "Eternal",
    "text": "At the start of each of your turns, every enemy Hero below its maximum Health loses 10 Health (stat reduction); Vhastrix gains +10 Attack permanently for each Hero affected, and heals 20 Health. Once per turn, you may pay 3 Pulse: destroy an enemy Hero with 30 or less Health remaining.",
    "auxCost": 8,
@@ -4807,7 +4807,7 @@ window.DEFAULT_DATA = {
    "atk": 60,
    "hp": 110,
    "rarity": "Common",
-   "text": "Once per turn, you may pay 2 Pulse: a Hero you control gains a ward that prevents the next 30 damage it would take (wards stack and absorb damage before Health).",
+   "text": "Once per turn, you may pay 2 Pulse: a Hero you control gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health).",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the first time each turn the Hero in this lane takes damage, it gains a ward that prevents the next 10 damage it would take (wards stack)."
@@ -4849,7 +4849,7 @@ window.DEFAULT_DATA = {
    "atk": 90,
    "hp": 170,
    "rarity": "Rare",
-   "text": "Once per turn, you may pay 2 Pulse: a Hero you control heals 40 Health and gains a ward that prevents the next 20 damage it would take (wards stack).",
+   "text": "Once per turn, you may pay 2 Pulse: a Hero you control heals 30 Health and gains a ward that prevents the next 20 damage it would take (wards stack).",
    "auxCost": 3,
    "auxSlots": 1,
    "auxText": "While in this slot, whenever a Hero you control is healed by a card effect, it also gains a ward that prevents the next 10 damage it would take (wards stack; maximum twice per turn)."
@@ -4891,7 +4891,7 @@ window.DEFAULT_DATA = {
    "atk": 120,
    "hp": 230,
    "rarity": "Ultra-Rare",
-   "text": "When Corwin enters play, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack and absorb damage before Health).",
+   "text": "When Corwin enters play, each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health).",
    "auxCost": 5,
    "auxSlots": 1,
    "auxText": "While in this slot, once per turn, when a Hero you control would take lethal combat damage, it first gains a ward that prevents the next 20 damage it would take (if the ward absorbs enough of the damage, it survives)."
@@ -4969,7 +4969,7 @@ window.DEFAULT_DATA = {
    "name": "Circle of Protection",
    "type": "hex",
    "cost": 1,
-   "text": "When an enemy Hero attacks a Hero in this lane, before combat, the defender gains a ward that prevents the next 30 damage it would take (wards absorb damage before Health). After this effect triggers once, destroy this card."
+   "text": "When an enemy Hero attacks a Hero in this lane, before combat, the defender gains a ward that prevents the next 20 damage it would take (wards absorb damage before Health). After this effect triggers once, destroy this card."
   },
   {
    "id": "brightmantle--rite-of-undoing",
@@ -5001,7 +5001,7 @@ window.DEFAULT_DATA = {
    "name": "The Gathering Light",
    "type": "rite",
    "cost": 1,
-   "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack and absorb damage before Health), then destroy this Rite. At any point before then, you may instead end this Rite early — one Hero you control immediately gains a ward that prevents the next 20 damage it would take."
+   "text": "Starting the turn after this Rite is played, count 2 of your turns. At the end of the 2nd counted turn, each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack and absorb damage before Health), then destroy this Rite. At any point before then, you may instead end this Rite early — one Hero you control immediately gains a ward that prevents the next 20 damage it would take."
   },
   {
    "id": "brightmantle--consecration-of-the-field",
@@ -5009,7 +5009,7 @@ window.DEFAULT_DATA = {
    "name": "Consecration of the Field",
    "type": "rite",
    "cost": 2,
-   "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, each Hero you control heals 40 Health and gains +10 Health permanently, then destroy this Rite. At any point before then, you may instead end this Rite early — each Hero you control heals 10 Health immediately."
+   "text": "Starting the turn after this Rite is played, count 3 of your turns. At the end of the 3rd counted turn, each Hero you control heals 30 Health and gains +10 Health permanently, then destroy this Rite. At any point before then, you may instead end this Rite early — each Hero you control heals 10 Health immediately."
   },
   {
    "id": "brightmantle--oath-of-the-first-light",
@@ -5033,7 +5033,7 @@ window.DEFAULT_DATA = {
    "name": "Sacrament of Ashes",
    "type": "pact",
    "cost": 1,
-   "text": "When this Pact resolves, destroy an Auxiliary card you control. A Hero you control heals 40 Health, and all enemy-imposed stat reductions and negative effects are removed from it (restoring the stats it would have without them)."
+   "text": "When this Pact resolves, destroy an Auxiliary card you control. A Hero you control heals 30 Health, and all enemy-imposed stat reductions and negative effects are removed from it (restoring the stats it would have without them)."
   },
   {
    "id": "brightmantle--tithe-of-light",
@@ -5057,7 +5057,7 @@ window.DEFAULT_DATA = {
    "name": "Vow of the Shieldbearer",
    "type": "pact",
    "cost": 2,
-   "text": "When this Pact resolves, choose a Hero you control — it cannot attack next turn. It gains a ward that prevents the next 40 damage it would take (wards stack) and +20 Health permanently."
+   "text": "When this Pact resolves, choose a Hero you control — it cannot attack next turn. It gains a ward that prevents the next 30 damage it would take (wards stack) and +20 Health permanently."
   },
   {
    "id": "brightmantle--radiant-mending",
@@ -5065,7 +5065,7 @@ window.DEFAULT_DATA = {
    "name": "Radiant Mending",
    "type": "incantation",
    "cost": 1,
-   "text": "When this Incantation resolves, a Hero you control heals 40 Health and gains a ward that prevents the next 10 damage it would take (wards stack)."
+   "text": "When this Incantation resolves, a Hero you control heals 30 Health and gains a ward that prevents the next 10 damage it would take (wards stack)."
   },
   {
    "id": "brightmantle--purge-the-shadow",
@@ -5081,7 +5081,7 @@ window.DEFAULT_DATA = {
    "name": "Aegis of Dawn",
    "type": "incantation",
    "cost": 4,
-   "text": "When this Incantation resolves, each Hero you control gains a ward that prevents the next 30 damage it would take (wards stack), and you gain 1 Pulse for each Hero warded this way (maximum 3)."
+   "text": "When this Incantation resolves, each Hero you control gains a ward that prevents the next 20 damage it would take (wards stack), and you gain 1 Pulse for each Hero warded this way (maximum 3)."
   },
   {
    "id": "brightmantle--rally-the-faithful",
@@ -5516,7 +5516,7 @@ window.DEFAULT_DATA = {
    "name": "Ashmaw the Devourer",
    "type": "hero",
    "cost": 7,
-   "atk": 130,
+   "atk": 140,
    "hp": 60,
    "rarity": "Rare",
    "text": "When Ashmaw the Devourer enters play, destroy an enemy Hero with 60 or less Health remaining.",
@@ -5544,7 +5544,7 @@ window.DEFAULT_DATA = {
    "name": "Nyxaraxi, the Obsidian Wyrm",
    "type": "hero",
    "cost": 9,
-   "atk": 160,
+   "atk": 170,
    "hp": 70,
    "rarity": "Ultra-Rare",
    "text": "When Nyxaraxi, the Obsidian Wyrm enters play, destroy an enemy Auxiliary card and an enemy Hero of your choice gets -40 Attack until the end of your next turn.",
@@ -5558,7 +5558,7 @@ window.DEFAULT_DATA = {
    "name": "Ignathor, Breath of Ruin",
    "type": "hero",
    "cost": 9,
-   "atk": 180,
+   "atk": 190,
    "hp": 60,
    "rarity": "Ultra-Rare",
    "text": "When Ignathor, Breath of Ruin enters play, destroy an enemy Hero with 80 or less Health remaining.",
@@ -5572,7 +5572,7 @@ window.DEFAULT_DATA = {
    "name": "Vorthalyx, the World-Ender",
    "type": "hero",
    "cost": 10,
-   "atk": 190,
+   "atk": 200,
    "hp": 90,
    "rarity": "Eternal",
    "text": "When Vorthalyx, the World-Ender enters play, destroy an enemy Hero with 100 or less Health remaining and destroy an enemy Auxiliary card.",
@@ -5790,7 +5790,7 @@ window.DEFAULT_DATA = {
    "atk": 30,
    "hp": 190,
    "rarity": "Common",
-   "text": "When Mudward Tunneler enters play, each other Hero you control heals 20 Health.",
+   "text": "When Mudward Tunneler enters play, each other Hero you control heals 10 Health.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +30 Health."
@@ -5804,7 +5804,7 @@ window.DEFAULT_DATA = {
    "atk": 50,
    "hp": 170,
    "rarity": "Common",
-   "text": "While Ironhide is in play, enemy Heroes must attack Ironhide's lane if able. Enemy Heroes that attack Ironhide take 20 damage after that combat resolves.",
+   "text": "While Ironhide is in play, enemy Heroes must attack Ironhide's lane if able. Enemy Heroes that attack Ironhide take 10 damage after that combat resolves.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +40 Health."
@@ -5832,7 +5832,7 @@ window.DEFAULT_DATA = {
    "atk": 30,
    "hp": 240,
    "rarity": "Uncommon",
-   "text": "At the start of each of your turns, each Hero you control heals 20 Health.",
+   "text": "At the start of each of your turns, each Hero you control heals 10 Health.",
    "auxCost": 2,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +50 Health."
@@ -5846,7 +5846,7 @@ window.DEFAULT_DATA = {
    "atk": 60,
    "hp": 300,
    "rarity": "Rare",
-   "text": "While Colossus is in play, all enemy Hero attacks must target Colossus's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Colossus take 20 damage after that combat resolves. Colossus takes 20 less combat damage.",
+   "text": "While Colossus is in play, all enemy Hero attacks must target Colossus's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Colossus take 10 damage after that combat resolves. Colossus takes 20 less combat damage.",
    "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +70 Health."
@@ -5860,7 +5860,7 @@ window.DEFAULT_DATA = {
    "atk": 50,
    "hp": 280,
    "rarity": "Rare",
-   "text": "When Bastion Everward enters play, each other Hero you control heals 30 Health. At the start of each of your turns, each Hero you control heals 20 Health.",
+   "text": "When Bastion Everward enters play, each other Hero you control heals 20 Health. At the start of each of your turns, each Hero you control heals 10 Health.",
    "auxCost": 3,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +60 Health."
@@ -5874,7 +5874,7 @@ window.DEFAULT_DATA = {
    "atk": 70,
    "hp": 380,
    "rarity": "Ultra-Rare",
-   "text": "While Adamantus is in play, all enemy Hero attacks must target Adamantus's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Adamantus take 30 damage after that combat resolves. Adamantus takes 30 less combat damage.",
+   "text": "While Adamantus is in play, all enemy Hero attacks must target Adamantus's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Adamantus take 20 damage after that combat resolves. Adamantus takes 30 less combat damage.",
    "auxCost": 5,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +90 Health."
@@ -5888,7 +5888,7 @@ window.DEFAULT_DATA = {
    "atk": 60,
    "hp": 360,
    "rarity": "Ultra-Rare",
-   "text": "When Aegisreach Titan enters play, each other Hero you control heals 40 Health. At the start of each of your turns, each Hero you control heals 30 Health.",
+   "text": "When Aegisreach Titan enters play, each other Hero you control heals 30 Health. At the start of each of your turns, each Hero you control heals 20 Health.",
    "auxCost": 5,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +80 Health."
@@ -5902,7 +5902,7 @@ window.DEFAULT_DATA = {
    "atk": 90,
    "hp": 440,
    "rarity": "Eternal",
-   "text": "While Karngmor, the Everstone is in play, all enemy Hero attacks must target Karngmor's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Karngmor take 30 damage after that combat resolves. At the start of each of your turns, each Hero you control heals 30 Health.",
+   "text": "While Karngmor, the Everstone is in play, all enemy Hero attacks must target Karngmor's lane, regardless of the enemy Hero's position or the Hero standing in its opposing lane; enemy Heroes that attack Karngmor take 20 damage after that combat resolves. At the start of each of your turns, each Hero you control heals 20 Health.",
    "auxCost": 7,
    "auxSlots": 2,
    "auxText": "While in this slot, the Hero in this lane continuously has +120 Health."
@@ -6062,7 +6062,7 @@ window.DEFAULT_DATA = {
    "name": "Fortify",
    "type": "incantation",
    "cost": 2,
-   "text": "When this Incantation resolves, each Hero you control heals 30 Health and gains +10 Attack until the end of your next turn."
+   "text": "When this Incantation resolves, each Hero you control heals 20 Health and gains +10 Attack until the end of your next turn."
   },
   {
    "id": "golmerad--stone-skin",
@@ -6070,7 +6070,7 @@ window.DEFAULT_DATA = {
    "name": "Stone Skin",
    "type": "incantation",
    "cost": 2,
-   "text": "When this Incantation resolves, a Hero you control heals 40 Health and gains a ward that prevents the next 30 damage it would take."
+   "text": "When this Incantation resolves, a Hero you control heals 30 Health and gains a ward that prevents the next 30 damage it would take."
   },
   {
    "id": "golmerad--bastion-s-call",
@@ -6131,7 +6131,7 @@ window.DEFAULT_DATA = {
    "type": "hero",
    "cost": 4,
    "atk": 50,
-   "hp": 70,
+   "hp": 80,
    "rarity": "Common",
    "text": "Once per turn, when Bronze Talos Shard deals combat damage to an enemy Hero, it heals 20 Health.",
    "auxCost": 2,
@@ -6158,8 +6158,8 @@ window.DEFAULT_DATA = {
    "name": "Cyclops Boulderhurler",
    "type": "hero",
    "cost": 6,
-   "atk": 110,
-   "hp": 70,
+   "atk": 120,
+   "hp": 80,
    "rarity": "Uncommon",
    "text": "When Cyclops Boulderhurler enters play, destroy an enemy Hero with 40 or less Health remaining.",
    "auxCost": 4,
@@ -6172,7 +6172,7 @@ window.DEFAULT_DATA = {
    "name": "Nymph of the Oracle",
    "type": "hero",
    "cost": 5,
-   "atk": 70,
+   "atk": 80,
    "hp": 60,
    "rarity": "Uncommon",
    "text": "When Nymph of the Oracle enters play, draw 1 card.",
@@ -6186,8 +6186,8 @@ window.DEFAULT_DATA = {
    "name": "Hydra",
    "type": "hero",
    "cost": 7,
-   "atk": 100,
-   "hp": 90,
+   "atk": 110,
+   "hp": 100,
    "rarity": "Rare",
    "text": "Whenever Hydra takes damage, it permanently gains 5 Attack. Once per turn, when Hydra deals combat damage to an enemy Hero, it heals 20 Health.",
    "auxCost": 5,
@@ -6200,8 +6200,8 @@ window.DEFAULT_DATA = {
    "name": "Chimera",
    "type": "hero",
    "cost": 7,
-   "atk": 120,
-   "hp": 70,
+   "atk": 130,
+   "hp": 80,
    "rarity": "Rare",
    "text": "When Chimera destroys an enemy Hero in combat, it deals 30 damage to the enemy Hero in a lane neighboring the one it attacked, if any.",
    "auxCost": 5,
@@ -6214,8 +6214,8 @@ window.DEFAULT_DATA = {
    "name": "Medusa, the Gorgon Queen",
    "type": "hero",
    "cost": 8,
-   "atk": 130,
-   "hp": 70,
+   "atk": 140,
+   "hp": 80,
    "rarity": "Ultra-Rare",
    "text": "When Medusa, the Gorgon Queen enters play, destroy an enemy Hero with 40 or less Health remaining and choose an enemy Hero — it cannot attack during your opponent's next turn.",
    "auxCost": 6,
@@ -6228,8 +6228,8 @@ window.DEFAULT_DATA = {
    "name": "Minotaur of the Labyrinth",
    "type": "hero",
    "cost": 8,
-   "atk": 170,
-   "hp": 80,
+   "atk": 180,
+   "hp": 90,
    "rarity": "Ultra-Rare",
    "text": "Whenever Minotaur takes damage, it permanently gains 10 Attack. Once per turn, when Minotaur deals combat damage to an enemy Hero, it heals 30 Health.",
    "auxCost": 6,
@@ -6242,8 +6242,8 @@ window.DEFAULT_DATA = {
    "name": "Typhon, the Titan of Storms",
    "type": "hero",
    "cost": 10,
-   "atk": 190,
-   "hp": 90,
+   "atk": 210,
+   "hp": 100,
    "rarity": "Eternal",
    "text": "When Typhon, the Titan of Storms enters play, choose an enemy Hero — it cannot attack during your opponent's next turn. Whenever Typhon takes damage, it permanently gains 10 Attack.",
    "auxCost": 8,
@@ -6432,7 +6432,7 @@ window.DEFAULT_DATA = {
    "atk": 30,
    "hp": 30,
    "rarity": "Common",
-   "text": "When Snik the Cutpurse enters play, steal 2 Pulse from your opponent.",
+   "text": "When Snik the Cutpurse enters play, steal 1 Pulse from your opponent.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack."
@@ -6446,7 +6446,7 @@ window.DEFAULT_DATA = {
    "atk": 40,
    "hp": 30,
    "rarity": "Common",
-   "text": "When Grubfingers enters play, your opponent loses 2 Pulse.",
+   "text": "When Grubfingers enters play, your opponent loses 1 Pulse.",
    "auxCost": 1,
    "auxSlots": 1,
    "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack."
@@ -6474,10 +6474,10 @@ window.DEFAULT_DATA = {
    "atk": 50,
    "hp": 30,
    "rarity": "Common",
-   "text": "When Muckstab Sneak enters play, your opponent loses 3 Pulse.",
+   "text": "When Muckstab Sneak enters play, your opponent loses 2 Pulse.",
    "auxCost": 1,
    "auxSlots": 1,
-   "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
+   "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack."
   },
   {
    "id": "gribrok--grizzle-the-taxman",
@@ -6491,7 +6491,7 @@ window.DEFAULT_DATA = {
    "text": "While Grizzle, the Taxman is in play, Heroes your opponent plays cost 1 additional Pulse.",
    "auxCost": 1,
    "auxSlots": 1,
-   "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
+   "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack."
   },
   {
    "id": "gribrok--nabber-queen",
@@ -6502,10 +6502,10 @@ window.DEFAULT_DATA = {
    "atk": 50,
    "hp": 50,
    "rarity": "Uncommon",
-   "text": "When Nabber Queen enters play, steal 3 Pulse from your opponent.",
+   "text": "When Nabber Queen enters play, steal 2 Pulse from your opponent.",
    "auxCost": 1,
    "auxSlots": 1,
-   "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
+   "auxText": "While in this slot, the Hero in this lane continuously has +10 Attack."
   },
   {
    "id": "gribrok--wartlord-gribok",
@@ -6516,10 +6516,10 @@ window.DEFAULT_DATA = {
    "atk": 80,
    "hp": 70,
    "rarity": "Rare",
-   "text": "When Wartlord Gribok enters play, your opponent loses 3 Pulse. While Wartlord Gribok is in play, Heroes your opponent plays cost 1 additional Pulse.",
+   "text": "When Wartlord Gribok enters play, your opponent loses 2 Pulse. While Wartlord Gribok is in play, Heroes your opponent plays cost 1 additional Pulse.",
    "auxCost": 2,
    "auxSlots": 1,
-   "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
+   "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
   },
   {
    "id": "gribrok--skitterfang-the-thief",
@@ -6530,10 +6530,10 @@ window.DEFAULT_DATA = {
    "atk": 60,
    "hp": 70,
    "rarity": "Rare",
-   "text": "When Skitterfang the Thief enters play, steal 4 Pulse from your opponent.",
+   "text": "When Skitterfang the Thief enters play, steal 3 Pulse from your opponent.",
    "auxCost": 2,
    "auxSlots": 1,
-   "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
+   "auxText": "While in this slot, the Hero in this lane continuously has +20 Attack."
   },
   {
    "id": "gribrok--vexmaw-the-pulse-eater",
@@ -6544,10 +6544,10 @@ window.DEFAULT_DATA = {
    "atk": 80,
    "hp": 80,
    "rarity": "Ultra-Rare",
-   "text": "When Vexmaw, the Pulse-Eater enters play, steal 4 Pulse from your opponent. While Vexmaw, the Pulse-Eater is in play, Heroes your opponent plays cost 1 additional Pulse.",
+   "text": "When Vexmaw, the Pulse-Eater enters play, steal 3 Pulse from your opponent. While Vexmaw, the Pulse-Eater is in play, Heroes your opponent plays cost 1 additional Pulse.",
    "auxCost": 3,
    "auxSlots": 2,
-   "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
+   "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
   },
   {
    "id": "gribrok--grobbla-the-swindler",
@@ -6558,10 +6558,10 @@ window.DEFAULT_DATA = {
    "atk": 60,
    "hp": 80,
    "rarity": "Ultra-Rare",
-   "text": "When Grobbla the Swindler enters play, your opponent loses 5 Pulse.",
+   "text": "When Grobbla the Swindler enters play, your opponent loses 4 Pulse.",
    "auxCost": 3,
    "auxSlots": 2,
-   "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
+   "auxText": "While in this slot, the Hero in this lane continuously has +30 Attack."
   },
   {
    "id": "gribrok--gribrok-the-underking",
@@ -6572,10 +6572,10 @@ window.DEFAULT_DATA = {
    "atk": 120,
    "hp": 110,
    "rarity": "Eternal",
-   "text": "When Gribrok the Underking enters play, steal 5 Pulse from your opponent. While Gribrok the Underking is in play, Heroes your opponent plays cost 2 additional Pulse.",
+   "text": "When Gribrok the Underking enters play, steal 4 Pulse from your opponent. While Gribrok the Underking is in play, Heroes your opponent plays cost 2 additional Pulse.",
    "auxCost": 5,
    "auxSlots": 2,
-   "auxText": "While in this slot, the Hero in this lane continuously has +50 Attack."
+   "auxText": "While in this slot, the Hero in this lane continuously has +40 Attack."
   },
   {
    "id": "gribrok--rusty-shiv",
@@ -6584,7 +6584,7 @@ window.DEFAULT_DATA = {
    "type": "relic",
    "slots": 1,
    "cost": 1,
-   "text": "While equipped, this Hero continuously has +20 Attack."
+   "text": "While equipped, this Hero continuously has +10 Attack."
   },
   {
    "id": "gribrok--stolen-trinket",
@@ -6593,7 +6593,7 @@ window.DEFAULT_DATA = {
    "type": "relic",
    "slots": 1,
    "cost": 1,
-   "text": "While equipped, this Hero continuously has +30 Attack."
+   "text": "While equipped, this Hero continuously has +20 Attack."
   },
   {
    "id": "gribrok--patchwork-armor",
@@ -6611,7 +6611,7 @@ window.DEFAULT_DATA = {
    "type": "relic",
    "slots": 2,
    "cost": 2,
-   "text": "While equipped, this Hero continuously has +30 Attack and +20 Health."
+   "text": "While equipped, this Hero continuously has +20 Attack and +20 Health."
   },
   {
    "id": "gribrok--kingpin-s-signet",
@@ -6620,7 +6620,7 @@ window.DEFAULT_DATA = {
    "type": "relic",
    "slots": 2,
    "cost": 3,
-   "text": "While equipped, this Hero continuously has +40 Attack and +30 Health."
+   "text": "While equipped, this Hero continuously has +30 Attack and +30 Health."
   },
   {
    "id": "gribrok--caltrops",
@@ -6732,7 +6732,7 @@ window.DEFAULT_DATA = {
    "name": "Pickpocket",
    "type": "incantation",
    "cost": 1,
-   "text": "When this Incantation resolves, steal 3 Pulse from your opponent."
+   "text": "When this Incantation resolves, steal 2 Pulse from your opponent."
   },
   {
    "id": "gribrok--sabotage",
@@ -6848,7 +6848,7 @@ window.DEFAULT_DATA = {
    "text": "When Tomb Warden Vesh enters play, return a Hero card from your discard pile to your hand. Whenever an enemy Hero dies, gain 2 Pulse.",
    "auxCost": 2,
    "auxSlots": 1,
-   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, that Hero gains +20 Attack and +20 Health permanently."
+   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, that Hero gains +10 Attack and +10 Health permanently."
   },
   {
    "id": "vhorrath--sepulcher-lord-kael",
@@ -6862,7 +6862,7 @@ window.DEFAULT_DATA = {
    "text": "When Sepulcher Lord Kael enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -20 Attack.",
    "auxCost": 3,
    "auxSlots": 2,
-   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, that Hero gains +30 Attack permanently."
+   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, that Hero gains +20 Attack permanently."
   },
   {
    "id": "vhorrath--grim-harvester",
@@ -6876,7 +6876,7 @@ window.DEFAULT_DATA = {
    "text": "When Grim Harvester enters play, reanimate a Hero from your discard pile into an empty lane; it enters with -30 Attack. Whenever an enemy Hero dies, gain 3 Pulse.",
    "auxCost": 3,
    "auxSlots": 2,
-   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, deal 30 damage to an enemy Hero of your choice."
+   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, deal 20 damage to an enemy Hero of your choice."
   },
   {
    "id": "vhorrath--lichlord-mordath",
@@ -6904,7 +6904,7 @@ window.DEFAULT_DATA = {
    "text": "When Countess Nyxthral enters play, play a Hero card of cost 8 or less from your discard pile into an empty lane without paying its cost. Whenever an enemy Hero dies, gain 2 Pulse.",
    "auxCost": 5,
    "auxSlots": 2,
-   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, gain 3 Pulse and that Hero gains +20 Attack permanently."
+   "auxText": "While in this slot, whenever a Hero you control is reanimated or raised from the discard pile, gain 2 Pulse and that Hero gains +10 Attack permanently."
   },
   {
    "id": "vhorrath--vhorrath-the-deathless",
