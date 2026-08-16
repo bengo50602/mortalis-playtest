@@ -377,7 +377,7 @@ body.on-splash .topbar{display:none}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260816192253</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260816192656</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -12354,6 +12354,21 @@ async function aiTakeTurn() {
       Meta.save();
       return out;
     },
+
+    /* consolation coins for a loss — granted only the first time each stage is
+       lost, so it can't be farmed by conceding. Returns { coins }. */
+    resolveLoss: function (i, stage) {
+      var p = Meta.current(); if (!p) return { coins: 0 };
+      if (!p.campaign.lost) p.campaign.lost = {};
+      if (!p.campaign.lost[i]) p.campaign.lost[i] = {};
+      if (p.campaign.lost[i][stage]) return { coins: 0 };   // already paid out
+      p.campaign.lost[i][stage] = true;
+      var ch = chapterData(i);
+      var coins = Math.round(ch.coinsRegular / 4);
+      Meta.addCoins(coins);
+      Meta.save();
+      return { coins: coins };
+    },
   };
 
   /* the player's campaign realms: up to C().lanes realms in which they own the
@@ -15258,7 +15273,12 @@ window.addEventListener("DOMContentLoaded", () => {
         + "<button class='mbtn' id='br-map'>Campaign map</button>"
         + "<button class='mbtn' id='br-store'>Store</button></div>";
     } else {
+      var loss = Campaign.resolveLoss(chapter, stage);
+      var lossLine = (loss && loss.coins)
+        ? "<div style='margin:6px 0;color:var(--warn)'>&#9679; +" + loss.coins + " coins for the effort</div>"
+        : "";
       body = "<h2 style='color:var(--bad)'>Defeat</h2>"
+        + lossLine
         + "<div class='row'><button class='mbtn primary' id='br-retry'>Retry duel</button>"
         + "<button class='mbtn' id='br-map'>Campaign map</button></div>";
     }

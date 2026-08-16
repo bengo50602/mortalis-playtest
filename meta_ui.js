@@ -574,7 +574,12 @@
         + "<button class='mbtn' id='br-map'>Campaign map</button>"
         + "<button class='mbtn' id='br-store'>Store</button></div>";
     } else {
+      var loss = Campaign.resolveLoss(chapter, stage);
+      var lossLine = (loss && loss.coins)
+        ? "<div style='margin:6px 0;color:var(--warn)'>&#9679; +" + loss.coins + " coins for the effort</div>"
+        : "";
       body = "<h2 style='color:var(--bad)'>Defeat</h2>"
+        + lossLine
         + "<div class='row'><button class='mbtn primary' id='br-retry'>Retry duel</button>"
         + "<button class='mbtn' id='br-map'>Campaign map</button></div>";
     }

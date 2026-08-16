@@ -401,6 +401,21 @@
       Meta.save();
       return out;
     },
+
+    /* consolation coins for a loss — granted only the first time each stage is
+       lost, so it can't be farmed by conceding. Returns { coins }. */
+    resolveLoss: function (i, stage) {
+      var p = Meta.current(); if (!p) return { coins: 0 };
+      if (!p.campaign.lost) p.campaign.lost = {};
+      if (!p.campaign.lost[i]) p.campaign.lost[i] = {};
+      if (p.campaign.lost[i][stage]) return { coins: 0 };   // already paid out
+      p.campaign.lost[i][stage] = true;
+      var ch = chapterData(i);
+      var coins = Math.round(ch.coinsRegular / 4);
+      Meta.addCoins(coins);
+      Meta.save();
+      return { coins: coins };
+    },
   };
 
   /* the player's campaign realms: up to C().lanes realms in which they own the
