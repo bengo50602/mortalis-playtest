@@ -406,6 +406,7 @@ function parseOp(cl) {
   if ((m = cl.match(/^(?:he|she|it|this Hero|the Hero in this lane|\w+) gains \+(\d+) Attack(?: and \+(\d+) Health)? until (?:the )?end of (your next turn|turn)$/i))) return { op: "buff", atk: +m[1], hp: +(m[2] || 0), target: "itOrLane", dur: /next/i.test(m[3]) ? 2 : 0 };
   if ((m = cl.match(/^(?:he|she|it|this Hero|\w+) gains \+(\d+) Health permanently$/i))) return { op: "buff", atk: 0, hp: +m[1], target: "itOrLane", perm: true };
   if ((m = cl.match(/^one Hero you control(?: of your choice)?(?: immediately)? gains a ward that prevents the next (\d+) damage[^]*$/i))) return { op: "ward", n: +m[1], target: "ownChoice" };
+  if ((m = cl.match(new RegExp(`^all Heroes you control gain \\+${NUM} Attack until the end of your next turn$`, "i")))) return { op: "buff", atk: +m[1], hp: 0, target: "allOwn", dur: 2 };
   if ((m = cl.match(new RegExp(`^all (\\w+) Heroes you control gain \\+${NUM} Attack until the end of your next turn$`, "i")))) { const rn2 = realmNames().find(r => r.toLowerCase() === m[1].toLowerCase()); if (rn2) return { op: "buff", atk: +m[2], hp: 0, target: "allOwn", realmFilter: rn2, dur: 2 }; }
   if ((m = cl.match(/^remove all enemy-imposed stat reductions and negative effects from up to (\d+) Heroes you control; each heals (\d+) Health$/i))) return { op: "removeReductions", target: "upToOwn", count: +m[1], healN: +m[2] };
   if ((m = cl.match(/^destroy any one enemy Relic, Auxiliary card, Hex, Rite, or Pact$/i))) return { op: "destroyAnyEnemy" };

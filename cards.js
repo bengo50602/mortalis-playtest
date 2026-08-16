@@ -1888,7 +1888,7 @@ window.DEFAULT_DATA = {
    "atk": 90,
    "hp": 80,
    "rarity": "Rare",
-   "text": "While Ithamun is in play, whenever your opponent plays a Hero, all Ankhara Heroes you control gain +20 Attack until the end of your next turn.",
+   "text": "While Ithamun is in play, whenever your opponent plays a Hero, all Heroes you control gain +20 Attack until the end of your next turn.",
    "auxCost": 4,
    "auxSlots": 1,
    "auxText": "Once per turn, you may pay 2 Pulse to destroy an enemy Relic or enemy Auxiliary card."

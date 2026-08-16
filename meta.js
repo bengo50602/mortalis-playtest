@@ -302,9 +302,9 @@
       story: CHAPTER_STORY[i] || blurb, act: ACT_INTRO[i] || null,
       boss: boss ? { id: boss.id, name: boss.name, atk: boss.atk, hp: boss.hp } : null,
       rewardRarity: ultra ? "Ultra-Rare" : "Rare",
-      coinsRegular: 25 + i * 8,
-      coinsBoss: 80 + i * 20,
-      sealsBoss: ultra ? 2 : 1,
+      coinsRegular: 30 + i * 14,
+      coinsBoss: 100 + i * 35,
+      sealsBoss: (i <= 5 ? 1 : i <= 10 ? 2 : 3) + (ultra ? 1 : 0),
       duels: DUELS, stages: STAGES,
     };
   }

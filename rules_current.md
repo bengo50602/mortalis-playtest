@@ -1012,7 +1012,7 @@ While in this slot, when the Hero in this lane declares an attack, the defending
 
 **Ithamun, Master of a Thousand Names**
 Hero Mode — Cost: 6 Pulse | Attack/Health: 90/80 | Rarity: Rare
-While Ithamun is in play, whenever your opponent plays a Hero, all Ankhara Heroes you control gain +20 Attack until the end of your next turn.
+While Ithamun is in play, whenever your opponent plays a Hero, all Heroes you control gain +20 Attack until the end of your next turn.
 Auxiliary Mode — Cost: 4 Pulse | 1 slot
 Once per turn, you may pay 2 Pulse to destroy an enemy Relic or enemy Auxiliary card.
 
