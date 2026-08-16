@@ -1416,6 +1416,13 @@ const FX = {
     } else if (kind === "effect") {
       FX.ring(lane, col, 1.5);
       FX.chip(lane, d.name, "#dfe5ef", "rgba(32,40,56,.92)");
+    } else if (kind === "rite") {
+      // a charged Rite finally discharges — double sigil-ring + golden burst
+      const rc = col || "#e0c060";
+      FX.ring(lane, rc, 2.7);
+      FX.after(() => FX.ring(lane, "#f2e2a2", 2.0), 130);
+      FX.burst(lane, rc);
+      FX.chip(lane, "Rite resolves — " + d.name, "#f6ecc4", "rgba(60,48,16,.94)");
     } else if (kind === "reveal") {
       FX.ring(lane, "#c7aee8", 1.7);
       FX.chip(lane, "Hex — " + d.name, "#e6d8fb", "rgba(42,33,64,.94)");
@@ -1495,6 +1502,16 @@ const FX = {
     }
   },
 
+  burst(el, col) {
+    const r = FX.rect(el);
+    if (!r) return;
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    for (let i = 0; i < 10; i++) {
+      const a = (i / 10) * Math.PI * 2;
+      const p = FX.spawn(`left:${cx}px;top:${cy}px;width:5px;height:5px;border-radius:50%;background:${col};box-shadow:0 0 8px ${col};opacity:1`, 760, "fxshard");
+      FX.go(p, `;transform:translate(${Math.cos(a) * 66}px, ${Math.sin(a) * 60}px) scale(.4);opacity:0`);
+    }
+  },
   fly(a, b, o) {
     o = o || {};
     const L = FX.layer();

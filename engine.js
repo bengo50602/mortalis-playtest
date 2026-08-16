@@ -3199,6 +3199,7 @@ async function resolveRite(pi, si, which) {
   const card = cardById(s.cardId);
   const r = fx(s.cardId).rite;
   const ops = which === "payoff" ? (r && r.payoff) : (r && r.early);
+  fxSignal("rite", { pi, li: s.laneIdx, name: card.name, realm: card.realm, which });
   P.slots[si] = null;
   log(`${P.name}'s Rite resolves${which === "early" ? " early" : ""}: ${card.name}.`, P.isAI ? "ai" : "");
   if (ops && ops !== "manual") {
