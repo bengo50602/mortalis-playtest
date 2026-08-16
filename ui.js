@@ -284,10 +284,9 @@ const UI = {
         // makes cards like Benedar look as though they did nothing
         const wardPill = (P.blockAtkGt >= G.gt && !P.blockAtkUsed && P.blockAtkLane === li)
           ? `<span class="pill ward" title="The first attack declared against your Heroes on your opponent's next turn is blocked.">ward armed</span>` : "";
-        // absorb-ward badge: a shield showing how much damage the ward will soak
-        const wardCount = L.hero.wardCount || 0;
+        // absorb-ward badge: a shield showing the total damage the ward will soak
         const wardShield = (L.hero.ward > 0)
-          ? `<span class="pill wardshield" title="Ward${wardCount > 1 ? "s (×" + wardCount + ")" : ""} — the next ${L.hero.ward} damage to this Hero is absorbed before its Health.">&#128737;&#65039; ${L.hero.ward}${wardCount > 1 ? " &times;" + wardCount : ""}</span>` : "";
+          ? `<span class="pill wardshield" title="Ward — the next ${L.hero.ward} damage to this Hero is absorbed before its Health.">&#128737;&#65039; ${L.hero.ward}</span>` : "";
         const relicPills = wardPill + wardShield + L.hero.relics.map(r => `<span class="pill relic" data-ruid="${r.uid}" title="${(cardById(r.cardId).text || "").replace(/"/g, "&quot;")}">${cardById(r.cardId).name}${r.counters ? " ⚒" + r.counters : ""}</span>`).join(" ");
         const freeRelic = C().relicSlotsPerHero - L.hero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0);
         div.innerHTML = `<div class="cost-orb">${c.cost}</div>
