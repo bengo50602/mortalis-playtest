@@ -575,7 +575,6 @@
         + "<button class='mbtn' id='br-store'>Store</button></div>";
     } else {
       body = "<h2 style='color:var(--bad)'>Defeat</h2>"
-        + "<div style='color:var(--muted)'>No penalty — regroup and try again.</div>"
         + "<div class='row'><button class='mbtn primary' id='br-retry'>Retry duel</button>"
         + "<button class='mbtn' id='br-map'>Campaign map</button></div>";
     }
