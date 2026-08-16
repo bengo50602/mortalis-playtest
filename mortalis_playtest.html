@@ -377,7 +377,7 @@ body.on-splash .topbar{display:none}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260816192713</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260816193903</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -11988,7 +11988,7 @@ async function aiTakeTurn() {
 
     names: function () { this.load(); return Object.keys(this.db.profiles); },
     exists: function (name) { this.load(); return !!this.db.profiles[normName(name)]; },
-    current: function () { this.load(); return this.db.current ? this.db.profiles[this.db.current] : null; },
+    current: function () { this.load(); var p = this.db.current ? this.db.profiles[this.db.current] : null; if (p) migrate(p); return p; },
 
     /* new profile: username + 4-digit PIN (stored plainly — light device gate, not security) */
     create: function (name, pin) {
@@ -12130,6 +12130,21 @@ async function aiTakeTurn() {
     if (!p.decks) p.decks = [];
     if (p.coins == null) p.coins = 0;
     if (p.seals == null) p.seals = 0;
+    // Backfill the starter realms' support cards for profiles created before
+    // support became individually collectible — otherwise the deckbuilder's
+    // ownership gate hides the support you started with. One-time, guarded.
+    if (!p.__starterSupport && typeof allCards === "function") {
+      try {
+        var lim = (C().copyLimit || 3);
+        ["Luminar", "Fangrend", "Brightmantle"].forEach(function (realm) {
+          allCards().forEach(function (c) {
+            if (c.realm === realm && c.type !== "hero" && !(p.collection[c.id] | 0)) p.collection[c.id] = lim;
+          });
+        });
+        p.__starterSupport = true;
+        Meta.save();
+      } catch (e) { /* engine not ready yet — try again on the next access */ }
+    }
   }
 
   /* --- per-profile decks: bridge the engine's global deck store to the profile.

@@ -35,7 +35,7 @@
 
     names: function () { this.load(); return Object.keys(this.db.profiles); },
     exists: function (name) { this.load(); return !!this.db.profiles[normName(name)]; },
-    current: function () { this.load(); return this.db.current ? this.db.profiles[this.db.current] : null; },
+    current: function () { this.load(); var p = this.db.current ? this.db.profiles[this.db.current] : null; if (p) migrate(p); return p; },
 
     /* new profile: username + 4-digit PIN (stored plainly — light device gate, not security) */
     create: function (name, pin) {
@@ -177,6 +177,21 @@
     if (!p.decks) p.decks = [];
     if (p.coins == null) p.coins = 0;
     if (p.seals == null) p.seals = 0;
+    // Backfill the starter realms' support cards for profiles created before
+    // support became individually collectible — otherwise the deckbuilder's
+    // ownership gate hides the support you started with. One-time, guarded.
+    if (!p.__starterSupport && typeof allCards === "function") {
+      try {
+        var lim = (C().copyLimit || 3);
+        ["Luminar", "Fangrend", "Brightmantle"].forEach(function (realm) {
+          allCards().forEach(function (c) {
+            if (c.realm === realm && c.type !== "hero" && !(p.collection[c.id] | 0)) p.collection[c.id] = lim;
+          });
+        });
+        p.__starterSupport = true;
+        Meta.save();
+      } catch (e) { /* engine not ready yet — try again on the next access */ }
+    }
   }
 
   /* --- per-profile decks: bridge the engine's global deck store to the profile.
