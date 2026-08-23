@@ -89,6 +89,7 @@ function validateDeck(deck, realms) {
     if (!c) { issues.push("a card no longer exists"); continue; }
     if (q > lim) issues.push(`${c.name} has ${q} copies (max ${lim})`);
     if (gated && !Meta.owns(id)) issues.push(`${c.name} isn't unlocked yet`);
+    else if (gated) { const owned = Meta.current().collection[id] | 0; if (q > owned) issues.push(`${c.name}: ${q} in deck but you only own ${owned}`); }
   }
   if (realms) {
     const allowed = new Set(realms);
@@ -3206,6 +3207,9 @@ async function resolveRite(pi, si, which) {
     const ctx = { laneIdx: s.laneIdx, sourceName: card.name };
     for (const op of ops) { if (ctx.abort) break; await runOp(op, pi, ctx); }
   } else if (!P.isAI) UI.toast("This Rite's effect needs manual resolution — card text is in the log; use sandbox tools.");
+  // The payoff resolves in a microtask after startTurn's render, so refresh the
+  // board now — otherwise the granted stats don't appear until the next render.
+  try { if (window.UI) UI.render(); } catch (e) { }
 }
 
 async function playSpell(pi, handIdx) { // pact or incantation
@@ -4101,6 +4105,9 @@ async function aiTakeTurn() {
   // well it pilots that deck.
   const d = "hard";
   const step = () => new Promise(r => setTimeout(r, 300));
+  // A render/FX exception must never abort the AI's turn — otherwise the AI can
+  // play its cards and then silently skip its whole attack phase.
+  const draw = () => { try { if (window.UI) UI.render(); } catch (e) { } };
 
   // ---- play phase ----
   let guard = 0;
@@ -4120,7 +4127,7 @@ async function aiTakeTurn() {
       if (!afford.some(p => p.kind === "hero") && heroesOf(pi).length < 2 &&
           P.hand.some(cid => cardById(cid).type === "hero" && canPlayNameCheck(pi, cardById(cid)))) {
         const hexPlay = afford.find(p => p.kind === "hex");
-        if (hexPlay) { await aiDoPlay(pi, hexPlay); UI.render(); await step(); continue; }
+        if (hexPlay) { await aiDoPlay(pi, hexPlay); draw(); await step(); continue; }
         break;
       }
       const rank = (p) => {
@@ -4145,16 +4152,19 @@ async function aiTakeTurn() {
       if (rank(pick) < 20) break;
     }
     await aiDoPlay(pi, pick);
-    UI.render(); await step();
+    draw(); await step();
   }
 
   // ---- attack phase ----
+  // Guarded so a render/effect exception can never skip the rest of the phase
+  // (and, critically, never skip the endTurn() below — which would freeze the game).
+  try {
   if (!(C().firstPlayerNoAttackTurn1 && G.gt === 1 && pi === G.firstPlayer) && !G.over) {
     // hard: lethal check on empty board
     const ready = () => G.players[pi].lanes.map((L, li) => li).filter(li => canAttack(pi, li));
     if (d === "hard" && heroesOf(0).length === 0) {
       const total = ready().reduce((s, li) => s + effAtk(pi, li), 0);
-      if (total > 0) { await resolveAttack(pi, ready(), { face: true }); UI.render(); }
+      if (total > 0) { await resolveAttack(pi, ready(), { face: true }); draw(); }
     }
     // onslaught planning (medium/hard): kill best target if guaranteed
     if (d !== "easy" && !G.over) {
@@ -4179,7 +4189,7 @@ async function aiTakeTurn() {
             const lt = legalTargetsFor(pi, group);
             if (lt.heroes.some(h => h.li === t.li)) {
               await resolveAttack(pi, group, { pi: 0, li: t.li });
-              UI.render(); await step();
+              draw(); await step();
               done = true; break;
             }
           }
@@ -4214,16 +4224,18 @@ async function aiTakeTurn() {
           }
           const threshold = d === "hard" ? 30 : 1;
           if (best && bestV >= threshold) await resolveAttack(pi, [li], best);
+          else if (lt.face) await resolveAttack(pi, [li], { face: true });   // no profitable trade → chip face (attacking has no downside; it never taps the defender)
         }
       }
-      UI.render(); await step();
+      draw(); await step();
     }
     // hard: after clearing, face if now empty
     if (d === "hard" && !G.over && heroesOf(0).length === 0) {
       const rem = G.players[pi].lanes.map((L, i) => i).filter(li => canAttack(pi, li));
-      if (rem.length) { await resolveAttack(pi, rem, { face: true }); UI.render(); }
+      if (rem.length) { await resolveAttack(pi, rem, { face: true }); draw(); }
     }
   }
+  } catch (e) { try { log("AI attack phase error: " + (e && e.message)); } catch (_) { } }
 
   // resolve early rites sometimes (hard keeps them)
   await step();

@@ -1590,8 +1590,11 @@ function dbCardInfo(c) {
     <p class="tip-body">${c.auxText || "—"}</p>`;
   else if (c.type === "relic") modes = `<div class="tip-mode">Relic — ${c.slots} slot${c.slots > 1 ? "s" : ""} · Cost ${c.cost} Pulse</div><p class="tip-body">${c.text || "—"}</p>`;
   else modes = `<div class="tip-mode">${dbCap(c.type)} — Cost ${c.cost} Pulse</div><p class="tip-body">${c.text || "—"}</p>`;
+  let ownLine = "";
+  const gated = window.Meta && Meta.current && Meta.current();
+  if (gated) { const owned = Meta.current().collection[c.id] | 0; const cap = Math.min(C().copyLimit, owned); ownLine = `<div class="tip-sub" style="color:var(--muted)">You own ${owned} — up to ${cap} per deck</div>`; }
   return `<div class="tip-hdr"><span class="tip-crest">${realmCrest(c.realm, 18, realmColor(c.realm), "#12151c") || ""}</span><span class="tip-nm">${c.name}</span></div>
-    <div class="tip-sub"><span style="color:${rc};font-weight:700">${c.rarity || "Support card"}</span> · ${c.realm} · ${dbCap(c.type)}</div>${modes}`;
+    <div class="tip-sub"><span style="color:${rc};font-weight:700">${c.rarity || "Support card"}</span> · ${c.realm} · ${dbCap(c.type)}</div>${ownLine}${modes}`;
 }
 
 const Decks = {
@@ -1711,8 +1714,14 @@ const Decks = {
   hideFullDeck() { Decks.hideTip(); const ov = $("deckview"); if (ov) ov.style.display = "none"; },
 
   qtyOf(id) { const e = (Decks.cur.cards || []).find(x => x[0] === id); return e ? e[1] : 0; },
+  // how many copies you own (max deck copies is capped by this when signed in)
+  ownedCopies(id) {
+    const gated = window.Meta && Meta.current && Meta.current();
+    if (!gated) return C().copyLimit;      // sandbox / no account: no ownership cap
+    return Math.min(C().copyLimit, Meta.current().collection[id] | 0);
+  },
   setQty(id, q) {
-    q = Math.max(0, Math.min(C().copyLimit, q));
+    q = Math.max(0, Math.min(Decks.ownedCopies(id), q));
     Decks.cur.cards = (Decks.cur.cards || []).filter(x => x[0] !== id);
     if (q > 0) Decks.cur.cards.push([id, q]);
   },
@@ -2051,6 +2060,8 @@ window.addEventListener("DOMContentLoaded", () => {
     const s = $("screen-setup");
     if (s) s.classList.add("title-mode");
     UI.renderSetup();
+    // refresh the splash menu + chip so coins/Seals reflect any rewards earned
+    try { if (window.MetaUI && MetaUI.refresh) MetaUI.refresh(); } catch (e) { }
     UI.show("setup");
   });
   on("tab-play", () => UI.show(G ? "game" : "setup"));

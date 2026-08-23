@@ -377,7 +377,7 @@ body.on-splash .topbar{display:none}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260816193926</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20260823141306</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -7808,6 +7808,7 @@ function validateDeck(deck, realms) {
     if (!c) { issues.push("a card no longer exists"); continue; }
     if (q > lim) issues.push(`${c.name} has ${q} copies (max ${lim})`);
     if (gated && !Meta.owns(id)) issues.push(`${c.name} isn't unlocked yet`);
+    else if (gated) { const owned = Meta.current().collection[id] | 0; if (q > owned) issues.push(`${c.name}: ${q} in deck but you only own ${owned}`); }
   }
   if (realms) {
     const allowed = new Set(realms);
@@ -10925,6 +10926,9 @@ async function resolveRite(pi, si, which) {
     const ctx = { laneIdx: s.laneIdx, sourceName: card.name };
     for (const op of ops) { if (ctx.abort) break; await runOp(op, pi, ctx); }
   } else if (!P.isAI) UI.toast("This Rite's effect needs manual resolution — card text is in the log; use sandbox tools.");
+  // The payoff resolves in a microtask after startTurn's render, so refresh the
+  // board now — otherwise the granted stats don't appear until the next render.
+  try { if (window.UI) UI.render(); } catch (e) { }
 }
 
 async function playSpell(pi, handIdx) { // pact or incantation
@@ -11820,6 +11824,9 @@ async function aiTakeTurn() {
   // well it pilots that deck.
   const d = "hard";
   const step = () => new Promise(r => setTimeout(r, 300));
+  // A render/FX exception must never abort the AI's turn — otherwise the AI can
+  // play its cards and then silently skip its whole attack phase.
+  const draw = () => { try { if (window.UI) UI.render(); } catch (e) { } };
 
   // ---- play phase ----
   let guard = 0;
@@ -11839,7 +11846,7 @@ async function aiTakeTurn() {
       if (!afford.some(p => p.kind === "hero") && heroesOf(pi).length < 2 &&
           P.hand.some(cid => cardById(cid).type === "hero" && canPlayNameCheck(pi, cardById(cid)))) {
         const hexPlay = afford.find(p => p.kind === "hex");
-        if (hexPlay) { await aiDoPlay(pi, hexPlay); UI.render(); await step(); continue; }
+        if (hexPlay) { await aiDoPlay(pi, hexPlay); draw(); await step(); continue; }
         break;
       }
       const rank = (p) => {
@@ -11864,16 +11871,19 @@ async function aiTakeTurn() {
       if (rank(pick) < 20) break;
     }
     await aiDoPlay(pi, pick);
-    UI.render(); await step();
+    draw(); await step();
   }
 
   // ---- attack phase ----
+  // Guarded so a render/effect exception can never skip the rest of the phase
+  // (and, critically, never skip the endTurn() below — which would freeze the game).
+  try {
   if (!(C().firstPlayerNoAttackTurn1 && G.gt === 1 && pi === G.firstPlayer) && !G.over) {
     // hard: lethal check on empty board
     const ready = () => G.players[pi].lanes.map((L, li) => li).filter(li => canAttack(pi, li));
     if (d === "hard" && heroesOf(0).length === 0) {
       const total = ready().reduce((s, li) => s + effAtk(pi, li), 0);
-      if (total > 0) { await resolveAttack(pi, ready(), { face: true }); UI.render(); }
+      if (total > 0) { await resolveAttack(pi, ready(), { face: true }); draw(); }
     }
     // onslaught planning (medium/hard): kill best target if guaranteed
     if (d !== "easy" && !G.over) {
@@ -11898,7 +11908,7 @@ async function aiTakeTurn() {
             const lt = legalTargetsFor(pi, group);
             if (lt.heroes.some(h => h.li === t.li)) {
               await resolveAttack(pi, group, { pi: 0, li: t.li });
-              UI.render(); await step();
+              draw(); await step();
               done = true; break;
             }
           }
@@ -11933,16 +11943,18 @@ async function aiTakeTurn() {
           }
           const threshold = d === "hard" ? 30 : 1;
           if (best && bestV >= threshold) await resolveAttack(pi, [li], best);
+          else if (lt.face) await resolveAttack(pi, [li], { face: true });   // no profitable trade → chip face (attacking has no downside; it never taps the defender)
         }
       }
-      UI.render(); await step();
+      draw(); await step();
     }
     // hard: after clearing, face if now empty
     if (d === "hard" && !G.over && heroesOf(0).length === 0) {
       const rem = G.players[pi].lanes.map((L, i) => i).filter(li => canAttack(pi, li));
-      if (rem.length) { await resolveAttack(pi, rem, { face: true }); UI.render(); }
+      if (rem.length) { await resolveAttack(pi, rem, { face: true }); draw(); }
     }
   }
+  } catch (e) { try { log("AI attack phase error: " + (e && e.message)); } catch (_) { } }
 
   // resolve early rites sometimes (hard keeps them)
   await step();
@@ -12032,8 +12044,8 @@ async function aiTakeTurn() {
     /* ------- economy (operate on the current profile) ------- */
     coins: function () { var p = this.current(); return p ? (p.coins | 0) : 0; },
     seals: function () { var p = this.current(); return p ? (p.seals | 0) : 0; },
-    addCoins: function (n) { var p = this.current(); if (!p) return; p.coins = Math.max(0, (p.coins | 0) + n); this.save(); },
-    addSeals: function (n) { var p = this.current(); if (!p) return; p.seals = Math.max(0, (p.seals | 0) + n); this.save(); },
+    addCoins: function (n) { var p = this.current(); if (!p) return; p.coins = Math.max(0, (p.coins | 0) + n); this.save(); uiRefresh(); },
+    addSeals: function (n) { var p = this.current(); if (!p) return; p.seals = Math.max(0, (p.seals | 0) + n); this.save(); uiRefresh(); },
     /* TESTING CHEAT (toggle, Ctrl+Shift+U): first press backs up your earned
        collection + currency and grants every card at max copies; second press
        restores exactly what you had earned before. */
@@ -12058,8 +12070,8 @@ async function aiTakeTurn() {
       this.save();
       return { ok: true, reverted: false, count: n };
     },
-    spendCoins: function (n) { var p = this.current(); if (!p || (p.coins | 0) < n) return false; p.coins -= n; this.save(); return true; },
-    spendSeals: function (n) { var p = this.current(); if (!p || (p.seals | 0) < n) return false; p.seals -= n; this.save(); return true; },
+    spendCoins: function (n) { var p = this.current(); if (!p || (p.coins | 0) < n) return false; p.coins -= n; this.save(); uiRefresh(); return true; },
+    spendSeals: function (n) { var p = this.current(); if (!p || (p.seals | 0) < n) return false; p.seals -= n; this.save(); uiRefresh(); return true; },
 
     /* ------- collection ------- */
     owned: function (id) { var p = this.current(); if (!p) return 0; return (p.collection[id] | 0); },
@@ -12100,6 +12112,10 @@ async function aiTakeTurn() {
   };
 
   function normName(n) { return (n || "").trim().toLowerCase(); }
+
+  // keep the on-screen coin/Seal displays (splash menu + top chip) live the
+  // moment currency changes, so the main menu never shows a stale balance.
+  function uiRefresh() { try { if (typeof window !== "undefined" && window.MetaUI && MetaUI.refresh) MetaUI.refresh(); } catch (e) { } }
 
   /* starter collection: the three basic realms, Commons + Uncommons only,
      full playset of each so a 40-card deck is buildable from day one. */
@@ -14152,8 +14168,11 @@ function dbCardInfo(c) {
     <p class="tip-body">${c.auxText || "—"}</p>`;
   else if (c.type === "relic") modes = `<div class="tip-mode">Relic — ${c.slots} slot${c.slots > 1 ? "s" : ""} · Cost ${c.cost} Pulse</div><p class="tip-body">${c.text || "—"}</p>`;
   else modes = `<div class="tip-mode">${dbCap(c.type)} — Cost ${c.cost} Pulse</div><p class="tip-body">${c.text || "—"}</p>`;
+  let ownLine = "";
+  const gated = window.Meta && Meta.current && Meta.current();
+  if (gated) { const owned = Meta.current().collection[c.id] | 0; const cap = Math.min(C().copyLimit, owned); ownLine = `<div class="tip-sub" style="color:var(--muted)">You own ${owned} — up to ${cap} per deck</div>`; }
   return `<div class="tip-hdr"><span class="tip-crest">${realmCrest(c.realm, 18, realmColor(c.realm), "#12151c") || ""}</span><span class="tip-nm">${c.name}</span></div>
-    <div class="tip-sub"><span style="color:${rc};font-weight:700">${c.rarity || "Support card"}</span> · ${c.realm} · ${dbCap(c.type)}</div>${modes}`;
+    <div class="tip-sub"><span style="color:${rc};font-weight:700">${c.rarity || "Support card"}</span> · ${c.realm} · ${dbCap(c.type)}</div>${ownLine}${modes}`;
 }
 
 const Decks = {
@@ -14273,8 +14292,14 @@ const Decks = {
   hideFullDeck() { Decks.hideTip(); const ov = $("deckview"); if (ov) ov.style.display = "none"; },
 
   qtyOf(id) { const e = (Decks.cur.cards || []).find(x => x[0] === id); return e ? e[1] : 0; },
+  // how many copies you own (max deck copies is capped by this when signed in)
+  ownedCopies(id) {
+    const gated = window.Meta && Meta.current && Meta.current();
+    if (!gated) return C().copyLimit;      // sandbox / no account: no ownership cap
+    return Math.min(C().copyLimit, Meta.current().collection[id] | 0);
+  },
   setQty(id, q) {
-    q = Math.max(0, Math.min(C().copyLimit, q));
+    q = Math.max(0, Math.min(Decks.ownedCopies(id), q));
     Decks.cur.cards = (Decks.cur.cards || []).filter(x => x[0] !== id);
     if (q > 0) Decks.cur.cards.push([id, q]);
   },
@@ -14613,6 +14638,8 @@ window.addEventListener("DOMContentLoaded", () => {
     const s = $("screen-setup");
     if (s) s.classList.add("title-mode");
     UI.renderSetup();
+    // refresh the splash menu + chip so coins/Seals reflect any rewards earned
+    try { if (window.MetaUI && MetaUI.refresh) MetaUI.refresh(); } catch (e) { }
     UI.show("setup");
   });
   on("tab-play", () => UI.show(G ? "game" : "setup"));

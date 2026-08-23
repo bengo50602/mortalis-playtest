@@ -79,8 +79,8 @@
     /* ------- economy (operate on the current profile) ------- */
     coins: function () { var p = this.current(); return p ? (p.coins | 0) : 0; },
     seals: function () { var p = this.current(); return p ? (p.seals | 0) : 0; },
-    addCoins: function (n) { var p = this.current(); if (!p) return; p.coins = Math.max(0, (p.coins | 0) + n); this.save(); },
-    addSeals: function (n) { var p = this.current(); if (!p) return; p.seals = Math.max(0, (p.seals | 0) + n); this.save(); },
+    addCoins: function (n) { var p = this.current(); if (!p) return; p.coins = Math.max(0, (p.coins | 0) + n); this.save(); uiRefresh(); },
+    addSeals: function (n) { var p = this.current(); if (!p) return; p.seals = Math.max(0, (p.seals | 0) + n); this.save(); uiRefresh(); },
     /* TESTING CHEAT (toggle, Ctrl+Shift+U): first press backs up your earned
        collection + currency and grants every card at max copies; second press
        restores exactly what you had earned before. */
@@ -105,8 +105,8 @@
       this.save();
       return { ok: true, reverted: false, count: n };
     },
-    spendCoins: function (n) { var p = this.current(); if (!p || (p.coins | 0) < n) return false; p.coins -= n; this.save(); return true; },
-    spendSeals: function (n) { var p = this.current(); if (!p || (p.seals | 0) < n) return false; p.seals -= n; this.save(); return true; },
+    spendCoins: function (n) { var p = this.current(); if (!p || (p.coins | 0) < n) return false; p.coins -= n; this.save(); uiRefresh(); return true; },
+    spendSeals: function (n) { var p = this.current(); if (!p || (p.seals | 0) < n) return false; p.seals -= n; this.save(); uiRefresh(); return true; },
 
     /* ------- collection ------- */
     owned: function (id) { var p = this.current(); if (!p) return 0; return (p.collection[id] | 0); },
@@ -147,6 +147,10 @@
   };
 
   function normName(n) { return (n || "").trim().toLowerCase(); }
+
+  // keep the on-screen coin/Seal displays (splash menu + top chip) live the
+  // moment currency changes, so the main menu never shows a stale balance.
+  function uiRefresh() { try { if (typeof window !== "undefined" && window.MetaUI && MetaUI.refresh) MetaUI.refresh(); } catch (e) { } }
 
   /* starter collection: the three basic realms, Commons + Uncommons only,
      full playset of each so a 40-card deck is buildable from day one. */
