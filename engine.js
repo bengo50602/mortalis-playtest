@@ -4108,6 +4108,9 @@ async function aiTakeTurn() {
   // A render/FX exception must never abort the AI's turn — otherwise the AI can
   // play its cards and then silently skip its whole attack phase.
   const draw = () => { try { if (window.UI) UI.render(); } catch (e) { } };
+  // A defender's retaliation ("enemy Heroes that attack it take N damage") — the
+  // attacker eats this only when the defender SURVIVES (i.e. a non-lethal chip).
+  const defenderThorns = (pos) => { const h = heroAt(pos); if (!h || isSilenced(h)) return 0; return (fx(h.cardId).flags || {}).thorns || 0; };
 
   // ---- play phase ----
   let guard = 0;
@@ -4212,19 +4215,23 @@ async function aiTakeTurn() {
       } else {
         if (lt.face && !lt.heroes.length) { await resolveAttack(pi, [li], { face: true }); }
         else {
-          // pick a target we beat; hard also accepts even trades that kill something bigger
+          // Attack a Hero only when it is advantageous: a clean kill, or free chip
+          // damage (we out-Attack it AND it has no retaliation). Never trade down,
+          // and never chip a survivor whose thorns would punish the attacker for no
+          // kill — in that case the AI simply holds this Hero back.
           let best = null, bestV = -1;
           for (const t of lt.heroes) {
             const dAtk = effAtk(0, t.li), dHp = curHp(0, t.li);
             let v = -1;
-            if (myAtk > dAtk) v = (myAtk - dAtk >= dHp ? 100 + dAtk : 40 + Math.min(myAtk - dAtk, dHp) / 10);
-            else if (myAtk === dAtk) v = 0;
-            else if (d === "hard") v = -1;
+            if (myAtk > dAtk) {
+              if (myAtk - dAtk >= dHp) v = 100 + dAtk;                          // lethal: thorns never trigger on a kill
+              else if (defenderThorns(t) === 0) v = 40 + Math.min(myAtk - dAtk, dHp) / 10;   // safe chip only
+              // else: chipping into retaliation is not advantageous — skip
+            }
             if (v > bestV) { bestV = v; best = t; }
           }
           const threshold = d === "hard" ? 30 : 1;
           if (best && bestV >= threshold) await resolveAttack(pi, [li], best);
-          else if (lt.face) await resolveAttack(pi, [li], { face: true });   // no profitable trade → chip face (attacking has no downside; it never taps the defender)
         }
       }
       draw(); await step();
