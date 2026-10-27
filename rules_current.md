@@ -1615,9 +1615,9 @@ At the start of each of your turns, if you control Heroes from 2 or more differe
 Auxiliary Mode — Cost: 1 Pulse | 2 slots
 While in this slot, at the start of each of your turns, if you control Heroes from 3 or more different Realms, draw 1 card.
 
-**Sir Roland of the Vale**
+**Sir Gaveron of Stonevow**
 Hero Mode — Cost: 4 Pulse | Attack/Health: 70/110 | Rarity: Uncommon
-Once per turn, you may pay 3 Pulse to Knight a Hero you control — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old). While Roland is in play, your Champion continuously has +20 Attack and +20 Health.
+Once per turn, you may pay 3 Pulse to Knight a Hero you control — it becomes your Champion (you may have only one Champion at a time; Knighting a new Hero replaces the old). While Gaveron is in play, your Champion continuously has +20 Attack and +20 Health.
 Auxiliary Mode — Cost: 2 Pulse | 1 slot
 While in this slot, your Champion continuously has +10 Attack and +10 Health, and heals 10 Health at the start of each of your turns.
 
@@ -1627,15 +1627,15 @@ Once per turn, you may pay 4 Pulse: choose another Hero you control — it may a
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, once per turn, you may pay 4 Pulse: a Hero you control in a lane neighboring this one may attack twice this turn.
 
-**Warden Elric of the Twin Banners**
+**Warden Osmund of the Twin Banners**
 Hero Mode — Cost: 5 Pulse | Attack/Health: 100/130 | Rarity: Rare
-Once per turn, Elric and a Hero you control in a lane neighboring his may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike).
+Once per turn, Osmund and a Hero you control in a lane neighboring his may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike).
 Auxiliary Mode — Cost: 3 Pulse | 1 slot
 While in this slot, when two Heroes you control attack together as a single combat (a Joint Strike), each gains +10 Attack for that combat.
 
-**Lord Commander Ravenshold**
+**Marshal Torvald Highbanner**
 Hero Mode — Cost: 7 Pulse | Attack/Health: 120/180 | Rarity: Ultra-Rare
-Once per turn, you may pay 2 Pulse: two Heroes you control in neighboring lanes may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike) this turn. While Ravenshold is in play, Heroes you control gain +10 Attack during Joint Strikes.
+Once per turn, you may pay 2 Pulse: two Heroes you control in neighboring lanes may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike) this turn. While Torvald is in play, Heroes you control gain +10 Attack during Joint Strikes.
 Auxiliary Mode — Cost: 5 Pulse | 2 slots
 While in this slot, once per turn, when a Hero you control is attacked, another Hero you control in a lane neighboring the defender may add half its Attack (rounded to the nearest 10) to the defender's Attack for that combat.
 
