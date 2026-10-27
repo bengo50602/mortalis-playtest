@@ -1627,7 +1627,7 @@ Once per turn, you may pay 4 Pulse: choose another Hero you control — it may a
 Auxiliary Mode — Cost: 3 Pulse | 2 slots
 While in this slot, once per turn, you may pay 4 Pulse: a Hero you control in a lane neighboring this one may attack twice this turn.
 
-**Warden Osmund of the Twin Banners**
+**Warden Osmund of the Twin**
 Hero Mode — Cost: 5 Pulse | Attack/Health: 100/130 | Rarity: Rare
 Once per turn, Osmund and a Hero you control in a lane neighboring his may attack one enemy lane together as a single combat, adding their Attacks together and splitting the combat damage dealt back as evenly as possible between them (a Joint Strike).
 Auxiliary Mode — Cost: 3 Pulse | 1 slot

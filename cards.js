@@ -3188,9 +3188,9 @@ window.DEFAULT_DATA = {
    "auxText": "While in this slot, once per turn, you may pay 4 Pulse: a Hero you control in a lane neighboring this one may attack twice this turn."
   },
   {
-   "id": "oathenhall--warden-osmund-of-the-twin-banners",
+   "id": "oathenhall--warden-osmund-of-the-twin",
    "realm": "Oathenhall",
-   "name": "Warden Osmund of the Twin Banners",
+   "name": "Warden Osmund of the Twin",
    "type": "hero",
    "cost": 5,
    "atk": 100,
