@@ -276,9 +276,6 @@ const UI = {
         const c = cardById(L.hero.cardId);
         const div = document.createElement("div");
         div.className = "herocard";
-        // card art (art/<id>.png); a missing file simply doesn't paint, so this is
-        // non-breaking — cards keep their look until the art folder is populated.
-        div.style.cssText = "background-image:linear-gradient(180deg,rgba(18,20,26,.42) 0%,rgba(18,20,26,.30) 42%,rgba(18,20,26,.9) 100%),url('art/" + c.id + ".png');background-size:cover;background-position:center top;background-color:#1b2029;";
         const atk = effAtk(pi, li), hp = curHp(pi, li), mhp = effMaxHp(pi, li);
         if (pi === G.active && L.hero.attacksUsed >= maxAttacksOf(pi, li)) div.classList.add("exhausted");
         if (pi === 0 && UI.sel.includes(li)) div.classList.add("selected");
@@ -292,8 +289,9 @@ const UI = {
           ? `<span class="pill wardshield" title="Ward — the next ${L.hero.ward} damage to this Hero is absorbed before its Health.">&#128737;&#65039; ${L.hero.ward}</span>` : "";
         const relicPills = wardPill + wardShield + L.hero.relics.map(r => `<span class="pill relic" data-ruid="${r.uid}" title="${(cardById(r.cardId).text || "").replace(/"/g, "&quot;")}">${cardById(r.cardId).name}${r.counters ? " ⚒" + r.counters : ""}</span>`).join(" ");
         const freeRelic = C().relicSlotsPerHero - L.hero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0);
-        div.innerHTML = `<div class="cost-orb">${c.cost}</div>
-          <div class="nm">${c.name}</div>
+        div.innerHTML = `<div class="hc-top"><div class="cost-orb">${c.cost}</div>
+            <div class="hc-id"><div class="nm">${c.name}</div><div class="sub">${c.realm} · Hero</div></div></div>
+          <div class="hc-art" style="background-image:url('art/${c.id}.png')"></div>
           <div class="txt">${c.text}</div>
           <div class="statbar"><span class="atk">${UI.statSpan(c.atk, atk)}</span><span class="rar">${c.rarity || ""}</span><span class="hp">${UI.statSpan(c.hp, hp)}${hp !== mhp ? `<span class="mx">/${mhp}</span>` : ""}</span></div>
           ${relicPills || freeRelic > 0 ? `<div class="relicrow">${relicPills}${freeRelic > 0 ? `<span class="pill dim">${freeRelic} relic slot${freeRelic > 1 ? "s" : ""}</span>` : ""}</div>` : ""}
@@ -463,13 +461,13 @@ const UI = {
       const c = cardById(cid);
       const d = document.createElement("div");
       d.className = "handcard";
-      d.style.cssText = "background-image:linear-gradient(180deg,rgba(18,20,26,.32) 0%,rgba(18,20,26,.82) 100%),url('art/" + c.id + ".png');background-size:cover;background-position:center top;background-color:#1a1f28;";
       const o = playOptions(0, hi);
       const playable = o.heroLanes.length || o.auxLanes.length || o.relicLanes.length || o.hexLanes.length || o.riteLanes.length || o.spell;
       if (!playable) d.classList.add("unaffordable");
       const typeLabel = c.type === "hero" ? `Hero ${c.cost} · Aux ${Math.max(1, c.auxCost != null ? c.auxCost : c.cost - C().auxDiscount)}` :
         c.type[0].toUpperCase() + c.type.slice(1) + " · " + c.cost + (c.type === "relic" ? ` · ${c.slots} slot${c.slots > 1 ? "s" : ""}` : "");
-      d.innerHTML = `<div class="nm">${c.name}</div>
+      d.innerHTML = `<div class="hc-art" style="background-image:url('art/${c.id}.png')"></div>
+        <div class="nm">${c.name}</div>
         <div class="meta">${c.realm}</div>
         <div class="meta">${typeLabel}${c.type === "hero" ? ` · ${c.atk}/${c.hp}` : ""}</div>
         ${autoLevel(c) === "manual" ? '<span class="badge-manual" title="Not scripted — adjudicate manually"></span>' : ""}`;
@@ -574,9 +572,9 @@ const UI = {
     }
     const lvl = autoLevel(c);
     const manualNote = lvl !== "auto" ? `<div class="manual-note">${lvl === "manual" ? "This card's effect is not scripted — the engine plays it for stats/cost and you adjudicate the text with sandbox tools." : "Partially scripted: " + fx(c.id).autoBits.concat(fx(c.id).auxAutoBits || []).join(", ") + "."}</div>` : "";
-    big.innerHTML = `<img class="bigart" src="art/${c.id}.png" alt="" onerror="this.remove()">
-      <div class="hdr"><span class="nm">${c.name}</span><span class="realm">${c.realm}</span></div>
-      <div class="sub">${c.type[0].toUpperCase() + c.type.slice(1)}${c.rarity ? " · " + c.rarity : ""}</div>
+    big.innerHTML = `<div class="zhdr"><div class="cost-orb">${c.cost}<span>Pulse</span></div>
+        <div class="zid"><div class="nm">${c.name}</div><div class="sub">${c.realm} · ${c.type[0].toUpperCase() + c.type.slice(1)}${c.rarity ? " · " + c.rarity : ""}</div></div></div>
+      <img class="bigart" src="art/${c.id}.png" alt="" onerror="this.remove()">
       ${modes}${live}${manualNote}<div class="actions" id="zoom-actions"></div>`;
     $("overlay").classList.add("visible");
     UI.buildZoomActions(c, ctx);
