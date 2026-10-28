@@ -281,9 +281,9 @@ a{color:var(--accent)}
 .zoomextra:empty{display:none}
 .zoomextra.actions{display:flex;gap:6px;flex-wrap:wrap}
 .zoomextra .live{background:#141922;border-radius:6px;padding:9px;font-size:12px}
-#inspector .ins-cardwrap{width:240px;height:336px;overflow:hidden;margin:0 auto 10px}
-#inspector .ins-cardscale{transform:scale(.6);transform-origin:top left;width:400px}
-#inspector .ins-cardscale .studiocard{margin:0}
+#inspector .ins-cardwrap{height:336px;overflow:hidden;display:flex;justify-content:center;margin-bottom:10px}
+#inspector .ins-cardscale{flex:0 0 400px;transform:scale(.6);transform-origin:top center}
+#inspector .ins-cardscale .studiocard{margin:0;max-width:none}
 .manual-note{font-size:11px;color:var(--warn);margin-top:8px}
 
 /* ---- editor ---- */
@@ -386,7 +386,7 @@ body.on-splash .topbar{display:none}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20261027231010</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20261027234324</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -7928,6 +7928,7 @@ function parseOp(cl) {
   if ((m = cl.match(/^remove all enemy-imposed stat reductions and negative effects(?: \([^)]*\))? from up to (\d+) Heroes you control[^]*?each heals (\d+) Health$/i))) return { op: "removeReductions", target: "upToOwn", count: +m[1], healN: +m[2] };
   // search deck for a relic
   if ((m = cl.match(/^(?:you may )?search your deck for(?: up to (\d+))?(?: a| any)? Relic cards?(?: costing (\d+) or less)?, reveal (?:it|them), and put (?:it|them) into your hand, then shuffle your deck$/i))) return { op: "searchRelic", count: m[1] ? +m[1] : 1, maxCost: m[2] ? +m[2] : 99 };
+  if (/^choose one of your opponent['’]s lanes:?\s*while .+ remains in play, your opponent cannot play relics or auxiliary cards into that lane$/i.test(cl)) return { op: "lockEnemyLane" };
   if ((m = cl.match(/^(?:you may )?move a Relic from one Hero you control to another Hero you control$/i))) return { op: "moveRelic" };
   if ((m = cl.match(/^(?:you may )?attach a Relic card (?:from your hand )?to a Hero you control without paying its cost$/i))) return { op: "attachRelic", discount: 99 };
   if ((m = cl.match(/^(?:you may )?attach a Relic card (?:from your hand )?to it, paying (\d+) less Pulse$/i))) return { op: "attachRelic", discount: +m[1], target: "lastChosen" };
@@ -8847,7 +8848,7 @@ function compileCard(card) {
       if ((dynH = norm(card.text).match(/all Heroes you control continuously have \+(\d+) Attack and \+(\d+) Health for each different Realm among the Heroes you control(?: \(maximum \+(\d+) Attack and \+(\d+) Health\))?/i))) { out.dynTeam = { kind: "perRealm", atk: +dynH[1], hp: +dynH[2], capAtk: dynH[3] ? +dynH[3] : 0, capHp: dynH[4] ? +dynH[4] : 0 }; out.autoBits.push("unity aura"); }
       // Jebe: this Hero alone scales with how many Realms you are fielding
       if ((dynH = norm(card.text).match(/(?:He|She|It|\w+) has \+(\d+) Attack(?: and \+(\d+) Health)? for each different Realm among (?:the )?Heroes you control/i))) { out.dynRealmSelf = { atk: +dynH[1], hp: +(dynH[2] || 0) }; out.autoBits.push("realm-count growth"); }
-      const em = norm(card.text).match(/^When .+? enters play, (.*?)(?:\. While |\.$|$)/i);
+      const em = norm(card.text).match(/^When .+? enters play, (.*?)(?:\. While |\. Whenever |\. At the start |\.$|$)/i);
       if (em) { out.onEnter = parseOps(em[1]); if (out.onEnter) out.autoBits.push("on-enter"); }
       // aux side
       const aout = { cont: out.auxCont, props: out.auxProps, sot: out.auxSot, eot: out.auxEot, autoBits: out.auxAutoBits };
@@ -10069,13 +10070,32 @@ async function runOp(op, pi, ctx) {
     case "searchRelic": {
       for (let k = 0; k < (op.count || 1); k++) {
         const idxs = P.deck.map((id, ix) => ({ id, ix })).filter(x => { const c = cardById(x.id); return c.type === "relic" && c.cost <= (op.maxCost || 99); });
-        if (!idxs.length) { if (!k) log(`No matching Relic in deck.`); break; }
+        if (!idxs.length) { if (!k) { log(`No matching Relic in deck.`); if (!P.isAI && window.UI && UI.toast) UI.toast("No Relic left in your deck to search."); } break; }
         let pick;
         if (P.isAI) pick = idxs.sort((a, b) => cardById(b.id).cost - cardById(a.id).cost)[0];
         else { const ci = await promptPick("Search your deck — put which Relic into your hand?", idxs.map(x => `${cardById(x.id).name} (${cardById(x.id).realm}, ${cardById(x.id).cost})`)); if (ci == null) break; pick = idxs[ci]; }
         P.hand.push(pick.id); P.deck.splice(pick.ix, 1);
         log(`${P.name} searches up a Relic: ${cardById(pick.id).name}.`);
       }
+      break;
+    }
+    case "lockEnemyLane": {
+      const O = G.players[1 - pi];
+      const lanes = O.lanes.map((L, li) => li).filter(li => laneUnlocked(1 - pi, li));
+      if (!lanes.length) break;
+      let li;
+      if (P.isAI) li = lanes.sort((a, b) => (O.lanes[b].hero ? 1 : 0) - (O.lanes[a].hero ? 1 : 0))[0];
+      else {
+        const idx = await promptPick("Lock one of your opponent's lanes — they can't play Relics or Auxiliary cards there while this Hero lives.",
+          lanes.map(l => `Lane ${l + 1}${O.lanes[l].hero ? " — " + cardById(O.lanes[l].hero.cardId).name : ""}`));
+        if (idx == null) break;
+        li = lanes[idx];
+      }
+      const src = P.lanes[ctx.laneIdx] && P.lanes[ctx.laneIdx].hero;
+      if (!src) break;
+      G.laneLocks = G.laneLocks || [];
+      G.laneLocks.push({ restrictedPi: 1 - pi, li, srcPi: pi, srcLane: ctx.laneIdx, srcUid: src.uid });
+      log(`${ctx.sourceName}: your opponent cannot play Relics or Auxiliary cards into lane ${li + 1} while ${ctx.sourceName} remains in play.`, P.isAI ? "ai" : "");
       break;
     }
     case "jointStrike": {
@@ -10991,6 +11011,16 @@ async function playSpell(pi, handIdx) { // pact or incantation
 
 /* ------------------------------ legality ------------------------------ */
 
+// Kravvax-style lock: player `pi` cannot play Relics/Auxiliary cards into lane
+// `li` while an opposing locker Hero that chose it remains in play in its lane.
+function laneRelicAuxLocked(pi, li) {
+  if (!G.laneLocks || !G.laneLocks.length) return false;
+  return G.laneLocks.some(L => {
+    if (L.restrictedPi !== pi || L.li !== li) return false;
+    const lane = G.players[L.srcPi].lanes[L.srcLane];
+    return lane && lane.hero && lane.hero.uid === L.srcUid;
+  });
+}
 function playOptions(pi, handIdx) {
   const P = G.players[pi];
   const card = cardById(P.hand[handIdx]);
@@ -11004,7 +11034,7 @@ function playOptions(pi, handIdx) {
         if (!laneUnlocked(pi, li) || L.sealedUntil > G.gt) return;
         if (L.realm === card.realm && !L.hero && P.pulse >= heroCostOf(pi, card)) opts.heroLanes.push(li);
         const freeAux = L.aux.filter(a => !a).length;
-        if (L.realm === card.realm && freeAux >= (card.auxSlots || 1) && P.pulse >= opts.auxCost) opts.auxLanes.push(li);
+        if (L.realm === card.realm && freeAux >= (card.auxSlots || 1) && P.pulse >= opts.auxCost && !laneRelicAuxLocked(pi, li)) opts.auxLanes.push(li);
       });
     }
   } else if (card.type === "relic") {
@@ -11014,7 +11044,7 @@ function playOptions(pi, handIdx) {
       const anyRealmRelics = !isSilenced(L.hero) && /Relics of any Realm may be attached/i.test(cardById(L.hero.cardId).text || "");
       if (C().relicRealmLocked && cardById(L.hero.cardId).realm !== card.realm && !anyRealmRelics) return;
       const used = L.hero.relics.reduce((s, r) => s + (cardById(r.cardId).slots || 1), 0);
-      if (C().relicSlotsPerHero - used >= (card.slots || 1) && P.pulse >= relicCostOf(pi, card)) opts.relicLanes.push(li);
+      if (C().relicSlotsPerHero - used >= (card.slots || 1) && P.pulse >= relicCostOf(pi, card) && !laneRelicAuxLocked(pi, li)) opts.relicLanes.push(li);
     });
   } else if (card.type === "hex") {
     if (openSlotIdx(pi) >= 0) P.lanes.forEach((L, li) => { if (laneUnlocked(pi, li)) opts.hexLanes.push(li); });
