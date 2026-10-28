@@ -5,7 +5,7 @@
 <title>Mortalis: Realms — Playtest</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0d1014; --panel:#161a21; --card:#1d222c; --ink:#e9e7e1; --muted:#8a93a4;
@@ -271,27 +271,17 @@ a{color:var(--accent)}
 /* ---- zoom overlay ---- */
 #overlay{position:fixed;inset:0;background:rgba(6,8,11,.72);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 #overlay.visible{display:flex}
-.bigcard{width:410px;max-width:94vw;max-height:88vh;overflow-y:auto;background:linear-gradient(180deg,#222835 0%,#191d26 100%);color:#e9e7e1;border:1px solid #4a5266;border-radius:12px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.bigcard{box-shadow:0 20px 60px rgba(0,0,0,.6),inset 0 0 0 6px #23262f,inset 0 0 0 7px #454c5e}
-.bigcard .bigart{display:block;width:100%;height:178px;object-fit:cover;object-position:center top;border-radius:9px;border:1px solid #454c5e;margin:4px 0 12px;background:#141922}
-.bigcard .zhdr{display:flex;align-items:center;gap:11px;margin-bottom:2px}
-.bigcard .zhdr .cost-orb{flex-shrink:0;width:46px;height:46px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:radial-gradient(circle at 35% 30%,#4a5670,#232836 70%);border:2px solid #7c8aa8;box-shadow:0 0 12px rgba(124,138,168,.35);
-  font-family:'Cinzel',serif;font-weight:800;font-size:19px;color:#dfe6f5;line-height:1}
-.bigcard .zhdr .cost-orb span{font-family:inherit;font-weight:400;font-size:7px;letter-spacing:1.3px;text-transform:uppercase;color:#9daac6}
-.bigcard .zid{min-width:0}
-.bigcard .zid .nm{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:#e8e4d8;line-height:1.05}
-.bigcard .zid .sub{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8fa0c0;margin-top:3px}
-.bigcard .mode{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#c8b27a;margin:12px 0 0;background:rgba(35,40,54,.55);border:1px solid #333a4a;border-bottom:none;border-radius:8px 8px 0 0;padding:9px 12px 4px}
-.bigcard .body{font-size:13px;line-height:1.5;margin:0;color:#cfd3de;background:rgba(35,40,54,.55);border:1px solid #333a4a;border-top:none;border-radius:0 0 8px 8px;padding:2px 12px 11px}
-.bigcard .hdr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.bigcard .nm{font-size:17px;font-weight:600}
-.bigcard .realm{font-size:12px;color:var(--muted);white-space:nowrap}
-.bigcard .sub{font-size:12px;color:var(--muted);margin:2px 0 12px}
-.bigcard .mode{font-size:13px;font-weight:600;margin:10px 0 2px;color:#cfd6e2}
-.bigcard .body{font-size:13px;line-height:1.55;margin:0;color:#b9c1cf}
-.bigcard .live{background:#141922;border-radius:6px;padding:9px;margin-top:10px;font-size:12px}
-.bigcard .actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+#overlay .bigcard{width:auto;max-width:94vw;max-height:92vh;overflow:auto;background:transparent;border:none;box-shadow:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:10px}
+.studiocard{width:400px;max-width:92vw;height:560px;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px;box-sizing:border-box;position:relative;color:#e9e7e1;flex-shrink:0}
+.studiocard .artbox{position:relative;flex-shrink:0;border-radius:8px;overflow:hidden}
+.studiocard .artbox img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.zoomextra{width:400px;max-width:92vw;box-sizing:border-box;background:linear-gradient(180deg,#222835,#191d26);border:1px solid #4a5266;border-radius:12px;padding:12px;color:#e9e7e1;font-size:12px}
+.zoomextra:empty{display:none}
+.zoomextra.actions{display:flex;gap:6px;flex-wrap:wrap}
+.zoomextra .live{background:#141922;border-radius:6px;padding:9px;font-size:12px}
+#inspector .ins-cardwrap{width:240px;height:336px;overflow:hidden;margin:0 auto 10px}
+#inspector .ins-cardscale{transform:scale(.6);transform-origin:top left;width:400px}
+#inspector .ins-cardscale .studiocard{margin:0}
 .manual-note{font-size:11px;color:var(--warn);margin-top:8px}
 
 /* ---- editor ---- */
@@ -394,7 +384,7 @@ body.on-splash .topbar{display:none}
 <rect x="30" y="28" width="4.4" height="9" rx="1.2" fill="#55627a"/>
 </svg><span class="wm"><span class="wm1">MORTALIS</span><span class="wm2"><i></i>REALMS<i></i></span></span></span>
   <span id="verinfo" style="font-size:11px;color:var(--muted)"></span>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20261027221721</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20261027224516</span>
   <div class="spacer"></div>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good);font-weight:600">How to play</button></a>
   <a href="pvp.html" style="text-decoration:none"><button style="border-color:var(--accent);color:var(--accent);font-weight:600">Play a friend (PvP)</button></a>
@@ -574,12 +564,12 @@ body.on-splash .topbar{display:none}
 <div id="overlay"><div class="bigcard" id="bigcard"></div></div>
 <div id="toast"></div>
 
-<script src="cards.js?v=20261027221721"></script>
-<script src="rules.js?v=20261027221721"></script>
-<script src="custom.js?v=20261027221721"></script>
-<script src="engine.js?v=20261027221721"></script>
-<script src="meta.js?v=20261027221721"></script>
-<script src="ui.js?v=20261027221721"></script>
-<script src="meta_ui.js?v=20261027221721"></script>
+<script src="cards.js?v=20261027224516"></script>
+<script src="rules.js?v=20261027224516"></script>
+<script src="custom.js?v=20261027224516"></script>
+<script src="engine.js?v=20261027224516"></script>
+<script src="meta.js?v=20261027224516"></script>
+<script src="ui.js?v=20261027224516"></script>
+<script src="meta_ui.js?v=20261027224516"></script>
 </body>
 </html>

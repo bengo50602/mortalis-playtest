@@ -572,10 +572,9 @@ const UI = {
     }
     const lvl = autoLevel(c);
     const manualNote = lvl !== "auto" ? `<div class="manual-note">${lvl === "manual" ? "This card's effect is not scripted — the engine plays it for stats/cost and you adjudicate the text with sandbox tools." : "Partially scripted: " + fx(c.id).autoBits.concat(fx(c.id).auxAutoBits || []).join(", ") + "."}</div>` : "";
-    big.innerHTML = `<div class="zhdr"><div class="cost-orb">${c.cost}<span>Pulse</span></div>
-        <div class="zid"><div class="nm">${c.name}</div><div class="sub">${c.realm} · ${c.type[0].toUpperCase() + c.type.slice(1)}${c.rarity ? " · " + c.rarity : ""}</div></div></div>
-      <img class="bigart" src="art/${c.id}.png" alt="" onerror="this.remove()">
-      ${modes}${live}${manualNote}<div class="actions" id="zoom-actions"></div>`;
+    big.innerHTML = fullCardHTML(c)
+      + ((live || manualNote) ? `<div class="zoomextra">${live}${manualNote}</div>` : "")
+      + `<div class="zoomextra actions" id="zoom-actions"></div>`;
     $("overlay").classList.add("visible");
     UI.buildZoomActions(c, ctx);
   },
@@ -830,9 +829,11 @@ const INS = {
     INS.el = d;
     return d;
   },
-  show(html) {
+  show(html, card) {
     const d = INS.ensure();
-    if (d) document.getElementById("ins-body").innerHTML = html;
+    if (!d) return;
+    const cardHtml = card ? `<div class="ins-cardwrap"><div class="ins-cardscale">${fullCardHTML(card)}</div></div>` : "";
+    document.getElementById("ins-body").innerHTML = cardHtml + html;
   },
   clear() { INS.show(`<span style="color:#6f7b8c">Hover anything on the board to see exactly what's affecting it.</span>`); },
 
@@ -905,15 +906,12 @@ const INS = {
     const maxA = maxAttacksOf(pi, li);
     notes.push(`attacks used this turn: ${h.attacksUsed} of ${maxA + (h.extraAttacks || 0)}`);
     s += INS.sub("in play") + [...notes, ...laneAux].map(n => `<div style="margin-bottom:3px">• ${n}</div>`).join("");
-    s += INS.sub("card text") + `<div style="color:#8a93a4">${c.text}</div>`;
-    INS.show(s);
+    INS.show(s, c);
   },
 
   card(c, extra) {
-    let s = INS.head(`${c.name} — ${c.realm} ${c.type}`);
-    if (extra) s += extra;
-    s += `<div style="color:#9aa4b6;margin-top:4px">${c.text || ""}</div>`;
-    INS.show(s);
+    let s = extra || "";
+    INS.show(s, c);
   },
 };
 
@@ -955,6 +953,101 @@ function realmCrest(realm, w, main, dark, bg) {
   if (!fn) return "";
   return `<svg viewBox="0 0 34 46" width="${w}" height="${Math.round(w * 46 / 34)}" style="flex-shrink:0;display:block">${fn(main, dark, bg || "#12151c")}</svg>`;
 }
+/* ---- full physical card (exact Card Studio layout) for the zoom + hover ---- */
+const HERO_PAL = { bg1:'#1d2027', bg2:'#14161c', bg3:'#101217', frame:'#3a4152', inset6:'#23262f', inset7:'#454c5e', ring1:'#4a5670', ring2:'#232836', ringB:'#7c8aa8', accent2:'#8fa0c0', markLight:'#8fa0c0', markDark:'#454c5e', label:'#c8b27a' };
+const CARD_PALS = {
+  relic:       { bg1:'#272117', bg2:'#1a160e', bg3:'#141109', frame:'#5e5138', inset6:'#2b2519', inset7:'#6a5c3d', ring1:'#5d5133', ring2:'#2b2519', accent2:'#d8bd80', boxBg:'rgba(58,50,34,0.5)',  boxBorder:'#4a4028', bodyCol:'#d5cfc0', footCol:'#a89a78', markLight:'#a89a78', markDark:'#6a5c3d', label:'Relic Effect' },
+  hex:         { bg1:'#231c30', bg2:'#151020', bg3:'#0f0b18', frame:'#4d4166', inset6:'#291f3a', inset7:'#5c4d7a', ring1:'#4a3d63', ring2:'#291f3a', accent2:'#c7aee8', boxBg:'rgba(52,44,74,0.5)',  boxBorder:'#443a5c', bodyCol:'#d2cddd', footCol:'#9d8cb8', markLight:'#9d8cb8', markDark:'#5c4d7a', label:'Trigger' },
+  rite:        { bg1:'#1a2724', bg2:'#0f1917', bg3:'#0b1311', frame:'#3c5a50', inset6:'#1e302b', inset7:'#4a6e62', ring1:'#3a5c50', ring2:'#1e302b', accent2:'#9ed6c6', boxBg:'rgba(38,58,52,0.5)',  boxBorder:'#31504a', bodyCol:'#ccd8d3', footCol:'#7ba396', markLight:'#7ba396', markDark:'#4a6e62', label:'Rite' },
+  pact:        { bg1:'#2b1c17', bg2:'#1a100d', bg3:'#130b09', frame:'#653f36', inset6:'#331f19', inset7:'#7a4a3f', ring1:'#6a4033', ring2:'#331f19', accent2:'#e39a86', boxBg:'rgba(64,38,32,0.5)',  boxBorder:'#54332c', bodyCol:'#dccfc9', footCol:'#b07868', markLight:'#b07868', markDark:'#7a4a3f', label:'Pact' },
+  incantation: { bg1:'#1a2530', bg2:'#101820', bg3:'#0b1118', frame:'#3d5a70', inset6:'#1f2d3a', inset7:'#4a7089', ring1:'#3a5670', ring2:'#1f2d3a', accent2:'#a2dcf2', boxBg:'rgba(36,54,68,0.5)',  boxBorder:'#31485c', bodyCol:'#ccd6dd', footCol:'#7ba0b8', markLight:'#7ba0b8', markDark:'#4a7089', label:'Incantation' },
+};
+const CARD_RARITY = { 'Common':{c:'#8a8f9e',b:'#3a4152'}, 'Uncommon':{c:'#8fbc8f',b:'#3d5242'}, 'Rare':{c:'#8fa8d8',b:'#3a4a6a'}, 'Ultra-Rare':{c:'#b79bdc',b:'#4d3f66'}, 'Eternal':{c:'#e0c478',b:'#6b5a30'} };
+const escC = s => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const fitHero = t => t.length > 300 ? 11.5 : t.length > 200 ? 12.5 : 13.5;
+const fitAux  = t => t.length > 300 ? 10 : t.length > 200 ? 10.8 : 12;
+const fitBody = t => t.length > 480 ? 11 : t.length > 340 ? 12 : t.length > 220 ? 12.8 : 13.5;
+const typeNameC = t => ({ hero: 'Hero', relic: 'Relic', hex: 'Hex', rite: 'Rite', pact: 'Pact', incantation: 'Incantation' })[t];
+function cardFooterOf(c) {
+  if (c.type === 'relic') return `${c.slots} slot${c.slots > 1 ? 's' : ''}`;
+  if (c.type === 'hex') return 'Face-down · pay on trigger';
+  if (c.type === 'rite') { const m = (c.text || '').match(/count (\d+) of your turns/i); return m ? `Resolves in ${m[1]} turns` : 'Delayed rite'; }
+  if (c.type === 'pact') return 'Risk / reward';
+  return 'Resolves immediately';
+}
+function cardArtRegion(c, h, border) {
+  return `<div class="artbox" style="height:${h}px;border:1px solid ${border};background:#1b1e26;"><img src="art/${c.id}.png" alt="" onerror="this.style.display='none'"></div>`;
+}
+function studioLogo(realm, p) { return realmCrest(realm, 34, p.markLight, p.markDark, p.bg1) || ""; }
+function fullCardHTML(c) {
+  if (c.type === 'hero') {
+    const p = HERO_PAL, r = CARD_RARITY[c.rarity] || CARD_RARITY.Common;
+    const auxMeta = `${c.auxCost} Pulse · ${c.auxSlots} slot${c.auxSlots > 1 ? 's' : ''}`;
+    return `<div class="studiocard" style="background:linear-gradient(165deg,${p.bg1} 0%,${p.bg2} 55%,${p.bg3} 100%);border:1px solid ${p.frame};box-shadow:0 14px 34px rgba(0,0,0,0.35), inset 0 0 0 6px ${p.inset6}, inset 0 0 0 7px ${p.inset7};">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 35% 30%,${p.ring1},${p.ring2} 70%);border:2px solid ${p.ringB};display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 12px rgba(124,138,168,0.35);">
+          <div style="font-family:'Cinzel',serif;font-size:24px;font-weight:800;color:#dfe6f5;line-height:1;">${c.cost}</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#9daac6;">Pulse</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:2px;min-width:0;">
+          <div style="font-family:'Cinzel',serif;font-size:${c.name.length > 26 ? 15 : 18}px;font-weight:700;color:#e8e4d8;line-height:1.1;">${escC(c.name)}</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:${p.accent2};">${escC(c.realm)} &middot; Hero</div>
+        </div>
+        <div style="margin-left:auto;flex-shrink:0;padding-top:2px;">${studioLogo(c.realm, p)}</div>
+      </div>
+      ${cardArtRegion(c, 178, '#454c5e')}
+      <div style="flex:1;display:flex;flex-direction:column;gap:8px;min-height:0;justify-content:flex-start;">
+        <div style="background:rgba(35,40,54,0.55);border:1px solid #333a4a;border-radius:8px;padding:9px 12px;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:${p.label};margin-bottom:3px;">Hero Mode</div>
+          <div style="font-family:'Alegreya',serif;font-size:${fitHero(c.text)}px;line-height:1.38;color:#cfd3de;">${escC(c.text)}</div>
+        </div>
+        <div style="background:rgba(24,27,35,0.7);border:1px dashed #3a4152;border-radius:8px;padding:9px 12px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:${p.accent2};">Auxiliary Mode</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;color:#7c88a0;">${auxMeta}</div>
+          </div>
+          <div style="font-family:'Alegreya',serif;font-size:${fitAux(c.auxText)}px;line-height:1.36;color:#a9aebc;font-style:italic;">${escC(c.auxText)}</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
+        <div style="display:flex;align-items:baseline;gap:6px;">
+          <span style="font-family:'Cinzel',serif;font-size:26px;font-weight:800;color:#e0a45c;">${c.atk}</span>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#7c88a0;">ATK</span>
+        </div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:${r.c};border:1px solid ${r.b};border-radius:20px;padding:3px 12px;">${escC(c.rarity)}</div>
+        <div style="display:flex;align-items:baseline;gap:6px;">
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#7c88a0;">HP</span>
+          <span style="font-family:'Cinzel',serif;font-size:26px;font-weight:800;color:#8fbc8f;">${c.hp}</span>
+        </div>
+      </div>
+    </div>`;
+  }
+  const p = CARD_PALS[c.type];
+  return `<div class="studiocard" style="background:linear-gradient(165deg,${p.bg1} 0%,${p.bg2} 55%,${p.bg3} 100%);border:1px solid ${p.frame};box-shadow:0 14px 34px rgba(0,0,0,0.35), inset 0 0 0 6px ${p.inset6}, inset 0 0 0 7px ${p.inset7};">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 35% 30%,${p.ring1},${p.ring2} 70%);border:2px solid ${p.accent2};display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;">
+        <div style="font-family:'Cinzel',serif;font-size:24px;font-weight:800;color:#dfe6f5;line-height:1;">${c.cost}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#9daac6;">Pulse</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px;min-width:0;">
+        <div style="font-family:'Cinzel',serif;font-size:${c.name.length > 26 ? 15 : 18}px;font-weight:700;color:#e8e4d8;line-height:1.1;">${escC(c.name)}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:${p.accent2};">${escC(c.realm)} &middot; ${typeNameC(c.type)}</div>
+      </div>
+      <div style="margin-left:auto;flex-shrink:0;padding-top:2px;">${studioLogo(c.realm, p)}</div>
+    </div>
+    ${cardArtRegion(c, 230, p.inset7)}
+    <div style="flex:1;display:flex;flex-direction:column;min-height:0;">
+      <div style="background:${p.boxBg};border:1px solid ${p.boxBorder};border-radius:8px;padding:10px 12px;flex:1;box-sizing:border-box;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:${p.accent2};margin-bottom:4px;">${p.label}</div>
+        <div style="font-family:'Alegreya',serif;font-size:${fitBody(c.text)}px;line-height:1.4;color:${p.bodyCol};">${escC(c.text)}</div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;flex-shrink:0;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:${p.footCol};border:1px solid ${p.frame};border-radius:20px;padding:3px 14px;">${cardFooterOf(c)}</div>
+    </div>
+  </div>`;
+}
+
 /* ---------------------------- card back art ----------------------------
    The Mortalis mark is drawn on a 40x44 grid, but its *ink* does not fill that
    grid: the diamond spans x 9..31 / y 3..25 and the four lane bars span
