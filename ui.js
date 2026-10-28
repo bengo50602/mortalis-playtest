@@ -823,8 +823,7 @@ const INS = {
     const d = document.createElement("div");
     d.id = "inspector";
     d.style.cssText = "background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:12px;margin-bottom:12px;min-height:96px";
-    d.innerHTML = `<div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Cheat sheet</div>
-      <div id="ins-body" style="color:#9aa4b6;line-height:1.5">Hover anything on the board to see exactly what's affecting it.</div>`;
+    d.innerHTML = `<div id="ins-body" style="color:#9aa4b6;line-height:1.5"><span style="color:#6f7b8c">Hover a card to see it full-size.</span></div>`;
     panel.parentElement.insertBefore(d, panel);
     INS.el = d;
     return d;
@@ -832,8 +831,9 @@ const INS = {
   show(html, card) {
     const d = INS.ensure();
     if (!d) return;
-    const cardHtml = card ? `<div class="ins-cardwrap"><div class="ins-cardscale">${fullCardHTML(card)}</div></div>` : "";
-    document.getElementById("ins-body").innerHTML = cardHtml + html;
+    document.getElementById("ins-body").innerHTML = card
+      ? `<div class="ins-cardwrap"><div class="ins-cardscale">${fullCardHTML(card)}</div></div>`
+      : (html || "");
   },
   clear() { INS.show(`<span style="color:#6f7b8c">Hover anything on the board to see exactly what's affecting it.</span>`); },
 
@@ -874,39 +874,7 @@ const INS = {
   hero(pi, li) {
     const h = heroAt({ pi, li });
     if (!h) return INS.clear();
-    const c = cardById(h.cardId);
-    const atk = effAtk(pi, li), hp = curHp(pi, li), mhp = effMaxHp(pi, li);
-    let s = INS.head(`${c.name} — ${c.realm} ${c.type}`);
-    s += INS.row("Printed", `${c.atk} ATK / ${c.hp} HP`, "#9aa4b6");
-    s += INS.row("<b>Right now</b>", `<b>${atk} ATK / ${hp}${hp !== mhp ? " of " + mhp : ""} HP</b>`, "#f0ece2");
-
-    const lines = INS.auraLines(pi, li);
-    if (h.permAtk || h.permHp) lines.push(INS.row("permanent gains", `+${h.permAtk}/+${h.permHp}`, "#a8e08a"));
-    if (h.redAtk || h.redHp) lines.push(INS.row("enemy reductions", `−${h.redAtk}/−${h.redHp}`, "#e0736b"));
-    const temps = (h.temp || []).filter(t => t.until >= G.gt);
-    for (const t of temps) lines.push(INS.row("temporary", `${t.atk >= 0 ? "+" : ""}${t.atk || 0}/${t.hp >= 0 ? "+" : ""}${t.hp || 0}`, t.atk < 0 || t.hp < 0 ? "#e0736b" : "#a8e08a"));
-    if (h.dmg) lines.push(INS.row("damage taken", `−${h.dmg} HP`, "#e0736b"));
-    if (lines.length) s += INS.sub("what's changing it") + lines.join("");
-
-    const notes = [];
-    if (h.ward > 0) notes.push(`ward absorbs the next <b>${h.ward}</b> damage`);
-    if (h.blood) notes.push(`${h.blood} blood counter${h.blood > 1 ? "s" : ""}`);
-    if (heroFlag({ pi, li }, "taunt")) notes.push("enemy attacks are forced onto this Hero");
-    if (heroFlag({ pi, li }, "attackAnyLane")) notes.push("may attack any lane");
-    if (heroFlag({ pi, li }, "anyLaneNotOpp")) notes.push("may attack any lane except the opposing one");
-    if (isProtected({ pi, li })) notes.push("cannot be attacked or targeted right now");
-    const ff = isSilenced(h) ? null : fx(h.cardId).flags;
-    if (ff && ff.thorns) notes.push(`attackers take ${ff.thorns} damage back`);
-    if (ff && ff.combatShield) notes.push(`takes ${ff.combatShield} less combat damage`);
-    if (isSilenced(h)) notes.push("SILENCED — its text does nothing");
-    for (const r of h.relics) notes.push(`Relic: <b>${cardById(r.cardId).name}</b> — ${cardById(r.cardId).text}`);
-    const laneAux = [];
-    const seenA = new Set();
-    for (const a of G.players[pi].lanes[li].aux) if (a && !seenA.has(a.uid)) { seenA.add(a.uid); laneAux.push(`Aux: <b>${cardById(a.cardId).name}</b> — ${cardById(a.cardId).auxText}`); }
-    const maxA = maxAttacksOf(pi, li);
-    notes.push(`attacks used this turn: ${h.attacksUsed} of ${maxA + (h.extraAttacks || 0)}`);
-    s += INS.sub("in play") + [...notes, ...laneAux].map(n => `<div style="margin-bottom:3px">• ${n}</div>`).join("");
-    INS.show(s, c);
+    INS.show("", cardById(h.cardId));
   },
 
   card(c, extra) {
