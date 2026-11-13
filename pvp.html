@@ -5,7 +5,7 @@
 <title>Mortalis: Realms — PvP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0d1014; --panel:#161a21; --card:#1d222c; --ink:#e9e7e1; --muted:#8a93a4;
@@ -55,19 +55,23 @@ a{color:var(--accent)}
 .lane-body{padding:8px;display:flex;flex-direction:column;gap:6px}
 .heroslot{min-height:92px;border:1px dashed var(--line2);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted)}
 .heroslot.eligible{border-color:var(--accent);background:var(--accent-bg);cursor:pointer;color:var(--accent);font-weight:600}
-.herocard{position:relative;background:linear-gradient(180deg,#2a3040 0%,#20252f 100%);border:1px solid #4a5266;border-radius:8px;
-  padding:8px 8px 7px;cursor:pointer;font-size:11px;min-height:92px;box-shadow:0 2px 10px rgba(0,0,0,.45)}
+.herocard{position:relative;background:linear-gradient(165deg,#1d2027,#14161c 55%,#101217);border:1px solid #3a4152;border-radius:11px;
+  padding:7px;cursor:pointer;font-size:11px;box-shadow:0 8px 22px rgba(0,0,0,.45),inset 0 0 0 4px #23262f,inset 0 0 0 5px #454c5e}
 .herocard:hover{border-color:#66718a}
-.herocard .cost-orb{position:absolute;top:-9px;left:7px;width:25px;height:25px;border-radius:50%;
-  background:var(--lc);border:2px solid #12161d;display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:700;color:#12151c}
-.herocard .nm{font-weight:600;font-size:12px;line-height:1.25;text-align:right;color:#f1efe9;min-height:15px}
-.herocard .txt{color:#9aa4b6;line-height:1.35;max-height:44px;overflow:hidden;margin-top:5px}
-.herocard .statbar{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;padding-top:5px;border-top:1px solid #39414f}
-.herocard .statbar .atk{font-size:14px;font-weight:700;color:#e0a45c}
-.herocard .statbar .hp{font-size:14px;font-weight:700;color:#8fbc8f}
+.herocard .hc-top{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.herocard .cost-orb{position:static;flex-shrink:0;width:30px;height:30px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#4a5670,#232836 70%);border:2px solid #7c8aa8;display:flex;align-items:center;justify-content:center;
+  font-family:'Cinzel',serif;font-size:13px;font-weight:800;color:#dfe6f5}
+.herocard .hc-id{min-width:0}
+.herocard .nm{font-family:'Cinzel',serif;font-weight:700;font-size:12px;line-height:1.05;text-align:left;color:#e8e4d8}
+.herocard .sub{font-size:8px;letter-spacing:1.3px;text-transform:uppercase;color:#8fa0c0;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.herocard .hc-art{height:90px;border-radius:7px;border:1px solid #454c5e;background:#1b1e26 center top/cover;margin-bottom:6px}
+.herocard .txt{color:#cfd3de;line-height:1.3;max-height:42px;overflow:hidden;font-size:9.5px;background:rgba(35,40,54,.5);border:1px solid #333a4a;border-radius:6px;padding:5px 7px}
+.herocard .statbar{display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding:0 2px}
+.herocard .statbar .atk{font-family:'Cinzel',serif;font-size:18px;font-weight:800;color:#e0a45c}
+.herocard .statbar .hp{font-family:'Cinzel',serif;font-size:18px;font-weight:800;color:#8fbc8f}
 .herocard .statbar .hp .mx{font-size:11px;font-weight:400;color:#6d7686}
-.herocard .statbar .rar{font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:#6d7686}
+.herocard .statbar .rar{font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:#c8b27a;border:1px solid #5a5333;border-radius:12px;padding:2px 8px}
 .herocard .relicrow{margin-top:5px;display:flex;flex-wrap:wrap;gap:3px}
 .herocard.selected{outline:2px solid var(--accent);outline-offset:1px}
 .herocard.targetable{outline:2px solid var(--bad);outline-offset:1px;box-shadow:0 0 14px -2px rgba(224,115,107,.6)}
@@ -98,9 +102,10 @@ a{color:var(--accent)}
 #turn-ind{color:#c3ccdb;font-weight:600}
 #prompt{font-weight:600;color:var(--accent)}
 .hand{display:flex;gap:7px;padding:8px 2px;flex-wrap:wrap}
-.handcard{width:124px;background:linear-gradient(180deg,#232936 0%,#1a1f28 100%);border:1px solid var(--line2);border-radius:8px;padding:7px;font-size:11px;cursor:pointer;position:relative;transition:transform .08s}
+.handcard{width:124px;background:linear-gradient(165deg,#1d2027,#14161c 60%,#101217);border:1px solid #3a4152;border-radius:10px;padding:7px;font-size:11px;cursor:pointer;position:relative;transition:transform .08s;box-shadow:inset 0 0 0 3px #23262f}
+.handcard .hc-art{height:66px;border-radius:6px;border:1px solid #454c5e;background:#1b1e26 center top/cover;margin-bottom:5px}
 .handcard:hover{border-color:var(--accent);transform:translateY(-2px)}
-.handcard .nm{font-weight:600;line-height:1.25;color:#eceae4}
+.handcard .nm{font-family:'Cinzel',serif;font-weight:700;line-height:1.1;color:#e8e4d8}
 .handcard .meta{color:var(--muted);margin-top:3px}
 .handcard.unaffordable{opacity:.45}
 .logpanel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:12px;display:flex;flex-direction:column;min-height:400px}
@@ -174,15 +179,17 @@ a{color:var(--accent)}
 /* ---- zoom overlay ---- */
 #overlay{position:fixed;inset:0;background:rgba(6,8,11,.72);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 #overlay.visible{display:flex}
-.bigcard{width:410px;max-width:94vw;max-height:88vh;overflow-y:auto;background:linear-gradient(180deg,#222835 0%,#191d26 100%);color:#e9e7e1;border:1px solid #4a5266;border-radius:12px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.bigcard .hdr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.bigcard .nm{font-size:17px;font-weight:600}
-.bigcard .realm{font-size:12px;color:var(--muted);white-space:nowrap}
-.bigcard .sub{font-size:12px;color:var(--muted);margin:2px 0 12px}
-.bigcard .mode{font-size:13px;font-weight:600;margin:10px 0 2px;color:#cfd6e2}
-.bigcard .body{font-size:13px;line-height:1.55;margin:0;color:#b9c1cf}
-.bigcard .live{background:#141922;border-radius:6px;padding:9px;margin-top:10px;font-size:12px}
-.bigcard .actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+#overlay .bigcard{width:auto;max-width:94vw;max-height:92vh;overflow:auto;background:transparent;border:none;box-shadow:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:10px}
+.studiocard{width:400px;max-width:92vw;height:560px;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px;box-sizing:border-box;position:relative;color:#e9e7e1;flex-shrink:0}
+.studiocard .artbox{position:relative;flex-shrink:0;border-radius:8px;overflow:hidden}
+.studiocard .artbox img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.zoomextra{width:400px;max-width:92vw;box-sizing:border-box;background:linear-gradient(180deg,#222835,#191d26);border:1px solid #4a5266;border-radius:12px;padding:12px;color:#e9e7e1;font-size:12px}
+.zoomextra:empty{display:none}
+.zoomextra.actions{display:flex;gap:6px;flex-wrap:wrap}
+.zoomextra .live{background:#141922;border-radius:6px;padding:9px;font-size:12px}
+#inspector .ins-cardwrap{height:336px;overflow:hidden;display:flex;justify-content:center;margin-bottom:10px}
+#inspector .ins-cardscale{flex:0 0 400px;transform:scale(.6);transform-origin:top center}
+#inspector .ins-cardscale .studiocard{margin:0;max-width:none}
 .manual-note{font-size:11px;color:var(--warn);margin-top:8px}
 
 /* ---- editor ---- */
@@ -279,7 +286,7 @@ a{color:var(--accent)}
   <span class="netstate" id="netstate"></span>
   <a href="index.html" style="text-decoration:none"><button>Main menu</button></a>
   <a href="tutorial.html" style="text-decoration:none"><button style="border-color:var(--good);color:var(--good)">How to play</button></a>
-  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20261109142204</span>
+  <span id="buildstamp" style="font-size:10px;color:#5e6673;letter-spacing:.3px">build 20261112220212</span>
   <div class="spacer"></div>
   <button id="tab-play" class="active-tab" style="display:none">Play</button>
   <button id="tab-cards">Edit cards</button>
@@ -428,11 +435,11 @@ a{color:var(--accent)}
 <div id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="cards.js?v=20261109142204"></script>
-<script src="rules.js?v=20261109142204"></script>
-<script src="engine.js?v=20261109142204"></script>
-<script src="meta.js?v=20261109142204"></script>
-<script src="ui.js?v=20261109142204"></script>
+<script src="cards.js?v=20261112220212"></script>
+<script src="rules.js?v=20261112220212"></script>
+<script src="engine.js?v=20261112220212"></script>
+<script src="meta.js?v=20261112220212"></script>
+<script src="ui.js?v=20261112220212"></script>
 <script>
 /* ================= Mortalis PvP layer (host-authoritative, PeerJS) ================= */
 (function () {
